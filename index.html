@@ -124,6 +124,7 @@
   #settings .close{display:block;margin:14px 0 0 auto}
 
   #qrModal{z-index:35}
+  #savedModal{z-index:33}
   #qrModal .panel{background:var(--card);border-radius:16px;padding:20px;width:min(380px,100%);text-align:center;max-height:92vh;overflow-y:auto}
   #qrModal h3{margin:0 0 4px;font-size:1.05rem}
   #qrModal .qsub{font-size:.85rem;color:var(--sub);word-break:break-word}
@@ -132,6 +133,28 @@
   #qrUrl{font-size:.7rem;color:var(--sub);word-break:break-all;max-height:3.2em;overflow:hidden;margin:4px 0 10px}
   #qrWarn{font-size:.78rem;color:var(--flag);margin:0 0 8px}
   #qrModal .btns{display:flex;gap:8px;justify-content:center;flex-wrap:wrap}
+
+  /* 保存したお題 */
+  #savedModal .panel{background:var(--card);border-radius:14px;padding:18px 20px;width:min(640px,100%);max-height:90vh;overflow-y:auto}
+  #savedModal h2{margin:0 0 6px;font-size:1.2rem}
+  #savedEmpty{font-size:.85rem;color:var(--sub)}
+  .sv{border:1px solid var(--line);border-radius:10px;padding:10px 12px;margin:8px 0}
+  .svTop{display:flex;gap:10px;align-items:center}
+  .svHead{flex:1;min-width:0;cursor:pointer}
+  .svTitle{font-weight:700;word-break:break-word}
+  .svMeta{font-size:.76rem;color:var(--sub)}
+  .svBtns{display:flex;gap:6px;flex:none}
+  .svPlays{margin-top:8px;border-top:1px dashed var(--line);padding-top:4px}
+  .svPlay{font-size:.82rem;padding:6px 0;border-bottom:1px dotted var(--line)}
+  .svPlay:last-child{border-bottom:0}
+  .svPlay .when{color:var(--sub);font-size:.74rem}
+  .svPlay .sc{font-weight:700;margin-left:6px}
+  .svPlay .rt{word-break:break-word}
+  .svPlay .rt .b{color:var(--sub);font-style:italic}
+  .svFoot{display:flex;justify-content:space-between;gap:8px;margin-top:14px}
+  #clearAll{border-color:var(--flag);color:var(--flag)}
+  #saveRecord:disabled{opacity:.7}
+  @media (max-width:720px){ .svTop{flex-wrap:wrap} .svBtns{width:100%;justify-content:flex-end} }
 
   /* トースト */
   #toast{position:fixed;left:50%;bottom:24px;transform:translateX(-50%);background:var(--ink);color:var(--bg);
@@ -238,7 +261,9 @@
     <button id="teeoff" disabled data-t="teeoff"></button>
     <button id="backBtn" hidden data-t="back"></button>
     <button id="shareOdai" disabled data-t="share"></button>
+    <button id="saveOdai" disabled data-t="saveOdai"></button>
     <button id="newBtn" data-t="newOdai"></button>
+    <button id="savedBtn">📒</button>
     <button id="gearBtn">⚙️</button>
     <button id="findToggle" hidden>🔍</button>
     <button id="menuBtn">⋯</button>
@@ -248,6 +273,8 @@
 <div id="menuPop" hidden>
   <button data-for="backBtn" data-t="back"></button>
   <button data-for="shareOdai" data-t="share"></button>
+  <button data-for="saveOdai" data-t="saveOdai"></button>
+  <button data-for="savedBtn" data-t="savedList"></button>
   <button data-for="newBtn" data-t="newOdai"></button>
   <button data-for="gearBtn" data-t="settings"></button>
 </div>
@@ -299,6 +326,15 @@
   </div>
 </div>
 
+<div id="savedModal" class="overlay">
+  <div class="panel">
+    <h2 data-t="savedList"></h2>
+    <p id="savedEmpty" data-t="emptySaved"></p>
+    <div id="savedRows"></div>
+    <div class="svFoot"><button id="clearAll" data-t="clearAll"></button><button id="savedClose" data-t="closeBtn"></button></div>
+  </div>
+</div>
+
 <div id="toast"></div>
 
 <div id="win" class="overlay">
@@ -313,6 +349,7 @@
     <div class="rules" id="winRules"></div>
     <div class="nameRow" id="nameRow"><span data-t="nameLbl"></span> <input id="myName" maxlength="20"></div>
     <div class="btns">
+      <button id="saveRecord" data-t="saveRecord"></button>
       <button id="sendChallenge" data-t="sendCh"></button>
       <button id="saveImg" data-t="saveImg"></button>
       <button id="shareImg" data-t="shareImg"></button>
@@ -362,6 +399,7 @@ const LANG_ORDER = ["ja","en","fr","es","zh","ko","ceb"];
 /* 画面の言葉 */
 const STR = {};
 STR.ja = {
+  saveOdai:"⭐ 保存", savedOk:"⭐ 保存済み", savedList:"📒 保存したお題", saveRecord:"⭐ 記録を保存", recordSaved:"✓ 保存したよ", best:sk=>`ベスト ${sk}`, notCleared:"未クリア", plays:n=>`記録 ${n}件`, playThis:"▶ 遊ぶ", delBtn:"🗑 削除", clearAll:"全部消す", confirmClearAll:"保存したお題と記録を全部消す？", confirmDel:"このお題と記録を消す？", emptySaved:"まだ保存したお題はないよ。気に入ったお題は「⭐ 保存」で残せるよ", savedPlay:"⭐ 保存したお題で遊ぶよ", savedToast:"お題を保存したよ", saveFail:"ブラウザに保存できなかった", locale:"ja-JP",
   routeImg:"画像の道のり", routeHide:"伏字にする", routeShow:"見せる", routeNote:"伏字にすると、スタートとゴール以外が黒い棒になるよ（ネタバレ防止）",
   quitCh:"🏠 挑戦状をやめて最初にもどる", quitHole:"🏳 このホールをやめる",
   appName:"Wikipediaゴルフ", start:"🏌️ スタート", goal:"🚩 ゴール", reroll:"引き直す", readFull:"全文を読む",
@@ -418,6 +456,7 @@ STR.ja = {
   catEmpty:"このカテゴリには現在ページまたはメディアがひとつもありません。"
 };
 STR.en = {
+  saveOdai:"⭐ Save", savedOk:"⭐ Saved", savedList:"📒 Saved courses", saveRecord:"⭐ Save record", recordSaved:"✓ Saved", best:sk=>`Best: ${sk}`, notCleared:"Not cleared", plays:n=>`${n} record${n===1?'':'s'}`, playThis:"▶ Play", delBtn:"🗑 Delete", clearAll:"Delete all", confirmClearAll:"Delete all saved courses and records?", confirmDel:"Delete this course and its records?", emptySaved:"No saved courses yet. Use “⭐ Save” to keep a course you like.", savedPlay:"⭐ Playing a saved course", savedToast:"Course saved", saveFail:"Couldn't save in this browser", locale:"en-US",
   routeImg:"Route in image", routeHide:"Hide (no spoilers)", routeShow:"Show", routeNote:"Hidden: everything except start and goal becomes black bars",
   quitCh:"🏠 Quit the challenge", quitHole:"🏳 Give up this hole",
   appName:"Wiki Golf", start:"🏌️ Start", goal:"🚩 Goal", reroll:"Reroll", readFull:"Read full article",
@@ -474,6 +513,7 @@ STR.en = {
   catEmpty:"This category currently contains no pages or media."
 };
 STR.fr = {
+  saveOdai:"⭐ Enregistrer", savedOk:"⭐ Enregistré", savedList:"📒 Parcours enregistrés", saveRecord:"⭐ Enregistrer le score", recordSaved:"✓ Enregistré", best:sk=>`Meilleur : ${sk}`, notCleared:"Non terminé", plays:n=>`${n} score${n>1?'s':''}`, playThis:"▶ Jouer", delBtn:"🗑 Supprimer", clearAll:"Tout supprimer", confirmClearAll:"Supprimer tous les parcours et scores enregistrés ?", confirmDel:"Supprimer ce parcours et ses scores ?", emptySaved:"Aucun parcours enregistré. Utilisez « ⭐ Enregistrer » pour garder un parcours.", savedPlay:"⭐ Parcours enregistré", savedToast:"Parcours enregistré", saveFail:"Impossible d'enregistrer dans ce navigateur", locale:"fr-FR",
   routeImg:"Parcours sur l'image", routeHide:"Masquer (sans spoiler)", routeShow:"Afficher", routeNote:"Masqué : tout sauf le départ et l'arrivée devient des barres noires",
   quitCh:"🏠 Abandonner le défi", quitHole:"🏳 Abandonner ce trou",
   appName:"Golf Wikipédia", start:"🏌️ Départ", goal:"🚩 Arrivée", reroll:"Retirer", readFull:"Lire l'article",
@@ -530,6 +570,7 @@ STR.fr = {
   catEmpty:"Cette catégorie ne contient actuellement aucune page ni aucun fichier."
 };
 STR.es = {
+  saveOdai:"⭐ Guardar", savedOk:"⭐ Guardado", savedList:"📒 Recorridos guardados", saveRecord:"⭐ Guardar resultado", recordSaved:"✓ Guardado", best:sk=>`Mejor: ${sk}`, notCleared:"Sin completar", plays:n=>`${n} resultado${n===1?'':'s'}`, playThis:"▶ Jugar", delBtn:"🗑 Borrar", clearAll:"Borrar todo", confirmClearAll:"¿Borrar todos los recorridos y resultados guardados?", confirmDel:"¿Borrar este recorrido y sus resultados?", emptySaved:"Aún no hay recorridos guardados. Usa «⭐ Guardar» para conservar uno.", savedPlay:"⭐ Jugando un recorrido guardado", savedToast:"Recorrido guardado", saveFail:"No se pudo guardar en este navegador", locale:"es-ES",
   routeImg:"Recorrido en la imagen", routeHide:"Ocultar (sin spoilers)", routeShow:"Mostrar", routeNote:"Oculto: todo salvo la salida y el hoyo se convierte en barras negras",
   quitCh:"🏠 Dejar el reto", quitHole:"🏳 Abandonar este hoyo",
   appName:"Golf Wikipedia", start:"🏌️ Salida", goal:"🚩 Hoyo", reroll:"Cambiar", readFull:"Leer artículo",
@@ -586,6 +627,7 @@ STR.es = {
   catEmpty:"Esta categoría no contiene actualmente ninguna página ni archivo multimedia."
 };
 STR.ko = {
+  saveOdai:"⭐ 저장", savedOk:"⭐ 저장됨", savedList:"📒 저장한 코스", saveRecord:"⭐ 기록 저장", recordSaved:"✓ 저장했어요", best:sk=>`최고 ${sk}`, notCleared:"미클리어", plays:n=>`기록 ${n}개`, playThis:"▶ 플레이", delBtn:"🗑 삭제", clearAll:"모두 삭제", confirmClearAll:"저장한 코스와 기록을 모두 지울까요?", confirmDel:"이 코스와 기록을 지울까요?", emptySaved:"아직 저장한 코스가 없어요. 마음에 드는 코스는 ‘⭐ 저장’으로 남길 수 있어요", savedPlay:"⭐ 저장한 코스로 플레이", savedToast:"코스를 저장했어요", saveFail:"브라우저에 저장하지 못했어요", locale:"ko-KR",
   routeImg:"이미지의 경로", routeHide:"가리기(스포일러 방지)", routeShow:"보이기", routeNote:"가리면 출발과 홀 말고는 검은 막대가 돼요",
   quitCh:"🏠 도전장 그만두고 처음으로", quitHole:"🏳 이번 홀 포기",
   appName:"위키 골프", start:"🏌️ 출발", goal:"🚩 홀", reroll:"다시 뽑기", readFull:"전문 읽기",
@@ -642,6 +684,7 @@ STR.ko = {
   catEmpty:"이 분류에는 현재 문서나 미디어가 없습니다."
 };
 STR["zh-hant"] = {
+  saveOdai:"⭐ 儲存", savedOk:"⭐ 已儲存", savedList:"📒 已儲存的題目", saveRecord:"⭐ 儲存紀錄", recordSaved:"✓ 已儲存", best:sk=>`最佳 ${sk}`, notCleared:"未完成", plays:n=>`紀錄 ${n} 筆`, playThis:"▶ 開始", delBtn:"🗑 刪除", clearAll:"全部刪除", confirmClearAll:"要刪除所有已儲存的題目和紀錄嗎？", confirmDel:"要刪除這個題目和紀錄嗎？", emptySaved:"還沒有儲存的題目。喜歡的題目可以按「⭐ 儲存」留下來", savedPlay:"⭐ 用已儲存的題目來玩", savedToast:"已儲存題目", saveFail:"無法儲存在此瀏覽器", locale:"zh-TW",
   routeImg:"圖片中的路線", routeHide:"遮住（防劇透）", routeShow:"顯示", routeNote:"遮住後，起點和終點以外都會變成黑色長條",
   quitCh:"🏠 放棄挑戰書，回到首頁", quitHole:"🏳 放棄這一洞",
   appName:"維基高爾夫", start:"🏌️ 起點", goal:"🚩 終點", reroll:"重抽", readFull:"閱讀全文",
@@ -698,6 +741,7 @@ STR["zh-hant"] = {
   catEmpty:"本分類目前沒有任何頁面或媒體。"
 };
 STR["zh-hans"] = {
+  saveOdai:"⭐ 保存", savedOk:"⭐ 已保存", savedList:"📒 已保存的题目", saveRecord:"⭐ 保存记录", recordSaved:"✓ 已保存", best:sk=>`最佳 ${sk}`, notCleared:"未完成", plays:n=>`记录 ${n} 条`, playThis:"▶ 开始", delBtn:"🗑 删除", clearAll:"全部删除", confirmClearAll:"要删除所有已保存的题目和记录吗？", confirmDel:"要删除这个题目和记录吗？", emptySaved:"还没有保存的题目。喜欢的题目可以按“⭐ 保存”留下来", savedPlay:"⭐ 用已保存的题目来玩", savedToast:"已保存题目", saveFail:"无法保存在此浏览器", locale:"zh-CN",
   routeImg:"图片中的路线", routeHide:"遮住（防剧透）", routeShow:"显示", routeNote:"遮住后，起点和终点以外都会变成黑色长条",
   quitCh:"🏠 放弃挑战书，回到首页", quitHole:"🏳 放弃这一洞",
   appName:"维基高尔夫", start:"🏌️ 起点", goal:"🚩 终点", reroll:"重抽", readFull:"阅读全文",
@@ -810,6 +854,8 @@ function applyUI(){
   $("sInput").placeholder = T("searchPh");
   $("myName").placeholder = T("namePh");
   $("gearBtn").title = T("settings");
+  $("savedBtn").title = T("savedList");
+  updateSaveBtn();
   if(!state.playing){
     $("route").textContent = T("routeHint");
     resetClockLabel();
@@ -933,6 +979,7 @@ async function draw(role, fixedTitle){
     card.classList.remove("loading");
     $("teeoff").disabled = !(state.start && state.goal) || state.playing;
     $("shareOdai").disabled = !(state.start && state.goal);
+    updateSaveBtn();
   }
 }
 
@@ -1281,7 +1328,7 @@ $("menuBtn").addEventListener("click", e=>{
   pop.querySelectorAll("button").forEach(b=>{
     const src = $(b.dataset.for);
     b.hidden = src.hidden; b.disabled = src.disabled;
-    if(b.dataset.for === "newBtn") b.textContent = src.textContent;
+    if(b.dataset.for === "newBtn" || b.dataset.for === "saveOdai") b.textContent = src.textContent;
   });
   pop.hidden = false;
   const r = $("menuBtn").getBoundingClientRect();
@@ -1525,6 +1572,7 @@ function finish(success){
     const b = document.createElement("span"); b.className = r.vs.res; b.textContent = T(r.vs.res); vs.appendChild(b);
   }
   $("nameRow").hidden = $("sendChallenge").hidden = !success;
+  $("saveRecord").disabled = false; $("saveRecord").textContent = T("saveRecord");
   $("myName").value = myName;
   $("win").classList.add("show");
 }
@@ -1578,7 +1626,7 @@ function renderChallengeBar(){
   if(!ch) return;
   const t = $("chText"); t.innerHTML = "";
   const b = document.createElement("b");
-  b.textContent = ch.strokes != null ? T("chText", chName(ch), T("sk", ch.strokes), ch.time != null ? fmtTime(ch.time) : "") : T("shared");
+  b.textContent = ch.strokes != null ? T("chText", chName(ch), T("sk", ch.strokes), ch.time != null ? fmtTime(ch.time) : "") : ch.saved ? T("savedPlay") : T("shared");
   const r = document.createElement("span"); r.className = "chRules"; r.textContent = "　" + T("rulesPre") + rulesText(ch.rules);
   t.append(b, r);
 }
@@ -1926,6 +1974,113 @@ $("shareImg").addEventListener("click", async ()=>{
   }catch(e){
     if(e.name !== "AbortError") toast(T("shareFail") + e.message);
   }
+});
+
+/* ════════ 保存したお題（このブラウザの中だけ） ════════ */
+const SAVE_KEY = "wikiGolfSaved";
+function loadSaved(){
+  try{ const a = JSON.parse(localStorage.getItem(SAVE_KEY) || "[]"); return Array.isArray(a) ? a : []; }catch(e){ return []; }
+}
+function storeSaved(a){
+  try{ localStorage.setItem(SAVE_KEY, JSON.stringify(a)); return true; }catch(e){ toast(T("saveFail")); return false; }
+}
+const odaiKey = (lang, s, g) => `${lang}|${norm(s)}|${norm(g)}`;
+const pickRules = r => Object.fromEntries(RULE_KEYS.map(k => [k, r[k]]));
+function upsertOdai(lang, startId, goalId, start, goal, rules){
+  const a = loadSaved(), key = odaiKey(lang, startId, goalId);
+  let e = a.find(x => x.key === key);
+  if(!e){ e = {key, lang, startId, goalId, start, goal, rules:pickRules(rules), savedAt:Date.now(), plays:[]}; a.unshift(e); }
+  return {a, e};
+}
+function currentOdaiKey(){
+  if(!state.start || !state.goal) return null;
+  return odaiKey(curLang(), state.start.title, state.goal.title);
+}
+function updateSaveBtn(){
+  const b = $("saveOdai"), key = currentOdaiKey();
+  const done = !!key && loadSaved().some(x => x.key === key);
+  b.disabled = !key || done;
+  b.textContent = done ? T("savedOk") : T("saveOdai");
+}
+$("saveOdai").addEventListener("click", ()=>{
+  if(!state.start || !state.goal) return;
+  const rules = state.playing ? state.rules : {...eff()};
+  const {a} = upsertOdai(rules.lang, state.start.title, state.goal.title, shown(state.start), shown(state.goal), rules);
+  if(storeSaved(a)){ toast(T("savedToast")); updateSaveBtn(); }
+});
+$("saveRecord").addEventListener("click", ()=>{
+  const r = state.result;
+  if(!r) return;
+  const {a, e} = upsertOdai(r.rules.lang, r.startId, r.goalId, r.start, r.goal, r.rules);
+  e.plays.unshift({route:r.route, strokes:r.strokes, time:Math.round(r.elapsed), success:r.success,
+                   date:r.date.getTime(), rules:pickRules(r.rules)});
+  if(storeSaved(a)){
+    $("saveRecord").disabled = true; $("saveRecord").textContent = T("recordSaved");
+    updateSaveBtn();
+  }
+});
+
+function renderSaved(){
+  const a = loadSaved(), box = $("savedRows");
+  box.innerHTML = "";
+  $("savedEmpty").hidden = a.length > 0;
+  $("clearAll").hidden = !a.length;
+  const fmtDate = ms => { try{ return new Date(ms).toLocaleString(T("locale"), {dateStyle:"short", timeStyle:"short"}); }catch(_){ return new Date(ms).toLocaleString(); } };
+  const el = (tag, cls, text) => { const x = document.createElement(tag); if(cls) x.className = cls; if(text != null) x.textContent = text; return x; };
+  for(const e of a){
+    const row = el("div", "sv"), top = el("div", "svTop"), head = el("div", "svHead");
+    head.append(el("div", "svTitle", `${e.start}  →  ${e.goal}`));
+    const wins = e.plays.filter(p => p.success);
+    const best = wins.length ? T("best", T("sk", Math.min(...wins.map(p => p.strokes)))) : T("notCleared");
+    head.append(el("div", "svMeta", [WIKIS[e.lang] ? WIKIS[e.lang].name : e.lang, best, T("plays", e.plays.length)].join(" · ")));
+    const btns = el("div", "svBtns");
+    const play = el("button", "", T("playThis")), del = el("button", "", T("delBtn"));
+    play.addEventListener("click", ()=> playSaved(e));
+    del.addEventListener("click", ()=>{
+      if(!confirm(T("confirmDel"))) return;
+      storeSaved(loadSaved().filter(x => x.key !== e.key));
+      renderSaved(); updateSaveBtn();
+    });
+    btns.append(play, del);
+    top.append(head, btns);
+    row.append(top);
+    if(e.plays.length){
+      const list = el("div", "svPlays");
+      list.hidden = true;
+      for(const p of e.plays){
+        const item = el("div", "svPlay");
+        const line = el("div");
+        line.append(el("span", "when", fmtDate(p.date)),
+                    el("span", "sc", (p.success ? "⛳ " + T("sk", p.strokes) : "⏰ " + T("noGoal")) + T("paren", fmtTime(p.time))));
+        const rt = el("div", "rt");
+        p.route.forEach((st, i) => {
+          if(i) rt.append(st.back ? " ↩ " : " → ");
+          rt.append(st.back ? el("span", "b", st.title) : st.title);
+        });
+        item.append(line, rt);
+        list.append(item);
+      }
+      row.append(list);
+      head.addEventListener("click", ()=>{ list.hidden = !list.hidden; });
+    }
+    box.append(row);
+  }
+}
+async function playSaved(e){
+  if(state.playing && state.strokes > 0 && !confirm(T("confirmNew"))) return;
+  $("savedModal").classList.remove("show");
+  $("win").classList.remove("show");
+  state.challenge = {start:e.startId, goal:e.goalId, rules:{...DEFAULTS, ...e.rules}, name:"", strokes:null, time:null, saved:true};
+  try{ history.replaceState(null, "", challengeUrl({start:e.startId, goal:e.goalId, rules:state.challenge.rules})); }catch(_){}
+  await loadChallenge();
+}
+$("savedBtn").addEventListener("click", ()=>{ renderSaved(); $("savedModal").classList.add("show"); });
+$("savedClose").addEventListener("click", ()=> $("savedModal").classList.remove("show"));
+$("savedModal").addEventListener("click", e=>{ if(e.target.id === "savedModal") $("savedModal").classList.remove("show"); });
+$("clearAll").addEventListener("click", ()=>{
+  if(!confirm(T("confirmClearAll"))) return;
+  try{ localStorage.removeItem(SAVE_KEY); }catch(_){}
+  renderSaved(); updateSaveBtn();
 });
 
 /* ════════ トースト ════════ */
