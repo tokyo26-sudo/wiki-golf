@@ -10,13 +10,11 @@
 <meta name="theme-color" content="#2f7d3a">
 <style>
   :root{
-    --bg:#eef5ec; --card:#ffffff; --ink:#1f2a1f; --sub:#5b6b5b;
-    --green:#2f7d3a; --green2:#e3f1e1; --flag:#d6453d; --flag2:#fbe7e5; --line:#d5e2d2;
+    --bg:#eef8e8; --card:#ffffff; --ink:#1f2a1f; --sub:#567058;
+    --green:#3c9f49; --green2:#dff3d7; --onGreen:#ffffff; --flag:#d6453d; --flag2:#fbe7e5; --line:#d0e6c6; color-scheme:light;
   }
-  @media (prefers-color-scheme: dark){
-    :root{ --bg:#141a14; --card:#1e261e; --ink:#e6eee5; --sub:#9db09b;
-      --green:#5fbf6c; --green2:#22331f; --flag:#ef7a72; --flag2:#3a2321; --line:#2f3b2e; }
-  }
+  @media (prefers-color-scheme: dark){ :root:not([data-theme="light"]){ --bg:#16251a; --card:#1f3324; --ink:#e8f1e6; --sub:#a3bda5; --green:#6cd27a; --green2:#24412b; --onGreen:#0d2311; --flag:#ef7a72; --flag2:#3e2522; --line:#335039; color-scheme:dark; } }
+  :root[data-theme="dark"]{ --bg:#16251a; --card:#1f3324; --ink:#e8f1e6; --sub:#a3bda5; --green:#6cd27a; --green2:#24412b; --onGreen:#0d2311; --flag:#ef7a72; --flag2:#3e2522; --line:#335039; color-scheme:dark; }
   *{box-sizing:border-box}
   html,body{height:100%}
   body{margin:0;background:var(--bg);color:var(--ink);
@@ -34,7 +32,8 @@
   #chBar b{font-size:1rem}
   #chBar .chRules{opacity:.8;font-size:.8rem}
   #chBar button{margin-left:auto}
-  @media (prefers-color-scheme: dark){ #chBar{background:#3a3115;color:#f3dc9b;border-color:#5c4c1d} }
+  @media (prefers-color-scheme: dark){ :root:not([data-theme="light"]) #chBar{background:#3a3115;color:#f3dc9b;border-color:#5c4c1d} }
+  :root[data-theme="dark"] #chBar{background:#3a3115;color:#f3dc9b;border-color:#5c4c1d}
 
   /* ── 上：お題 ── */
   #odai{display:grid;grid-template-columns:1fr auto 1fr;gap:10px;padding:10px 12px 6px;flex:none}
@@ -71,7 +70,7 @@
   #barBtns{flex:none;display:flex;gap:6px}
   #bar{position:relative}
   #ver{position:absolute;right:10px;bottom:1px;font-size:.6rem;color:var(--sub);opacity:.7;pointer-events:none;letter-spacing:.03em}
-  #teeoff{background:var(--green);color:#fff;border-color:var(--green);font-weight:700}
+  #teeoff{background:var(--green);color:var(--onGreen);border-color:var(--green);font-weight:700}
   #gearBtn{font-size:1.05rem;padding:3px 10px}
   #menuBtn,#findToggle{display:none;font-size:1.05rem;padding:3px 11px}
 
@@ -121,7 +120,7 @@
   .seg{display:flex;flex-wrap:wrap;gap:6px;margin-top:6px}
   .seg button.withDesc{display:flex;flex-direction:column;align-items:flex-start;text-align:left;white-space:normal;line-height:1.35;padding:6px 12px}
   .seg button.withDesc small{font-size:.7rem;opacity:.8;margin-top:1px}
-  .seg button.on{background:var(--green);color:#fff;border-color:var(--green)}
+  .seg button.on{background:var(--green);color:var(--onGreen);border-color:var(--green)}
   .srow.locked .seg{opacity:.45;pointer-events:none}
   .shead{font-size:.75rem;color:var(--sub);margin:14px 0 0;letter-spacing:.08em}
   #settings .quit{margin:2px 0 6px;border-color:var(--flag);color:var(--flag);font-weight:700}
@@ -165,12 +164,13 @@
   .homeInner{width:min(660px,100%);margin:0 auto}
   .homeHead{text-align:center;margin:6px 0 14px}
   .homeHead h1{margin:0;font-size:2.1rem;letter-spacing:.02em}
-  .homeHead p{color:var(--sub);margin:6px 0 0;font-size:.92rem}
+  .homeHead p{color:var(--sub);margin:6px 0 0;font-size:.92rem;text-wrap:balance;word-break:auto-phrase}
+  .homeCard .about,#mpHint,.snote{text-wrap:pretty;word-break:auto-phrase}
   .homeHead small{color:var(--sub);font-size:.68rem;opacity:.8}
   .homeCard{background:var(--card);border:1px solid var(--line);border-radius:14px;padding:6px 18px 14px;margin:12px 0}
   .homeBtns{display:grid;grid-template-columns:1.3fr 1fr 1fr;gap:10px;margin:16px 0}
   .homeBtns button{padding:14px 10px;font-size:1rem;font-weight:700;border-radius:12px;white-space:normal}
-  .homeBtns .prime,#mpCreate,#lbStart,#mpJoin.prime{background:var(--green);color:#fff;border-color:var(--green);font-weight:700}
+  .homeBtns .prime,#mpCreate,#lbStart,#mpJoin.prime{background:var(--green);color:var(--onGreen);border-color:var(--green);font-weight:700}
   #hBack{border:0;background:transparent;color:var(--sub);padding:4px 0;margin-bottom:4px}
   .homeCard h2{margin:12px 0 4px;font-size:1.2rem}
   .homeCard .about{font-size:.85rem;color:var(--sub);margin:0 0 6px}
@@ -212,7 +212,8 @@
   #mpStrip .chip.off{opacity:.5}
   #mpStrip .chip.reach{border-color:#e8590c;background:#fff1e6;color:#9a3412;animation:reachPulse 1.2s infinite}
   @keyframes reachPulse{50%{box-shadow:0 0 0 4px rgba(232,89,12,.2)}}
-  @media (prefers-color-scheme: dark){ #mpStrip .chip.reach{background:#3b2414;color:#fdba74} }
+  @media (prefers-color-scheme: dark){ :root:not([data-theme="light"]) #mpStrip .chip.reach{background:#3b2414;color:#fdba74} }
+  :root[data-theme="dark"] #mpStrip .chip.reach{background:#3b2414;color:#fdba74}
   #mpRes{margin-top:12px;border-top:1px solid var(--line);padding-top:10px}
   .mpResHead{font-weight:800;text-align:center;margin-bottom:6px}
   .mpR{padding:6px 0;border-bottom:1px dotted var(--line);font-size:.9rem}
@@ -221,6 +222,62 @@
   .mpR .rt{font-size:.78rem;color:var(--sub);word-break:break-word;margin-top:2px}
   #winNew:disabled{opacity:.45}
   @media (max-width:720px){ #mpStrip{margin:6px 8px 0} }
+
+  /* プレイ中：お題は打数の帯に1行で */
+  #miniOdai{display:flex;align-items:center;gap:4px;min-width:0;max-width:42%;flex:0 1 auto}
+  #miniOdai .mo{border:0;background:transparent;padding:2px 4px;font-weight:700;font-size:.92rem;white-space:nowrap;overflow:hidden;text-overflow:ellipsis;min-width:0;max-width:17em;color:var(--ink)}
+  #moStart::before{content:"🏌️ "}
+  #moGoal::before{content:"🚩 "}
+  #moGoal{color:var(--flag) !important}
+  .moArrow{color:var(--sub);flex:none}
+  #moTag{flex:none;font-size:.7rem;padding:1px 8px;border-radius:999px;background:#fff4d6;color:#5a4300;white-space:nowrap}
+  #moTag:empty{display:none}
+  body.playing #odai, body.playing #chBar{display:none !important}
+  #pageNum.warn{color:var(--flag)}
+  /* 対戦の様子：広い画面では右の列 */
+  #main{flex:1;min-height:0;display:flex;flex-direction:column}
+  #mpStrip .stripHead{display:none}
+  #mpStrip .chip .st{margin-left:2px}
+  @media (min-width:1100px){
+    body.inmp.playing #main{flex-direction:row}
+    body.inmp.playing #mpStrip{order:2;flex-direction:column;width:250px;flex:none;margin:8px 12px 12px 0;overflow-y:auto;gap:8px}
+    body.inmp.playing #mpStrip .stripHead{display:block;font-size:.78rem;color:var(--sub);font-weight:700}
+    body.inmp.playing #mpStrip .chip{border-radius:12px;white-space:normal;padding:8px 12px;display:flex;flex-direction:column;gap:2px}
+    body.inmp.playing #viewerWrap{margin-right:8px}
+  }
+  /* スタンプ */
+  #stampBtn{font-size:1.05rem;padding:3px 10px}
+  #stampPop{position:fixed;z-index:26;background:var(--card);border:1px solid var(--line);border-radius:12px;box-shadow:0 10px 30px rgba(0,0,0,.18);padding:6px;display:grid;grid-template-columns:1fr 1fr;gap:4px;min-width:220px}
+  #stampPop button{border:0;text-align:left;padding:8px 10px;background:transparent}
+  #stampPop .em,.stampRow button{font-size:1.3rem}
+  .stampRow{display:flex;gap:6px;justify-content:center;flex-wrap:wrap;margin:10px 0}
+  .stampRow button{padding:4px 10px;border-radius:999px}
+  #stampLayer{position:fixed;right:16px;top:76px;z-index:45;display:flex;flex-direction:column;gap:6px;pointer-events:none;align-items:flex-end}
+  .stamp{background:var(--card);border:1px solid var(--line);border-radius:16px;padding:6px 14px;box-shadow:0 6px 18px rgba(0,0,0,.15);display:flex;align-items:center;gap:8px;font-size:.9rem;animation:stampIn .25s ease-out;transition:opacity .4s}
+  .stamp .em{font-size:1.8rem;line-height:1}
+  .stamp .lb{color:var(--sub)}
+  .stamp.bye{opacity:0}
+  @keyframes stampIn{from{transform:translateY(-8px) scale(.9);opacity:0}}
+  #mpList .rename{margin-left:auto;float:right;padding:0 8px;font-size:.8rem;border-radius:8px}
+  /* 待合室のお題 */
+  #lbOdai{display:grid;grid-template-columns:1fr 1fr;gap:8px;margin:10px 0}
+  .lbCard{border:1px solid var(--line);border-radius:10px;padding:8px 10px;min-width:0}
+  .lbCard .tag{font-size:.72rem}
+  .lbCard .meta{font-size:.68rem}
+  .lbTitle{font-weight:800;font-size:1.05rem;margin:4px 0 2px;word-break:break-word}
+  .lbTitle.link{cursor:pointer;text-decoration:underline dotted var(--sub);text-underline-offset:4px}
+  .lbExt{font-size:.75rem;color:var(--sub);margin:0;display:-webkit-box;-webkit-line-clamp:3;-webkit-box-orient:vertical;overflow:hidden}
+  .lbBtns{display:flex;gap:6px;flex-wrap:wrap;margin-top:6px}
+  .lbBtns button{font-size:.78rem;padding:3px 10px}
+  /* 通信の記録（debug=1） */
+  #mpLog{position:fixed;left:8px;bottom:8px;z-index:60;width:min(460px,calc(100vw - 16px));max-height:40vh;overflow:auto;background:rgba(0,0,0,.82);color:#9ef09e;font:11px/1.4 ui-monospace,Menlo,monospace;padding:6px 8px;border-radius:8px;white-space:pre-wrap;pointer-events:auto}
+  @media (max-width:720px){
+    #bar{flex-wrap:wrap}
+    #miniOdai{order:-1;flex-basis:100%;max-width:100%}
+    #lbOdai{grid-template-columns:1fr}
+    body.inmp #barBtns > #stampBtn:not([hidden]){display:inline-block}
+    #stampLayer{top:auto;bottom:70px;right:10px}
+  }
 
   /* トースト */
   #toast{position:fixed;left:50%;bottom:24px;transform:translateX(-50%);background:var(--ink);color:var(--bg);
@@ -250,7 +307,7 @@
   #win .nameRow{margin-top:14px;font-size:.85rem;color:var(--sub);text-align:center}
   #win .nameRow input{font:inherit;padding:4px 8px;border:1px solid var(--line);border-radius:8px;background:var(--card);color:var(--ink);width:180px}
   #win .btns{margin-top:12px;display:flex;gap:8px;justify-content:center;flex-wrap:wrap}
-  #win .btns .prime{background:var(--green);color:#fff;border-color:var(--green);font-weight:700}
+  #win .btns .prime{background:var(--green);color:var(--onGreen);border-color:var(--green);font-weight:700}
 
   /* ── スマホ ── */
   @media (max-width:720px){
@@ -320,10 +377,12 @@
 </section>
 
 <section id="bar">
+  <div id="miniOdai" hidden><span id="moTag"></span><button class="mo" id="moStart"></button><span class="moArrow">→</span><button class="mo" id="moGoal"></button></div>
   <div class="stat"><div class="num" id="strokeNum">0</div><div class="lbl" data-t="strokes"></div></div>
   <div class="stat"><div class="num" id="clockNum">0:00</div><div class="lbl" id="clockLbl"></div></div>
+  <div class="stat" id="pageStat" hidden><div class="num" id="pageNum">0</div><div class="lbl" data-t="pageLeft"></div></div>
   <div id="route"></div>
-  <span id="ver">v1.0</span>
+  <span id="ver">v1.1</span>
   <div id="barBtns">
     <button id="teeoff" disabled data-t="teeoff"></button>
     <button id="backBtn" hidden data-t="back"></button>
@@ -331,13 +390,12 @@
     <button id="saveOdai" disabled data-t="saveOdai"></button>
     <button id="savedBtn">📁</button>
     <button id="shareOdai" disabled data-t="share"></button>
+    <button id="stampBtn" hidden>😀</button>
     <button id="gearBtn">⚙️</button>
     <button id="findToggle" hidden>🔍</button>
     <button id="menuBtn">⋯</button>
   </div>
 </section>
-
-<div id="mpStrip" hidden></div>
 
 <div id="menuPop" hidden>
   <button data-for="backBtn" data-t="back"></button>
@@ -345,10 +403,13 @@
   <button data-for="saveOdai" data-t="saveOdai"></button>
   <button data-for="savedBtn" data-t="savedList"></button>
   <button data-for="shareOdai" data-t="share"></button>
+  <button data-for="stampBtn" data-t="stampTitle"></button>
   <button data-for="gearBtn" data-t="settings"></button>
   <button data-for="toHome" data-t="toHome"></button>
 </div>
 
+<div id="main">
+<div id="mpStrip" hidden></div>
 <section id="viewerWrap">
   <div id="findbar" hidden>
     <input type="search" id="sInput">
@@ -360,6 +421,11 @@
   <iframe id="frame" title="article"></iframe>
   <div id="placeholder" data-t-html="placeholder"></div>
 </section>
+</div>
+
+<div id="stampPop" hidden></div>
+<div id="stampLayer"></div>
+<pre id="mpLog" hidden></pre>
 
 <div id="pop" hidden></div>
 
@@ -372,7 +438,7 @@
 
 <div id="settings" class="overlay">
   <div class="panel">
-    <h2><span data-t="settings"></span> <small style="font-size:.65rem;font-weight:400;color:var(--sub)">v1.0</small></h2>
+    <h2><span data-t="settings"></span> <small style="font-size:.65rem;font-weight:400;color:var(--sub)">v1.1</small></h2>
     <p class="lockNote" id="lockNote" hidden></p>
     <button id="quitHole" class="quit" hidden></button>
     <button id="toHome" data-t="toHome"></button>
@@ -399,7 +465,7 @@
 
 <div id="home">
   <div class="homeInner">
-    <div class="homeHead"><h1>⛳ <span data-t="appName"></span></h1><p data-t="homeAbout"></p><small>v1.0</small></div>
+    <div class="homeHead"><h1>⛳ <span data-t="appName"></span></h1><p data-t="homeAbout"></p><small>v1.1</small></div>
 
     <section id="homeMain">
       <div class="homeBtns">
@@ -433,8 +499,10 @@
         <div class="mpRow" style="justify-content:center"><button id="mpCopy" data-t="copy"></button></div>
         <div id="lbCount"></div>
         <ul id="mpList"></ul>
+        <div id="lbOdai"></div>
         <div id="lbRulesGuest" hidden><b data-t="lbRulesGuest"></b><span id="lbRulesText"></span></div>
         <div id="lbRules"></div>
+        <div id="lbStamps" class="stampRow"></div>
         <p id="mpHint"></p>
         <button id="lbStart" data-t="lbStart"></button>
         <div class="mpRow" style="justify-content:center"><button id="mpLeaveBtn" data-t="mpLeave"></button></div>
@@ -465,6 +533,7 @@
     <div class="path" id="winPath"></div>
     <div class="rules" id="winRules"></div>
     <div id="mpRes" hidden></div>
+    <div id="winStamps" class="stampRow" hidden></div>
     <div class="nameRow" id="nameRow"><span data-t="nameLbl"></span> <input id="myName" maxlength="20"></div>
     <div class="btns">
       <button id="saveRecord" data-t="saveRecord"></button>
@@ -1060,6 +1129,71 @@ Object.assign(STR["zh-hans"], {
   mpHintHost:"决定规则后按“全员开始”。题目会在开始的瞬间公开", mpHintGuest:"等待房主开始。题目会在开始的瞬间公开"
 });
 
+/* ── v1.1 の言葉 ── */
+Object.assign(STR.ja, {
+  limit:"制限時間（1ホール全体）", pageLimit:"1ページの持ち時間", pageNote:"時間切れになると、記事の中のリンクに勝手に飛ぶよ（1打に数える）",
+  sec:n=>`${n}秒`, forcedWarn:"あと5秒で勝手に飛ぶよ！", forcedToast:"🎲 強制ショット！", forcedIn:"🎲 強制ショットでカップイン！",
+  imgForced:"打 🎲強制ショットでカップイン！", rPage:n=>`1ページ${n}秒`, mpForced:"強制ショット！", pageLeft:"持ち時間",
+  theme:"画面の色", themeAuto:"自動", themeLight:"ライト", themeDark:"ダーク",
+  mpRename:"✏️ 名前を変える", mpRenamePrompt:"新しい名前", stampTitle:"スタンプ",
+  stamps:["余裕","焦ってる","考え中","わろた","たのむ…","やった！"],
+  mpHintHost:"お題を引き直して決めたら「全員でスタート」。押した瞬間にゲーム開始！", mpHintGuest:"ホストがお題を決めてるよ。全文を読んで作戦を立てよう"
+});
+Object.assign(STR.en, {
+  limit:"Time limit (whole hole)", pageLimit:"Time per page", pageNote:"When it runs out, you jump to a random link in the article (counts as a stroke)",
+  sec:n=>`${n} s`, forcedWarn:"Random jump in 5 seconds!", forcedToast:"🎲 Forced shot!", forcedIn:"🎲 Holed out with a forced shot!",
+  imgForced:"strokes — 🎲 forced-shot hole out!", rPage:n=>`${n} s per page`, mpForced:"forced shot!", pageLeft:"Page",
+  theme:"Color theme", themeAuto:"Auto", themeLight:"Light", themeDark:"Dark",
+  mpRename:"✏️ Rename", mpRenamePrompt:"New name", stampTitle:"Stamps",
+  stamps:["Easy","Panicking","Thinking","LOL","Please…","Yay!"],
+  mpHintHost:"Reroll until you like the course, then “Start for everyone” — play begins instantly", mpHintGuest:"The host is choosing the course. Read it and plan your route"
+});
+Object.assign(STR.fr, {
+  limit:"Temps limite (tout le trou)", pageLimit:"Temps par page", pageNote:"À la fin du temps, vous sautez vers un lien au hasard de l'article (compte comme un coup)",
+  sec:n=>`${n} s`, forcedWarn:"Saut aléatoire dans 5 secondes !", forcedToast:"🎲 Coup forcé !", forcedIn:"🎲 Dans le trou sur un coup forcé !",
+  imgForced:"coups — 🎲 dans le trou sur un coup forcé !", rPage:n=>`${n} s par page`, mpForced:"coup forcé !", pageLeft:"Page",
+  theme:"Couleurs", themeAuto:"Auto", themeLight:"Clair", themeDark:"Sombre",
+  mpRename:"✏️ Renommer", mpRenamePrompt:"Nouveau nom", stampTitle:"Tampons",
+  stamps:["Tranquille","Panique","Réfléchit","MDR","Pitié…","Youpi !"],
+  mpHintHost:"Retirez jusqu'à ce que le parcours vous plaise, puis « Lancer pour tous » : la partie démarre aussitôt", mpHintGuest:"L'hôte choisit le parcours. Lisez-le et préparez votre route"
+});
+Object.assign(STR.es, {
+  limit:"Tiempo límite (todo el hoyo)", pageLimit:"Tiempo por página", pageNote:"Al agotarse, saltas a un enlace al azar del artículo (cuenta como golpe)",
+  sec:n=>`${n} s`, forcedWarn:"¡Salto aleatorio en 5 segundos!", forcedToast:"🎲 ¡Golpe forzado!", forcedIn:"🎲 ¡Embocada con un golpe forzado!",
+  imgForced:"golpes — 🎲 ¡embocada forzada!", rPage:n=>`${n} s por página`, mpForced:"¡golpe forzado!", pageLeft:"Página",
+  theme:"Colores", themeAuto:"Auto", themeLight:"Claro", themeDark:"Oscuro",
+  mpRename:"✏️ Cambiar nombre", mpRenamePrompt:"Nuevo nombre", stampTitle:"Sellos",
+  stamps:["Tranqui","Nervioso","Pensando","JAJA","Porfa…","¡Bien!"],
+  mpHintHost:"Cambia hasta que te guste el recorrido y pulsa «Empezar todos»: la partida empieza al instante", mpHintGuest:"El anfitrión está eligiendo el recorrido. Léelo y planea tu ruta"
+});
+Object.assign(STR.ko, {
+  limit:"제한 시간(홀 전체)", pageLimit:"페이지당 제한 시간", pageNote:"시간이 다 되면 문서 안의 링크로 무작위 이동해요(1타로 계산)",
+  sec:n=>`${n}초`, forcedWarn:"5초 뒤에 무작위로 이동해요!", forcedToast:"🎲 강제 샷!", forcedIn:"🎲 강제 샷으로 홀인!",
+  imgForced:"타 🎲 강제 샷으로 홀인!", rPage:n=>`페이지당 ${n}초`, mpForced:"강제 샷!", pageLeft:"페이지",
+  theme:"화면 색", themeAuto:"자동", themeLight:"라이트", themeDark:"다크",
+  mpRename:"✏️ 이름 바꾸기", mpRenamePrompt:"새 이름", stampTitle:"스탬프",
+  stamps:["여유","초조","고민 중","ㅋㅋㅋ","제발…","해냈다!"],
+  mpHintHost:"코스를 다시 뽑아 정한 뒤 ‘모두 시작’. 누르는 순간 게임 시작!", mpHintGuest:"방장이 코스를 고르고 있어요. 전문을 읽고 작전을 세워 보세요"
+});
+Object.assign(STR["zh-hant"], {
+  limit:"時間限制（整洞）", pageLimit:"每頁限時", pageNote:"時間到會自動跳到條目中的隨機連結（算 1 桿）",
+  sec:n=>`${n} 秒`, forcedWarn:"5 秒後自動跳轉！", forcedToast:"🎲 強制擊球！", forcedIn:"🎲 強制擊球進洞！",
+  imgForced:"桿 🎲 強制擊球進洞！", rPage:n=>`每頁 ${n} 秒`, mpForced:"強制擊球！", pageLeft:"本頁",
+  theme:"畫面顏色", themeAuto:"自動", themeLight:"淺色", themeDark:"深色",
+  mpRename:"✏️ 改名字", mpRenamePrompt:"新名字", stampTitle:"貼圖",
+  stamps:["游刃有餘","好緊張","思考中","笑死","拜託…","成功！"],
+  mpHintHost:"重抽決定題目後按「全員開始」，按下就立刻開始！", mpHintGuest:"房主正在決定題目。先讀全文想好路線吧"
+});
+Object.assign(STR["zh-hans"], {
+  limit:"时间限制（整洞）", pageLimit:"每页限时", pageNote:"时间到会自动跳到条目中的随机链接（算 1 杆）",
+  sec:n=>`${n} 秒`, forcedWarn:"5 秒后自动跳转！", forcedToast:"🎲 强制击球！", forcedIn:"🎲 强制击球进洞！",
+  imgForced:"杆 🎲 强制击球进洞！", rPage:n=>`每页 ${n} 秒`, mpForced:"强制击球！", pageLeft:"本页",
+  theme:"界面颜色", themeAuto:"自动", themeLight:"浅色", themeDark:"深色",
+  mpRename:"✏️ 改名字", mpRenamePrompt:"新名字", stampTitle:"贴图",
+  stamps:["游刃有余","好紧张","思考中","笑死","拜托…","成功！"],
+  mpHintHost:"重抽决定题目后按“全员开始”，按下就立刻开始！", mpHintGuest:"房主正在决定题目。先读全文想好路线吧"
+});
+
 /* ════════ 設定 ════════ */
 function browserLang(){
   for(const l of (navigator.languages || [navigator.language || "en"])){
@@ -1069,8 +1203,8 @@ function browserLang(){
   return "en";
 }
 const DEFAULTS = {lang:browserLang(), zhVariant:"auto", difficulty:"normal", allowCategory:true, allowBack:true,
-                  allowSearch:true, timeLimit:0, goalView:"full", shape:"wide", routeImg:"hide"};
-const RULE_KEYS = ["lang","difficulty","allowCategory","allowBack","allowSearch","timeLimit","goalView"];
+                  allowSearch:true, timeLimit:0, pageLimit:0, goalView:"full", shape:"wide", routeImg:"hide", theme:"auto"};
+const RULE_KEYS = ["lang","difficulty","allowCategory","allowBack","allowSearch","timeLimit","pageLimit","goalView"];
 
 let settings = {...DEFAULTS};
 try{ Object.assign(settings, JSON.parse(localStorage.getItem("wikiGolfSettings") || "{}")); }catch(e){}
@@ -1265,6 +1399,13 @@ function fillCard(role){
 
 function setPlaying(on){
   state.playing = on;
+  $("miniOdai").hidden = !on;
+  if(on){
+    $("moStart").textContent = shown(state.start);
+    $("moGoal").textContent = shown(state.goal);
+    const ch = state.challenge, m = state.mp;
+    $("moTag").textContent = m ? `⚔️ ${m.room}` : ch ? (ch.strokes != null ? `⚔️ ${chName(ch)} ${T("sk", ch.strokes)}` : ch.saved ? "⭐" : "🔗") : "";
+  }
   document.body.classList.toggle("playing", on);
   if(!on) document.body.classList.remove("collapsed");
 }
@@ -1284,6 +1425,7 @@ function resetGame(){
   $("frame").removeAttribute("srcdoc");
   $("placeholder").hidden = false;
   state.backs = 0; state.reach = false; state.nsNow = 0; state.pct = 0; state.goalCheck = false; state.searchUntil = 0;
+  $("pageStat").hidden = true;
   mpControls();
 }
 function resetClockLabel(){
@@ -1519,7 +1661,7 @@ function onFrameClick(e){
   go(t);
 }
 
-async function go(title, {count = true, back = false} = {}){
+async function go(title, {count = true, back = false, forced = false} = {}){
   if(state.busy) return;
   state.busy = true;
   $("frame").classList.add("busy");
@@ -1531,7 +1673,8 @@ async function go(title, {count = true, back = false} = {}){
     state.nsNow = parsed.ns; state.pct = 0;
     if(count){ state.strokes++; $("strokeNum").textContent = state.strokes; }
     if(!back) state.stack.push(parsed.title);
-    state.route.push({title:parsed.title, shown:parsed.shownTitle, back});
+    state.route.push({title:parsed.title, shown:parsed.shownTitle, back, forced});
+    state.pageT0 = Date.now(); state.forcedWarned = false;
     drawRoute();
     $("backBtn").disabled = state.stack.length < 2;
     if(state.route.length > 1 && norm(parsed.title) === norm(state.goal.title)) finish(true);
@@ -1551,7 +1694,7 @@ function drawRoute(){
     if(i){ const sep = document.createElement("span"); sep.className = "sep"; sep.textContent = s.back ? "↩" : "→"; r.appendChild(sep); }
     const sp = document.createElement("span");
     sp.className = "step" + (s.back ? " back" : "");
-    sp.textContent = s.shown;
+    sp.textContent = (s.forced ? "🎲" : "") + s.shown;
     r.appendChild(sp);
   });
   r.scrollLeft = r.scrollWidth;
@@ -1572,6 +1715,34 @@ function tick(){
     $("clockNum").classList.toggle("warn", left <= 30);
     if(left <= 0 && state.playing) finish(false);
   }else $("clockNum").textContent = fmtTime(sec);
+  const pl = state.rules && state.rules.pageLimit;
+  if(pl && state.playing){
+    if(state.busy || !state.pageT0) state.pageT0 = Date.now();
+    const left = Math.max(0, pl - (Date.now() - state.pageT0) / 1000);
+    $("pageNum").textContent = Math.ceil(left);
+    $("pageNum").classList.toggle("warn", left <= 5);
+    if(left <= 5 && left > 0 && !state.forcedWarned){ state.forcedWarned = true; toast(T("forcedWarn")); }
+    if(left <= 0 && !state.busy) forcedShot();
+  }
+}
+/* 持ち時間切れ：記事の中の使えるリンクからランダムに1つ選んで飛ぶ（1打） */
+function forcedShot(){
+  if(!state.playing || state.busy) return;
+  state.pageT0 = Date.now(); state.forcedWarned = false;
+  const doc = $("frame").contentDocument;
+  if(!doc) return;
+  const cands = [...doc.querySelectorAll("#mw-content-text a[href], .catlinks a[href]")].filter(a => {
+    const h = a.getAttribute("href") || "";
+    if(h.startsWith("#")) return false;
+    const t = linkTitle(h);
+    return t && !linkAllowed(a, t, state.rules);
+  });
+  if(!cands.length) return;
+  const a = cands[Math.floor(Math.random() * cands.length)];
+  toast(T("forcedToast"));
+  state.forcedUntil = Date.now() + 4000;
+  mpAct();
+  go(linkTitle(a.getAttribute("href")), {forced:true});
 }
 
 /* ════════ ボタン ════════ */
@@ -1591,6 +1762,9 @@ async function startGame(){
   document.querySelectorAll(".card .reroll").forEach(b => b.disabled = true);
   $("clockLbl").textContent = state.rules.timeLimit ? T("left") : T("time");
   state.backs = 0; state.lastAct = Date.now();
+  state.pageT0 = Date.now(); state.forcedWarned = false; state.forcedUntil = 0;
+  $("pageStat").hidden = !state.rules.pageLimit;
+  if(state.rules.pageLimit) $("pageNum").textContent = state.rules.pageLimit;
   mpControls();
   renderStrip();
   await ensureNs();
@@ -1640,7 +1814,7 @@ $("findToggle").addEventListener("click", ()=>{
 /* ════════ プレビュー・全文 ════════ */
 const canHover = matchMedia("(hover: hover)").matches;
 let popTimer;
-function showPop(role){
+function showPop(role, anchor){
   const p = state[role];
   if(!p) return;
   const view = role === "goal" ? eff().goalView : "full";
@@ -1651,11 +1825,17 @@ function showPop(role){
   pop.innerHTML = (p.thumbnail ? `<img src="${esc(p.thumbnail.source)}" alt="">` : "") +
     `<div class="ptext">${esc(text) || esc(T("noSummary"))}</div>` +
     (view === "full" ? `<div class="pfoot">${esc(T("clickFull"))}</div>` : "");
-  const r = $(role).getBoundingClientRect();
+  const r = (anchor || $(role)).getBoundingClientRect();
   pop.hidden = false;
   pop.style.left = Math.max(12, Math.min(r.left, innerWidth - pop.offsetWidth - 12)) + "px";
   pop.style.top = (r.bottom + 6) + "px";
 }
+$("moStart").addEventListener("click", ()=> openReader("start"));
+$("moGoal").addEventListener("click", ()=>{
+  const v = eff().goalView;
+  if(v === "full") openReader("goal");
+  else if(v === "summary") $("pop").hidden ? showPop("goal", $("moGoal")) : hidePop();
+});
 function hidePop(){ clearTimeout(popTimer); $("pop").hidden = true; }
 
 ["start","goal"].forEach(role=>{
@@ -1766,8 +1946,10 @@ function schema(){
     {key:"allowBack", label:T("backRule"), rule:true, opts:[[true,T("yes")],[false,T("no")]]},
     {key:"allowSearch", label:T("searchRule"), note:T("searchNote"), rule:true, opts:[[true,T("yes")],[false,T("no")]]},
     {key:"timeLimit", label:T("limit"), rule:true, opts:[[0,T("none")],[180,T("min",3)],[300,T("min",5)],[600,T("min",10)]]},
+    {key:"pageLimit", label:T("pageLimit"), note:T("pageNote"), rule:true, opts:[[0,T("none")],[30,T("sec",30)],[60,T("min",1)],[120,T("min",2)]]},
     {head:T("hView")},
     {key:"goalView", label:T("view"), note:T("viewNote"), rule:true, opts:[["full",T("full")],["summary",T("summary")],["title",T("titleOnly")]]},
+    {key:"theme", label:T("theme"), opts:[["auto",T("themeAuto")],["light",T("themeLight")],["dark",T("themeDark")]]},
     {head:T("hImg")},
     {key:"shape", label:T("shape"), opts:[["wide",T("wide")],["square",T("square")]]},
     {key:"routeImg", label:T("routeImg"), note:T("routeNote"), opts:[["hide",T("routeHide")],["show",T("routeShow")]]}
@@ -1825,6 +2007,7 @@ function changeSetting(key, val){
   buildSettings();
   if(key === "goalView"){ fillCard("goal"); hidePop(); }
   if(key === "timeLimit" && !state.playing) resetClockLabel();
+  if(key === "theme") applyTheme();
   if(key === "difficulty" && old !== val && state.screen === "game") toast(T("nextOdai"));
   renderHome();
   mpRulesChanged();
@@ -1839,9 +2022,15 @@ $("gearBtn").addEventListener("click", ()=>{ buildSettings(); $("settings").clas
 $("settingsClose").addEventListener("click", ()=> $("settings").classList.remove("show"));
 $("settings").addEventListener("click", e=>{ if(e.target.id === "settings") $("settings").classList.remove("show"); });
 
+function applyTheme(){
+  const t = settings.theme;
+  if(t === "light" || t === "dark") document.documentElement.dataset.theme = t;
+  else delete document.documentElement.dataset.theme;
+}
 function rulesText(r){
   const parts = [T("rDiff") + T(r.difficulty)];
   parts.push(r.timeLimit ? T("rLimit", r.timeLimit/60) : T("rNoLimit"));
+  if(r.pageLimit) parts.push(T("rPage", r.pageLimit));
   parts.push(T("rView") + T({full:"vFull", summary:"vSum", title:"vTitle"}[r.goalView]));
   if(!r.allowCategory) parts.push(T("rNoCat"));
   if(!r.allowBack) parts.push(T("rNoBack"));
@@ -1858,10 +2047,11 @@ function finish(success, reason){
   const r = state.result = {
     success, startId:state.start.title, goalId:state.goal.title,
     start:shown(state.start), goal:shown(state.goal), strokes:state.strokes,
-    route:state.route.map(s=>({title:s.shown, back:s.back})), elapsed:state.elapsed, rules:state.rules, date:new Date()
+    route:state.route.map(s=>({title:s.shown, back:s.back, forced:!!s.forced})), elapsed:state.elapsed, rules:state.rules, date:new Date()
   };
+  r.forcedIn = success && !!(state.route.length && state.route[state.route.length - 1].forced);
   r.vs = judge(r, state.challenge);
-  $("winHead").textContent = success ? (r.strokes === 1 ? T("hio") : T("cupIn")) : reason === "giveup" ? T("giveUpHead") : T("timeUp");
+  $("winHead").textContent = success ? (r.forcedIn ? T("forcedIn") : r.strokes === 1 ? T("hio") : T("cupIn")) : reason === "giveup" ? T("giveUpHead") : T("timeUp");
   $("winStart").textContent = r.start;
   $("winGoal").textContent = r.goal;
   $("winN").textContent = r.strokes;
@@ -1870,7 +2060,7 @@ function finish(success, reason){
   const path = $("winPath"); path.innerHTML = "";
   r.route.forEach((s,i)=>{
     if(i){ const sp = document.createElement("span"); sp.className = "sep"; sp.textContent = s.back ? " ↩ " : " → "; path.appendChild(sp); }
-    const t = document.createElement("span"); if(s.back) t.className = "back"; t.textContent = s.title; path.appendChild(t);
+    const t = document.createElement("span"); if(s.back) t.className = "back"; t.textContent = (s.forced ? "🎲" : "") + s.title; path.appendChild(t);
   });
   $("winRules").textContent = rulesText(r.rules);
   const vs = $("winVs");
@@ -1900,7 +2090,7 @@ const D_CODE = {easy:"e", normal:"n", any:"a"}, V_CODE = {full:"f", summary:"s",
 const inv = o => Object.fromEntries(Object.entries(o).map(([k,v])=>[v,k]));
 function encodeRules(r){
   return [D_CODE[r.difficulty] || "n", r.allowCategory ? 1 : 0, r.allowBack ? 1 : 0, r.allowSearch ? 1 : 0,
-          r.timeLimit || 0, V_CODE[r.goalView] || "f"].join(".");
+          r.timeLimit || 0, V_CODE[r.goalView] || "f", r.pageLimit || 0].join(".");
 }
 function decodeRules(str, lang){
   const a = String(str || "").split(".");
@@ -1910,7 +2100,8 @@ function decodeRules(str, lang){
     difficulty: inv(D_CODE)[a[0]] || "normal",
     allowCategory: a[1] !== "0", allowBack: a[2] !== "0", allowSearch: a[3] !== "0",
     timeLimit: [0,180,300,600].includes(t) ? t : 0,
-    goalView: inv(V_CODE)[a[5]] || "full"
+    goalView: inv(V_CODE)[a[5]] || "full",
+    pageLimit: [0,30,60,120].includes(parseInt(a[6], 10)) ? parseInt(a[6], 10) : 0
   };
 }
 let myName = "";
@@ -2103,6 +2294,7 @@ function routeTokens(steps, maskMid, showLast){
     if(i) toks.push({t: s.back ? " ↩ " : " → ", c:C.sub, sep:true});
     const isEnd = i === 0 || (showLast && i === steps.length - 1);
     const mask = maskMid && !isEnd && !s.gap;
+    if(s.forced) toks.push({t:"🎲", c:C.ink});
     toks.push({t:s.title, c: mask ? C.ink : (s.gap || s.back) ? C.sub : C.ink, mask});
   });
   return toks;
@@ -2167,7 +2359,7 @@ function drawShare(measureOnly, W, H, routeFont, steps, oy = 0, qr = null){
   const sc = String(r.strokes);
   ctx.font = FONT(900, 104);
   const nw = ctx.measureText(sc).width;
-  const unit = r.success ? (r.strokes === 1 ? T("imgHio") : T("imgOk", r.strokes)) : T("imgNg");
+  const unit = r.success ? (r.forcedIn ? T("imgForced") : r.strokes === 1 ? T("imgHio") : T("imgOk", r.strokes)) : T("imgNg");
   ctx.font = FONT(600, 24);
   const timeStr = T("timeLbl") + fmtTime(r.elapsed);
   const timeW = ctx.measureText(timeStr).width;
@@ -2386,7 +2578,8 @@ function renderSaved(){
         const rt = el("div", "rt");
         p.route.forEach((st, i) => {
           if(i) rt.append(st.back ? " ↩ " : " → ");
-          rt.append(st.back ? el("span", "b", st.title) : st.title);
+          const tt = (st.forced ? "🎲" : "") + st.title;
+          rt.append(st.back ? el("span", "b", tt) : tt);
         });
         item.append(line, rt);
         list.append(item);
@@ -2428,6 +2621,7 @@ function showHome(view = "main"){
   $("homeMp").hidden = view !== "mp";
   $("homeLobby").hidden = view !== "lobby";
   renderHome();
+  renderStrip();
 }
 function hideHome(){
   state.screen = "game";
@@ -2459,6 +2653,17 @@ const MP_MAX = 4;
 let sbClient = null;
 const mk = (tag, cls, text) => { const x = document.createElement(tag); if(cls) x.className = cls; if(text != null) x.textContent = text; return x; };
 
+/* ── 通信の記録（URLに debug=1 を付けると画面に出る） ── */
+let DEBUG = /[?&]debug=1/.test(location.search);
+try{ if(DEBUG) sessionStorage.setItem("wgDebug", "1"); else DEBUG = sessionStorage.getItem("wgDebug") === "1"; }catch(_){}
+const mpLogLines = [];
+function mpLog(dir, text){
+  const d = new Date(), p = n => String(n).padStart(2, "0");
+  mpLogLines.push(`${p(d.getHours())}:${p(d.getMinutes())}:${p(d.getSeconds())} ${dir} ${text}`);
+  if(mpLogLines.length > 60) mpLogLines.shift();
+  if(DEBUG){ const el = $("mpLog"); el.hidden = false; el.textContent = mpLogLines.slice(-30).join("\n"); el.scrollTop = el.scrollHeight; }
+}
+
 function loadSupabase(){
   if(window.supabase && window.supabase.createClient) return Promise.resolve();
   return new Promise((res, rej)=>{
@@ -2470,14 +2675,36 @@ function loadSupabase(){
 const rid = () => Math.random().toString(36).slice(2, 10);
 const ROOM_CHARS = "ABCDEFGHJKLMNPQRSTUVWXYZ23456789";
 const newRoomCode = () => Array.from({length:4}, () => ROOM_CHARS[Math.floor(Math.random() * ROOM_CHARS.length)]).join("");
-const freshStats = () => ({strokes:0, backs:0, act:"", pct:0, reach:false, done:false, success:false, elapsed:0, route:null, inRound:false});
+const freshStats = () => ({strokes:0, backs:0, act:"", pct:0, reach:false, done:false, success:false, elapsed:0, route:null, inRound:false, seen:0});
 const byId = (a, b) => a.id < b.id ? -1 : 1;
 function isHost(){ return !!state.mp && state.mp.hostId === state.mp.me.id; }
-function mpSend(payload){
-  const m = state.mp;
-  if(m && m.ch && m.subscribed) m.ch.send({type:"broadcast", event:"g", payload:{...payload, from:m.me.id}});
-}
 function hostRules(){ return pickRules(eff()); }
+
+/* 合図を送る：サーバーの受け取り確認（ack）がなければもう一度 */
+async function mpSend(payload, tries = 2){
+  const m = state.mp;
+  if(!m || !m.ch || !m.subscribed) return;
+  const body = {...payload, from:m.me.id};
+  for(let i = 0; i < tries; i++){
+    let res;
+    try{ res = await m.ch.send({type:"broadcast", event:"g", payload:body}); }catch(e){ res = "error:" + e.message; }
+    if(payload.t !== "st" || res !== "ok") mpLog("→", `${payload.t} ${res}`);
+    if(res === "ok" || state.mp !== m) return;
+    await new Promise(r => setTimeout(r, 700));
+  }
+}
+function mpTrack(){
+  const m = state.mp;
+  if(m && m.ch) m.ch.track({id:m.me.id, name:m.me.name, joinedAt:m.me.joinedAt, host:m.amHost});
+}
+/* 名前が同じ人がいたら、あとから来た人に (2) を付ける */
+function dname(id){
+  const m = state.mp, p = m && m.players.get(id);
+  if(!p) return "…";
+  const same = m.arrival.filter(x => { const q = m.players.get(x); return q && !q.left && q.name === p.name; });
+  const k = same.indexOf(id);
+  return k > 0 ? `${p.name} (${k + 1})` : p.name;
+}
 
 async function mpConnect(room, creating){
   if(state.mp) return;
@@ -2487,18 +2714,20 @@ async function mpConnect(room, creating){
   try{
     await loadSupabase();
     if(!sbClient) sbClient = window.supabase.createClient(SB_URL, SB_KEY,
-      {auth:{persistSession:false, autoRefreshToken:false}, realtime:{params:{eventsPerSecond:10}}});
+      {auth:{persistSession:false, autoRefreshToken:false}, realtime:{params:{eventsPerSecond:20}}});
   }catch(e){ $("mpErr").textContent = T("mpFail") + e.message; return; }
   const me = {id:rid(), name, joinedAt:Date.now()};
-  const ch = sbClient.channel("wikigolf:" + room, {config:{broadcast:{self:false}, presence:{key:me.id}}});
+  const ch = sbClient.channel("wikigolf:" + room, {config:{broadcast:{self:false, ack:true}, presence:{key:me.id}}});
   state.mp = {ch, room, me, hostId:null, amHost:!!creating, players:new Map(), order:[], arrival:[me.id],
               round:0, phase:"lobby", locked:false, participants:[], rules:creating ? hostRules() : null,
-              subscribed:false, gotRoom:!!creating};
+              subscribed:false, gotRoom:!!creating, drawing:false, lastStamp:0};
   state.mp.players.set(me.id, {id:me.id, name, joinedAt:me.joinedAt, ...freshStats()});
+  mpLog("◎", `join ${room} as ${name}${creating ? " (host)" : ""}`);
   ch.on("broadcast", {event:"g"}, ({payload}) => mpOnMsg(payload))
     .on("presence", {event:"sync"}, () => mpOnSync())
     .subscribe(async status => {
       const m = state.mp;
+      mpLog("◎", "channel " + status);
       if(!m || m.ch !== ch) return;
       if(status === "SUBSCRIBED"){
         if(m.subscribed) return;
@@ -2506,13 +2735,15 @@ async function mpConnect(room, creating){
         await ch.track({id:me.id, name:me.name, joinedAt:me.joinedAt, host:m.amHost});
         $("mpErr").textContent = "";
         try{ history.replaceState(null, "", baseUrl() + "?room=" + room); }catch(_){}
-        if(!creating){
+        showHome("lobby");
+        mpControls();
+        if(creating) mpHostDraw();
+        else{
           mpSend({t:"hello"});
           setTimeout(()=>{
             if(state.mp && state.mp.ch === ch && !state.mp.gotRoom){ mpLeave(true); $("mpErr").textContent = T("mpNoHost"); }
-          }, 7000);
+          }, 8000);
         }
-        showHome("lobby");
       }else if(!m.subscribed && (status === "CHANNEL_ERROR" || status === "TIMED_OUT")){
         $("mpErr").textContent = T("mpFail") + status;
         state.mp = null;
@@ -2526,13 +2757,13 @@ async function mpLeave(silent){
   if(!m) return;
   if(!silent && state.playing && state.strokes > 0 && !confirm(T("confirmExit"))) return;
   state.mp = null;
+  mpLog("◎", "leave");
   try{ await m.ch.untrack(); }catch(_){}
   try{ sbClient.removeChannel(m.ch); }catch(_){}
   if(state.playing){ stopTimer(); setPlaying(false); }
   state.invite = null;
   state.challenge = null;
   try{ history.replaceState(null, "", baseUrl()); }catch(_){}
-  renderStrip();
   $("mpRes").hidden = true;
   resetGame(); state.start = state.goal = null;
   showHome(silent ? "mp" : "main");
@@ -2541,9 +2772,9 @@ async function mpLeave(silent){
 function mpOnSync(){
   const m = state.mp;
   if(!m) return;
-  const active = Object.values(m.ch.presenceState()).map(a => a && a[0]).filter(x => x && x.id);
+  const active = Object.values(m.ch.presenceState()).map(a => a && a[a.length - 1]).filter(x => x && x.id);
   const prev = new Set(m.order);
-  let newcomers = [];
+  const newcomers = [];
   for(const x of active){
     let p = m.players.get(x.id);
     if(!p){ p = {id:x.id, name:x.name, joinedAt:x.joinedAt, ...freshStats()}; m.players.set(x.id, p); }
@@ -2554,7 +2785,7 @@ function mpOnSync(){
   for(const id of m.order){
     if(!active.some(x => x.id === id)){
       const p = m.players.get(id);
-      if(p && !p.left){ p.left = true; if(mpIsMember(id)) toast(T("mpLeft", p.name)); }
+      if(p && !p.left){ p.left = true; if(mpIsMember(id)) toast(T("mpLeft", p.name)); mpLog("◎", "left " + p.name); }
     }
   }
   // ホストは「ホスト札」を持っている人（端末の時計は使わない）。いなくなったら id のいちばん小さい人へ
@@ -2563,21 +2794,21 @@ function mpOnSync(){
   if(!hostId && active.length){
     const members = active.filter(x => mpIsMember(x.id));
     hostId = (members.length ? members : active).sort(byId)[0].id;
-    if(hostId === m.me.id && !m.amHost){ m.amHost = true; m.ch.track({id:m.me.id, name:m.me.name, joinedAt:m.me.joinedAt, host:true}); }
+    if(hostId === m.me.id && !m.amHost){ m.amHost = true; mpTrack(); mpLog("◎", "I am host now"); }
   }
-  if(holders.length > 1 && m.amHost && hostId !== m.me.id){
-    m.amHost = false; m.ch.track({id:m.me.id, name:m.me.name, joinedAt:m.me.joinedAt, host:false});
-  }
+  if(holders.length > 1 && m.amHost && hostId !== m.me.id){ m.amHost = false; mpTrack(); }
+  const wasHost = m.hostId === m.me.id;
   m.hostId = hostId;
-  // 並び：ホスト → 来た順（ホストが見た順）
   m.order = active.map(x => x.id).sort((a, b) => (b === hostId) - (a === hostId) || m.arrival.indexOf(a) - m.arrival.indexOf(b));
   if(isHost()){
     for(const x of newcomers){
-      const pos = m.order.filter(id => mpIsMember(id) || !m.locked).indexOf(x.id);
+      mpLog("◎", "arrive " + x.name);
+      const pos = m.order.indexOf(x.id);
       if(m.locked && !m.participants.includes(x.id)) mpSend({t:"kick", id:x.id, reason:"locked"});
-      else if(pos >= MP_MAX) mpSend({t:"kick", id:x.id, reason:"full"});
+      else if(!m.locked && pos >= MP_MAX) mpSend({t:"kick", id:x.id, reason:"full"});
       else { toast(T("mpJoined", x.name)); mpSendRoom(); }
     }
+    if(!wasHost && state.screen === "home" && state.homeView === "lobby" && (!state.start || !state.goal)) mpHostDraw();
   }else{
     for(const x of newcomers) if(m.order.length && mpIsMember(x.id)) toast(T("mpJoined", x.name));
   }
@@ -2593,18 +2824,73 @@ function mpIsMember(id){
 }
 function mpMembers(){ const m = state.mp; return m.order.filter(id => mpIsMember(id)); }
 
+/* ── お題とルールの同期（ホスト → みんな） ── */
+function curOdai(){
+  if(!state.start || !state.goal) return null;
+  return {lang:curLang(), start:state.start.title, goal:state.goal.title, rules:pickRules(state.playing && state.rules ? state.rules : eff())};
+}
 function mpSendRoom(){
   const m = state.mp;
   if(!isHost()) return;
-  mpSend({t:"room", rules:hostRules(), locked:m.locked, participants:m.participants, round:m.round, phase:m.phase});
+  mpSend({t:"room", rules:hostRules(), odai:m.phase === "lobby" && !m.drawing ? curOdai() : null,
+          locked:m.locked, participants:m.participants, round:m.round, phase:m.phase}, 1);
+}
+function mpSendOdai(){
+  const m = state.mp;
+  if(!isHost() || m.drawing) return;
+  const o = curOdai();
+  if(o) mpSend({t:"odai", odai:o});
+}
+async function mpHostDraw(){
+  const m = state.mp;
+  if(!isHost() || m.drawing) return;
+  m.drawing = true;
+  state.challenge = null;
+  resetGame();
+  state.start = state.goal = null;
+  mpSend({t:"odai", odai:null});
+  renderLobby();
+  await Promise.all([draw("start"), draw("goal")]);
+  if(state.start && state.goal && norm(state.start.title) === norm(state.goal.title)) await draw("goal");
+  if(state.mp !== m) return;
+  m.drawing = false;
+  mpSendOdai(); renderLobby();
+}
+async function mpHostReroll(role){
+  const m = state.mp;
+  if(!isHost() || m.drawing) return;
+  m.drawing = true; renderLobby();
+  await draw(role);
+  if(state.start && state.goal && norm(state.start.title) === norm(state.goal.title)) await draw(role);
+  if(state.mp !== m) return;
+  m.drawing = false;
+  mpSendOdai(); renderLobby();
 }
 function mpRulesChanged(){
-  if(state.mp && isHost() && state.screen === "home"){ state.mp.rules = hostRules(); mpSend({t:"rules", rules:state.mp.rules}); }
+  const m = state.mp;
+  if(!m || !isHost() || state.screen !== "home") return;
+  m.rules = hostRules();
+  if(state.start && state.start.lang && state.start.lang !== m.rules.lang) mpHostDraw();
+  else { mpSendRoom(); renderLobby(); }
+}
+/* 参加者：ホストのお題を読み込む */
+async function mpLoadOdai(o){
+  if(!o){ if(!state.playing){ state.challenge = null; state.start = state.goal = null; renderLobby(); } return; }
+  const ch = state.challenge;
+  if(ch && ch.mp && ch.start === o.start && ch.goal === o.goal && (ch.rules.lang === o.rules.lang) && state.start && state.goal){
+    ch.rules = {...DEFAULTS, ...o.rules};          // 同じお題ならルールだけ更新
+    applyUI();
+    return;
+  }
+  $("win").classList.remove("show");
+  state.challenge = {start:o.start, goal:o.goal, rules:{...DEFAULTS, ...o.rules}, name:"", strokes:null, time:null, mp:true};
+  await loadChallenge();
 }
 
 function mpOnMsg(p){
   const m = state.mp;
   if(!m || !p || p.from === m.me.id) return;
+  if(p.t !== "st") mpLog("←", `${p.t} from ${(m.players.get(p.from) || {}).name || p.from}`);
   const fromHost = !m.hostId || p.from === m.hostId;
   const pl = m.players.get(p.from);
   switch(p.t){
@@ -2618,11 +2904,12 @@ function mpOnMsg(p){
       m.gotRoom = true;
       m.rules = p.rules; m.locked = p.locked; m.participants = p.participants || []; m.round = p.round || 0;
       if(m.locked && !m.participants.includes(m.me.id)){ mpLeave(true); $("mpErr").textContent = T("mpLocked"); return; }
+      if(!state.playing && state.screen === "home" && p.phase === "lobby" && p.odai) mpLoadOdai(p.odai);
       renderHome();
       break;
-    case "rules":
-      if(!fromHost) return;
-      m.rules = p.rules; renderHome();
+    case "odai":
+      if(!fromHost || state.playing) return;
+      mpLoadOdai(p.odai);
       break;
     case "kick":
       if(p.id === m.me.id){ mpLeave(true); $("mpErr").textContent = p.reason === "full" ? T("mpFull") : T("mpLocked"); }
@@ -2635,25 +2922,27 @@ function mpOnMsg(p){
       if(!fromHost) return;
       mpGoLobby();
       break;
+    case "stamp":
+      showStamp(p.from, p.i);
+      break;
     case "st":
-      if(pl && p.round === m.round){ Object.assign(pl, {strokes:p.strokes, backs:p.backs, act:p.act, pct:p.pct, reach:p.reach}); renderStrip(); }
+      if(pl && p.round === m.round && !pl.done){ Object.assign(pl, {strokes:p.strokes, backs:p.backs, act:p.act, pct:p.pct, reach:p.reach, seen:Date.now()}); renderStrip(); }
+      else if(pl && p.round !== m.round) mpLog("←", `st round ${p.round}≠${m.round} from ${pl.name}`);
       break;
     case "fin":
       if(pl && p.round === m.round){
-        Object.assign(pl, {done:true, success:p.success, strokes:p.strokes, elapsed:p.elapsed, route:p.route, backs:p.backs, reach:false});
-        renderStrip(); renderMpResults();
+        const first = !pl.done;
+        Object.assign(pl, {done:true, success:p.success, strokes:p.strokes, elapsed:p.elapsed, route:p.route, backs:p.backs, reach:false, seen:Date.now()});
+        if(first){ renderStrip(); renderMpResults(); }
       }
       break;
   }
 }
 
-/* ── スタート（お題はこの瞬間に引く） ── */
-function curOdai(){
-  return {lang:curLang(), start:state.start.title, goal:state.goal.title, rules:pickRules(state.playing && state.rules ? state.rules : eff())};
-}
+/* ── スタート（待合室で決めたお題で、全員いきなり開始） ── */
 function mpBeginRound(round, players){
   const m = state.mp;
-  m.round = round; m.phase = "playing"; m.locked = true;
+  m.round = round; m.phase = "playing"; m.locked = true; m.myFin = null;
   m.participants = [...new Set([...m.participants, ...players])];
   for(const [id, p] of m.players) Object.assign(p, freshStats(), {inRound:players.includes(id)});
   $("mpRes").hidden = true;
@@ -2661,19 +2950,11 @@ function mpBeginRound(round, players){
 }
 async function mpHostStart(){
   const m = state.mp;
-  if(!isHost() || mpMembers().length < 2) return;
+  if(!isHost() || m.drawing || mpMembers().length < 2 || !state.start || !state.goal) return;
   const players = mpMembers();
-  hideHome();
-  state.challenge = null;
-  resetGame();
-  applyUI();
-  $("route").textContent = T("mpPreparing");
-  state.start = state.goal = null;
-  await Promise.all([draw("start"), draw("goal")]);
-  if(state.start && state.goal && norm(state.start.title) === norm(state.goal.title)) await draw("goal");
-  if(!state.start || !state.goal || state.mp !== m){ showHome("lobby"); return; }
   const round = m.round + 1;
-  mpSend({t:"start", round, odai:curOdai(), players});
+  mpSend({t:"start", round, odai:curOdai(), players}, 3);
+  hideHome();
   mpBeginRound(round, players);
   startGame();
 }
@@ -2682,10 +2963,9 @@ async function mpGuestStart(p){
   if(state.playing) return;
   if(!(p.players || []).includes(m.me.id)){ m.locked = true; m.participants = p.players || []; mpLeave(true); $("mpErr").textContent = T("mpLocked"); return; }
   ["win", "reader", "settings", "qrModal", "savedModal"].forEach(id => $(id).classList.remove("show"));
-  hideHome();
-  state.challenge = {start:p.odai.start, goal:p.odai.goal, rules:{...DEFAULTS, ...p.odai.rules}, name:"", strokes:null, time:null, mp:true};
-  await loadChallenge();
+  await mpLoadOdai(p.odai);
   if(state.mp !== m) return;
+  hideHome();
   mpBeginRound(p.round, p.players);
   startGame();
 }
@@ -2693,13 +2973,13 @@ function mpGoLobby(){
   const m = state.mp;
   if(!m) return;
   m.phase = "lobby";
-  state.challenge = null;
-  renderChallengeBar();
-  showHome("lobby");
+  if(state.playing){ stopTimer(); setPlaying(false); }
+  if(isHost()){ showHome("lobby"); mpHostDraw(); }
+  else { state.challenge = null; resetGame(); state.start = state.goal = null; showHome("lobby"); }
 }
 function mpToLobby(){
   if(!isHost() || !mpAllDone()) return;
-  mpSend({t:"lobby"});
+  mpSend({t:"lobby"}, 3);
   mpGoLobby();
 }
 
@@ -2707,11 +2987,12 @@ function mpToLobby(){
 let stTimer = null, lastSt = "";
 function mpQueue(){
   if(!state.mp || !state.playing || stTimer) return;
-  stTimer = setTimeout(()=>{ stTimer = null; mpSendStatus(); }, 600);
+  stTimer = setTimeout(()=>{ stTimer = null; mpSendStatus(false); }, 600);
 }
 function mpAct(){ state.lastAct = Date.now(); mpQueue(); }
 function myAct(){
   const now = Date.now();
+  if((state.forcedUntil || 0) > now) return "forced";
   if(state.busy) return "loading";
   if(state.goalCheck) return "goal";
   if((state.searchUntil || 0) > now) return "search";
@@ -2720,26 +3001,27 @@ function myAct(){
   if(state.nsNow === 6) return "file";
   return "read";
 }
-function mpSendStatus(){
+function mpSendStatus(force){
   const m = state.mp;
   if(!m || !state.playing) return;
   const st = {strokes:state.strokes, backs:state.backs || 0, act:myAct(), pct:state.pct || 0, reach:!!state.reach};
-  const me = m.players.get(m.me.id);
-  if(me) Object.assign(me, st);
-  renderStrip();
   const key = JSON.stringify(st);
-  if(key === lastSt) return;
+  if(key === lastSt && !force) return;
   lastSt = key;
-  mpSend({t:"st", round:m.round, ...st});
+  mpSend({t:"st", round:m.round, ...st}, 1);
 }
+/* 定期便：様子・ゴールの合図を送り直す（取りこぼし対策） */
 setInterval(()=>{
-  if(!state.mp) return;
-  if(state.playing) mpQueue();
+  const m = state.mp;
+  if(!m) return;
+  if(state.playing) mpSendStatus(true);
+  else if(m.phase === "playing" && m.myFin && !mpAllDone()) mpSend({t:"fin", round:m.round, ...m.myFin}, 1);
   else if(isHost() && state.screen === "home") mpSendRoom();
-}, 4000);
+}, 3000);
 
 function actText(p){
   switch(p.act){
+    case "forced":  return "🎲 " + T("mpForced");
     case "loading": return "⏳ " + T("mpLoading");
     case "goal":    return "🚩 " + T("mpGoalCheck");
     case "search":  return "🔍 " + T("mpSearching");
@@ -2750,26 +3032,74 @@ function actText(p){
     default: return "";
   }
 }
+/* 相手の様子（自分の分は出さない） */
 function renderStrip(){
   const m = state.mp, box = $("mpStrip");
+  document.body.classList.toggle("inmp", !!m);
   if(!m || state.screen !== "game"){ box.hidden = true; box.innerHTML = ""; return; }
-  box.hidden = false; box.innerHTML = "";
-  const ids = [...m.players.values()].filter(p => p.inRound).map(p => p.id)
+  const ids = [...m.players.values()].filter(p => p.inRound && p.id !== m.me.id).map(p => p.id)
     .sort((a, b) => (b === m.hostId) - (a === m.hostId) || m.arrival.indexOf(a) - m.arrival.indexOf(b));
+  box.hidden = !ids.length; box.innerHTML = "";
+  box.append(mk("div", "stripHead", `⚔️ ${T("mpRoom")} ${m.room}`));
   for(const id of ids){
     const p = m.players.get(id);
-    const isMe = id === m.me.id;
-    const reach = !isMe && p.reach && !p.done && !p.left;
-    const chip = mk("span", "chip" + (isMe ? " me" : "") + (p.left ? " off" : "") + (reach ? " reach" : ""));
-    chip.append(mk("b", "", p.name + (id === m.hostId ? " 👑" : "")));
+    const reach = p.reach && !p.done && !p.left;
+    const chip = mk("span", "chip" + (p.left ? " off" : "") + (reach ? " reach" : ""));
+    chip.dataset.id = id;
+    chip.append(mk("b", "", dname(id) + (id === m.hostId ? " 👑" : "")));
     let txt;
     if(p.done) txt = p.success ? `🏁 ${T("sk", p.strokes)}` : `🏳 ${T("mpDnf")}`;
     else if(p.left) txt = "📴 " + T("mpOffline");
     else txt = `⛳${p.strokes}` + (p.backs ? ` ↩${p.backs}` : "") + " " + actText(p) + (reach ? "  🔥" + T("mpReach") : "");
-    chip.append(txt);
+    chip.append(mk("span", "st", txt));
     box.append(chip);
   }
 }
+
+/* ── スタンプ ── */
+const STAMPS = ["😎", "😰", "🤔", "😂", "🙏", "🎉"];
+function sendStamp(i){
+  const m = state.mp;
+  if(!m || Date.now() - m.lastStamp < 2000) return;
+  m.lastStamp = Date.now();
+  mpSend({t:"stamp", i}, 1);
+  showStamp(m.me.id, i);
+}
+function showStamp(id, i){
+  const m = state.mp;
+  if(!m || !STAMPS[i]) return;
+  const b = mk("div", "stamp");
+  b.append(mk("span", "em", STAMPS[i]), mk("b", "", dname(id)), mk("span", "lb", (T("stamps") || [])[i] || ""));
+  $("stampLayer").append(b);
+  setTimeout(()=> b.classList.add("bye"), 3500);
+  setTimeout(()=> b.remove(), 4000);
+}
+function renderStampRow(box){
+  box.innerHTML = "";
+  STAMPS.forEach((e, i)=>{
+    const b = mk("button", "", e);
+    b.title = (T("stamps") || [])[i] || "";
+    b.addEventListener("click", ()=>{ sendStamp(i); $("stampPop").hidden = true; });
+    box.append(b);
+  });
+}
+$("stampBtn").addEventListener("click", e=>{
+  e.stopPropagation();
+  const pop = $("stampPop");
+  if(!pop.hidden){ pop.hidden = true; return; }
+  pop.innerHTML = "";
+  STAMPS.forEach((em, i)=>{
+    const b = mk("button", "");
+    b.append(mk("span", "em", em), " " + ((T("stamps") || [])[i] || ""));
+    b.addEventListener("click", ()=>{ sendStamp(i); pop.hidden = true; });
+    pop.append(b);
+  });
+  pop.hidden = false;
+  const r = $("stampBtn").getBoundingClientRect();
+  pop.style.top = (r.bottom + 6) + "px";
+  pop.style.left = Math.max(8, Math.min(r.right - pop.offsetWidth, innerWidth - pop.offsetWidth - 8)) + "px";
+});
+document.addEventListener("click", e=>{ if(!e.target.closest("#stampPop,#stampBtn")) $("stampPop").hidden = true; });
 
 /* ── 結果発表と答え合わせ ── */
 function mpRoundPlayers(){ return [...state.mp.players.values()].filter(p => p.inRound); }
@@ -2778,9 +3108,18 @@ function mpRanked(){
   const cls = p => p.done ? (p.success ? 0 : 1) : (p.left ? 3 : 2);
   return mpRoundPlayers().sort((a, b) => (cls(a) - cls(b)) || (cls(a) === 0 ? (a.strokes - b.strokes) || (a.elapsed - b.elapsed) : 0));
 }
+function routeEl(route){
+  const rt = mk("div", "rt");
+  route.forEach((s, j) => {
+    if(j) rt.append(s.back ? " ↩ " : " → ");
+    const t = (s.forced ? "🎲" : "") + s.title;
+    rt.append(s.back ? mk("i", "", t) : t);
+  });
+  return rt;
+}
 function renderMpResults(){
   const m = state.mp, box = $("mpRes");
-  if(!m || !state.result || !mpRoundPlayers().length){ box.hidden = true; return; }
+  if(!m || !state.result || !mpRoundPlayers().length){ box.hidden = true; $("winStamps").hidden = true; return; }
   box.hidden = false; box.innerHTML = "";
   const all = mpAllDone();
   box.append(mk("div", "mpResHead", all ? T("mpAllDone") : T("mpWaitOthers")));
@@ -2794,19 +3133,17 @@ function renderMpResults(){
       rk = (rank === 1 ? "🏆 " : "") + T("mpRank", rank);
     }
     row.append(mk("span", "rk", rk || "—"));
-    row.append(mk("b", "", p.name + (p.id === m.me.id ? `（${T("you")}）` : "")));
+    row.append(mk("b", "", dname(p.id) + (p.id === m.me.id ? `（${T("you")}）` : "")));
     let res;
     if(p.done) res = p.success ? `${T("sk", p.strokes)}${T("paren", fmtTime(p.elapsed))}` : T("mpDnf");
     else if(p.left) res = "📴 " + T("mpOffline");
     else res = `${T("mpPlayingNow")}… ⛳${p.strokes}`;
     row.append(" ", res);
-    if(p.done && p.route){
-      const rt = mk("div", "rt");
-      p.route.forEach((s, j) => { if(j) rt.append(s.back ? " ↩ " : " → "); rt.append(s.back ? mk("i", "", s.title) : s.title); });
-      row.append(rt);
-    }
+    if(p.done && p.route) row.append(routeEl(p.route));
     box.append(row);
   });
+  $("winStamps").hidden = false;
+  renderStampRow($("winStamps"));
   $("winNew").hidden = !isHost();
   $("winNew").disabled = !all;
   $("winNew").textContent = T("mpToLobby");
@@ -2815,9 +3152,10 @@ function mpOnFinish(r){
   const m = state.mp;
   if(!m) return;
   const payload = {success:r.success, strokes:r.strokes, elapsed:Math.round(r.elapsed), route:r.route, backs:state.backs || 0};
+  m.myFin = payload;
   const me = m.players.get(m.me.id);
   if(me) Object.assign(me, payload, {done:true, reach:false});
-  mpSend({t:"fin", round:m.round, ...payload});
+  mpSend({t:"fin", round:m.round, ...payload}, 3);
   $("nameRow").hidden = $("sendChallenge").hidden = true;
   renderStrip(); renderMpResults();
 }
@@ -2825,12 +3163,15 @@ function mpOnFinish(r){
 /* ── ボタンの出し分け ── */
 function mpControls(){
   const m = state.mp;
+  document.body.classList.toggle("inmp", !!m);
+  $("stampBtn").hidden = !m;
   if(m){
     if(!state.playing) $("teeoff").hidden = true;
     $("newBtn").hidden = true;
   }else{
     $("newBtn").hidden = false;
     $("winNew").hidden = false; $("winNew").disabled = false; $("winNew").textContent = T("next");
+    $("winStamps").hidden = true;
   }
   renderChallengeBar();
 }
@@ -2858,11 +3199,48 @@ let mpQrRoom = null;
 function lobbyRows(){
   const rs = schema();
   const cut = rs.findIndex(r => r.head === T("hImg"));
-  return cut > 0 ? rs.slice(0, cut) : rs;
+  return (cut > 0 ? rs.slice(0, cut) : rs).filter(r => r.key !== "theme");
+}
+function mpRename(){
+  const m = state.mp;
+  if(!m) return;
+  const n = (window.prompt(T("mpRenamePrompt"), m.me.name) || "").trim().slice(0, 20);
+  if(!n || n === m.me.name) return;
+  saveName(n); $("mpName").value = n;
+  m.me.name = n;
+  const me = m.players.get(m.me.id); if(me) me.name = n;
+  mpTrack();
+  renderLobby();
+}
+function renderLobbyOdai(){
+  const m = state.mp, box = $("lbOdai");
+  box.innerHTML = "";
+  const view = eff().goalView;
+  for(const role of ["start", "goal"]){
+    const p = m.drawing ? null : state[role];
+    const card = mk("div", "lbCard " + role);
+    card.append(mk("span", "tag", T(role)));
+    if(role === "goal" && p && p.inlinks !== undefined) card.append(mk("span", "meta", T("inlinks", p.inlinks, p.inlinksMore)));
+    const title = mk("div", "lbTitle", p ? shown(p) : T("mpPreparing"));
+    const canRead = p && (role === "start" || view === "full");
+    if(canRead){ title.classList.add("link"); title.addEventListener("click", ()=> openReader(role)); }
+    card.append(title);
+    if(p && (role === "start" || view !== "title") && p.extract) card.append(mk("p", "lbExt", p.extract.replace(/\s+/g, " ")));
+    const btns = mk("div", "lbBtns");
+    if(isHost()){
+      const rr = mk("button", "", T("reroll"));
+      rr.disabled = m.drawing;
+      rr.addEventListener("click", ()=> mpHostReroll(role));
+      btns.append(rr);
+    }
+    if(canRead){ const rd = mk("button", "", T("readFull")); rd.addEventListener("click", ()=> openReader(role)); btns.append(rd); }
+    card.append(btns);
+    box.append(card);
+  }
 }
 function renderLobby(){
   const m = state.mp;
-  if(!m) return;
+  if(!m || state.screen !== "home" || state.homeView !== "lobby") return;
   $("mpRoom").textContent = m.room;
   const url = baseUrl() + "?room=" + m.room;
   $("mpUrl").textContent = url;
@@ -2882,12 +3260,18 @@ function renderLobby(){
   for(let i = 0; i < MP_MAX; i++){
     const id = members[i];
     if(!id){ list.append(mk("li", "empty", T("lbEmpty"))); continue; }
-    const p = m.players.get(id);
-    const li = mk("li", "", p ? p.name : "…");
+    const li = mk("li", "", dname(id));
     if(id === m.hostId) li.append(mk("span", "tagHost", "👑 " + T("mpHost")));
-    if(id === m.me.id) li.append(mk("span", "tagMe", T("you")));
+    if(id === m.me.id){
+      li.append(mk("span", "tagMe", T("you")));
+      const rn = mk("button", "rename", "✏️");
+      rn.title = T("mpRename");
+      rn.addEventListener("click", mpRename);
+      li.append(rn);
+    }
     list.append(li);
   }
+  renderLobbyOdai();
   if(isHost()){
     $("lbRulesGuest").hidden = true;
     $("lbRules").hidden = false;
@@ -2898,8 +3282,10 @@ function renderLobby(){
     const r = m.rules;
     $("lbRulesText").textContent = r ? `${WIKIS[r.lang] ? WIKIS[r.lang].name : r.lang}${T("sep")}${rulesText({...r, lang:settings.lang})}` : "…";
   }
+  renderStampRow($("lbStamps"));
+  const ready = !!(state.start && state.goal && !m.drawing);
   $("lbStart").hidden = !isHost();
-  $("lbStart").disabled = members.length < 2;
+  $("lbStart").disabled = members.length < 2 || !ready;
   $("mpHint").textContent = isHost() ? (members.length < 2 ? T("lbNeed2") : T("mpHintHost")) : T("mpHintGuest");
 }
 $("lbStart").addEventListener("click", ()=> mpHostStart());
@@ -2917,6 +3303,7 @@ function toast(msg){
 }
 
 /* ════════ はじまり ════════ */
+applyTheme();
 state.challenge = parseChallenge();
 const roomQ = (new URLSearchParams(location.search).get("room") || "").toUpperCase().replace(/[^A-Z0-9]/g, "").slice(0, 4);
 if(state.challenge){ hideHome(); loadChallenge(); }
