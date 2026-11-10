@@ -362,6 +362,7 @@ const LANG_ORDER = ["ja","en","fr","es","zh","ko","ceb"];
 /* 画面の言葉 */
 const STR = {};
 STR.ja = {
+  routeImg:"画像の道のり", routeHide:"伏字にする", routeShow:"見せる", routeNote:"伏字にすると、スタートとゴール以外が黒い棒になるよ（ネタバレ防止）",
   quitCh:"🏠 挑戦状をやめて最初にもどる", quitHole:"🏳 このホールをやめる",
   appName:"Wikipediaゴルフ", start:"🏌️ スタート", goal:"🚩 ゴール", reroll:"引き直す", readFull:"全文を読む",
   inlinks:(n,m)=>`入口リンク ${n}${m?"本以上":"本"}`,
@@ -417,6 +418,7 @@ STR.ja = {
   catEmpty:"このカテゴリには現在ページまたはメディアがひとつもありません。"
 };
 STR.en = {
+  routeImg:"Route in image", routeHide:"Hide (no spoilers)", routeShow:"Show", routeNote:"Hidden: everything except start and goal becomes black bars",
   quitCh:"🏠 Quit the challenge", quitHole:"🏳 Give up this hole",
   appName:"Wiki Golf", start:"🏌️ Start", goal:"🚩 Goal", reroll:"Reroll", readFull:"Read full article",
   inlinks:(n,m)=>`${n}${m?"+":""} links in`,
@@ -472,6 +474,7 @@ STR.en = {
   catEmpty:"This category currently contains no pages or media."
 };
 STR.fr = {
+  routeImg:"Parcours sur l'image", routeHide:"Masquer (sans spoiler)", routeShow:"Afficher", routeNote:"Masqué : tout sauf le départ et l'arrivée devient des barres noires",
   quitCh:"🏠 Abandonner le défi", quitHole:"🏳 Abandonner ce trou",
   appName:"Golf Wikipédia", start:"🏌️ Départ", goal:"🚩 Arrivée", reroll:"Retirer", readFull:"Lire l'article",
   inlinks:(n,m)=>`${n}${m?"+":""} liens entrants`,
@@ -527,6 +530,7 @@ STR.fr = {
   catEmpty:"Cette catégorie ne contient actuellement aucune page ni aucun fichier."
 };
 STR.es = {
+  routeImg:"Recorrido en la imagen", routeHide:"Ocultar (sin spoilers)", routeShow:"Mostrar", routeNote:"Oculto: todo salvo la salida y el hoyo se convierte en barras negras",
   quitCh:"🏠 Dejar el reto", quitHole:"🏳 Abandonar este hoyo",
   appName:"Golf Wikipedia", start:"🏌️ Salida", goal:"🚩 Hoyo", reroll:"Cambiar", readFull:"Leer artículo",
   inlinks:(n,m)=>`${n}${m?"+":""} enlaces entrantes`,
@@ -582,6 +586,7 @@ STR.es = {
   catEmpty:"Esta categoría no contiene actualmente ninguna página ni archivo multimedia."
 };
 STR.ko = {
+  routeImg:"이미지의 경로", routeHide:"가리기(스포일러 방지)", routeShow:"보이기", routeNote:"가리면 출발과 홀 말고는 검은 막대가 돼요",
   quitCh:"🏠 도전장 그만두고 처음으로", quitHole:"🏳 이번 홀 포기",
   appName:"위키 골프", start:"🏌️ 출발", goal:"🚩 홀", reroll:"다시 뽑기", readFull:"전문 읽기",
   inlinks:(n,m)=>`들어오는 링크 ${n}${m?"개 이상":"개"}`,
@@ -637,6 +642,7 @@ STR.ko = {
   catEmpty:"이 분류에는 현재 문서나 미디어가 없습니다."
 };
 STR["zh-hant"] = {
+  routeImg:"圖片中的路線", routeHide:"遮住（防劇透）", routeShow:"顯示", routeNote:"遮住後，起點和終點以外都會變成黑色長條",
   quitCh:"🏠 放棄挑戰書，回到首頁", quitHole:"🏳 放棄這一洞",
   appName:"維基高爾夫", start:"🏌️ 起點", goal:"🚩 終點", reroll:"重抽", readFull:"閱讀全文",
   inlinks:(n,m)=>`連入連結 ${n}${m?"+":""} 個`,
@@ -692,6 +698,7 @@ STR["zh-hant"] = {
   catEmpty:"本分類目前沒有任何頁面或媒體。"
 };
 STR["zh-hans"] = {
+  routeImg:"图片中的路线", routeHide:"遮住（防剧透）", routeShow:"显示", routeNote:"遮住后，起点和终点以外都会变成黑色长条",
   quitCh:"🏠 放弃挑战书，回到首页", quitHole:"🏳 放弃这一洞",
   appName:"维基高尔夫", start:"🏌️ 起点", goal:"🚩 终点", reroll:"重抽", readFull:"阅读全文",
   inlinks:(n,m)=>`链入链接 ${n}${m?"+":""} 个`,
@@ -756,7 +763,7 @@ function browserLang(){
   return "en";
 }
 const DEFAULTS = {lang:browserLang(), zhVariant:"auto", difficulty:"normal", allowCategory:true, allowBack:true,
-                  allowSearch:true, timeLimit:0, goalView:"full", shape:"wide"};
+                  allowSearch:true, timeLimit:0, goalView:"full", shape:"wide", routeImg:"hide"};
 const RULE_KEYS = ["lang","difficulty","allowCategory","allowBack","allowSearch","timeLimit","goalView"];
 
 let settings = {...DEFAULTS};
@@ -1069,7 +1076,7 @@ ${skinCss(lang).map(u=>`<link rel="stylesheet" href="${u}">`).join("\n")}
   .mw-page-container{padding:0 28px;max-width:1080px;margin:0 auto}
   .mw-page-container-inner{display:block}
   .mw-body{padding-top:12px}
-  a.golf-blocked{cursor:not-allowed}
+  a.golf-blocked{cursor:${BLOCK_CURSOR}}
   html,body{background:#fff !important;color:#202122 !important;color-scheme:light}
   .mw-body a:not(.new):not(.external){color:#0645ad}
   .mw-body a:not(.new):not(.external):visited{color:#0b0080}
@@ -1109,6 +1116,8 @@ ${skinCss(lang).map(u=>`<link rel="stylesheet" href="${u}">`).join("\n")}
 </body>
 </html>`;
 }
+
+const BLOCK_CURSOR = `url("data:image/svg+xml,${encodeURIComponent("<svg xmlns='http://www.w3.org/2000/svg' width='24' height='24'><circle cx='12' cy='12' r='9' fill='white' stroke='#e0352b' stroke-width='3'/><line x1='5.6' y1='5.6' x2='18.4' y2='18.4' stroke='#e0352b' stroke-width='3'/></svg>")}") 12 12, not-allowed`;
 
 /* /wiki/題名 、中文の /zh-tw/題名 などから題名を取り出す */
 function linkTitle(href){
@@ -1422,7 +1431,8 @@ function schema(){
     {head:T("hView")},
     {key:"goalView", label:T("view"), note:T("viewNote"), rule:true, opts:[["full",T("full")],["summary",T("summary")],["title",T("titleOnly")]]},
     {head:T("hImg")},
-    {key:"shape", label:T("shape"), opts:[["wide",T("wide")],["square",T("square")]]}
+    {key:"shape", label:T("shape"), opts:[["wide",T("wide")],["square",T("square")]]},
+    {key:"routeImg", label:T("routeImg"), note:T("routeNote"), opts:[["hide",T("routeHide")],["show",T("routeShow")]]}
   );
   return rows;
 }
@@ -1690,9 +1700,11 @@ function wrapText(ctx, text, maxW){
 }
 function wrapTokens(ctx, tokens, maxW){
   const lines = [[]]; let x = 0;
-  const push = (t, c) => { lines[lines.length-1].push({t, c}); x += ctx.measureText(t).width; };
+  let mask = false;
+  const push = (t, c) => { lines[lines.length-1].push({t, c, mask}); x += ctx.measureText(t).width; };
   const nl = () => { lines.push([]); x = 0; };
   for(const tok of tokens){
+    mask = !!tok.mask;
     const w = ctx.measureText(tok.t).width;
     if(x + w <= maxW){ push(tok.t, tok.c); continue; }
     if(tok.sep){ nl(); push(tok.t.trimStart(), tok.c); continue; }
@@ -1706,11 +1718,13 @@ function wrapTokens(ctx, tokens, maxW){
   }
   return lines.filter(l => l.length);
 }
-function routeTokens(steps){
+function routeTokens(steps, maskMid, showLast){
   const toks = [];
   steps.forEach((s,i)=>{
     if(i) toks.push({t: s.back ? " ↩ " : " → ", c:C.sub, sep:true});
-    toks.push({t:s.title, c: (s.gap || s.back) ? C.sub : C.ink});
+    const isEnd = i === 0 || (showLast && i === steps.length - 1);
+    const mask = maskMid && !isEnd && !s.gap;
+    toks.push({t:s.title, c: mask ? C.ink : (s.gap || s.back) ? C.sub : C.ink, mask});
   });
   return toks;
 }
@@ -1810,11 +1824,17 @@ function drawShare(measureOnly, W, H, routeFont, steps, oy = 0, qr = null){
   y += 14;
 
   ctx.font = FONT(600, routeFont);
-  const rl = wrapTokens(ctx, routeTokens(steps), cw);
+  const rl = wrapTokens(ctx, routeTokens(steps, settings.routeImg !== "show", r.success), cw);
   const rlh = routeFont * 1.6;
   rl.forEach(line=>{
     y += rlh;
-    if(D){ let x = PX; for(const seg of line){ ctx.fillStyle = seg.c; ctx.fillText(seg.t, x, y - routeFont*0.3); x += ctx.measureText(seg.t).width; } }
+    if(D){ let x = PX; for(const seg of line){
+      const w = ctx.measureText(seg.t).width;
+      ctx.fillStyle = seg.c;
+      if(seg.mask){ rr(ctx, x + 1, y - routeFont*1.12, Math.max(4, w - 2), routeFont*1.02, 3); ctx.fill(); }
+      else ctx.fillText(seg.t, x, y - routeFont*0.3);
+      x += w;
+    } }
   });
 
   // 下の段：ルール（左）とQR（右）
