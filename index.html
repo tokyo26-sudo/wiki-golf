@@ -160,6 +160,47 @@
   #saveRecord:disabled{opacity:.7}
   @media (max-width:720px){ .svTop{flex-wrap:wrap} .svBtns{width:100%;justify-content:flex-end} }
 
+  /* 対戦 */
+  #mpBtn.on{background:var(--flag2);border-color:var(--flag);color:var(--flag);font-weight:700}
+  #mpStrip{flex:none;display:flex;gap:6px;overflow-x:auto;margin:6px 12px 0;scrollbar-width:thin;padding-bottom:2px}
+  #mpStrip .chip{flex:none;background:var(--card);border:1px solid var(--line);border-radius:999px;padding:3px 12px;font-size:.78rem;white-space:nowrap}
+  #mpStrip .chip b{margin-right:6px}
+  #mpStrip .chip.me{border-color:var(--green)}
+  #mpStrip .chip.off{opacity:.5}
+  #mpStrip .chip.reach{border-color:#e8590c;background:#fff1e6;color:#9a3412;animation:reachPulse 1.2s infinite}
+  @keyframes reachPulse{50%{box-shadow:0 0 0 4px rgba(232,89,12,.2)}}
+  @media (prefers-color-scheme: dark){ #mpStrip .chip.reach{background:#3b2414;color:#fdba74} }
+  #mpModal{z-index:34}
+  #mpModal .panel{background:var(--card);border-radius:14px;padding:18px 20px;width:min(480px,100%);max-height:92vh;overflow-y:auto}
+  #mpModal h2{margin:0 0 6px;font-size:1.2rem}
+  #mpModal .about{font-size:.85rem;color:var(--sub);margin:0 0 10px}
+  .mpRow{display:flex;gap:8px;flex-wrap:wrap;align-items:center;margin:10px 0}
+  .mpRow label{font-size:.85rem;color:var(--sub)}
+  #mpName,#mpCode{font:inherit;padding:6px 10px;border:1px solid var(--line);border-radius:8px;background:var(--card);color:var(--ink)}
+  #mpCode{width:7em;text-transform:uppercase;letter-spacing:.15em}
+  #mpCreate{background:var(--green);color:#fff;border-color:var(--green);font-weight:700}
+  #mpErr{color:var(--flag);font-size:.85rem;min-height:1.2em;margin:4px 0}
+  .mpCodeBig{text-align:center;margin:4px 0}
+  .mpCodeBig small{display:block;color:var(--sub);font-size:.75rem}
+  #mpRoom{font-size:2.4rem;font-weight:900;letter-spacing:.2em}
+  #mpQr{background:#fff;border-radius:10px;padding:8px;width:fit-content;margin:6px auto}
+  #mpQr canvas{display:block;width:170px;height:auto;image-rendering:pixelated}
+  #mpUrl{font-size:.68rem;color:var(--sub);word-break:break-all;text-align:center}
+  #mpWarn{font-size:.75rem;color:var(--flag);text-align:center;margin:4px 0}
+  #mpList{list-style:none;padding:0;margin:10px 0}
+  #mpList li{padding:6px 10px;border:1px solid var(--line);border-radius:8px;margin:4px 0;font-weight:700}
+  #mpList .tagHost,#mpList .tagMe{font-weight:400;font-size:.72rem;color:var(--sub);margin-left:8px}
+  #mpHint{font-size:.85rem;text-align:center;margin:6px 0}
+  #mpLeaveBtn{border-color:var(--flag);color:var(--flag)}
+  .mpFoot{display:flex;justify-content:space-between;gap:8px;margin-top:12px}
+  #mpRes{margin-top:12px;border-top:1px solid var(--line);padding-top:10px}
+  .mpResHead{font-weight:800;text-align:center;margin-bottom:6px}
+  .mpR{padding:6px 0;border-bottom:1px dotted var(--line);font-size:.9rem}
+  .mpR:last-child{border-bottom:0}
+  .mpR .rk{display:inline-block;min-width:4.2em;font-weight:900;color:var(--green)}
+  .mpR .rt{font-size:.78rem;color:var(--sub);word-break:break-word;margin-top:2px}
+  @media (max-width:720px){ #mpStrip{margin:6px 8px 0} #mpName,#mpCode{font-size:16px} }
+
   /* トースト */
   #toast{position:fixed;left:50%;bottom:24px;transform:translateX(-50%);background:var(--ink);color:var(--bg);
     padding:8px 16px;border-radius:999px;font-size:.85rem;opacity:0;transition:opacity .2s;pointer-events:none;z-index:40;
@@ -261,13 +302,14 @@
   <div class="stat"><div class="num" id="strokeNum">0</div><div class="lbl" data-t="strokes"></div></div>
   <div class="stat"><div class="num" id="clockNum">0:00</div><div class="lbl" id="clockLbl"></div></div>
   <div id="route"></div>
-  <span id="ver">v0.8.2</span>
+  <span id="ver">v0.9</span>
   <div id="barBtns">
     <button id="teeoff" disabled data-t="teeoff"></button>
     <button id="backBtn" hidden data-t="back"></button>
     <button id="newBtn" data-t="newOdai"></button>
     <button id="saveOdai" disabled data-t="saveOdai"></button>
     <button id="savedBtn">📁</button>
+    <button id="mpBtn" data-t="mpBtn"></button>
     <button id="shareOdai" disabled data-t="share"></button>
     <button id="gearBtn">⚙️</button>
     <button id="findToggle" hidden>🔍</button>
@@ -275,11 +317,14 @@
   </div>
 </section>
 
+<div id="mpStrip" hidden></div>
+
 <div id="menuPop" hidden>
   <button data-for="backBtn" data-t="back"></button>
   <button data-for="newBtn" data-t="newOdai"></button>
   <button data-for="saveOdai" data-t="saveOdai"></button>
   <button data-for="savedBtn" data-t="savedList"></button>
+  <button data-for="mpBtn" data-t="mpTitle"></button>
   <button data-for="shareOdai" data-t="share"></button>
   <button data-for="gearBtn" data-t="settings"></button>
 </div>
@@ -307,7 +352,7 @@
 
 <div id="settings" class="overlay">
   <div class="panel">
-    <h2><span data-t="settings"></span> <small style="font-size:.65rem;font-weight:400;color:var(--sub)">v0.8.2</small></h2>
+    <h2><span data-t="settings"></span> <small style="font-size:.65rem;font-weight:400;color:var(--sub)">v0.9</small></h2>
     <p class="lockNote" id="lockNote" hidden></p>
     <button id="quitHole" class="quit" hidden></button>
     <div id="settingRows"></div>
@@ -328,6 +373,30 @@
       <button id="qrSend" data-t="sendLink"></button>
       <button id="qrClose" data-t="closeBtn"></button>
     </div>
+  </div>
+</div>
+
+<div id="mpModal" class="overlay">
+  <div class="panel">
+    <h2 data-t="mpTitle"></h2>
+    <div id="mpOut">
+      <p class="about" data-t="mpAbout"></p>
+      <div class="mpRow"><label data-t="mpName"></label><input id="mpName" maxlength="20"></div>
+      <div class="mpRow"><button id="mpCreate" data-t="mpCreate"></button></div>
+      <div class="mpRow"><label data-t="mpCodeLbl"></label><input id="mpCode" maxlength="4" placeholder="ABCD" autocomplete="off"><button id="mpJoin" data-t="mpJoin"></button></div>
+    </div>
+    <div id="mpIn" hidden>
+      <div class="mpCodeBig"><small data-t="mpRoom"></small><span id="mpRoom"></span></div>
+      <div id="mpQr"></div>
+      <div class="qsub" style="text-align:center;font-size:.8rem;color:var(--sub)" data-t="mpShareRoom"></div>
+      <div id="mpUrl"></div>
+      <p id="mpWarn" hidden data-t="fileWarn"></p>
+      <ul id="mpList"></ul>
+      <p id="mpHint"></p>
+      <div class="mpRow" style="justify-content:center"><button id="mpCopy" data-t="copy"></button><button id="mpLeaveBtn" data-t="mpLeave"></button></div>
+    </div>
+    <div id="mpErr"></div>
+    <div class="mpFoot"><span></span><button id="mpClose" data-t="closeBtn"></button></div>
   </div>
 </div>
 
@@ -352,6 +421,7 @@
     <div class="vs" id="winVs" hidden></div>
     <div class="path" id="winPath"></div>
     <div class="rules" id="winRules"></div>
+    <div id="mpRes" hidden></div>
     <div class="nameRow" id="nameRow"><span data-t="nameLbl"></span> <input id="myName" maxlength="20"></div>
     <div class="btns">
       <button id="saveRecord" data-t="saveRecord"></button>
@@ -810,6 +880,85 @@ STR["zh-hans"] = {
   catEmpty:"本分类目前没有任何页面或媒体。"
 };
 
+/* ── 対戦モードの言葉 ── */
+Object.assign(STR.ja, {
+  mpBtn:"⚔️ 対戦", mpTitle:"⚔️ リアルタイム対戦", mpName:"名前", mpCreate:"⚔️ 部屋を作る", mpCodeLbl:"部屋コード", mpJoin:"参加する",
+  mpAbout:"2〜4人で同じお題を同時にスタート。打数が少ない人の勝ち！", mpRoom:"部屋",
+  mpHintHost:"お題とルールを決めたら「ティーオフ」で全員スタート", mpHintGuest:"ホストのスタートを待ってね", mpLeave:"部屋を出る", mpHost:"ホスト",
+  mpWait:"ホストのティーオフを待ってるよ…", mpBar:(r,h,n)=>`⚔️ 部屋 ${r} ・ ホスト：${h} ・ ${n}人`, mpConnecting:"接続中…", mpFail:"つながらなかった：",
+  mpFull:"満員（4人まで）だったよ", mpNoHost:"その部屋にはだれもいないみたい", mpJoined:n=>`${n}が入ったよ`, mpLeft:n=>`${n}が抜けたよ`,
+  mpGiveUp:"🏳 ギブアップ", giveUpHead:"🏳 ギブアップ…", mpRank:n=>`${n}位`, mpWaitOthers:"みんなのゴールを待ってるよ…", mpAllDone:"全員そろったよ！答え合わせ",
+  mpNext:"🎲 次のお題へ", mpLoading:"読み込み中", mpReading:"読んでる", mpSearching:"検索中", mpGoalCheck:"ゴール確認中", mpCat:"カテゴリにいる",
+  mpFile:"画像ページにいる", mpIdle:"考え中…", mpReach:"リーチ！", mpOffline:"切断", mpDnf:"ゴールならず", mpGuest:"ゲスト", mpCodeBad:"4文字のコードを入れてね",
+  mpMidRound:"いまラウンド中だよ。次のお題から参加してね", mpShareRoom:"このQRかリンクで友達を呼んでね", mpPlayingNow:"プレイ中"
+});
+Object.assign(STR.en, {
+  mpBtn:"⚔️ Battle", mpTitle:"⚔️ Live battle", mpName:"Name", mpCreate:"⚔️ Create a room", mpCodeLbl:"Room code", mpJoin:"Join",
+  mpAbout:"2–4 players start the same course at the same time. Fewest strokes wins!", mpRoom:"Room",
+  mpHintHost:"Pick the course and rules, then press “Tee off” to start everyone", mpHintGuest:"Waiting for the host to tee off", mpLeave:"Leave room", mpHost:"host",
+  mpWait:"Waiting for the host to tee off…", mpBar:(r,h,n)=>`⚔️ Room ${r} · Host: ${h} · ${n} players`, mpConnecting:"Connecting…", mpFail:"Couldn't connect: ",
+  mpFull:"The room is full (max 4)", mpNoHost:"Nobody seems to be in that room", mpJoined:n=>`${n} joined`, mpLeft:n=>`${n} left`,
+  mpGiveUp:"🏳 Give up", giveUpHead:"🏳 Gave up…", mpRank:n=>(["1st","2nd","3rd"][n-1] || `${n}th`), mpWaitOthers:"Waiting for the others to finish…", mpAllDone:"Everyone's done! Compare routes",
+  mpNext:"🎲 Next course", mpLoading:"loading", mpReading:"reading", mpSearching:"searching", mpGoalCheck:"checking the goal", mpCat:"in a category",
+  mpFile:"on a file page", mpIdle:"thinking…", mpReach:"So close!", mpOffline:"offline", mpDnf:"didn't finish", mpGuest:"Guest", mpCodeBad:"Enter a 4-character code",
+  mpMidRound:"A round is in progress — you'll join from the next course", mpShareRoom:"Invite friends with this QR code or link", mpPlayingNow:"playing"
+});
+Object.assign(STR.fr, {
+  mpBtn:"⚔️ Duel", mpTitle:"⚔️ Duel en direct", mpName:"Nom", mpCreate:"⚔️ Créer un salon", mpCodeLbl:"Code du salon", mpJoin:"Rejoindre",
+  mpAbout:"De 2 à 4 joueurs démarrent le même parcours en même temps. Le moins de coups gagne !", mpRoom:"Salon",
+  mpHintHost:"Choisissez le parcours et les règles, puis « Départ » pour lancer tout le monde", mpHintGuest:"En attente du départ de l'hôte", mpLeave:"Quitter le salon", mpHost:"hôte",
+  mpWait:"En attente du départ de l'hôte…", mpBar:(r,h,n)=>`⚔️ Salon ${r} · Hôte : ${h} · ${n} joueurs`, mpConnecting:"Connexion…", mpFail:"Connexion impossible : ",
+  mpFull:"Le salon est complet (4 max)", mpNoHost:"Il n'y a personne dans ce salon", mpJoined:n=>`${n} a rejoint le salon`, mpLeft:n=>`${n} est parti`,
+  mpGiveUp:"🏳 Abandonner", giveUpHead:"🏳 Abandon…", mpRank:n=>(n===1 ? "1er" : `${n}e`), mpWaitOthers:"En attente des autres joueurs…", mpAllDone:"Tout le monde a fini ! Comparez les parcours",
+  mpNext:"🎲 Parcours suivant", mpLoading:"chargement", mpReading:"lit", mpSearching:"cherche", mpGoalCheck:"relit l'arrivée", mpCat:"dans une catégorie",
+  mpFile:"sur une page de fichier", mpIdle:"réfléchit…", mpReach:"Tout près !", mpOffline:"déconnecté", mpDnf:"non terminé", mpGuest:"Invité", mpCodeBad:"Saisissez un code de 4 caractères",
+  mpMidRound:"Une manche est en cours : vous jouerez au prochain parcours", mpShareRoom:"Invitez vos amis avec ce QR code ou ce lien", mpPlayingNow:"en jeu"
+});
+Object.assign(STR.es, {
+  mpBtn:"⚔️ Duelo", mpTitle:"⚔️ Duelo en directo", mpName:"Nombre", mpCreate:"⚔️ Crear sala", mpCodeLbl:"Código de sala", mpJoin:"Unirse",
+  mpAbout:"De 2 a 4 jugadores empiezan el mismo recorrido a la vez. ¡Gana quien use menos golpes!", mpRoom:"Sala",
+  mpHintHost:"Elige el recorrido y las reglas, y pulsa «Salida» para que todos empiecen", mpHintGuest:"Esperando a que el anfitrión dé la salida", mpLeave:"Salir de la sala", mpHost:"anfitrión",
+  mpWait:"Esperando la salida del anfitrión…", mpBar:(r,h,n)=>`⚔️ Sala ${r} · Anfitrión: ${h} · ${n} jugadores`, mpConnecting:"Conectando…", mpFail:"No se pudo conectar: ",
+  mpFull:"La sala está llena (máx. 4)", mpNoHost:"No parece haber nadie en esa sala", mpJoined:n=>`${n} se ha unido`, mpLeft:n=>`${n} se ha ido`,
+  mpGiveUp:"🏳 Rendirse", giveUpHead:"🏳 Te rendiste…", mpRank:n=>`${n}.º`, mpWaitOthers:"Esperando a los demás…", mpAllDone:"¡Todos han terminado! Comparad los recorridos",
+  mpNext:"🎲 Siguiente recorrido", mpLoading:"cargando", mpReading:"leyendo", mpSearching:"buscando", mpGoalCheck:"revisando el hoyo", mpCat:"en una categoría",
+  mpFile:"en una página de archivo", mpIdle:"pensando…", mpReach:"¡Muy cerca!", mpOffline:"desconectado", mpDnf:"sin terminar", mpGuest:"Invitado", mpCodeBad:"Escribe un código de 4 caracteres",
+  mpMidRound:"Hay una ronda en curso: entrarás en el próximo recorrido", mpShareRoom:"Invita a tus amigos con este código QR o enlace", mpPlayingNow:"jugando"
+});
+Object.assign(STR.ko, {
+  mpBtn:"⚔️ 대전", mpTitle:"⚔️ 실시간 대전", mpName:"이름", mpCreate:"⚔️ 방 만들기", mpCodeLbl:"방 코드", mpJoin:"참가",
+  mpAbout:"2~4명이 같은 코스를 동시에 시작해요. 타수가 적은 사람이 승리!", mpRoom:"방",
+  mpHintHost:"코스와 규칙을 정하고 ‘티샷’을 누르면 모두 시작해요", mpHintGuest:"방장이 시작하기를 기다려 주세요", mpLeave:"방 나가기", mpHost:"방장",
+  mpWait:"방장의 티샷을 기다리는 중…", mpBar:(r,h,n)=>`⚔️ 방 ${r} · 방장: ${h} · ${n}명`, mpConnecting:"연결 중…", mpFail:"연결하지 못했어요: ",
+  mpFull:"방이 꽉 찼어요(최대 4명)", mpNoHost:"그 방에는 아무도 없는 것 같아요", mpJoined:n=>`${n} 님이 들어왔어요`, mpLeft:n=>`${n} 님이 나갔어요`,
+  mpGiveUp:"🏳 기권", giveUpHead:"🏳 기권…", mpRank:n=>`${n}위`, mpWaitOthers:"다른 사람들을 기다리는 중…", mpAllDone:"모두 끝났어요! 경로 비교",
+  mpNext:"🎲 다음 코스", mpLoading:"불러오는 중", mpReading:"읽는 중", mpSearching:"찾는 중", mpGoalCheck:"홀 확인 중", mpCat:"분류 문서",
+  mpFile:"파일 문서", mpIdle:"고민 중…", mpReach:"리치!", mpOffline:"연결 끊김", mpDnf:"홀인 실패", mpGuest:"게스트", mpCodeBad:"4글자 코드를 입력하세요",
+  mpMidRound:"지금 라운드 중이에요. 다음 코스부터 참가해요", mpShareRoom:"이 QR 코드나 링크로 친구를 불러요", mpPlayingNow:"플레이 중"
+});
+Object.assign(STR["zh-hant"], {
+  mpBtn:"⚔️ 對戰", mpTitle:"⚔️ 即時對戰", mpName:"名字", mpCreate:"⚔️ 建立房間", mpCodeLbl:"房間代碼", mpJoin:"加入",
+  mpAbout:"2～4 人同時從同一題開始。桿數最少的人獲勝！", mpRoom:"房間",
+  mpHintHost:"決定題目和規則後，按「開球」讓大家一起開始", mpHintGuest:"等待房主開球", mpLeave:"離開房間", mpHost:"房主",
+  mpWait:"等待房主開球…", mpBar:(r,h,n)=>`⚔️ 房間 ${r}・房主：${h}・${n} 人`, mpConnecting:"連線中…", mpFail:"無法連線：",
+  mpFull:"房間已滿（最多 4 人）", mpNoHost:"那個房間好像沒有人", mpJoined:n=>`${n} 加入了`, mpLeft:n=>`${n} 離開了`,
+  mpGiveUp:"🏳 棄權", giveUpHead:"🏳 棄權…", mpRank:n=>`第${n}名`, mpWaitOthers:"等待其他人進洞…", mpAllDone:"大家都完成了！對答案",
+  mpNext:"🎲 下一題", mpLoading:"載入中", mpReading:"閱讀中", mpSearching:"搜尋中", mpGoalCheck:"確認終點中", mpCat:"在分類頁",
+  mpFile:"在檔案頁", mpIdle:"思考中…", mpReach:"聽牌！", mpOffline:"已斷線", mpDnf:"未能進洞", mpGuest:"訪客", mpCodeBad:"請輸入 4 個字元的代碼",
+  mpMidRound:"目前正在進行中，下一題再加入", mpShareRoom:"用這個 QR Code 或連結邀請朋友", mpPlayingNow:"進行中"
+});
+Object.assign(STR["zh-hans"], {
+  mpBtn:"⚔️ 对战", mpTitle:"⚔️ 实时对战", mpName:"名字", mpCreate:"⚔️ 创建房间", mpCodeLbl:"房间代码", mpJoin:"加入",
+  mpAbout:"2～4 人同时从同一题开始。杆数最少的人获胜！", mpRoom:"房间",
+  mpHintHost:"决定题目和规则后，按“开球”让大家一起开始", mpHintGuest:"等待房主开球", mpLeave:"离开房间", mpHost:"房主",
+  mpWait:"等待房主开球…", mpBar:(r,h,n)=>`⚔️ 房间 ${r}・房主：${h}・${n} 人`, mpConnecting:"连接中…", mpFail:"无法连接：",
+  mpFull:"房间已满（最多 4 人）", mpNoHost:"那个房间好像没有人", mpJoined:n=>`${n} 加入了`, mpLeft:n=>`${n} 离开了`,
+  mpGiveUp:"🏳 弃权", giveUpHead:"🏳 弃权…", mpRank:n=>`第${n}名`, mpWaitOthers:"等待其他人进洞…", mpAllDone:"大家都完成了！对答案",
+  mpNext:"🎲 下一题", mpLoading:"加载中", mpReading:"阅读中", mpSearching:"搜索中", mpGoalCheck:"确认终点中", mpCat:"在分类页",
+  mpFile:"在文件页", mpIdle:"思考中…", mpReach:"听牌！", mpOffline:"已断线", mpDnf:"未能进洞", mpGuest:"访客", mpCodeBad:"请输入 4 个字符的代码",
+  mpMidRound:"目前正在进行中，下一题再加入", mpShareRoom:"用这个二维码或链接邀请朋友", mpPlayingNow:"进行中"
+});
+
 /* ════════ 設定 ════════ */
 function browserLang(){
   for(const l of (navigator.languages || [navigator.language || "en"])){
@@ -868,6 +1017,7 @@ function applyUI(){
   $("gearBtn").title = T("settings");
   $("savedBtn").title = T("savedList");
   updateSaveBtn();
+  if(typeof mpControls === "function") mpControls();
   if(!state.playing){
     $("route").textContent = T("routeHint");
     resetClockLabel();
@@ -992,6 +1142,7 @@ async function draw(role, fixedTitle){
     $("teeoff").disabled = !(state.start && state.goal) || state.playing;
     $("shareOdai").disabled = !(state.start && state.goal);
     updateSaveBtn();
+    if(state.mp && state.start && state.goal && !state.playing) mpSendOdai();
   }
 }
 
@@ -1031,6 +1182,8 @@ function resetGame(){
   $("frame").onload = null;
   $("frame").removeAttribute("srcdoc");
   $("placeholder").hidden = false;
+  state.backs = 0; state.reach = false; state.nsNow = 0; state.pct = 0; state.goalCheck = false; state.searchUntil = 0;
+  mpControls();
 }
 function resetClockLabel(){
   const lim = eff().timeLimit;
@@ -1045,6 +1198,8 @@ async function newOdai(){
   applyUI();
   state.start = state.goal = null;
   await Promise.all([draw("start"), draw("goal")]);
+  // たまたま同じ記事になったらゴールだけ引き直す
+  if(state.start && state.goal && norm(state.start.title) === norm(state.goal.title)) await draw("goal");
 }
 async function loadChallenge(){
   state.start = state.goal = null;
@@ -1221,6 +1376,12 @@ async function render(parsed){
     if(href.startsWith("#")) return;
     if(linkAllowed(a, linkTitle(href), state.rules)) a.classList.add("golf-blocked");
   });
+  // 対戦用：今の記事にゴールへのリンクがあるか（自分の画面には出さない）
+  const goalKey = state.goal ? norm(state.goal.title).toLowerCase() : "";
+  state.reach = !!goalKey && [...doc.querySelectorAll("a[href]")].some(a => {
+    const t = linkTitle(a.getAttribute("href") || "");
+    return t && t.toLowerCase() === goalKey;
+  });
   // スマホ：下にスクロールしたらお題の帯を引っこめる
   let lastY = 0;
   const fw = $("frame").contentWindow;
@@ -1230,6 +1391,11 @@ async function render(parsed){
     if(y > lastY + 12 && y > 80) document.body.classList.add("collapsed");
     else if(y < lastY - 12 || y < 40) document.body.classList.remove("collapsed");
     lastY = y;
+  }, {passive:true});
+  if(fw) fw.addEventListener("scroll", ()=>{
+    const max = fw.document.documentElement.scrollHeight - fw.innerHeight;
+    state.pct = max > 0 ? Math.min(100, Math.round(fw.scrollY / max * 100)) : 100;
+    mpAct();
   }, {passive:true});
   document.body.classList.remove("collapsed");
   $("placeholder").hidden = true;
@@ -1257,10 +1423,12 @@ async function go(title, {count = true, back = false} = {}){
   if(state.busy) return;
   state.busy = true;
   $("frame").classList.add("busy");
+  mpAct();
   try{
     const parsed = await loadArticle(title);
     if(!state.playing) return;               // 読み込み中に時間切れ
     await render(parsed);
+    state.nsNow = parsed.ns; state.pct = 0;
     if(count){ state.strokes++; $("strokeNum").textContent = state.strokes; }
     if(!back) state.stack.push(parsed.title);
     state.route.push({title:parsed.title, shown:parsed.shownTitle, back});
@@ -1272,6 +1440,7 @@ async function go(title, {count = true, back = false} = {}){
   }finally{
     state.busy = false;
     $("frame").classList.remove("busy");
+    mpAct();
   }
 }
 
@@ -1306,8 +1475,13 @@ function tick(){
 }
 
 /* ════════ ボタン ════════ */
-$("teeoff").addEventListener("click", async ()=>{
-  if(!state.start || !state.goal) return;
+$("teeoff").addEventListener("click", ()=>{
+  if(!state.start || !state.goal || state.playing) return;
+  if(state.mp){ if(isHost()) mpHostStart(); return; }
+  startGame();
+});
+async function startGame(){
+  if(!state.start || !state.goal || state.playing) return;
   state.rules = {...eff()};
   setPlaying(true);
   hidePop();
@@ -1317,12 +1491,15 @@ $("teeoff").addEventListener("click", async ()=>{
   $("findToggle").hidden = !state.rules.allowSearch;
   document.querySelectorAll(".card .reroll").forEach(b => b.disabled = true);
   $("clockLbl").textContent = state.rules.timeLimit ? T("left") : T("time");
+  state.backs = 0; state.lastAct = Date.now();
+  mpControls();
   await ensureNs();
   await go(state.start.title, {count:false});
   startTimer();
-});
+}
 $("backBtn").addEventListener("click", ()=>{
   if(state.stack.length < 2 || state.busy || !state.playing) return;
+  state.backs = (state.backs || 0) + 1;
   state.stack.pop();
   go(state.stack[state.stack.length-1], {count:false, back:true});
 });
@@ -1402,6 +1579,7 @@ async function openReader(role){
   const p = state[role];
   if(!p) return;
   hidePop();
+  if(role === "goal" && state.playing){ state.goalCheck = true; mpAct(); }
   $("reader").classList.add("show");
   $("readerNote").textContent = T("loading");
   try{
@@ -1420,8 +1598,9 @@ async function openReader(role){
     $("readerNote").textContent = T("loadFail") + e.message;
   }
 }
-$("readerClose").addEventListener("click", ()=> $("reader").classList.remove("show"));
-$("reader").addEventListener("click", e=>{ if(e.target.id === "reader") $("reader").classList.remove("show"); });
+function closeReader(){ $("reader").classList.remove("show"); if(state.goalCheck){ state.goalCheck = false; mpAct(); } }
+$("readerClose").addEventListener("click", closeReader);
+$("reader").addEventListener("click", e=>{ if(e.target.id === "reader") closeReader(); });
 
 /* ════════ ページ内検索 ════════ */
 let hits = [], cur = -1, searchTimer;
@@ -1466,7 +1645,7 @@ function step(d){
   hits[cur].scrollIntoView({block:"center"});
   $("sCount").textContent = `${cur+1} / ${hits.length}`;
 }
-$("sInput").addEventListener("input", ()=>{ clearTimeout(searchTimer); searchTimer = setTimeout(()=>doSearch(false), 200); });
+$("sInput").addEventListener("input", ()=>{ state.searchUntil = Date.now() + 6000; mpAct(); clearTimeout(searchTimer); searchTimer = setTimeout(()=>doSearch(false), 200); });
 $("sInput").addEventListener("keydown", e=>{ if(e.key === "Enter"){ e.preventDefault(); step(e.shiftKey ? -1 : 1); } });
 $("sNext").addEventListener("click", ()=>step(1));
 $("sPrev").addEventListener("click", ()=>step(-1));
@@ -1520,6 +1699,11 @@ function buildSettings(){
   $("lockNote").textContent = state.challenge ? T("lockCh") : T("lockPlay");
   $("quitHole").hidden = !(state.playing || state.challenge);
   $("quitHole").textContent = state.challenge ? T("quitCh") : T("quitHole");
+  if(state.mp){
+    $("quitHole").hidden = !state.playing;
+    $("quitHole").textContent = T("mpGiveUp");
+    if(!isHost() && !state.playing){ $("lockNote").hidden = false; $("lockNote").textContent = T("mpHintGuest"); }
+  }
 }
 function changeSetting(key, val){
   const old = settings[key];
@@ -1531,8 +1715,10 @@ function changeSetting(key, val){
   if(key === "goalView"){ fillCard("goal"); hidePop(); }
   if(key === "timeLimit" && !state.playing) resetClockLabel();
   if(key === "difficulty" && old !== val) toast(T("nextOdai"));
+  if(state.mp) mpSendOdai();
 }
 $("quitHole").addEventListener("click", ()=>{
+  if(state.mp && state.playing){ $("settings").classList.remove("show"); finish(false, "giveup"); return; }
   if(state.playing && state.strokes > 0 && !confirm(state.challenge ? T("confirmExit") : T("confirmNew"))) return;
   $("settings").classList.remove("show");
   newOdai();
@@ -1553,7 +1739,7 @@ function rulesText(r){
 }
 
 /* ════════ カップイン／タイムアップ ════════ */
-function finish(success){
+function finish(success, reason){
   setPlaying(false);
   stopTimer();
   $("backBtn").disabled = true;
@@ -1563,7 +1749,7 @@ function finish(success){
     route:state.route.map(s=>({title:s.shown, back:s.back})), elapsed:state.elapsed, rules:state.rules, date:new Date()
   };
   r.vs = judge(r, state.challenge);
-  $("winHead").textContent = success ? (r.strokes === 1 ? T("hio") : T("cupIn")) : T("timeUp");
+  $("winHead").textContent = success ? (r.strokes === 1 ? T("hio") : T("cupIn")) : reason === "giveup" ? T("giveUpHead") : T("timeUp");
   $("winStart").textContent = r.start;
   $("winGoal").textContent = r.goal;
   $("winN").textContent = r.strokes;
@@ -1587,6 +1773,8 @@ function finish(success){
   $("nameRow").hidden = $("sendChallenge").hidden = !success;
   $("saveRecord").disabled = false; $("saveRecord").textContent = T("saveRecord");
   $("myName").value = myName;
+  $("mpRes").hidden = true;
+  if(state.mp){ mpOnFinish(r); mpControls(); }
   $("win").classList.add("show");
 }
 $("winClose").addEventListener("click", ()=> $("win").classList.remove("show"));
@@ -1634,6 +1822,19 @@ function parseChallenge(){
 function chName(ch){ return ch.name || T("someone"); }
 function renderChallengeBar(){
   const ch = state.challenge, bar = $("chBar");
+  if(state.mp){
+    const m = state.mp, host = m.players.get(m.hostId);
+    bar.hidden = false;
+    $("chExit").textContent = T("mpLeave");
+    $("newBtn").textContent = T("newOdai");
+    const t = $("chText"); t.innerHTML = "";
+    const b = document.createElement("b"); b.textContent = T("mpBar", m.room, host ? host.name : "…", m.order.length || 1);
+    const r = document.createElement("span"); r.className = "chRules";
+    r.textContent = "　" + T("rulesPre") + rulesText(state.playing && state.rules ? state.rules : eff());
+    t.append(b, r);
+    return;
+  }
+  $("chExit").textContent = T("exitCh");
   bar.hidden = !ch;
   $("newBtn").textContent = ch ? "🏠 " + T("exitCh") : T("newOdai");
   if(!ch) return;
@@ -1660,6 +1861,7 @@ function judge(r, ch){
   return {name:chName(ch), strokes:ch.strokes, time:ch.time, res};
 }
 $("chExit").addEventListener("click", ()=>{
+  if(state.mp) return mpLeave();
   if(state.playing && state.strokes > 0 && !confirm(T("confirmExit"))) return;
   newOdai();
 });
@@ -2096,6 +2298,379 @@ $("clearAll").addEventListener("click", ()=>{
   renderSaved(); updateSaveBtn();
 });
 
+/* ════════ リアルタイム対戦（Supabase Realtime：broadcast＋presence。表は使わない） ════════ */
+const SB_URL = "https://acytuhewfhuoxugwmbat.supabase.co";
+const SB_KEY = "sb_publishable_ruAGcA3YSvXXCPkc3s6aTQ_4lg3wAYJ";
+const SB_JS  = "https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2.75.0/dist/umd/supabase.js";
+const MP_MAX = 4;
+let sbClient = null;
+const mk = (tag, cls, text) => { const x = document.createElement(tag); if(cls) x.className = cls; if(text != null) x.textContent = text; return x; };
+
+function loadSupabase(){
+  if(window.supabase && window.supabase.createClient) return Promise.resolve();
+  return new Promise((res, rej)=>{
+    const s = document.createElement("script");
+    s.src = SB_JS; s.onload = () => res(); s.onerror = () => rej(new Error("supabase-js"));
+    document.head.appendChild(s);
+  });
+}
+const rid = () => Math.random().toString(36).slice(2, 10);
+const ROOM_CHARS = "ABCDEFGHJKLMNPQRSTUVWXYZ23456789";
+const newRoomCode = () => Array.from({length:4}, () => ROOM_CHARS[Math.floor(Math.random() * ROOM_CHARS.length)]).join("");
+const freshStats = () => ({strokes:0, backs:0, act:"", pct:0, reach:false, done:false, success:false, elapsed:0, route:null, inRound:false});
+function isHost(){ return !!state.mp && state.mp.hostId === state.mp.me.id; }
+function mpSend(payload){
+  const m = state.mp;
+  if(m && m.ch && m.subscribed) m.ch.send({type:"broadcast", event:"g", payload:{...payload, from:m.me.id}});
+}
+
+async function mpConnect(room, creating){
+  if(state.mp) return;
+  const name = ($("mpName").value.trim() || myName || (T("mpGuest") + Math.floor(Math.random() * 90 + 10))).slice(0, 20);
+  saveName(name); $("mpName").value = name;
+  $("mpErr").textContent = T("mpConnecting");
+  try{
+    await loadSupabase();
+    if(!sbClient) sbClient = window.supabase.createClient(SB_URL, SB_KEY,
+      {auth:{persistSession:false, autoRefreshToken:false}, realtime:{params:{eventsPerSecond:10}}});
+  }catch(e){ $("mpErr").textContent = T("mpFail") + e.message; return; }
+  const me = {id:rid(), name, joinedAt:Date.now()};
+  const ch = sbClient.channel("wikigolf:" + room, {config:{broadcast:{self:false}, presence:{key:me.id}}});
+  state.mp = {ch, room, me, hostId:null, players:new Map(), order:[], round:0, phase:"lobby", creating, subscribed:false, midRound:false};
+  state.mp.players.set(me.id, {id:me.id, name, joinedAt:me.joinedAt, ...freshStats()});
+  ch.on("broadcast", {event:"g"}, ({payload}) => mpOnMsg(payload))
+    .on("presence", {event:"sync"}, () => mpOnSync())
+    .subscribe(async status => {
+      const m = state.mp;
+      if(!m || m.ch !== ch) return;
+      if(status === "SUBSCRIBED"){
+        if(m.subscribed) return;
+        m.subscribed = true;
+        await ch.track({id:me.id, name:me.name, joinedAt:me.joinedAt});
+        $("mpErr").textContent = "";
+        try{ history.replaceState(null, "", baseUrl() + "?room=" + room); }catch(_){}
+        if(!creating){
+          mpSend({t:"hello"});
+          setTimeout(()=>{
+            if(state.mp && state.mp.ch === ch && state.mp.order.length <= 1){ toast(T("mpNoHost")); mpLeave(true); }
+          }, 6000);
+        }else mpSendOdai();
+        mpControls(); renderMp(); renderStrip();
+      }else if(!m.subscribed && (status === "CHANNEL_ERROR" || status === "TIMED_OUT")){
+        $("mpErr").textContent = T("mpFail") + status;
+        state.mp = null;
+        try{ sbClient.removeChannel(ch); }catch(_){}
+        renderMp(); mpControls();
+      }
+    });
+  renderMp();
+}
+
+async function mpLeave(silent){
+  const m = state.mp;
+  if(!m) return;
+  if(!silent && state.playing && state.strokes > 0 && !confirm(T("confirmExit"))) return;
+  state.mp = null;
+  try{ await m.ch.untrack(); }catch(_){}
+  try{ sbClient.removeChannel(m.ch); }catch(_){}
+  if(state.playing){ stopTimer(); setPlaying(false); }
+  renderStrip(); renderMp();
+  $("mpRes").hidden = true;
+  newOdai();
+}
+
+function mpOnSync(){
+  const m = state.mp;
+  if(!m) return;
+  const metas = Object.values(m.ch.presenceState()).map(a => a && a[0]).filter(x => x && x.id)
+    .sort((a, b) => (a.joinedAt - b.joinedAt) || (a.id < b.id ? -1 : 1));
+  if(metas.findIndex(x => x.id === m.me.id) >= MP_MAX){ toast(T("mpFull")); mpLeave(true); return; }
+  const active = metas.slice(0, MP_MAX);
+  const prev = new Set(m.order);
+  let newcomer = false;
+  for(const x of active){
+    let p = m.players.get(x.id);
+    if(!p){ p = {id:x.id, name:x.name, joinedAt:x.joinedAt, ...freshStats()}; m.players.set(x.id, p); }
+    p.name = x.name; p.left = false;
+    if(!prev.has(x.id) && x.id !== m.me.id){ newcomer = true; if(m.order.length) toast(T("mpJoined", x.name)); }
+  }
+  for(const id of m.order){
+    if(!active.some(x => x.id === id)){
+      const p = m.players.get(id);
+      if(p && !p.left){ p.left = true; toast(T("mpLeft", p.name)); }
+    }
+  }
+  m.order = active.map(x => x.id);
+  m.hostId = active.length ? active[0].id : null;
+  if(isHost() && newcomer) mpSendOdai();
+  mpControls(); renderMp(); renderStrip();
+  if($("win").classList.contains("show")) renderMpResults();
+}
+
+function mpOnMsg(p){
+  const m = state.mp;
+  if(!m || !p || p.from === m.me.id) return;
+  const pl = m.players.get(p.from);
+  switch(p.t){
+    case "hello":
+      if(isHost()) mpSendOdai();
+      break;
+    case "odai":
+      if(p.hostName) m.hostName = p.hostName;
+      mpApplyOdai(p);
+      break;
+    case "start":
+      mpGuestStart(p);
+      break;
+    case "st":
+      if(pl && p.round === m.round){ Object.assign(pl, {strokes:p.strokes, backs:p.backs, act:p.act, pct:p.pct, reach:p.reach}); renderStrip(); }
+      break;
+    case "fin":
+      if(pl && p.round === m.round){
+        Object.assign(pl, {done:true, success:p.success, strokes:p.strokes, elapsed:p.elapsed, route:p.route, backs:p.backs, reach:false});
+        renderStrip(); renderMpResults();
+      }
+      break;
+  }
+}
+
+/* ── お題の同期（ホスト → みんな） ── */
+let odaiTimer = null;
+function curOdai(){
+  return {lang:curLang(), start:state.start.title, goal:state.goal.title, rules:pickRules(state.playing && state.rules ? state.rules : eff())};
+}
+function mpSendOdai(){
+  if(!isHost()) return;
+  clearTimeout(odaiTimer);
+  odaiTimer = setTimeout(()=>{
+    if(!isHost() || !state.start || !state.goal) return;
+    mpSend({t:"odai", odai:curOdai(), phase:state.playing ? "playing" : "lobby", round:state.mp.round, hostName:state.mp.me.name});
+  }, 300);
+}
+async function mpLoadOdai(o){
+  const ch = state.challenge;
+  const same = ch && ch.mp && ch.start === o.start && ch.goal === o.goal && state.start && state.goal &&
+               JSON.stringify(pickRules(ch.rules)) === JSON.stringify(o.rules);
+  if(same) return;
+  $("win").classList.remove("show");
+  state.challenge = {start:o.start, goal:o.goal, rules:{...DEFAULTS, ...o.rules}, name:"", strokes:null, time:null, mp:true};
+  await loadChallenge();
+}
+async function mpApplyOdai(p){
+  const m = state.mp;
+  if(state.playing || isHost()) return;
+  m.midRound = p.phase === "playing";
+  if(m.midRound && !state.start) toast(T("mpMidRound"));
+  await mpLoadOdai(p.odai);
+  mpControls(); renderMp();
+}
+
+/* ── 同時スタート ── */
+function mpBeginRound(round){
+  const m = state.mp;
+  m.round = round; m.phase = "playing"; m.midRound = false;
+  for(const id of m.order){ const p = m.players.get(id); if(p) Object.assign(p, freshStats(), {inRound:true}); }
+  for(const [id, p] of m.players) if(!m.order.includes(id)) p.inRound = false;
+  $("mpRes").hidden = true;
+  renderStrip();
+}
+function mpHostStart(){
+  const m = state.mp;
+  const round = m.round + 1;
+  mpSend({t:"start", round, odai:curOdai()});
+  mpBeginRound(round);
+  startGame();
+}
+async function mpGuestStart(p){
+  if(state.playing || isHost()) return;
+  await mpLoadOdai(p.odai);
+  ["win", "reader", "settings", "qrModal", "savedModal", "mpModal"].forEach(id => $(id).classList.remove("show"));
+  mpBeginRound(p.round);
+  startGame();
+}
+
+/* ── プレイ中の様子 ── */
+let stTimer = null, lastSt = "";
+function mpQueue(){
+  if(!state.mp || !state.playing || stTimer) return;
+  stTimer = setTimeout(()=>{ stTimer = null; mpSendStatus(); }, 600);
+}
+function mpAct(){ state.lastAct = Date.now(); mpQueue(); }
+function myAct(){
+  const now = Date.now();
+  if(state.busy) return "loading";
+  if(state.goalCheck) return "goal";
+  if((state.searchUntil || 0) > now) return "search";
+  if(now - (state.lastAct || now) > 30000) return "idle";
+  if(state.nsNow === 14) return "cat";
+  if(state.nsNow === 6) return "file";
+  return "read";
+}
+function mpSendStatus(){
+  const m = state.mp;
+  if(!m || !state.playing) return;
+  const st = {strokes:state.strokes, backs:state.backs || 0, act:myAct(), pct:state.pct || 0, reach:!!state.reach};
+  const me = m.players.get(m.me.id);
+  if(me) Object.assign(me, st);
+  renderStrip();
+  const key = JSON.stringify(st);
+  if(key === lastSt) return;
+  lastSt = key;
+  mpSend({t:"st", round:m.round, ...st});
+}
+setInterval(()=>{ if(state.mp && state.playing) mpQueue(); }, 5000);
+
+function actText(p){
+  switch(p.act){
+    case "loading": return "⏳ " + T("mpLoading");
+    case "goal":    return "🚩 " + T("mpGoalCheck");
+    case "search":  return "🔍 " + T("mpSearching");
+    case "idle":    return "💤 " + T("mpIdle");
+    case "cat":     return "🗂 " + T("mpCat");
+    case "file":    return "🖼 " + T("mpFile");
+    case "read":    return `📖 ${T("mpReading")} ${p.pct || 0}%`;
+    default: return "";
+  }
+}
+function renderStrip(){
+  const m = state.mp, box = $("mpStrip");
+  if(!m){ box.hidden = true; box.innerHTML = ""; return; }
+  box.hidden = false; box.innerHTML = "";
+  const ids = m.order.concat([...m.players.keys()].filter(id => !m.order.includes(id) && m.players.get(id).inRound));
+  for(const id of ids){
+    const p = m.players.get(id);
+    if(!p) continue;
+    const isMe = id === m.me.id;
+    const reach = !isMe && p.reach && p.inRound && !p.done && !p.left;
+    const chip = mk("span", "chip" + (isMe ? " me" : "") + (p.left ? " off" : "") + (reach ? " reach" : ""));
+    chip.append(mk("b", "", p.name + (id === m.hostId ? " 👑" : "")));
+    let txt = "";
+    if(p.left) txt = "📴 " + T("mpOffline");
+    else if(p.inRound && p.done) txt = p.success ? `🏁 ${T("sk", p.strokes)}` : `🏳 ${T("mpDnf")}`;
+    else if(p.inRound && m.phase === "playing") txt = `⛳${p.strokes}` + (p.backs ? ` ↩${p.backs}` : "") + " " + actText(p) + (reach ? "  🔥" + T("mpReach") : "");
+    chip.append(txt);
+    box.append(chip);
+  }
+}
+
+/* ── 結果発表と答え合わせ ── */
+function mpRoundPlayers(){ return [...state.mp.players.values()].filter(p => p.inRound); }
+function mpAllDone(){ return mpRoundPlayers().every(p => p.done || p.left); }
+function mpRanked(){
+  const cls = p => p.done ? (p.success ? 0 : 1) : (p.left ? 3 : 2);
+  return mpRoundPlayers().sort((a, b) => (cls(a) - cls(b)) || (cls(a) === 0 ? (a.strokes - b.strokes) || (a.elapsed - b.elapsed) : 0));
+}
+function renderMpResults(){
+  const m = state.mp, box = $("mpRes");
+  if(!m || !state.result || !mpRoundPlayers().length){ box.hidden = true; return; }
+  box.hidden = false; box.innerHTML = "";
+  const all = mpAllDone();
+  if(all) m.phase = "lobby";
+  box.append(mk("div", "mpResHead", all ? T("mpAllDone") : T("mpWaitOthers")));
+  let rank = 0, prev = null;
+  mpRanked().forEach((p, i) => {
+    const row = mk("div", "mpR");
+    let rk = "";
+    if(p.done && p.success){
+      const key = p.strokes + ":" + p.elapsed;
+      if(key !== prev){ rank = i + 1; prev = key; }
+      rk = (rank === 1 ? "🏆 " : "") + T("mpRank", rank);
+    }
+    row.append(mk("span", "rk", rk || "—"));
+    row.append(mk("b", "", p.name + (p.id === m.me.id ? `（${T("you")}）` : "")));
+    let res;
+    if(p.done) res = p.success ? `${T("sk", p.strokes)}${T("paren", fmtTime(p.elapsed))}` : T("mpDnf");
+    else if(p.left) res = "📴 " + T("mpOffline");
+    else res = `${T("mpPlayingNow")}… ⛳${p.strokes}`;
+    row.append(" ", res);
+    if(p.done && p.route){
+      const rt = mk("div", "rt");
+      p.route.forEach((s, j) => { if(j) rt.append(s.back ? " ↩ " : " → "); rt.append(s.back ? mk("i", "", s.title) : s.title); });
+      row.append(rt);
+    }
+    box.append(row);
+  });
+  $("winNew").hidden = !isHost();
+}
+function mpOnFinish(r){
+  const m = state.mp;
+  if(!m) return;
+  const payload = {success:r.success, strokes:r.strokes, elapsed:Math.round(r.elapsed), route:r.route, backs:state.backs || 0};
+  const me = m.players.get(m.me.id);
+  if(me) Object.assign(me, payload, {done:true, reach:false});
+  mpSend({t:"fin", round:m.round, ...payload});
+  $("nameRow").hidden = $("sendChallenge").hidden = true;
+  $("winNew").hidden = !isHost();
+  $("winNew").textContent = T("mpNext");
+  renderStrip(); renderMpResults();
+}
+
+/* ── ボタンの出し分け ── */
+function mpControls(){
+  const m = state.mp, guest = !!m && !isHost();
+  if(!state.playing){
+    $("teeoff").hidden = guest;
+    if(guest) $("route").textContent = m.midRound ? T("mpMidRound") : T("mpWait");
+  }
+  $("newBtn").hidden = guest || (!!m && state.playing);
+  $("mpBtn").classList.toggle("on", !!m);
+  if(!m){ $("winNew").hidden = false; $("winNew").textContent = T("next"); }
+  renderChallengeBar();
+}
+
+/* ── 対戦の窓 ── */
+let mpQrRoom = null;
+function renderMp(){
+  const m = state.mp;
+  $("mpOut").hidden = !!m;
+  $("mpIn").hidden = !m;
+  if(!m){ if(!$("mpName").value) $("mpName").value = myName; mpQrRoom = null; return; }
+  $("mpRoom").textContent = m.room;
+  const url = baseUrl() + "?room=" + m.room;
+  $("mpUrl").textContent = url;
+  $("mpWarn").hidden = !isFile();
+  if(mpQrRoom !== m.room){
+    mpQrRoom = m.room;
+    const box = $("mpQr"); box.innerHTML = "";
+    try{
+      const qr = makeQr(url), n = qr.getModuleCount(), size = (n + 4) * 5;
+      const cv = document.createElement("canvas"); cv.width = cv.height = size;
+      drawQr(cv.getContext("2d"), qr, 0, 0, size); box.appendChild(cv);
+    }catch(_){}
+  }
+  const list = $("mpList"); list.innerHTML = "";
+  for(const id of m.order){
+    const p = m.players.get(id);
+    if(!p) continue;
+    const li = mk("li", "", p.name);
+    if(id === m.hostId) li.append(mk("span", "tagHost", "👑 " + T("mpHost")));
+    if(id === m.me.id) li.append(mk("span", "tagMe", T("you")));
+    list.append(li);
+  }
+  $("mpHint").textContent = isHost() ? T("mpHintHost") : (m.midRound ? T("mpMidRound") : T("mpHintGuest"));
+}
+function openMp(code){
+  if(code) $("mpCode").value = code.toUpperCase().slice(0, 4);
+  $("mpErr").textContent = "";
+  renderMp();
+  $("mpModal").classList.add("show");
+}
+$("mpBtn").addEventListener("click", ()=> openMp());
+$("mpClose").addEventListener("click", ()=> $("mpModal").classList.remove("show"));
+$("mpModal").addEventListener("click", e=>{ if(e.target.id === "mpModal") $("mpModal").classList.remove("show"); });
+$("mpCreate").addEventListener("click", ()=> mpConnect(newRoomCode(), true));
+$("mpJoin").addEventListener("click", ()=>{
+  const code = $("mpCode").value.toUpperCase().replace(/[^A-Z0-9]/g, "");
+  if(code.length !== 4){ $("mpErr").textContent = T("mpCodeBad"); return; }
+  mpConnect(code, false);
+});
+$("mpCode").addEventListener("keydown", e=>{ if(e.key === "Enter") $("mpJoin").click(); });
+$("mpLeaveBtn").addEventListener("click", ()=>{ mpLeave(); $("mpModal").classList.remove("show"); });
+$("mpCopy").addEventListener("click", async ()=>{
+  const url = $("mpUrl").textContent;
+  try{ await navigator.clipboard.writeText(url); toast(T("copied")); }catch(_){ window.prompt(T("copyPrompt"), url); }
+});
+
 /* ════════ トースト ════════ */
 let toastTimer;
 function toast(msg){
@@ -2106,6 +2681,8 @@ function toast(msg){
 /* ════════ はじまり ════════ */
 state.challenge = parseChallenge();
 if(state.challenge) loadChallenge(); else newOdai();
+const roomQ = new URLSearchParams(location.search).get("room");
+if(roomQ) openMp(roomQ);
 </script>
 </body>
 </html>
