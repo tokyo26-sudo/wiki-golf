@@ -69,6 +69,8 @@
   #route .step.back{color:var(--sub);font-style:italic}
   #route .sep{margin:0 6px;color:var(--sub)}
   #barBtns{flex:none;display:flex;gap:6px}
+  #bar{position:relative}
+  #ver{position:absolute;right:10px;bottom:1px;font-size:.6rem;color:var(--sub);opacity:.7;pointer-events:none;letter-spacing:.03em}
   #teeoff{background:var(--green);color:#fff;border-color:var(--green);font-weight:700}
   #gearBtn{font-size:1.05rem;padding:3px 10px}
   #menuBtn,#findToggle{display:none;font-size:1.05rem;padding:3px 11px}
@@ -117,6 +119,8 @@
   .srow .slabel{font-weight:700;font-size:.9rem}
   .srow .snote{font-size:.75rem;color:var(--sub)}
   .seg{display:flex;flex-wrap:wrap;gap:6px;margin-top:6px}
+  .seg button.withDesc{display:flex;flex-direction:column;align-items:flex-start;text-align:left;white-space:normal;line-height:1.35;padding:6px 12px}
+  .seg button.withDesc small{font-size:.7rem;opacity:.8;margin-top:1px}
   .seg button.on{background:var(--green);color:#fff;border-color:var(--green)}
   .srow.locked .seg{opacity:.45;pointer-events:none}
   .shead{font-size:.75rem;color:var(--sub);margin:14px 0 0;letter-spacing:.08em}
@@ -257,13 +261,14 @@
   <div class="stat"><div class="num" id="strokeNum">0</div><div class="lbl" data-t="strokes"></div></div>
   <div class="stat"><div class="num" id="clockNum">0:00</div><div class="lbl" id="clockLbl"></div></div>
   <div id="route"></div>
+  <span id="ver">v0.8.2</span>
   <div id="barBtns">
     <button id="teeoff" disabled data-t="teeoff"></button>
     <button id="backBtn" hidden data-t="back"></button>
-    <button id="shareOdai" disabled data-t="share"></button>
-    <button id="saveOdai" disabled data-t="saveOdai"></button>
     <button id="newBtn" data-t="newOdai"></button>
-    <button id="savedBtn">📒</button>
+    <button id="saveOdai" disabled data-t="saveOdai"></button>
+    <button id="savedBtn">📁</button>
+    <button id="shareOdai" disabled data-t="share"></button>
     <button id="gearBtn">⚙️</button>
     <button id="findToggle" hidden>🔍</button>
     <button id="menuBtn">⋯</button>
@@ -272,10 +277,10 @@
 
 <div id="menuPop" hidden>
   <button data-for="backBtn" data-t="back"></button>
-  <button data-for="shareOdai" data-t="share"></button>
+  <button data-for="newBtn" data-t="newOdai"></button>
   <button data-for="saveOdai" data-t="saveOdai"></button>
   <button data-for="savedBtn" data-t="savedList"></button>
-  <button data-for="newBtn" data-t="newOdai"></button>
+  <button data-for="shareOdai" data-t="share"></button>
   <button data-for="gearBtn" data-t="settings"></button>
 </div>
 
@@ -302,7 +307,7 @@
 
 <div id="settings" class="overlay">
   <div class="panel">
-    <h2 data-t="settings"></h2>
+    <h2><span data-t="settings"></span> <small style="font-size:.65rem;font-weight:400;color:var(--sub)">v0.8.2</small></h2>
     <p class="lockNote" id="lockNote" hidden></p>
     <button id="quitHole" class="quit" hidden></button>
     <div id="settingRows"></div>
@@ -399,7 +404,8 @@ const LANG_ORDER = ["ja","en","fr","es","zh","ko","ceb"];
 /* 画面の言葉 */
 const STR = {};
 STR.ja = {
-  saveOdai:"⭐ 保存", savedOk:"⭐ 保存済み", savedList:"📒 保存したお題", saveRecord:"⭐ 記録を保存", recordSaved:"✓ 保存したよ", best:sk=>`ベスト ${sk}`, notCleared:"未クリア", plays:n=>`記録 ${n}件`, playThis:"▶ 遊ぶ", delBtn:"🗑 削除", clearAll:"全部消す", confirmClearAll:"保存したお題と記録を全部消す？", confirmDel:"このお題と記録を消す？", emptySaved:"まだ保存したお題はないよ。気に入ったお題は「⭐ 保存」で残せるよ", savedPlay:"⭐ 保存したお題で遊ぶよ", savedToast:"お題を保存したよ", saveFail:"ブラウザに保存できなかった", locale:"ja-JP",
+  easyD:"スタートとゴールのリンク数が多め", normalD:"スタートとゴールのリンク数が普通", anyD:"完全ランダムで出題", diffNote2:"次のお題から反映されるよ",
+  saveOdai:"⭐ 保存", savedOk:"⭐ 保存済み", savedList:"📁 保存したお題", saveRecord:"⭐ 記録を保存", recordSaved:"✓ 保存したよ", best:sk=>`ベスト ${sk}`, notCleared:"未クリア", plays:n=>`記録 ${n}件`, playThis:"▶ 遊ぶ", delBtn:"🗑 削除", clearAll:"全部消す", confirmClearAll:"保存したお題と記録を全部消す？", confirmDel:"このお題と記録を消す？", emptySaved:"まだ保存したお題はないよ。気に入ったお題は「⭐ 保存」で残せるよ", savedPlay:"⭐ 保存したお題で遊ぶよ", savedToast:"お題を保存したよ", saveFail:"ブラウザに保存できなかった", locale:"ja-JP",
   routeImg:"画像の道のり", routeHide:"伏字にする", routeShow:"見せる", routeNote:"伏字にすると、スタートとゴール以外が黒い棒になるよ（ネタバレ防止）",
   quitCh:"🏠 挑戦状をやめて最初にもどる", quitHole:"🏳 このホールをやめる",
   appName:"Wikipediaゴルフ", start:"🏌️ スタート", goal:"🚩 ゴール", reroll:"引き直す", readFull:"全文を読む",
@@ -456,7 +462,8 @@ STR.ja = {
   catEmpty:"このカテゴリには現在ページまたはメディアがひとつもありません。"
 };
 STR.en = {
-  saveOdai:"⭐ Save", savedOk:"⭐ Saved", savedList:"📒 Saved courses", saveRecord:"⭐ Save record", recordSaved:"✓ Saved", best:sk=>`Best: ${sk}`, notCleared:"Not cleared", plays:n=>`${n} record${n===1?'':'s'}`, playThis:"▶ Play", delBtn:"🗑 Delete", clearAll:"Delete all", confirmClearAll:"Delete all saved courses and records?", confirmDel:"Delete this course and its records?", emptySaved:"No saved courses yet. Use “⭐ Save” to keep a course you like.", savedPlay:"⭐ Playing a saved course", savedToast:"Course saved", saveFail:"Couldn't save in this browser", locale:"en-US",
+  easyD:"Start and goal have lots of links", normalD:"Start and goal have a normal number of links", anyD:"Completely random", diffNote2:"Applies from the next course",
+  saveOdai:"⭐ Save", savedOk:"⭐ Saved", savedList:"📁 Saved courses", saveRecord:"⭐ Save record", recordSaved:"✓ Saved", best:sk=>`Best: ${sk}`, notCleared:"Not cleared", plays:n=>`${n} record${n===1?'':'s'}`, playThis:"▶ Play", delBtn:"🗑 Delete", clearAll:"Delete all", confirmClearAll:"Delete all saved courses and records?", confirmDel:"Delete this course and its records?", emptySaved:"No saved courses yet. Use “⭐ Save” to keep a course you like.", savedPlay:"⭐ Playing a saved course", savedToast:"Course saved", saveFail:"Couldn't save in this browser", locale:"en-US",
   routeImg:"Route in image", routeHide:"Hide (no spoilers)", routeShow:"Show", routeNote:"Hidden: everything except start and goal becomes black bars",
   quitCh:"🏠 Quit the challenge", quitHole:"🏳 Give up this hole",
   appName:"Wiki Golf", start:"🏌️ Start", goal:"🚩 Goal", reroll:"Reroll", readFull:"Read full article",
@@ -513,7 +520,8 @@ STR.en = {
   catEmpty:"This category currently contains no pages or media."
 };
 STR.fr = {
-  saveOdai:"⭐ Enregistrer", savedOk:"⭐ Enregistré", savedList:"📒 Parcours enregistrés", saveRecord:"⭐ Enregistrer le score", recordSaved:"✓ Enregistré", best:sk=>`Meilleur : ${sk}`, notCleared:"Non terminé", plays:n=>`${n} score${n>1?'s':''}`, playThis:"▶ Jouer", delBtn:"🗑 Supprimer", clearAll:"Tout supprimer", confirmClearAll:"Supprimer tous les parcours et scores enregistrés ?", confirmDel:"Supprimer ce parcours et ses scores ?", emptySaved:"Aucun parcours enregistré. Utilisez « ⭐ Enregistrer » pour garder un parcours.", savedPlay:"⭐ Parcours enregistré", savedToast:"Parcours enregistré", saveFail:"Impossible d'enregistrer dans ce navigateur", locale:"fr-FR",
+  easyD:"Départ et arrivée avec beaucoup de liens", normalD:"Départ et arrivée avec un nombre de liens normal", anyD:"Tirage entièrement aléatoire", diffNote2:"S'applique au prochain parcours",
+  saveOdai:"⭐ Enregistrer", savedOk:"⭐ Enregistré", savedList:"📁 Parcours enregistrés", saveRecord:"⭐ Enregistrer le score", recordSaved:"✓ Enregistré", best:sk=>`Meilleur : ${sk}`, notCleared:"Non terminé", plays:n=>`${n} score${n>1?'s':''}`, playThis:"▶ Jouer", delBtn:"🗑 Supprimer", clearAll:"Tout supprimer", confirmClearAll:"Supprimer tous les parcours et scores enregistrés ?", confirmDel:"Supprimer ce parcours et ses scores ?", emptySaved:"Aucun parcours enregistré. Utilisez « ⭐ Enregistrer » pour garder un parcours.", savedPlay:"⭐ Parcours enregistré", savedToast:"Parcours enregistré", saveFail:"Impossible d'enregistrer dans ce navigateur", locale:"fr-FR",
   routeImg:"Parcours sur l'image", routeHide:"Masquer (sans spoiler)", routeShow:"Afficher", routeNote:"Masqué : tout sauf le départ et l'arrivée devient des barres noires",
   quitCh:"🏠 Abandonner le défi", quitHole:"🏳 Abandonner ce trou",
   appName:"Golf Wikipédia", start:"🏌️ Départ", goal:"🚩 Arrivée", reroll:"Retirer", readFull:"Lire l'article",
@@ -570,7 +578,8 @@ STR.fr = {
   catEmpty:"Cette catégorie ne contient actuellement aucune page ni aucun fichier."
 };
 STR.es = {
-  saveOdai:"⭐ Guardar", savedOk:"⭐ Guardado", savedList:"📒 Recorridos guardados", saveRecord:"⭐ Guardar resultado", recordSaved:"✓ Guardado", best:sk=>`Mejor: ${sk}`, notCleared:"Sin completar", plays:n=>`${n} resultado${n===1?'':'s'}`, playThis:"▶ Jugar", delBtn:"🗑 Borrar", clearAll:"Borrar todo", confirmClearAll:"¿Borrar todos los recorridos y resultados guardados?", confirmDel:"¿Borrar este recorrido y sus resultados?", emptySaved:"Aún no hay recorridos guardados. Usa «⭐ Guardar» para conservar uno.", savedPlay:"⭐ Jugando un recorrido guardado", savedToast:"Recorrido guardado", saveFail:"No se pudo guardar en este navegador", locale:"es-ES",
+  easyD:"Salida y hoyo con muchos enlaces", normalD:"Salida y hoyo con una cantidad normal de enlaces", anyD:"Totalmente aleatorio", diffNote2:"Se aplica desde el próximo recorrido",
+  saveOdai:"⭐ Guardar", savedOk:"⭐ Guardado", savedList:"📁 Recorridos guardados", saveRecord:"⭐ Guardar resultado", recordSaved:"✓ Guardado", best:sk=>`Mejor: ${sk}`, notCleared:"Sin completar", plays:n=>`${n} resultado${n===1?'':'s'}`, playThis:"▶ Jugar", delBtn:"🗑 Borrar", clearAll:"Borrar todo", confirmClearAll:"¿Borrar todos los recorridos y resultados guardados?", confirmDel:"¿Borrar este recorrido y sus resultados?", emptySaved:"Aún no hay recorridos guardados. Usa «⭐ Guardar» para conservar uno.", savedPlay:"⭐ Jugando un recorrido guardado", savedToast:"Recorrido guardado", saveFail:"No se pudo guardar en este navegador", locale:"es-ES",
   routeImg:"Recorrido en la imagen", routeHide:"Ocultar (sin spoilers)", routeShow:"Mostrar", routeNote:"Oculto: todo salvo la salida y el hoyo se convierte en barras negras",
   quitCh:"🏠 Dejar el reto", quitHole:"🏳 Abandonar este hoyo",
   appName:"Golf Wikipedia", start:"🏌️ Salida", goal:"🚩 Hoyo", reroll:"Cambiar", readFull:"Leer artículo",
@@ -627,7 +636,8 @@ STR.es = {
   catEmpty:"Esta categoría no contiene actualmente ninguna página ni archivo multimedia."
 };
 STR.ko = {
-  saveOdai:"⭐ 저장", savedOk:"⭐ 저장됨", savedList:"📒 저장한 코스", saveRecord:"⭐ 기록 저장", recordSaved:"✓ 저장했어요", best:sk=>`최고 ${sk}`, notCleared:"미클리어", plays:n=>`기록 ${n}개`, playThis:"▶ 플레이", delBtn:"🗑 삭제", clearAll:"모두 삭제", confirmClearAll:"저장한 코스와 기록을 모두 지울까요?", confirmDel:"이 코스와 기록을 지울까요?", emptySaved:"아직 저장한 코스가 없어요. 마음에 드는 코스는 ‘⭐ 저장’으로 남길 수 있어요", savedPlay:"⭐ 저장한 코스로 플레이", savedToast:"코스를 저장했어요", saveFail:"브라우저에 저장하지 못했어요", locale:"ko-KR",
+  easyD:"출발과 홀의 링크가 많은 편", normalD:"출발과 홀의 링크가 보통", anyD:"완전 무작위로 출제", diffNote2:"다음 코스부터 적용돼요",
+  saveOdai:"⭐ 저장", savedOk:"⭐ 저장됨", savedList:"📁 저장한 코스", saveRecord:"⭐ 기록 저장", recordSaved:"✓ 저장했어요", best:sk=>`최고 ${sk}`, notCleared:"미클리어", plays:n=>`기록 ${n}개`, playThis:"▶ 플레이", delBtn:"🗑 삭제", clearAll:"모두 삭제", confirmClearAll:"저장한 코스와 기록을 모두 지울까요?", confirmDel:"이 코스와 기록을 지울까요?", emptySaved:"아직 저장한 코스가 없어요. 마음에 드는 코스는 ‘⭐ 저장’으로 남길 수 있어요", savedPlay:"⭐ 저장한 코스로 플레이", savedToast:"코스를 저장했어요", saveFail:"브라우저에 저장하지 못했어요", locale:"ko-KR",
   routeImg:"이미지의 경로", routeHide:"가리기(스포일러 방지)", routeShow:"보이기", routeNote:"가리면 출발과 홀 말고는 검은 막대가 돼요",
   quitCh:"🏠 도전장 그만두고 처음으로", quitHole:"🏳 이번 홀 포기",
   appName:"위키 골프", start:"🏌️ 출발", goal:"🚩 홀", reroll:"다시 뽑기", readFull:"전문 읽기",
@@ -684,7 +694,8 @@ STR.ko = {
   catEmpty:"이 분류에는 현재 문서나 미디어가 없습니다."
 };
 STR["zh-hant"] = {
-  saveOdai:"⭐ 儲存", savedOk:"⭐ 已儲存", savedList:"📒 已儲存的題目", saveRecord:"⭐ 儲存紀錄", recordSaved:"✓ 已儲存", best:sk=>`最佳 ${sk}`, notCleared:"未完成", plays:n=>`紀錄 ${n} 筆`, playThis:"▶ 開始", delBtn:"🗑 刪除", clearAll:"全部刪除", confirmClearAll:"要刪除所有已儲存的題目和紀錄嗎？", confirmDel:"要刪除這個題目和紀錄嗎？", emptySaved:"還沒有儲存的題目。喜歡的題目可以按「⭐ 儲存」留下來", savedPlay:"⭐ 用已儲存的題目來玩", savedToast:"已儲存題目", saveFail:"無法儲存在此瀏覽器", locale:"zh-TW",
+  easyD:"起點和終點的連結較多", normalD:"起點和終點的連結數普通", anyD:"完全隨機出題", diffNote2:"下一題起生效",
+  saveOdai:"⭐ 儲存", savedOk:"⭐ 已儲存", savedList:"📁 已儲存的題目", saveRecord:"⭐ 儲存紀錄", recordSaved:"✓ 已儲存", best:sk=>`最佳 ${sk}`, notCleared:"未完成", plays:n=>`紀錄 ${n} 筆`, playThis:"▶ 開始", delBtn:"🗑 刪除", clearAll:"全部刪除", confirmClearAll:"要刪除所有已儲存的題目和紀錄嗎？", confirmDel:"要刪除這個題目和紀錄嗎？", emptySaved:"還沒有儲存的題目。喜歡的題目可以按「⭐ 儲存」留下來", savedPlay:"⭐ 用已儲存的題目來玩", savedToast:"已儲存題目", saveFail:"無法儲存在此瀏覽器", locale:"zh-TW",
   routeImg:"圖片中的路線", routeHide:"遮住（防劇透）", routeShow:"顯示", routeNote:"遮住後，起點和終點以外都會變成黑色長條",
   quitCh:"🏠 放棄挑戰書，回到首頁", quitHole:"🏳 放棄這一洞",
   appName:"維基高爾夫", start:"🏌️ 起點", goal:"🚩 終點", reroll:"重抽", readFull:"閱讀全文",
@@ -741,7 +752,8 @@ STR["zh-hant"] = {
   catEmpty:"本分類目前沒有任何頁面或媒體。"
 };
 STR["zh-hans"] = {
-  saveOdai:"⭐ 保存", savedOk:"⭐ 已保存", savedList:"📒 已保存的题目", saveRecord:"⭐ 保存记录", recordSaved:"✓ 已保存", best:sk=>`最佳 ${sk}`, notCleared:"未完成", plays:n=>`记录 ${n} 条`, playThis:"▶ 开始", delBtn:"🗑 删除", clearAll:"全部删除", confirmClearAll:"要删除所有已保存的题目和记录吗？", confirmDel:"要删除这个题目和记录吗？", emptySaved:"还没有保存的题目。喜欢的题目可以按“⭐ 保存”留下来", savedPlay:"⭐ 用已保存的题目来玩", savedToast:"已保存题目", saveFail:"无法保存在此浏览器", locale:"zh-CN",
+  easyD:"起点和终点的链接较多", normalD:"起点和终点的链接数普通", anyD:"完全随机出题", diffNote2:"下一题起生效",
+  saveOdai:"⭐ 保存", savedOk:"⭐ 已保存", savedList:"📁 已保存的题目", saveRecord:"⭐ 保存记录", recordSaved:"✓ 已保存", best:sk=>`最佳 ${sk}`, notCleared:"未完成", plays:n=>`记录 ${n} 条`, playThis:"▶ 开始", delBtn:"🗑 删除", clearAll:"全部删除", confirmClearAll:"要删除所有已保存的题目和记录吗？", confirmDel:"要删除这个题目和记录吗？", emptySaved:"还没有保存的题目。喜欢的题目可以按“⭐ 保存”留下来", savedPlay:"⭐ 用已保存的题目来玩", savedToast:"已保存题目", saveFail:"无法保存在此浏览器", locale:"zh-CN",
   routeImg:"图片中的路线", routeHide:"遮住（防剧透）", routeShow:"显示", routeNote:"遮住后，起点和终点以外都会变成黑色长条",
   quitCh:"🏠 放弃挑战书，回到首页", quitHole:"🏳 放弃这一洞",
   appName:"维基高尔夫", start:"🏌️ 起点", goal:"🚩 终点", reroll:"重抽", readFull:"阅读全文",
@@ -1470,7 +1482,7 @@ function schema(){
     opts:[["auto",T("auto")],["zh-tw","繁體"],["zh-cn","简体"]]});
   rows.push(
     {head:T("hRules")},
-    {key:"difficulty", label:T("diff"), note:T("diffNote"), rule:true, opts:[["easy",T("easy")],["normal",T("normal")],["any",T("any")]]},
+    {key:"difficulty", label:T("diff"), note:T("diffNote2"), rule:true, opts:[["easy",T("easy"),T("easyD")],["normal",T("normal"),T("normalD")],["any",T("any"),T("anyD")]]},
     {key:"allowCategory", label:T("cat"), rule:true, opts:[[true,T("yes")],[false,T("no")]]},
     {key:"allowBack", label:T("backRule"), rule:true, opts:[[true,T("yes")],[false,T("no")]]},
     {key:"allowSearch", label:T("searchRule"), note:T("searchNote"), rule:true, opts:[[true,T("yes")],[false,T("no")]]},
@@ -1493,9 +1505,10 @@ function buildSettings(){
     div.className = "srow" + (locked ? " locked" : "");
     div.innerHTML = `<div class="slabel">${esc(row.label)}</div>` + (row.note ? `<div class="snote">${esc(row.note)}</div>` : "");
     const seg = document.createElement("div"); seg.className = "seg";
-    for(const [val, lab] of row.opts){
+    for(const [val, lab, desc] of row.opts){
       const b = document.createElement("button");
       b.textContent = lab;
+      if(desc){ b.classList.add("withDesc"); const sm = document.createElement("small"); sm.textContent = desc; b.appendChild(sm); }
       if((row.rule || row.chOnly ? eff() : settings)[row.key] === val) b.classList.add("on");
       b.addEventListener("click", ()=> changeSetting(row.key, val));
       seg.appendChild(b);
