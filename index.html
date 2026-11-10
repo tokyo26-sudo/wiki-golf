@@ -1,0 +1,1919 @@
+<!DOCTYPE html>
+<html lang="ja">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
+<title>Wikipediaゴルフ</title>
+<style>
+  :root{
+    --bg:#eef5ec; --card:#ffffff; --ink:#1f2a1f; --sub:#5b6b5b;
+    --green:#2f7d3a; --green2:#e3f1e1; --flag:#d6453d; --flag2:#fbe7e5; --line:#d5e2d2;
+  }
+  @media (prefers-color-scheme: dark){
+    :root{ --bg:#141a14; --card:#1e261e; --ink:#e6eee5; --sub:#9db09b;
+      --green:#5fbf6c; --green2:#22331f; --flag:#ef7a72; --flag2:#3a2321; --line:#2f3b2e; }
+  }
+  *{box-sizing:border-box}
+  html,body{height:100%}
+  body{margin:0;background:var(--bg);color:var(--ink);
+    font-family:"Hiragino Sans","Noto Sans JP","Yu Gothic","Apple SD Gothic Neo","Malgun Gothic","PingFang TC","Microsoft JhengHei",sans-serif;
+    line-height:1.6;display:flex;flex-direction:column;height:100dvh}
+  button,a.btn{font:inherit;font-size:.85rem;border-radius:9px;padding:5px 12px;cursor:pointer;
+    border:1px solid var(--line);background:var(--card);color:var(--ink);text-decoration:none;white-space:nowrap}
+  button:hover:not(:disabled){filter:brightness(.95)}
+  button:disabled{opacity:.4;cursor:default}
+  [hidden]{display:none !important}
+
+  /* ── 挑戦状の帯 ── */
+  #chBar{flex:none;display:flex;align-items:center;gap:10px;flex-wrap:wrap;margin:10px 12px 0;padding:8px 14px;
+    border-radius:12px;background:#fff4d6;color:#5a4300;border:1px solid #f0d58a;font-size:.88rem}
+  #chBar b{font-size:1rem}
+  #chBar .chRules{opacity:.8;font-size:.8rem}
+  #chBar button{margin-left:auto}
+  @media (prefers-color-scheme: dark){ #chBar{background:#3a3115;color:#f3dc9b;border-color:#5c4c1d} }
+
+  /* ── 上：お題 ── */
+  #odai{display:grid;grid-template-columns:1fr auto 1fr;gap:10px;padding:10px 12px 6px;flex:none}
+  .arrow{display:flex;align-items:center;color:var(--sub);font-size:1.4rem}
+  .card{background:var(--card);border:1px solid var(--line);border-radius:12px;padding:8px 12px;
+    display:flex;gap:10px;align-items:flex-start;min-width:0}
+  .card img{width:56px;height:56px;object-fit:cover;border-radius:8px;flex:none;background:var(--bg)}
+  .card .body{min-width:0;flex:1}
+  .tag{font-weight:700;font-size:.75rem;padding:1px 10px;border-radius:999px;display:inline-block;white-space:nowrap}
+  .start .tag{background:var(--green2);color:var(--green)}
+  .goal .tag{background:var(--flag2);color:var(--flag)}
+  .meta{font-size:.72rem;color:var(--sub);margin-left:6px}
+  .card .title{font-weight:700;font-size:1.08rem;margin:2px 0;word-break:break-word;cursor:pointer;
+    text-decoration:underline dotted var(--sub);text-underline-offset:4px}
+  .card .title.plain{cursor:default;text-decoration:none}
+  .card .extract{color:var(--sub);font-size:.8rem;margin:0;
+    display:-webkit-box;-webkit-line-clamp:2;-webkit-box-orient:vertical;overflow:hidden}
+  .card .btns{display:flex;gap:6px;margin-top:6px;flex-wrap:wrap}
+  .loading{opacity:.45;pointer-events:none}
+
+  /* ── 真ん中：打数・時間・道のり ── */
+  #bar{flex:none;display:flex;align-items:center;gap:12px;padding:8px 12px;margin:0 12px;
+    background:var(--card);border:1px solid var(--line);border-radius:12px}
+  .stat{flex:none;text-align:center;min-width:64px}
+  .stat .num{font-size:1.9rem;font-weight:800;line-height:1}
+  #clockNum{font-size:1.25rem;font-variant-numeric:tabular-nums}
+  #clockNum.warn{color:var(--flag)}
+  .stat .lbl{font-size:.7rem;color:var(--sub);white-space:nowrap}
+  #route{flex:1;min-width:0;overflow-x:auto;white-space:nowrap;font-size:.85rem;color:var(--sub);
+    padding:4px 0;scrollbar-width:thin}
+  #route .step{color:var(--ink)}
+  #route .step.back{color:var(--sub);font-style:italic}
+  #route .sep{margin:0 6px;color:var(--sub)}
+  #barBtns{flex:none;display:flex;gap:6px}
+  #teeoff{background:var(--green);color:#fff;border-color:var(--green);font-weight:700}
+  #gearBtn{font-size:1.05rem;padding:3px 10px}
+  #menuBtn,#findToggle{display:none;font-size:1.05rem;padding:3px 11px}
+
+  /* メニュー（スマホ） */
+  #menuPop{position:fixed;z-index:26;background:var(--card);border:1px solid var(--line);border-radius:12px;
+    box-shadow:0 10px 30px rgba(0,0,0,.18);padding:6px;display:flex;flex-direction:column;min-width:190px}
+  #menuPop button{border:0;text-align:left;padding:10px 12px;font-size:.95rem;background:transparent}
+
+  /* ── 下：記事の窓 ── */
+  #viewerWrap{flex:1;min-height:0;margin:8px 12px 12px;border:1px solid var(--line);border-radius:12px;
+    overflow:hidden;position:relative;background:#fff;display:flex;flex-direction:column}
+  #findbar{flex:none;display:flex;align-items:center;gap:6px;padding:6px 10px;background:#f8f9fa;
+    border-bottom:1px solid #c8ccd1;color:#202122;font-size:.85rem}
+  #findbar input[type=search]{font:inherit;padding:4px 8px;border:1px solid #a2a9b1;border-radius:4px;width:220px;max-width:40vw;background:#fff;color:#202122}
+  #findbar button{background:#fff;color:#202122;border-color:#a2a9b1;padding:3px 9px;border-radius:4px}
+  #findbar label{display:flex;align-items:center;gap:4px;cursor:pointer;white-space:nowrap}
+  #sCount{color:#54595d;min-width:48px;white-space:nowrap}
+  #frame{flex:1;width:100%;border:0;display:block;transition:opacity .15s;min-height:0}
+  #frame.busy{opacity:.35}
+  #placeholder{position:absolute;inset:0;display:flex;align-items:center;justify-content:center;text-align:center;
+    color:var(--sub);background:var(--card);padding:16px}
+
+  /* ── プレビュー ── */
+  #pop{position:fixed;z-index:25;width:340px;max-width:calc(100vw - 24px);background:#fff;color:#202122;
+    border-radius:2px;box-shadow:0 30px 90px -20px rgba(0,0,0,.3),0 0 1px 1px rgba(0,0,0,.05);
+    font-family:sans-serif;font-size:14px;line-height:1.6;overflow:hidden;pointer-events:none}
+  #pop img{display:block;width:100%;max-height:200px;object-fit:cover}
+  #pop .ptext{padding:16px 16px 8px}
+  #pop .pfoot{padding:6px 16px 12px;font-size:12px;color:#72777d}
+
+  /* ── モーダル ── */
+  .overlay{position:fixed;inset:0;background:rgba(0,0,0,.45);display:none;align-items:center;justify-content:center;z-index:30;padding:16px}
+  .overlay.show{display:flex}
+  #reader .panel{background:#fff;width:min(1100px,100%);height:min(88vh,100%);border-radius:10px;overflow:hidden;
+    display:flex;flex-direction:column}
+  #reader .rhead{flex:none;display:flex;justify-content:space-between;align-items:center;gap:8px;padding:8px 12px;
+    background:#f8f9fa;border-bottom:1px solid #c8ccd1;color:#202122;font-size:.85rem}
+  #reader .rhead button{background:#fff;color:#202122;border-color:#a2a9b1}
+  #readerFrame{flex:1;border:0;width:100%}
+
+  #settings .panel{background:var(--card);border-radius:14px;padding:18px 20px;width:min(540px,100%);max-height:90vh;overflow-y:auto}
+  #settings h2{margin:0 0 4px;font-size:1.2rem}
+  #settings .lockNote{font-size:.8rem;color:var(--flag);margin:0 0 6px}
+  .srow{padding:10px 0;border-bottom:1px solid var(--line)}
+  .srow .slabel{font-weight:700;font-size:.9rem}
+  .srow .snote{font-size:.75rem;color:var(--sub)}
+  .seg{display:flex;flex-wrap:wrap;gap:6px;margin-top:6px}
+  .seg button.on{background:var(--green);color:#fff;border-color:var(--green)}
+  .srow.locked .seg{opacity:.45;pointer-events:none}
+  .shead{font-size:.75rem;color:var(--sub);margin:14px 0 0;letter-spacing:.08em}
+  #settings .quit{margin:2px 0 6px;border-color:var(--flag);color:var(--flag);font-weight:700}
+  #settings .close{display:block;margin:14px 0 0 auto}
+
+  #qrModal{z-index:35}
+  #qrModal .panel{background:var(--card);border-radius:16px;padding:20px;width:min(380px,100%);text-align:center;max-height:92vh;overflow-y:auto}
+  #qrModal h3{margin:0 0 4px;font-size:1.05rem}
+  #qrModal .qsub{font-size:.85rem;color:var(--sub);word-break:break-word}
+  #qrBox{background:#fff;border-radius:12px;padding:12px;margin:12px auto;width:fit-content}
+  #qrBox canvas{display:block;width:min(260px,70vw);height:auto;image-rendering:pixelated}
+  #qrUrl{font-size:.7rem;color:var(--sub);word-break:break-all;max-height:3.2em;overflow:hidden;margin:4px 0 10px}
+  #qrWarn{font-size:.78rem;color:var(--flag);margin:0 0 8px}
+  #qrModal .btns{display:flex;gap:8px;justify-content:center;flex-wrap:wrap}
+
+  /* トースト */
+  #toast{position:fixed;left:50%;bottom:24px;transform:translateX(-50%);background:var(--ink);color:var(--bg);
+    padding:8px 16px;border-radius:999px;font-size:.85rem;opacity:0;transition:opacity .2s;pointer-events:none;z-index:40;
+    max-width:calc(100vw - 32px);text-align:center}
+  #toast.show{opacity:.92}
+
+  /* カップイン */
+  #win .box{background:var(--card);border-radius:16px;padding:22px 24px;max-width:600px;width:100%;max-height:92vh;overflow-y:auto}
+  #win .whead{text-align:center;font-size:1.1rem;font-weight:800;color:var(--sub);letter-spacing:.05em}
+  #win .sg{display:flex;align-items:center;gap:12px;margin:10px 0}
+  #win .sg .tag{font-size:.85rem;padding:3px 12px;flex:none}
+  #win .sg .big{font-size:1.6rem;font-weight:800;line-height:1.3;word-break:break-word}
+  #win .down{text-align:left;color:var(--sub);margin:-6px 0 -6px 30px}
+  #win .score{text-align:center;margin:12px 0 4px}
+  #win .score .n{font-size:3.6rem;font-weight:900;line-height:1}
+  #win .score .u{font-size:1.4rem;font-weight:800;margin-left:4px}
+  #win .score .sub{display:block;color:var(--sub);font-size:.9rem;margin-top:4px}
+  #win .vs{text-align:center;font-weight:700;margin:10px 0 0;padding:8px 10px;border-radius:10px;background:var(--bg)}
+  #win .vs .win{color:var(--green)}
+  #win .vs .lose{color:var(--flag)}
+  #win .path{font-size:.85rem;background:var(--bg);border-radius:10px;padding:10px 12px;
+    max-height:180px;overflow-y:auto;word-break:break-word;margin-top:10px}
+  #win .path .sep{color:var(--sub)}
+  #win .path .back{color:var(--sub);font-style:italic}
+  #win .rules{font-size:.75rem;color:var(--sub);margin-top:8px}
+  #win .nameRow{margin-top:14px;font-size:.85rem;color:var(--sub);text-align:center}
+  #win .nameRow input{font:inherit;padding:4px 8px;border:1px solid var(--line);border-radius:8px;background:var(--card);color:var(--ink);width:180px}
+  #win .btns{margin-top:12px;display:flex;gap:8px;justify-content:center;flex-wrap:wrap}
+  #win .btns .prime{background:var(--green);color:#fff;border-color:var(--green);font-weight:700}
+
+  /* ── スマホ ── */
+  @media (max-width:720px){
+    #chBar{margin:8px 8px 0;padding:6px 10px;font-size:.8rem}
+    #chBar b{font-size:.88rem}
+    #chBar .chRules{display:block;width:100%}
+    #chBar button{margin-left:0;font-size:.78rem}
+    #odai{grid-template-columns:1fr;gap:6px;padding:8px 8px 6px}
+    .arrow{display:none}
+    .card .extract{display:none}
+    .card img{width:40px;height:40px}
+    body.playing #odai{grid-template-columns:1fr 1fr}
+    body.playing .card{padding:5px 9px;gap:6px}
+    body.playing .card img, body.playing .card .btns, body.playing .card .meta{display:none !important}
+    body.playing .card .tag{font-size:.62rem;padding:0 8px}
+    body.playing .card .title{font-size:.88rem;white-space:nowrap;overflow:hidden;text-overflow:ellipsis;margin:0;text-decoration:none}
+    body.collapsed #odai, body.collapsed #chBar{display:none !important}
+    #bar{margin:0 8px;padding:6px 8px;gap:8px}
+    .stat{min-width:38px}
+    .stat .num{font-size:1.45rem}
+    #clockNum{font-size:1rem}
+    .stat .lbl{font-size:.62rem}
+    #route{font-size:.78rem}
+    #barBtns > button{display:none}
+    #barBtns > #teeoff:not([hidden]), #barBtns > #menuBtn{display:inline-block}
+    body.playing #barBtns > #findToggle:not([hidden]){display:inline-block}
+    #viewerWrap{margin:6px 8px 8px;border-radius:10px}
+    #findbar:not(.open){display:none}
+    #findbar input[type=search]{flex:1;width:auto;max-width:none;min-width:0;font-size:16px}
+    #findbar label{font-size:.75rem}
+    .overlay{padding:10px}
+    #reader .panel{height:100%}
+    #win .box{padding:18px 16px}
+    #win .sg .big{font-size:1.3rem}
+    #win .score .n{font-size:3rem}
+    #win .nameRow input{font-size:16px}
+  }
+</style>
+</head>
+<body>
+
+<div id="chBar" hidden>
+  <span id="chText"></span>
+  <button id="chExit" data-t="exitCh"></button>
+</div>
+
+<section id="odai">
+  <div class="card start" id="start">
+    <img alt="" hidden>
+    <div class="body">
+      <span class="tag" data-t="start"></span><span class="meta"></span>
+      <div class="title">…</div>
+      <p class="extract"></p>
+      <div class="btns"><button class="reroll" data-t="reroll"></button><button class="readFull" data-t="readFull"></button></div>
+    </div>
+  </div>
+  <div class="arrow">➜</div>
+  <div class="card goal" id="goal">
+    <img alt="" hidden>
+    <div class="body">
+      <span class="tag" data-t="goal"></span><span class="meta"></span>
+      <div class="title">…</div>
+      <p class="extract"></p>
+      <div class="btns"><button class="reroll" data-t="reroll"></button><button class="readFull" data-t="readFull"></button></div>
+    </div>
+  </div>
+</section>
+
+<section id="bar">
+  <div class="stat"><div class="num" id="strokeNum">0</div><div class="lbl" data-t="strokes"></div></div>
+  <div class="stat"><div class="num" id="clockNum">0:00</div><div class="lbl" id="clockLbl"></div></div>
+  <div id="route"></div>
+  <div id="barBtns">
+    <button id="teeoff" disabled data-t="teeoff"></button>
+    <button id="backBtn" hidden data-t="back"></button>
+    <button id="shareOdai" disabled data-t="share"></button>
+    <button id="newBtn" data-t="newOdai"></button>
+    <button id="gearBtn">⚙️</button>
+    <button id="findToggle" hidden>🔍</button>
+    <button id="menuBtn">⋯</button>
+  </div>
+</section>
+
+<div id="menuPop" hidden>
+  <button data-for="backBtn" data-t="back"></button>
+  <button data-for="shareOdai" data-t="share"></button>
+  <button data-for="newBtn" data-t="newOdai"></button>
+  <button data-for="gearBtn" data-t="settings"></button>
+</div>
+
+<section id="viewerWrap">
+  <div id="findbar" hidden>
+    <input type="search" id="sInput">
+    <button id="sPrev">▲</button>
+    <button id="sNext">▼</button>
+    <span id="sCount"></span>
+    <label><input type="checkbox" id="linkOnly"><span data-t="linkOnly"></span></label>
+  </div>
+  <iframe id="frame" title="article"></iframe>
+  <div id="placeholder" data-t-html="placeholder"></div>
+</section>
+
+<div id="pop" hidden></div>
+
+<div id="reader" class="overlay">
+  <div class="panel">
+    <div class="rhead"><span id="readerNote"></span><button id="readerClose" data-t="close"></button></div>
+    <iframe id="readerFrame" title="full text"></iframe>
+  </div>
+</div>
+
+<div id="settings" class="overlay">
+  <div class="panel">
+    <h2 data-t="settings"></h2>
+    <p class="lockNote" id="lockNote" hidden></p>
+    <button id="quitHole" class="quit" hidden></button>
+    <div id="settingRows"></div>
+    <button class="close" id="settingsClose" data-t="closeBtn"></button>
+  </div>
+</div>
+
+<div id="qrModal" class="overlay">
+  <div class="panel">
+    <h3 id="qrTitle"></h3>
+    <div class="qsub" id="qrSub"></div>
+    <div id="qrBox"></div>
+    <div class="qsub" data-t="qrHint"></div>
+    <div id="qrUrl"></div>
+    <p id="qrWarn" hidden data-t="fileWarn"></p>
+    <div class="btns">
+      <button id="qrCopy" data-t="copy"></button>
+      <button id="qrSend" data-t="sendLink"></button>
+      <button id="qrClose" data-t="closeBtn"></button>
+    </div>
+  </div>
+</div>
+
+<div id="toast"></div>
+
+<div id="win" class="overlay">
+  <div class="box">
+    <div class="whead" id="winHead"></div>
+    <div class="sg"><span class="tag" style="background:var(--green2);color:var(--green)" data-t="start"></span><span class="big" id="winStart"></span></div>
+    <div class="down">↓</div>
+    <div class="sg"><span class="tag" style="background:var(--flag2);color:var(--flag)" data-t="goal"></span><span class="big" id="winGoal"></span></div>
+    <div class="score"><span class="n" id="winN"></span><span class="u" id="winU"></span><span class="sub" id="winSub"></span></div>
+    <div class="vs" id="winVs" hidden></div>
+    <div class="path" id="winPath"></div>
+    <div class="rules" id="winRules"></div>
+    <div class="nameRow" id="nameRow"><span data-t="nameLbl"></span> <input id="myName" maxlength="20"></div>
+    <div class="btns">
+      <button id="sendChallenge" data-t="sendCh"></button>
+      <button id="saveImg" data-t="saveImg"></button>
+      <button id="shareImg" data-t="shareImg"></button>
+      <button id="winClose" data-t="keep"></button>
+      <button id="winNew" class="prime" data-t="next"></button>
+    </div>
+  </div>
+</div>
+
+<script>
+/* QR Code Generator for JavaScript (qrcode-generator 1.4.4) */
+// Copyright (c) 2009 Kazuhiko Arase
+// Licensed under the MIT license:
+//  http://www.opensource.org/licenses/mit-license.php
+var qrcode=function(){var t=function(t,r){var e=t,n=g[r],o=null,i=0,a=null,u=[],f={},c=function(t,r){o=function(t){for(var r=new Array(t),e=0;e<t;e+=1){r[e]=new Array(t);for(var n=0;n<t;n+=1)r[e][n]=null}return r}(i=4*e+17),l(0,0),l(i-7,0),l(0,i-7),s(),h(),d(t,r),e>=7&&v(t),null==a&&(a=p(e,n,u)),w(a,r)},l=function(t,r){for(var e=-1;e<=7;e+=1)if(!(t+e<=-1||i<=t+e))for(var n=-1;n<=7;n+=1)r+n<=-1||i<=r+n||(o[t+e][r+n]=0<=e&&e<=6&&(0==n||6==n)||0<=n&&n<=6&&(0==e||6==e)||2<=e&&e<=4&&2<=n&&n<=4)},h=function(){for(var t=8;t<i-8;t+=1)null==o[t][6]&&(o[t][6]=t%2==0);for(var r=8;r<i-8;r+=1)null==o[6][r]&&(o[6][r]=r%2==0)},s=function(){for(var t=B.getPatternPosition(e),r=0;r<t.length;r+=1)for(var n=0;n<t.length;n+=1){var i=t[r],a=t[n];if(null==o[i][a])for(var u=-2;u<=2;u+=1)for(var f=-2;f<=2;f+=1)o[i+u][a+f]=-2==u||2==u||-2==f||2==f||0==u&&0==f}},v=function(t){for(var r=B.getBCHTypeNumber(e),n=0;n<18;n+=1){var a=!t&&1==(r>>n&1);o[Math.floor(n/3)][n%3+i-8-3]=a}for(n=0;n<18;n+=1){a=!t&&1==(r>>n&1);o[n%3+i-8-3][Math.floor(n/3)]=a}},d=function(t,r){for(var e=n<<3|r,a=B.getBCHTypeInfo(e),u=0;u<15;u+=1){var f=!t&&1==(a>>u&1);u<6?o[u][8]=f:u<8?o[u+1][8]=f:o[i-15+u][8]=f}for(u=0;u<15;u+=1){f=!t&&1==(a>>u&1);u<8?o[8][i-u-1]=f:u<9?o[8][15-u-1+1]=f:o[8][15-u-1]=f}o[i-8][8]=!t},w=function(t,r){for(var e=-1,n=i-1,a=7,u=0,f=B.getMaskFunction(r),c=i-1;c>0;c-=2)for(6==c&&(c-=1);;){for(var g=0;g<2;g+=1)if(null==o[n][c-g]){var l=!1;u<t.length&&(l=1==(t[u]>>>a&1)),f(n,c-g)&&(l=!l),o[n][c-g]=l,-1==(a-=1)&&(u+=1,a=7)}if((n+=e)<0||i<=n){n-=e,e=-e;break}}},p=function(t,r,e){for(var n=A.getRSBlocks(t,r),o=b(),i=0;i<e.length;i+=1){var a=e[i];o.put(a.getMode(),4),o.put(a.getLength(),B.getLengthInBits(a.getMode(),t)),a.write(o)}var u=0;for(i=0;i<n.length;i+=1)u+=n[i].dataCount;if(o.getLengthInBits()>8*u)throw"code length overflow. ("+o.getLengthInBits()+">"+8*u+")";for(o.getLengthInBits()+4<=8*u&&o.put(0,4);o.getLengthInBits()%8!=0;)o.putBit(!1);for(;!(o.getLengthInBits()>=8*u||(o.put(236,8),o.getLengthInBits()>=8*u));)o.put(17,8);return function(t,r){for(var e=0,n=0,o=0,i=new Array(r.length),a=new Array(r.length),u=0;u<r.length;u+=1){var f=r[u].dataCount,c=r[u].totalCount-f;n=Math.max(n,f),o=Math.max(o,c),i[u]=new Array(f);for(var g=0;g<i[u].length;g+=1)i[u][g]=255&t.getBuffer()[g+e];e+=f;var l=B.getErrorCorrectPolynomial(c),h=k(i[u],l.getLength()-1).mod(l);for(a[u]=new Array(l.getLength()-1),g=0;g<a[u].length;g+=1){var s=g+h.getLength()-a[u].length;a[u][g]=s>=0?h.getAt(s):0}}var v=0;for(g=0;g<r.length;g+=1)v+=r[g].totalCount;var d=new Array(v),w=0;for(g=0;g<n;g+=1)for(u=0;u<r.length;u+=1)g<i[u].length&&(d[w]=i[u][g],w+=1);for(g=0;g<o;g+=1)for(u=0;u<r.length;u+=1)g<a[u].length&&(d[w]=a[u][g],w+=1);return d}(o,n)};f.addData=function(t,r){var e=null;switch(r=r||"Byte"){case"Numeric":e=M(t);break;case"Alphanumeric":e=x(t);break;case"Byte":e=m(t);break;case"Kanji":e=L(t);break;default:throw"mode:"+r}u.push(e),a=null},f.isDark=function(t,r){if(t<0||i<=t||r<0||i<=r)throw t+","+r;return o[t][r]},f.getModuleCount=function(){return i},f.make=function(){if(e<1){for(var t=1;t<40;t++){for(var r=A.getRSBlocks(t,n),o=b(),i=0;i<u.length;i++){var a=u[i];o.put(a.getMode(),4),o.put(a.getLength(),B.getLengthInBits(a.getMode(),t)),a.write(o)}var g=0;for(i=0;i<r.length;i++)g+=r[i].dataCount;if(o.getLengthInBits()<=8*g)break}e=t}c(!1,function(){for(var t=0,r=0,e=0;e<8;e+=1){c(!0,e);var n=B.getLostPoint(f);(0==e||t>n)&&(t=n,r=e)}return r}())},f.createTableTag=function(t,r){t=t||2;var e="";e+='<table style="',e+=" border-width: 0px; border-style: none;",e+=" border-collapse: collapse;",e+=" padding: 0px; margin: "+(r=void 0===r?4*t:r)+"px;",e+='">',e+="<tbody>";for(var n=0;n<f.getModuleCount();n+=1){e+="<tr>";for(var o=0;o<f.getModuleCount();o+=1)e+='<td style="',e+=" border-width: 0px; border-style: none;",e+=" border-collapse: collapse;",e+=" padding: 0px; margin: 0px;",e+=" width: "+t+"px;",e+=" height: "+t+"px;",e+=" background-color: ",e+=f.isDark(n,o)?"#000000":"#ffffff",e+=";",e+='"/>';e+="</tr>"}return e+="</tbody>",e+="</table>"},f.createSvgTag=function(t,r,e,n){var o={};"object"==typeof arguments[0]&&(t=(o=arguments[0]).cellSize,r=o.margin,e=o.alt,n=o.title),t=t||2,r=void 0===r?4*t:r,(e="string"==typeof e?{text:e}:e||{}).text=e.text||null,e.id=e.text?e.id||"qrcode-description":null,(n="string"==typeof n?{text:n}:n||{}).text=n.text||null,n.id=n.text?n.id||"qrcode-title":null;var i,a,u,c,g=f.getModuleCount()*t+2*r,l="";for(c="l"+t+",0 0,"+t+" -"+t+",0 0,-"+t+"z ",l+='<svg version="1.1" xmlns="http://www.w3.org/2000/svg"',l+=o.scalable?"":' width="'+g+'px" height="'+g+'px"',l+=' viewBox="0 0 '+g+" "+g+'" ',l+=' preserveAspectRatio="xMinYMin meet"',l+=n.text||e.text?' role="img" aria-labelledby="'+y([n.id,e.id].join(" ").trim())+'"':"",l+=">",l+=n.text?'<title id="'+y(n.id)+'">'+y(n.text)+"</title>":"",l+=e.text?'<description id="'+y(e.id)+'">'+y(e.text)+"</description>":"",l+='<rect width="100%" height="100%" fill="white" cx="0" cy="0"/>',l+='<path d="',a=0;a<f.getModuleCount();a+=1)for(u=a*t+r,i=0;i<f.getModuleCount();i+=1)f.isDark(a,i)&&(l+="M"+(i*t+r)+","+u+c);return l+='" stroke="transparent" fill="black"/>',l+="</svg>"},f.createDataURL=function(t,r){t=t||2,r=void 0===r?4*t:r;var e=f.getModuleCount()*t+2*r,n=r,o=e-r;return I(e,e,(function(r,e){if(n<=r&&r<o&&n<=e&&e<o){var i=Math.floor((r-n)/t),a=Math.floor((e-n)/t);return f.isDark(a,i)?0:1}return 1}))},f.createImgTag=function(t,r,e){t=t||2,r=void 0===r?4*t:r;var n=f.getModuleCount()*t+2*r,o="";return o+="<img",o+=' src="',o+=f.createDataURL(t,r),o+='"',o+=' width="',o+=n,o+='"',o+=' height="',o+=n,o+='"',e&&(o+=' alt="',o+=y(e),o+='"'),o+="/>"};var y=function(t){for(var r="",e=0;e<t.length;e+=1){var n=t.charAt(e);switch(n){case"<":r+="&lt;";break;case">":r+="&gt;";break;case"&":r+="&amp;";break;case'"':r+="&quot;";break;default:r+=n}}return r};return f.createASCII=function(t,r){if((t=t||1)<2)return function(t){t=void 0===t?2:t;var r,e,n,o,i,a=1*f.getModuleCount()+2*t,u=t,c=a-t,g={"██":"█","█ ":"▀"," █":"▄","  ":" "},l={"██":"▀","█ ":"▀"," █":" ","  ":" "},h="";for(r=0;r<a;r+=2){for(n=Math.floor((r-u)/1),o=Math.floor((r+1-u)/1),e=0;e<a;e+=1)i="█",u<=e&&e<c&&u<=r&&r<c&&f.isDark(n,Math.floor((e-u)/1))&&(i=" "),u<=e&&e<c&&u<=r+1&&r+1<c&&f.isDark(o,Math.floor((e-u)/1))?i+=" ":i+="█",h+=t<1&&r+1>=c?l[i]:g[i];h+="\n"}return a%2&&t>0?h.substring(0,h.length-a-1)+Array(a+1).join("▀"):h.substring(0,h.length-1)}(r);t-=1,r=void 0===r?2*t:r;var e,n,o,i,a=f.getModuleCount()*t+2*r,u=r,c=a-r,g=Array(t+1).join("██"),l=Array(t+1).join("  "),h="",s="";for(e=0;e<a;e+=1){for(o=Math.floor((e-u)/t),s="",n=0;n<a;n+=1)i=1,u<=n&&n<c&&u<=e&&e<c&&f.isDark(o,Math.floor((n-u)/t))&&(i=0),s+=i?g:l;for(o=0;o<t;o+=1)h+=s+"\n"}return h.substring(0,h.length-1)},f.renderTo2dContext=function(t,r){r=r||2;for(var e=f.getModuleCount(),n=0;n<e;n++)for(var o=0;o<e;o++)t.fillStyle=f.isDark(n,o)?"black":"white",t.fillRect(n*r,o*r,r,r)},f};t.stringToBytes=(t.stringToBytesFuncs={default:function(t){for(var r=[],e=0;e<t.length;e+=1){var n=t.charCodeAt(e);r.push(255&n)}return r}}).default,t.createStringToBytes=function(t,r){var e=function(){for(var e=S(t),n=function(){var t=e.read();if(-1==t)throw"eof";return t},o=0,i={};;){var a=e.read();if(-1==a)break;var u=n(),f=n()<<8|n();i[String.fromCharCode(a<<8|u)]=f,o+=1}if(o!=r)throw o+" != "+r;return i}(),n="?".charCodeAt(0);return function(t){for(var r=[],o=0;o<t.length;o+=1){var i=t.charCodeAt(o);if(i<128)r.push(i);else{var a=e[t.charAt(o)];"number"==typeof a?(255&a)==a?r.push(a):(r.push(a>>>8),r.push(255&a)):r.push(n)}}return r}};var r,e,n,o,i,a=1,u=2,f=4,c=8,g={L:1,M:0,Q:3,H:2},l=0,h=1,s=2,v=3,d=4,w=5,p=6,y=7,B=(r=[[],[6,18],[6,22],[6,26],[6,30],[6,34],[6,22,38],[6,24,42],[6,26,46],[6,28,50],[6,30,54],[6,32,58],[6,34,62],[6,26,46,66],[6,26,48,70],[6,26,50,74],[6,30,54,78],[6,30,56,82],[6,30,58,86],[6,34,62,90],[6,28,50,72,94],[6,26,50,74,98],[6,30,54,78,102],[6,28,54,80,106],[6,32,58,84,110],[6,30,58,86,114],[6,34,62,90,118],[6,26,50,74,98,122],[6,30,54,78,102,126],[6,26,52,78,104,130],[6,30,56,82,108,134],[6,34,60,86,112,138],[6,30,58,86,114,142],[6,34,62,90,118,146],[6,30,54,78,102,126,150],[6,24,50,76,102,128,154],[6,28,54,80,106,132,158],[6,32,58,84,110,136,162],[6,26,54,82,110,138,166],[6,30,58,86,114,142,170]],e=1335,n=7973,i=function(t){for(var r=0;0!=t;)r+=1,t>>>=1;return r},(o={}).getBCHTypeInfo=function(t){for(var r=t<<10;i(r)-i(e)>=0;)r^=e<<i(r)-i(e);return 21522^(t<<10|r)},o.getBCHTypeNumber=function(t){for(var r=t<<12;i(r)-i(n)>=0;)r^=n<<i(r)-i(n);return t<<12|r},o.getPatternPosition=function(t){return r[t-1]},o.getMaskFunction=function(t){switch(t){case l:return function(t,r){return(t+r)%2==0};case h:return function(t,r){return t%2==0};case s:return function(t,r){return r%3==0};case v:return function(t,r){return(t+r)%3==0};case d:return function(t,r){return(Math.floor(t/2)+Math.floor(r/3))%2==0};case w:return function(t,r){return t*r%2+t*r%3==0};case p:return function(t,r){return(t*r%2+t*r%3)%2==0};case y:return function(t,r){return(t*r%3+(t+r)%2)%2==0};default:throw"bad maskPattern:"+t}},o.getErrorCorrectPolynomial=function(t){for(var r=k([1],0),e=0;e<t;e+=1)r=r.multiply(k([1,C.gexp(e)],0));return r},o.getLengthInBits=function(t,r){if(1<=r&&r<10)switch(t){case a:return 10;case u:return 9;case f:case c:return 8;default:throw"mode:"+t}else if(r<27)switch(t){case a:return 12;case u:return 11;case f:return 16;case c:return 10;default:throw"mode:"+t}else{if(!(r<41))throw"type:"+r;switch(t){case a:return 14;case u:return 13;case f:return 16;case c:return 12;default:throw"mode:"+t}}},o.getLostPoint=function(t){for(var r=t.getModuleCount(),e=0,n=0;n<r;n+=1)for(var o=0;o<r;o+=1){for(var i=0,a=t.isDark(n,o),u=-1;u<=1;u+=1)if(!(n+u<0||r<=n+u))for(var f=-1;f<=1;f+=1)o+f<0||r<=o+f||0==u&&0==f||a==t.isDark(n+u,o+f)&&(i+=1);i>5&&(e+=3+i-5)}for(n=0;n<r-1;n+=1)for(o=0;o<r-1;o+=1){var c=0;t.isDark(n,o)&&(c+=1),t.isDark(n+1,o)&&(c+=1),t.isDark(n,o+1)&&(c+=1),t.isDark(n+1,o+1)&&(c+=1),0!=c&&4!=c||(e+=3)}for(n=0;n<r;n+=1)for(o=0;o<r-6;o+=1)t.isDark(n,o)&&!t.isDark(n,o+1)&&t.isDark(n,o+2)&&t.isDark(n,o+3)&&t.isDark(n,o+4)&&!t.isDark(n,o+5)&&t.isDark(n,o+6)&&(e+=40);for(o=0;o<r;o+=1)for(n=0;n<r-6;n+=1)t.isDark(n,o)&&!t.isDark(n+1,o)&&t.isDark(n+2,o)&&t.isDark(n+3,o)&&t.isDark(n+4,o)&&!t.isDark(n+5,o)&&t.isDark(n+6,o)&&(e+=40);var g=0;for(o=0;o<r;o+=1)for(n=0;n<r;n+=1)t.isDark(n,o)&&(g+=1);return e+=Math.abs(100*g/r/r-50)/5*10},o),C=function(){for(var t=new Array(256),r=new Array(256),e=0;e<8;e+=1)t[e]=1<<e;for(e=8;e<256;e+=1)t[e]=t[e-4]^t[e-5]^t[e-6]^t[e-8];for(e=0;e<255;e+=1)r[t[e]]=e;var n={glog:function(t){if(t<1)throw"glog("+t+")";return r[t]},gexp:function(r){for(;r<0;)r+=255;for(;r>=256;)r-=255;return t[r]}};return n}();function k(t,r){if(void 0===t.length)throw t.length+"/"+r;var e=function(){for(var e=0;e<t.length&&0==t[e];)e+=1;for(var n=new Array(t.length-e+r),o=0;o<t.length-e;o+=1)n[o]=t[o+e];return n}(),n={getAt:function(t){return e[t]},getLength:function(){return e.length},multiply:function(t){for(var r=new Array(n.getLength()+t.getLength()-1),e=0;e<n.getLength();e+=1)for(var o=0;o<t.getLength();o+=1)r[e+o]^=C.gexp(C.glog(n.getAt(e))+C.glog(t.getAt(o)));return k(r,0)},mod:function(t){if(n.getLength()-t.getLength()<0)return n;for(var r=C.glog(n.getAt(0))-C.glog(t.getAt(0)),e=new Array(n.getLength()),o=0;o<n.getLength();o+=1)e[o]=n.getAt(o);for(o=0;o<t.getLength();o+=1)e[o]^=C.gexp(C.glog(t.getAt(o))+r);return k(e,0).mod(t)}};return n}var A=function(){var t=[[1,26,19],[1,26,16],[1,26,13],[1,26,9],[1,44,34],[1,44,28],[1,44,22],[1,44,16],[1,70,55],[1,70,44],[2,35,17],[2,35,13],[1,100,80],[2,50,32],[2,50,24],[4,25,9],[1,134,108],[2,67,43],[2,33,15,2,34,16],[2,33,11,2,34,12],[2,86,68],[4,43,27],[4,43,19],[4,43,15],[2,98,78],[4,49,31],[2,32,14,4,33,15],[4,39,13,1,40,14],[2,121,97],[2,60,38,2,61,39],[4,40,18,2,41,19],[4,40,14,2,41,15],[2,146,116],[3,58,36,2,59,37],[4,36,16,4,37,17],[4,36,12,4,37,13],[2,86,68,2,87,69],[4,69,43,1,70,44],[6,43,19,2,44,20],[6,43,15,2,44,16],[4,101,81],[1,80,50,4,81,51],[4,50,22,4,51,23],[3,36,12,8,37,13],[2,116,92,2,117,93],[6,58,36,2,59,37],[4,46,20,6,47,21],[7,42,14,4,43,15],[4,133,107],[8,59,37,1,60,38],[8,44,20,4,45,21],[12,33,11,4,34,12],[3,145,115,1,146,116],[4,64,40,5,65,41],[11,36,16,5,37,17],[11,36,12,5,37,13],[5,109,87,1,110,88],[5,65,41,5,66,42],[5,54,24,7,55,25],[11,36,12,7,37,13],[5,122,98,1,123,99],[7,73,45,3,74,46],[15,43,19,2,44,20],[3,45,15,13,46,16],[1,135,107,5,136,108],[10,74,46,1,75,47],[1,50,22,15,51,23],[2,42,14,17,43,15],[5,150,120,1,151,121],[9,69,43,4,70,44],[17,50,22,1,51,23],[2,42,14,19,43,15],[3,141,113,4,142,114],[3,70,44,11,71,45],[17,47,21,4,48,22],[9,39,13,16,40,14],[3,135,107,5,136,108],[3,67,41,13,68,42],[15,54,24,5,55,25],[15,43,15,10,44,16],[4,144,116,4,145,117],[17,68,42],[17,50,22,6,51,23],[19,46,16,6,47,17],[2,139,111,7,140,112],[17,74,46],[7,54,24,16,55,25],[34,37,13],[4,151,121,5,152,122],[4,75,47,14,76,48],[11,54,24,14,55,25],[16,45,15,14,46,16],[6,147,117,4,148,118],[6,73,45,14,74,46],[11,54,24,16,55,25],[30,46,16,2,47,17],[8,132,106,4,133,107],[8,75,47,13,76,48],[7,54,24,22,55,25],[22,45,15,13,46,16],[10,142,114,2,143,115],[19,74,46,4,75,47],[28,50,22,6,51,23],[33,46,16,4,47,17],[8,152,122,4,153,123],[22,73,45,3,74,46],[8,53,23,26,54,24],[12,45,15,28,46,16],[3,147,117,10,148,118],[3,73,45,23,74,46],[4,54,24,31,55,25],[11,45,15,31,46,16],[7,146,116,7,147,117],[21,73,45,7,74,46],[1,53,23,37,54,24],[19,45,15,26,46,16],[5,145,115,10,146,116],[19,75,47,10,76,48],[15,54,24,25,55,25],[23,45,15,25,46,16],[13,145,115,3,146,116],[2,74,46,29,75,47],[42,54,24,1,55,25],[23,45,15,28,46,16],[17,145,115],[10,74,46,23,75,47],[10,54,24,35,55,25],[19,45,15,35,46,16],[17,145,115,1,146,116],[14,74,46,21,75,47],[29,54,24,19,55,25],[11,45,15,46,46,16],[13,145,115,6,146,116],[14,74,46,23,75,47],[44,54,24,7,55,25],[59,46,16,1,47,17],[12,151,121,7,152,122],[12,75,47,26,76,48],[39,54,24,14,55,25],[22,45,15,41,46,16],[6,151,121,14,152,122],[6,75,47,34,76,48],[46,54,24,10,55,25],[2,45,15,64,46,16],[17,152,122,4,153,123],[29,74,46,14,75,47],[49,54,24,10,55,25],[24,45,15,46,46,16],[4,152,122,18,153,123],[13,74,46,32,75,47],[48,54,24,14,55,25],[42,45,15,32,46,16],[20,147,117,4,148,118],[40,75,47,7,76,48],[43,54,24,22,55,25],[10,45,15,67,46,16],[19,148,118,6,149,119],[18,75,47,31,76,48],[34,54,24,34,55,25],[20,45,15,61,46,16]],r=function(t,r){var e={};return e.totalCount=t,e.dataCount=r,e},e={};return e.getRSBlocks=function(e,n){var o=function(r,e){switch(e){case g.L:return t[4*(r-1)+0];case g.M:return t[4*(r-1)+1];case g.Q:return t[4*(r-1)+2];case g.H:return t[4*(r-1)+3];default:return}}(e,n);if(void 0===o)throw"bad rs block @ typeNumber:"+e+"/errorCorrectionLevel:"+n;for(var i=o.length/3,a=[],u=0;u<i;u+=1)for(var f=o[3*u+0],c=o[3*u+1],l=o[3*u+2],h=0;h<f;h+=1)a.push(r(c,l));return a},e}(),b=function(){var t=[],r=0,e={getBuffer:function(){return t},getAt:function(r){var e=Math.floor(r/8);return 1==(t[e]>>>7-r%8&1)},put:function(t,r){for(var n=0;n<r;n+=1)e.putBit(1==(t>>>r-n-1&1))},getLengthInBits:function(){return r},putBit:function(e){var n=Math.floor(r/8);t.length<=n&&t.push(0),e&&(t[n]|=128>>>r%8),r+=1}};return e},M=function(t){var r=a,e=t,n={getMode:function(){return r},getLength:function(t){return e.length},write:function(t){for(var r=e,n=0;n+2<r.length;)t.put(o(r.substring(n,n+3)),10),n+=3;n<r.length&&(r.length-n==1?t.put(o(r.substring(n,n+1)),4):r.length-n==2&&t.put(o(r.substring(n,n+2)),7))}},o=function(t){for(var r=0,e=0;e<t.length;e+=1)r=10*r+i(t.charAt(e));return r},i=function(t){if("0"<=t&&t<="9")return t.charCodeAt(0)-"0".charCodeAt(0);throw"illegal char :"+t};return n},x=function(t){var r=u,e=t,n={getMode:function(){return r},getLength:function(t){return e.length},write:function(t){for(var r=e,n=0;n+1<r.length;)t.put(45*o(r.charAt(n))+o(r.charAt(n+1)),11),n+=2;n<r.length&&t.put(o(r.charAt(n)),6)}},o=function(t){if("0"<=t&&t<="9")return t.charCodeAt(0)-"0".charCodeAt(0);if("A"<=t&&t<="Z")return t.charCodeAt(0)-"A".charCodeAt(0)+10;switch(t){case" ":return 36;case"$":return 37;case"%":return 38;case"*":return 39;case"+":return 40;case"-":return 41;case".":return 42;case"/":return 43;case":":return 44;default:throw"illegal char :"+t}};return n},m=function(r){var e=f,n=t.stringToBytes(r),o={getMode:function(){return e},getLength:function(t){return n.length},write:function(t){for(var r=0;r<n.length;r+=1)t.put(n[r],8)}};return o},L=function(r){var e=c,n=t.stringToBytesFuncs.SJIS;if(!n)throw"sjis not supported.";!function(t,r){var e=n("友");if(2!=e.length||38726!=(e[0]<<8|e[1]))throw"sjis not supported."}();var o=n(r),i={getMode:function(){return e},getLength:function(t){return~~(o.length/2)},write:function(t){for(var r=o,e=0;e+1<r.length;){var n=(255&r[e])<<8|255&r[e+1];if(33088<=n&&n<=40956)n-=33088;else{if(!(57408<=n&&n<=60351))throw"illegal char at "+(e+1)+"/"+n;n-=49472}n=192*(n>>>8&255)+(255&n),t.put(n,13),e+=2}if(e<r.length)throw"illegal char at "+(e+1)}};return i},D=function(){var t=[],r={writeByte:function(r){t.push(255&r)},writeShort:function(t){r.writeByte(t),r.writeByte(t>>>8)},writeBytes:function(t,e,n){e=e||0,n=n||t.length;for(var o=0;o<n;o+=1)r.writeByte(t[o+e])},writeString:function(t){for(var e=0;e<t.length;e+=1)r.writeByte(t.charCodeAt(e))},toByteArray:function(){return t},toString:function(){var r="";r+="[";for(var e=0;e<t.length;e+=1)e>0&&(r+=","),r+=t[e];return r+="]"}};return r},S=function(t){var r=t,e=0,n=0,o=0,i={read:function(){for(;o<8;){if(e>=r.length){if(0==o)return-1;throw"unexpected end of file./"+o}var t=r.charAt(e);if(e+=1,"="==t)return o=0,-1;t.match(/^\s$/)||(n=n<<6|a(t.charCodeAt(0)),o+=6)}var i=n>>>o-8&255;return o-=8,i}},a=function(t){if(65<=t&&t<=90)return t-65;if(97<=t&&t<=122)return t-97+26;if(48<=t&&t<=57)return t-48+52;if(43==t)return 62;if(47==t)return 63;throw"c:"+t};return i},I=function(t,r,e){for(var n=function(t,r){var e=t,n=r,o=new Array(t*r),i={setPixel:function(t,r,n){o[r*e+t]=n},write:function(t){t.writeString("GIF87a"),t.writeShort(e),t.writeShort(n),t.writeByte(128),t.writeByte(0),t.writeByte(0),t.writeByte(0),t.writeByte(0),t.writeByte(0),t.writeByte(255),t.writeByte(255),t.writeByte(255),t.writeString(","),t.writeShort(0),t.writeShort(0),t.writeShort(e),t.writeShort(n),t.writeByte(0);var r=a(2);t.writeByte(2);for(var o=0;r.length-o>255;)t.writeByte(255),t.writeBytes(r,o,255),o+=255;t.writeByte(r.length-o),t.writeBytes(r,o,r.length-o),t.writeByte(0),t.writeString(";")}},a=function(t){for(var r=1<<t,e=1+(1<<t),n=t+1,i=u(),a=0;a<r;a+=1)i.add(String.fromCharCode(a));i.add(String.fromCharCode(r)),i.add(String.fromCharCode(e));var f,c,g,l=D(),h=(f=l,c=0,g=0,{write:function(t,r){if(t>>>r!=0)throw"length over";for(;c+r>=8;)f.writeByte(255&(t<<c|g)),r-=8-c,t>>>=8-c,g=0,c=0;g|=t<<c,c+=r},flush:function(){c>0&&f.writeByte(g)}});h.write(r,n);var s=0,v=String.fromCharCode(o[s]);for(s+=1;s<o.length;){var d=String.fromCharCode(o[s]);s+=1,i.contains(v+d)?v+=d:(h.write(i.indexOf(v),n),i.size()<4095&&(i.size()==1<<n&&(n+=1),i.add(v+d)),v=d)}return h.write(i.indexOf(v),n),h.write(e,n),h.flush(),l.toByteArray()},u=function(){var t={},r=0,e={add:function(n){if(e.contains(n))throw"dup key:"+n;t[n]=r,r+=1},size:function(){return r},indexOf:function(r){return t[r]},contains:function(r){return void 0!==t[r]}};return e};return i}(t,r),o=0;o<r;o+=1)for(var i=0;i<t;i+=1)n.setPixel(i,o,e(i,o));var a=D();n.write(a);for(var u=function(){var t=0,r=0,e=0,n="",o={},i=function(t){n+=String.fromCharCode(a(63&t))},a=function(t){if(t<0);else{if(t<26)return 65+t;if(t<52)return t-26+97;if(t<62)return t-52+48;if(62==t)return 43;if(63==t)return 47}throw"n:"+t};return o.writeByte=function(n){for(t=t<<8|255&n,r+=8,e+=1;r>=6;)i(t>>>r-6),r-=6},o.flush=function(){if(r>0&&(i(t<<6-r),t=0,r=0),e%3!=0)for(var o=3-e%3,a=0;a<o;a+=1)n+="="},o.toString=function(){return n},o}(),f=a.toByteArray(),c=0;c<f.length;c+=1)u.writeByte(f[c]);return u.flush(),"data:image/gif;base64,"+u};return t}();qrcode.stringToBytesFuncs["UTF-8"]=function(t){return function(t){for(var r=[],e=0;e<t.length;e++){var n=t.charCodeAt(e);n<128?r.push(n):n<2048?r.push(192|n>>6,128|63&n):n<55296||n>=57344?r.push(224|n>>12,128|n>>6&63,128|63&n):(e++,n=65536+((1023&n)<<10|1023&t.charCodeAt(e)),r.push(240|n>>18,128|n>>12&63,128|n>>6&63,128|63&n))}return r}(t)},function(t){"function"==typeof define&&define.amd?define([],t):"object"==typeof exports&&(module.exports=t())}((function(){return qrcode}));
+</script>
+<script>
+const $ = id => document.getElementById(id);
+
+/* ════════ 言語 ════════ */
+const WIKIS = {
+  ja:  {host:"ja.wikipedia.org",  name:"日本語",
+        siteSub:"出典: フリー百科事典『ウィキペディア（Wikipedia）』", redirect:f=>`（${f}から転送）`,
+        diff:{easy:{minLen:20000,minIn:300}, normal:{minLen:5000,minIn:30}}},
+  en:  {host:"en.wikipedia.org",  name:"English",
+        siteSub:"From Wikipedia, the free encyclopedia", redirect:f=>`(Redirected from ${f})`,
+        diff:{easy:{minLen:30000,minIn:500}, normal:{minLen:8000,minIn:50}}},
+  fr:  {host:"fr.wikipedia.org",  name:"Français",
+        siteSub:"Un article de Wikipédia, l'encyclopédie libre.", redirect:f=>`(Redirigé depuis ${f})`,
+        diff:{easy:{minLen:20000,minIn:300}, normal:{minLen:5000,minIn:30}}},
+  es:  {host:"es.wikipedia.org",  name:"Español",
+        siteSub:"De Wikipedia, la enciclopedia libre", redirect:f=>`(Redirigido desde «${f}»)`,
+        diff:{easy:{minLen:20000,minIn:300}, normal:{minLen:5000,minIn:30}}},
+  zh:  {host:"zh.wikipedia.org",  name:"中文",
+        siteSub:v => v === "zh-cn" ? "维基百科，自由的百科全书" : "維基百科，自由的百科全書",
+        redirect:(f,v) => v === "zh-cn" ? `（重定向自${f}）` : `（重新導向自${f}）`,
+        diff:{easy:{minLen:20000,minIn:300}, normal:{minLen:5000,minIn:30}}},
+  ko:  {host:"ko.wikipedia.org",  name:"한국어",
+        siteSub:"위키백과, 우리 모두의 백과사전.", redirect:f=>`(${f}에서 넘어옴)`,
+        diff:{easy:{minLen:15000,minIn:200}, normal:{minLen:4000,minIn:20}}},
+  ceb: {host:"ceb.wikipedia.org", name:"Sinugboanon",
+        siteSub:"Gikan sa Wikipedia, ang gawasnong ensiklopedya", redirect:f=>`(Redirected from ${f})`,
+        diff:{easy:{minLen:3000,minIn:30}, normal:{minLen:1000,minIn:5}}}
+};
+const LANG_ORDER = ["ja","en","fr","es","zh","ko","ceb"];
+
+/* 画面の言葉 */
+const STR = {};
+STR.ja = {
+  quitCh:"🏠 挑戦状をやめて最初にもどる", quitHole:"🏳 このホールをやめる",
+  appName:"Wikipediaゴルフ", start:"🏌️ スタート", goal:"🚩 ゴール", reroll:"引き直す", readFull:"全文を読む",
+  inlinks:(n,m)=>`入口リンク ${n}${m?"本以上":"本"}`,
+  strokes:"打数", time:"タイム", left:"のこり",
+  routeHint:"お題が決まったら「ティーオフ」を押してね",
+  teeoff:"⛳ ティーオフ", back:"↩ 1つ戻る", share:"🔗 お題を共有", newOdai:"🎲 新しいお題", settings:"⚙️ 設定",
+  placeholder:"ティーオフするとここにスタートの記事が出るよ。<br>記事の中のリンクだけをたどってゴールを目指そう。",
+  searchPh:"🔍 記事の中を検索", linkOnly:"リンクだけ", hits:n=>`${n}件`,
+  loading:"読み込み中…", fullOf:g=>(g?"🚩 ゴール":"🏌️ スタート")+"の全文 ― 読むだけ（リンクは押せません）",
+  close:"✕ 閉じる", closeBtn:"閉じる",
+  lockPlay:"プレイ中はルールを変えられないよ（次のホールから変えられる）",
+  lockCh:"挑戦状のお題なので、ルールはリンクの設定で固定だよ（終わったら元にもどる）",
+  hLang:"言語", hRules:"ゲームのルール", hView:"表示", hImg:"シェア画像",
+  lang:"Wikipediaの言語", langNote:"変えると画面の言葉も変わって、新しいお題になるよ",
+  zhVar:"中文の字体", auto:"自動",
+  diff:"難易度", diffNote:"次のお題から反映。ゴールに来ているリンクの数（入口）で選ぶよ",
+  easy:"かんたん", normal:"ふつう", any:"なんでもあり",
+  cat:"カテゴリのリンク", backRule:"1つ戻る", searchRule:"ページ内検索", searchNote:"「使えない」にすると検索ボックスが消えるよ",
+  yes:"使える", no:"使えない", limit:"制限時間", none:"なし", min:n=>`${n}分`,
+  view:"ゴールの見せ方", viewNote:"全文＝カーソルでプレビュー、クリックで全文",
+  full:"全文読める", summary:"要約だけ", titleOnly:"タイトルだけ",
+  shape:"画像の形", wide:"横長", square:"正方形",
+  rRed:"まだ記事がない赤リンクだよ", rExt:"外部リンクは使えないよ（OB）", rSpecial:"特別ページは開けないよ", rCat:"カテゴリは使えない設定だよ",
+  loadFail:"読み込めなかった：", nextOdai:"次のお題から反映するよ",
+  fail:"取得できなかった…", err:"エラー：", notFound:t=>`「${t}」の記事が見つからなかった`, noFound:"見つからなかった",
+  noSummary:"（要約なし）", clickFull:"クリックで全文を読む",
+  confirmNew:"今のホールをやめて新しいお題にする？", confirmExit:"今のホールをやめてランダムのお題にする？",
+  cupIn:"⛳ カップイン！", hio:"⛳ ホールインワン！！", timeUp:"⏰ タイムアップ…",
+  unitOk:"打", unitNg:"打でゴールならず", timeLbl:"タイム ",
+  nameLbl:"挑戦状に入れる名前", namePh:"なくてもOK",
+  sendCh:"⚔️ 挑戦状を送る", saveImg:"🖼 画像を保存", shareImg:"📤 シェア", keep:"記事を見続ける", next:"🎲 次のホールへ",
+  sk:n=>`${n}打`, you:"アナタ", noGoal:"ゴールならず", paren:t=>`（${t}）`,
+  win:"勝ち！", lose:"負け…", draw:"引き分け",
+  rDiff:"難易度：", rLimit:n=>`制限時間${n}分`, rNoLimit:"時間制限なし", rView:"ゴール：", vFull:"全文", vSum:"要約だけ", vTitle:"タイトルだけ",
+  rNoCat:"カテゴリ禁止", rNoBack:"戻る禁止", rNoSearch:"検索禁止", rLang:"言語：", sep:" ／ ",
+  chText:(n,k,t)=>`⚔️ 挑戦状！ ${n}は ${k}${t ? "・" + t : ""}。勝てるかな？`, shared:"🔗 共有されたお題で遊ぶよ", rulesPre:"ルール：", exitCh:"ランダムのお題にもどる",
+  someone:"だれかさん",
+  imgOk:"打でカップイン！", imgHio:"打 ホールインワン！", imgNg:"打でゴールならず…", route:"道のり", omitted:n=>`…（${n}ページぶん省略）…`,
+  qrCaption:"同じお題で挑戦", tag:"#Wikipediaゴルフ",
+  copied:"リンクをコピーしたよ！友達に送ってね", fileWarn:"ファイルから直接開いてるので、ネットに置いてからじゃないと友達は開けないよ",
+  imgCopied:"画像をコピーしたよ。貼り付けてシェアしてね", cantShare:"このブラウザはシェアできないので保存するね", shareFail:"シェアできなかった：", imgFail:"画像を作れなかった",
+  qrOdai:"このお題のQRコード", qrCh:"挑戦状のQRコード", qrHint:"スマホのカメラで読み取ってね", copy:"📋 リンクをコピー", sendLink:"📤 送る", copyPrompt:"このリンクをコピーしてね",
+  qrFail:"QRコードを作れなかった", more500:"（多いので最初の500件まで表示）",
+  q:t=>`「${t}」`, arrowTxt:"→",
+  txtOdai:(s,g)=>`Wikipediaゴルフのお題！\n「${s}」→「${g}」\nいっしょにやろう`,
+  txtCh:(s,g,n,k)=>`Wikipediaゴルフの挑戦状！\n「${s}」→「${g}」\n${n}は${k}打。勝てるかな？`,
+  txtRes:(s,g,ok,k,t)=>`Wikipediaゴルフ\n「${s}」→「${g}」\n`+(ok?`${k}打でカップイン！（${t}）`:`${k}打でゴールならず…`),
+  txtVs:(n,k,l)=>`${n}（${k}打）に${l}`, me:"わたし",
+  imgVs:(n,k,t)=>`⚔️ vs ${n}（${k}打${t ? " " + t : ""}）→ `,
+  catSub:"下位カテゴリ", catSubN:n=>`このカテゴリには ${n} 個の下位カテゴリがあります。`,
+  catPages:c=>`カテゴリ「${c}」にあるページ`, catPagesN:n=>`このカテゴリには ${n} ページが含まれています。`,
+  catMedia:c=>`カテゴリ「${c}」にあるメディア`, catMediaN:n=>`このカテゴリには ${n} 個のファイルが含まれています。`,
+  catEmpty:"このカテゴリには現在ページまたはメディアがひとつもありません。"
+};
+STR.en = {
+  quitCh:"🏠 Quit the challenge", quitHole:"🏳 Give up this hole",
+  appName:"Wiki Golf", start:"🏌️ Start", goal:"🚩 Goal", reroll:"Reroll", readFull:"Read full article",
+  inlinks:(n,m)=>`${n}${m?"+":""} links in`,
+  strokes:"Strokes", time:"Time", left:"Left",
+  routeHint:"Press “Tee off” when you're happy with the course",
+  teeoff:"⛳ Tee off", back:"↩ Back", share:"🔗 Share course", newOdai:"🎲 New course", settings:"⚙️ Settings",
+  placeholder:"Tee off and the start article will appear here.<br>Follow only the links inside articles to reach the goal.",
+  searchPh:"🔍 Find in article", linkOnly:"Links only", hits:n=>`${n} found`,
+  loading:"Loading…", fullOf:g=>(g?"🚩 Goal":"🏌️ Start")+" — read-only (links are disabled)",
+  close:"✕ Close", closeBtn:"Close",
+  lockPlay:"You can't change the rules mid-hole (they apply from the next hole)",
+  lockCh:"This is a challenge, so the rules are fixed by the link (yours come back afterwards)",
+  hLang:"Language", hRules:"Rules", hView:"Display", hImg:"Share image",
+  lang:"Wikipedia language", langNote:"Changing it also switches the interface and draws a new course",
+  zhVar:"Chinese script", auto:"Auto",
+  diff:"Difficulty", diffNote:"Applies from the next course. Based on how many articles link to the goal",
+  easy:"Easy", normal:"Normal", any:"Anything goes",
+  cat:"Category links", backRule:"Back button", searchRule:"Find in article", searchNote:"Turning it off hides the search box",
+  yes:"Allowed", no:"Not allowed", limit:"Time limit", none:"None", min:n=>`${n} min`,
+  view:"Goal preview", viewNote:"Full = hover to preview, click to read it all",
+  full:"Full article", summary:"Summary only", titleOnly:"Title only",
+  shape:"Image shape", wide:"Wide", square:"Square",
+  rRed:"That's a red link — the article doesn't exist yet", rExt:"External links are out of bounds", rSpecial:"Special pages can't be opened", rCat:"Category links are off in these rules",
+  loadFail:"Couldn't load: ", nextOdai:"Applies from the next course",
+  fail:"Couldn't fetch…", err:"Error: ", notFound:t=>`Couldn't find the article “${t}”`, noFound:"Nothing found",
+  noSummary:"(no summary)", clickFull:"Click to read the full article",
+  confirmNew:"Abandon this hole and draw a new course?", confirmExit:"Abandon this hole and go back to random courses?",
+  cupIn:"⛳ In the hole!", hio:"⛳ Hole in one!!", timeUp:"⏰ Time's up…",
+  unitOk:n=>n===1?"stroke":"strokes", unitNg:"strokes, didn't finish", timeLbl:"Time ",
+  nameLbl:"Your name for the challenge", namePh:"optional",
+  sendCh:"⚔️ Send a challenge", saveImg:"🖼 Save image", shareImg:"📤 Share", keep:"Keep reading", next:"🎲 Next hole",
+  sk:n=>`${n} ${n===1?"stroke":"strokes"}`, you:"You", noGoal:"didn't finish", paren:t=>` (${t})`,
+  win:"You win!", lose:"You lose…", draw:"Draw",
+  rDiff:"Difficulty: ", rLimit:n=>`${n} min limit`, rNoLimit:"No time limit", rView:"Goal: ", vFull:"full", vSum:"summary", vTitle:"title only",
+  rNoCat:"no categories", rNoBack:"no back", rNoSearch:"no search", rLang:"Language: ", sep:" / ",
+  chText:(n,k,t)=>`⚔️ Challenge! ${n} did it in ${k}${t ? " · " + t : ""}. Can you beat that?`, shared:"🔗 Playing a shared course", rulesPre:"Rules: ", exitCh:"Back to random courses",
+  someone:"Someone",
+  imgOk:n=>n===1?"stroke!":"strokes!", imgHio:"Hole in one!", imgNg:"strokes, didn't finish", route:"Route", omitted:n=>`… (${n} pages skipped) …`,
+  qrCaption:"Play this course", tag:"#WikiGolf",
+  copied:"Link copied! Send it to a friend", fileWarn:"You opened this as a local file — put it online first so friends can open the link",
+  imgCopied:"Image copied — paste it to share", cantShare:"Sharing isn't supported here, so saving instead", shareFail:"Couldn't share: ", imgFail:"Couldn't create the image",
+  qrOdai:"QR code for this course", qrCh:"Challenge QR code", qrHint:"Scan with your phone camera", copy:"📋 Copy link", sendLink:"📤 Send", copyPrompt:"Copy this link",
+  qrFail:"Couldn't create the QR code", more500:" (showing the first 500)",
+  q:t=>`“${t}”`, arrowTxt:"→",
+  txtOdai:(s,g)=>`Wiki Golf course!\n“${s}” → “${g}”\nWant to play?`,
+  txtCh:(s,g,n,k)=>`Wiki Golf challenge!\n“${s}” → “${g}”\n${n} did it in ${k}. Can you beat that?`,
+  txtRes:(s,g,ok,k,t)=>`Wiki Golf\n“${s}” → “${g}”\n`+(ok?`In the hole in ${k} (${t})!`:`${k} and didn't finish…`),
+  txtVs:(n,k,l)=>`vs ${n} (${k}): ${l}`, me:"I",
+  imgVs:(n,k,t)=>`⚔️ vs ${n} (${k}${t ? ", " + t : ""}) → `,
+  catSub:"Subcategories", catSubN:n=>`This category has the following ${n} subcategories.`,
+  catPages:c=>`Pages in category "${c}"`, catPagesN:n=>`The following ${n} pages are in this category.`,
+  catMedia:c=>`Media in category "${c}"`, catMediaN:n=>`The following ${n} files are in this category.`,
+  catEmpty:"This category currently contains no pages or media."
+};
+STR.fr = {
+  quitCh:"🏠 Abandonner le défi", quitHole:"🏳 Abandonner ce trou",
+  appName:"Golf Wikipédia", start:"🏌️ Départ", goal:"🚩 Arrivée", reroll:"Retirer", readFull:"Lire l'article",
+  inlinks:(n,m)=>`${n}${m?"+":""} liens entrants`,
+  strokes:"Coups", time:"Temps", left:"Reste",
+  routeHint:"Quand le parcours vous plaît, appuyez sur « Départ »",
+  teeoff:"⛳ Départ", back:"↩ Retour", share:"🔗 Partager le parcours", newOdai:"🎲 Nouveau parcours", settings:"⚙️ Réglages",
+  placeholder:"Au départ, l'article de départ s'affichera ici.<br>Suivez uniquement les liens des articles pour atteindre l'arrivée.",
+  searchPh:"🔍 Rechercher dans l'article", linkOnly:"Liens seulement", hits:n=>`${n} résultat${n>1?"s":""}`,
+  loading:"Chargement…", fullOf:g=>(g?"🚩 Arrivée":"🏌️ Départ")+" — lecture seule (liens désactivés)",
+  close:"✕ Fermer", closeBtn:"Fermer",
+  lockPlay:"Impossible de changer les règles en cours de trou (elles s'appliqueront au suivant)",
+  lockCh:"C'est un défi : les règles sont fixées par le lien (les vôtres reviendront ensuite)",
+  hLang:"Langue", hRules:"Règles", hView:"Affichage", hImg:"Image à partager",
+  lang:"Langue de Wikipédia", langNote:"Change aussi la langue de l'interface et tire un nouveau parcours",
+  zhVar:"Écriture chinoise", auto:"Auto",
+  diff:"Difficulté", diffNote:"S'applique au prochain parcours. Selon le nombre de liens vers l'arrivée",
+  easy:"Facile", normal:"Normal", any:"Tout est permis",
+  cat:"Liens de catégorie", backRule:"Bouton retour", searchRule:"Recherche dans l'article", searchNote:"Désactivée, la barre de recherche disparaît",
+  yes:"Autorisé", no:"Interdit", limit:"Temps limite", none:"Aucun", min:n=>`${n} min`,
+  view:"Aperçu de l'arrivée", viewNote:"Complet = aperçu au survol, clic pour tout lire",
+  full:"Article complet", summary:"Résumé seulement", titleOnly:"Titre seulement",
+  shape:"Format de l'image", wide:"Paysage", square:"Carré",
+  rRed:"Lien rouge : l'article n'existe pas encore", rExt:"Les liens externes sont hors limites", rSpecial:"Impossible d'ouvrir les pages spéciales", rCat:"Les catégories sont interdites avec ces règles",
+  loadFail:"Chargement impossible : ", nextOdai:"S'appliquera au prochain parcours",
+  fail:"Impossible de récupérer…", err:"Erreur : ", notFound:t=>`Article « ${t} » introuvable`, noFound:"Rien trouvé",
+  noSummary:"(pas de résumé)", clickFull:"Cliquez pour lire l'article",
+  confirmNew:"Abandonner ce trou et tirer un nouveau parcours ?", confirmExit:"Abandonner ce trou et revenir aux parcours aléatoires ?",
+  cupIn:"⛳ Dans le trou !", hio:"⛳ Trou en un !!", timeUp:"⏰ Temps écoulé…",
+  unitOk:n=>n===1?"coup":"coups", unitNg:"coups, non terminé", timeLbl:"Temps ",
+  nameLbl:"Votre nom pour le défi", namePh:"facultatif",
+  sendCh:"⚔️ Envoyer un défi", saveImg:"🖼 Enregistrer l'image", shareImg:"📤 Partager", keep:"Continuer à lire", next:"🎲 Trou suivant",
+  sk:n=>`${n} coup${n>1?"s":""}`, you:"Vous", noGoal:"non terminé", paren:t=>` (${t})`,
+  win:"Gagné !", lose:"Perdu…", draw:"Égalité",
+  rDiff:"Difficulté : ", rLimit:n=>`limite ${n} min`, rNoLimit:"sans limite de temps", rView:"Arrivée : ", vFull:"complet", vSum:"résumé", vTitle:"titre seul",
+  rNoCat:"sans catégories", rNoBack:"sans retour", rNoSearch:"sans recherche", rLang:"Langue : ", sep:" / ",
+  chText:(n,k,t)=>`⚔️ Défi ! ${n} l'a fait en ${k}${t ? " · " + t : ""}. Ferez-vous mieux ?`, shared:"🔗 Parcours partagé", rulesPre:"Règles : ", exitCh:"Revenir aux parcours aléatoires",
+  someone:"Quelqu'un",
+  imgOk:n=>n===1?"coup, dans le trou !":"coups, dans le trou !", imgHio:"coup : trou en un !", imgNg:"coups, non terminé…", route:"Parcours", omitted:n=>`… (${n} pages omises) …`,
+  qrCaption:"Jouer ce parcours", tag:"#GolfWikipedia",
+  copied:"Lien copié ! Envoyez-le à un ami", fileWarn:"Page ouverte en fichier local : mettez-la en ligne pour que vos amis puissent ouvrir le lien",
+  imgCopied:"Image copiée — collez-la pour la partager", cantShare:"Partage non pris en charge, enregistrement à la place", shareFail:"Partage impossible : ", imgFail:"Impossible de créer l'image",
+  qrOdai:"QR code de ce parcours", qrCh:"QR code du défi", qrHint:"Scannez avec l'appareil photo du téléphone", copy:"📋 Copier le lien", sendLink:"📤 Envoyer", copyPrompt:"Copiez ce lien",
+  qrFail:"Impossible de créer le QR code", more500:" (les 500 premiers affichés)",
+  q:t=>`« ${t} »`, arrowTxt:"→",
+  txtOdai:(s,g)=>`Parcours de Golf Wikipédia !\n« ${s} » → « ${g} »\nOn joue ?`,
+  txtCh:(s,g,n,k)=>`Défi Golf Wikipédia !\n« ${s} » → « ${g} »\n${n} l'a fait en ${k}. Ferez-vous mieux ?`,
+  txtRes:(s,g,ok,k,t)=>`Golf Wikipédia\n« ${s} » → « ${g} »\n`+(ok?`Dans le trou en ${k} (${t}) !`:`${k}, non terminé…`),
+  txtVs:(n,k,l)=>`contre ${n} (${k}) : ${l}`, me:"Un ami",
+  imgVs:(n,k,t)=>`⚔️ contre ${n} (${k}${t ? ", " + t : ""}) → `,
+  catSub:"Sous-catégories", catSubN:n=>`Cette catégorie comprend ${n} sous-catégories.`,
+  catPages:c=>`Pages dans la catégorie « ${c} »`, catPagesN:n=>`Cette catégorie contient ${n} pages.`,
+  catMedia:c=>`Médias dans la catégorie « ${c} »`, catMediaN:n=>`Cette catégorie contient ${n} fichiers.`,
+  catEmpty:"Cette catégorie ne contient actuellement aucune page ni aucun fichier."
+};
+STR.es = {
+  quitCh:"🏠 Dejar el reto", quitHole:"🏳 Abandonar este hoyo",
+  appName:"Golf Wikipedia", start:"🏌️ Salida", goal:"🚩 Hoyo", reroll:"Cambiar", readFull:"Leer artículo",
+  inlinks:(n,m)=>`${n}${m?"+":""} enlaces entrantes`,
+  strokes:"Golpes", time:"Tiempo", left:"Quedan",
+  routeHint:"Cuando te guste el recorrido, pulsa «Salida»",
+  teeoff:"⛳ Salida", back:"↩ Volver", share:"🔗 Compartir recorrido", newOdai:"🎲 Nuevo recorrido", settings:"⚙️ Ajustes",
+  placeholder:"Al salir, aquí aparecerá el artículo de salida.<br>Sigue solo los enlaces de los artículos hasta llegar al hoyo.",
+  searchPh:"🔍 Buscar en el artículo", linkOnly:"Solo enlaces", hits:n=>`${n} resultado${n===1?"":"s"}`,
+  loading:"Cargando…", fullOf:g=>(g?"🚩 Hoyo":"🏌️ Salida")+" — solo lectura (enlaces desactivados)",
+  close:"✕ Cerrar", closeBtn:"Cerrar",
+  lockPlay:"No puedes cambiar las reglas en mitad del hoyo (se aplicarán en el siguiente)",
+  lockCh:"Es un reto: las reglas vienen fijadas por el enlace (luego vuelven las tuyas)",
+  hLang:"Idioma", hRules:"Reglas", hView:"Visualización", hImg:"Imagen para compartir",
+  lang:"Idioma de Wikipedia", langNote:"También cambia el idioma de la interfaz y saca un nuevo recorrido",
+  zhVar:"Escritura china", auto:"Auto",
+  diff:"Dificultad", diffNote:"Se aplica desde el próximo recorrido. Según cuántos artículos enlazan al hoyo",
+  easy:"Fácil", normal:"Normal", any:"Todo vale",
+  cat:"Enlaces de categoría", backRule:"Botón volver", searchRule:"Buscar en el artículo", searchNote:"Si lo desactivas, desaparece el buscador",
+  yes:"Permitido", no:"Prohibido", limit:"Tiempo límite", none:"Sin límite", min:n=>`${n} min`,
+  view:"Vista previa del hoyo", viewNote:"Completo = vista previa al pasar el cursor, clic para leerlo todo",
+  full:"Artículo completo", summary:"Solo resumen", titleOnly:"Solo título",
+  shape:"Formato de imagen", wide:"Horizontal", square:"Cuadrado",
+  rRed:"Enlace rojo: el artículo aún no existe", rExt:"Los enlaces externos están fuera de límites", rSpecial:"No se pueden abrir páginas especiales", rCat:"Las categorías están prohibidas con estas reglas",
+  loadFail:"No se pudo cargar: ", nextOdai:"Se aplicará en el próximo recorrido",
+  fail:"No se pudo obtener…", err:"Error: ", notFound:t=>`No se encontró el artículo «${t}»`, noFound:"No se encontró nada",
+  noSummary:"(sin resumen)", clickFull:"Haz clic para leer el artículo",
+  confirmNew:"¿Abandonar este hoyo y sacar un nuevo recorrido?", confirmExit:"¿Abandonar este hoyo y volver a recorridos aleatorios?",
+  cupIn:"⛳ ¡Embocada!", hio:"⛳ ¡¡Hoyo en uno!!", timeUp:"⏰ Se acabó el tiempo…",
+  unitOk:n=>n===1?"golpe":"golpes", unitNg:"golpes, sin terminar", timeLbl:"Tiempo ",
+  nameLbl:"Tu nombre para el reto", namePh:"opcional",
+  sendCh:"⚔️ Enviar un reto", saveImg:"🖼 Guardar imagen", shareImg:"📤 Compartir", keep:"Seguir leyendo", next:"🎲 Siguiente hoyo",
+  sk:n=>`${n} golpe${n===1?"":"s"}`, you:"Tú", noGoal:"sin terminar", paren:t=>` (${t})`,
+  win:"¡Ganas!", lose:"Pierdes…", draw:"Empate",
+  rDiff:"Dificultad: ", rLimit:n=>`límite ${n} min`, rNoLimit:"sin límite de tiempo", rView:"Hoyo: ", vFull:"completo", vSum:"resumen", vTitle:"solo título",
+  rNoCat:"sin categorías", rNoBack:"sin volver", rNoSearch:"sin búsqueda", rLang:"Idioma: ", sep:" / ",
+  chText:(n,k,t)=>`⚔️ ¡Reto! ${n} lo hizo en ${k}${t ? " · " + t : ""}. ¿Puedes superarlo?`, shared:"🔗 Jugando un recorrido compartido", rulesPre:"Reglas: ", exitCh:"Volver a recorridos aleatorios",
+  someone:"Alguien",
+  imgOk:n=>n===1?"golpe, ¡embocada!":"golpes, ¡embocada!", imgHio:"golpe: ¡hoyo en uno!", imgNg:"golpes, sin terminar…", route:"Recorrido", omitted:n=>`… (${n} páginas omitidas) …`,
+  qrCaption:"Juega este recorrido", tag:"#GolfWikipedia",
+  copied:"¡Enlace copiado! Envíaselo a un amigo", fileWarn:"Abriste la página como archivo local: súbela a internet para que tus amigos puedan abrir el enlace",
+  imgCopied:"Imagen copiada: pégala para compartirla", cantShare:"Compartir no está disponible aquí; se guardará", shareFail:"No se pudo compartir: ", imgFail:"No se pudo crear la imagen",
+  qrOdai:"Código QR de este recorrido", qrCh:"Código QR del reto", qrHint:"Escanéalo con la cámara del móvil", copy:"📋 Copiar enlace", sendLink:"📤 Enviar", copyPrompt:"Copia este enlace",
+  qrFail:"No se pudo crear el código QR", more500:" (se muestran los primeros 500)",
+  q:t=>`«${t}»`, arrowTxt:"→",
+  txtOdai:(s,g)=>`¡Recorrido de Golf Wikipedia!\n«${s}» → «${g}»\n¿Jugamos?`,
+  txtCh:(s,g,n,k)=>`¡Reto de Golf Wikipedia!\n«${s}» → «${g}»\n${n} lo hizo en ${k}. ¿Puedes superarlo?`,
+  txtRes:(s,g,ok,k,t)=>`Golf Wikipedia\n«${s}» → «${g}»\n`+(ok?`¡Embocada en ${k} (${t})!`:`${k}, sin terminar…`),
+  txtVs:(n,k,l)=>`contra ${n} (${k}): ${l}`, me:"Un amigo",
+  imgVs:(n,k,t)=>`⚔️ contra ${n} (${k}${t ? ", " + t : ""}) → `,
+  catSub:"Subcategorías", catSubN:n=>`Esta categoría contiene ${n} subcategorías.`,
+  catPages:c=>`Páginas en la categoría «${c}»`, catPagesN:n=>`Esta categoría contiene ${n} páginas.`,
+  catMedia:c=>`Archivos multimedia en la categoría «${c}»`, catMediaN:n=>`Esta categoría contiene ${n} archivos.`,
+  catEmpty:"Esta categoría no contiene actualmente ninguna página ni archivo multimedia."
+};
+STR.ko = {
+  quitCh:"🏠 도전장 그만두고 처음으로", quitHole:"🏳 이번 홀 포기",
+  appName:"위키 골프", start:"🏌️ 출발", goal:"🚩 홀", reroll:"다시 뽑기", readFull:"전문 읽기",
+  inlinks:(n,m)=>`들어오는 링크 ${n}${m?"개 이상":"개"}`,
+  strokes:"타수", time:"시간", left:"남은 시간",
+  routeHint:"코스가 마음에 들면 ‘티샷’을 누르세요",
+  teeoff:"⛳ 티샷", back:"↩ 뒤로", share:"🔗 코스 공유", newOdai:"🎲 새 코스", settings:"⚙️ 설정",
+  placeholder:"티샷을 하면 여기에 출발 문서가 나타나요.<br>문서 안의 링크만 따라가서 홀을 노려 보세요.",
+  searchPh:"🔍 문서에서 찾기", linkOnly:"링크만", hits:n=>`${n}건`,
+  loading:"불러오는 중…", fullOf:g=>(g?"🚩 홀":"🏌️ 출발")+" 전문 — 읽기 전용(링크는 누를 수 없어요)",
+  close:"✕ 닫기", closeBtn:"닫기",
+  lockPlay:"플레이 중에는 규칙을 바꿀 수 없어요(다음 홀부터 적용)",
+  lockCh:"도전장 코스라서 규칙은 링크 설정으로 고정돼요(끝나면 원래대로)",
+  hLang:"언어", hRules:"게임 규칙", hView:"표시", hImg:"공유 이미지",
+  lang:"위키백과 언어", langNote:"바꾸면 화면 언어도 바뀌고 새 코스가 나와요",
+  zhVar:"중국어 글자체", auto:"자동",
+  diff:"난이도", diffNote:"다음 코스부터 적용. 홀 문서로 들어오는 링크 수로 골라요",
+  easy:"쉬움", normal:"보통", any:"아무거나",
+  cat:"분류 링크", backRule:"뒤로 가기", searchRule:"문서 내 찾기", searchNote:"끄면 찾기 상자가 사라져요",
+  yes:"사용 가능", no:"사용 불가", limit:"제한 시간", none:"없음", min:n=>`${n}분`,
+  view:"홀 미리 보기", viewNote:"전문 = 마우스를 올리면 미리 보기, 클릭하면 전문",
+  full:"전문 보기", summary:"요약만", titleOnly:"제목만",
+  shape:"이미지 모양", wide:"가로형", square:"정사각형",
+  rRed:"아직 문서가 없는 빨간 링크예요", rExt:"외부 링크는 OB예요", rSpecial:"특수 문서는 열 수 없어요", rCat:"이 규칙에서는 분류를 쓸 수 없어요",
+  loadFail:"불러오지 못했어요: ", nextOdai:"다음 코스부터 적용돼요",
+  fail:"가져오지 못했어요…", err:"오류: ", notFound:t=>`“${t}” 문서를 찾지 못했어요`, noFound:"찾지 못했어요",
+  noSummary:"(요약 없음)", clickFull:"클릭하면 전문을 읽어요",
+  confirmNew:"이번 홀을 그만두고 새 코스를 뽑을까요?", confirmExit:"이번 홀을 그만두고 무작위 코스로 돌아갈까요?",
+  cupIn:"⛳ 홀인!", hio:"⛳ 홀인원!!", timeUp:"⏰ 시간 종료…",
+  unitOk:"타", unitNg:"타, 홀인 실패", timeLbl:"시간 ",
+  nameLbl:"도전장에 넣을 이름", namePh:"비워도 OK",
+  sendCh:"⚔️ 도전장 보내기", saveImg:"🖼 이미지 저장", shareImg:"📤 공유", keep:"계속 읽기", next:"🎲 다음 홀로",
+  sk:n=>`${n}타`, you:"나", noGoal:"홀인 실패", paren:t=>`(${t})`,
+  win:"승리!", lose:"패배…", draw:"무승부",
+  rDiff:"난이도: ", rLimit:n=>`제한 ${n}분`, rNoLimit:"시간 제한 없음", rView:"홀: ", vFull:"전문", vSum:"요약만", vTitle:"제목만",
+  rNoCat:"분류 금지", rNoBack:"뒤로 금지", rNoSearch:"찾기 금지", rLang:"언어: ", sep:" / ",
+  chText:(n,k,t)=>`⚔️ 도전장! ${n}의 기록은 ${k}${t ? " · " + t : ""}. 이길 수 있을까요?`, shared:"🔗 공유된 코스로 플레이", rulesPre:"규칙: ", exitCh:"무작위 코스로 돌아가기",
+  someone:"누군가",
+  imgOk:"타 만에 홀인!", imgHio:"타 홀인원!", imgNg:"타, 홀인 실패…", route:"경로", omitted:n=>`… (${n}개 문서 생략) …`,
+  qrCaption:"같은 코스에 도전", tag:"#위키골프",
+  copied:"링크를 복사했어요! 친구에게 보내세요", fileWarn:"파일로 직접 열었기 때문에, 인터넷에 올려야 친구가 링크를 열 수 있어요",
+  imgCopied:"이미지를 복사했어요. 붙여 넣어 공유하세요", cantShare:"이 브라우저는 공유를 지원하지 않아 저장할게요", shareFail:"공유하지 못했어요: ", imgFail:"이미지를 만들지 못했어요",
+  qrOdai:"이 코스의 QR 코드", qrCh:"도전장 QR 코드", qrHint:"휴대폰 카메라로 찍어 보세요", copy:"📋 링크 복사", sendLink:"📤 보내기", copyPrompt:"이 링크를 복사하세요",
+  qrFail:"QR 코드를 만들지 못했어요", more500:" (처음 500개만 표시)",
+  q:t=>`“${t}”`, arrowTxt:"→",
+  txtOdai:(s,g)=>`위키 골프 코스!\n“${s}” → “${g}”\n같이 해요`,
+  txtCh:(s,g,n,k)=>`위키 골프 도전장!\n“${s}” → “${g}”\n${n}의 기록은 ${k}. 이길 수 있을까요?`,
+  txtRes:(s,g,ok,k,t)=>`위키 골프\n“${s}” → “${g}”\n`+(ok?`${k} 만에 홀인! (${t})`:`${k}, 홀인 실패…`),
+  txtVs:(n,k,l)=>`${n}(${k})에게 ${l}`, me:"나",
+  imgVs:(n,k,t)=>`⚔️ vs ${n}(${k}${t ? " " + t : ""}) → `,
+  catSub:"하위 분류", catSubN:n=>`이 분류에는 하위 분류 ${n}개가 있습니다.`,
+  catPages:c=>`“${c}” 분류에 속하는 문서`, catPagesN:n=>`이 분류에 속하는 문서 ${n}개가 있습니다.`,
+  catMedia:c=>`“${c}” 분류에 속하는 미디어`, catMediaN:n=>`이 분류에 속하는 파일 ${n}개가 있습니다.`,
+  catEmpty:"이 분류에는 현재 문서나 미디어가 없습니다."
+};
+STR["zh-hant"] = {
+  quitCh:"🏠 放棄挑戰書，回到首頁", quitHole:"🏳 放棄這一洞",
+  appName:"維基高爾夫", start:"🏌️ 起點", goal:"🚩 終點", reroll:"重抽", readFull:"閱讀全文",
+  inlinks:(n,m)=>`連入連結 ${n}${m?"+":""} 個`,
+  strokes:"桿數", time:"時間", left:"剩餘",
+  routeHint:"題目滿意的話，按下「開球」吧",
+  teeoff:"⛳ 開球", back:"↩ 上一頁", share:"🔗 分享題目", newOdai:"🎲 新題目", settings:"⚙️ 設定",
+  placeholder:"開球後，起點條目會顯示在這裡。<br>只沿著條目中的連結前進，朝終點出發吧。",
+  searchPh:"🔍 在條目中搜尋", linkOnly:"只找連結", hits:n=>`${n} 筆`,
+  loading:"載入中…", fullOf:g=>(g?"🚩 終點":"🏌️ 起點")+"全文 ― 唯讀（連結無法點擊）",
+  close:"✕ 關閉", closeBtn:"關閉",
+  lockPlay:"進行中無法更改規則（下一洞起生效）",
+  lockCh:"這是挑戰書的題目，規則依連結設定固定（結束後恢復）",
+  hLang:"語言", hRules:"遊戲規則", hView:"顯示", hImg:"分享圖片",
+  lang:"維基百科語言", langNote:"更改後介面語言也會切換，並重新出題",
+  zhVar:"中文字體", auto:"自動",
+  diff:"難度", diffNote:"下一題起生效。依連入終點的連結數挑選",
+  easy:"簡單", normal:"普通", any:"什麼都有",
+  cat:"分類連結", backRule:"上一頁", searchRule:"條目內搜尋", searchNote:"設為「不可用」後搜尋框會消失",
+  yes:"可用", no:"不可用", limit:"時間限制", none:"無", min:n=>`${n} 分鐘`,
+  view:"終點的顯示方式", viewNote:"全文＝滑鼠移上去預覽，點擊看全文",
+  full:"可看全文", summary:"只看摘要", titleOnly:"只看標題",
+  shape:"圖片形狀", wide:"橫式", square:"正方形",
+  rRed:"這是還沒有條目的紅色連結", rExt:"外部連結不能用（OB）", rSpecial:"特殊頁面無法開啟", rCat:"此規則不能使用分類",
+  loadFail:"無法載入：", nextOdai:"下一題起生效",
+  fail:"無法取得…", err:"錯誤：", notFound:t=>`找不到條目「${t}」`, noFound:"找不到",
+  noSummary:"（無摘要）", clickFull:"點擊閱讀全文",
+  confirmNew:"要放棄這一洞並重新出題嗎？", confirmExit:"要放棄這一洞並回到隨機題目嗎？",
+  cupIn:"⛳ 進洞！", hio:"⛳ 一桿進洞！！", timeUp:"⏰ 時間到…",
+  unitOk:"桿", unitNg:"桿，未能進洞", timeLbl:"時間 ",
+  nameLbl:"挑戰書上的名字", namePh:"可留空",
+  sendCh:"⚔️ 送出挑戰書", saveImg:"🖼 儲存圖片", shareImg:"📤 分享", keep:"繼續閱讀", next:"🎲 下一洞",
+  sk:n=>`${n}桿`, you:"你", noGoal:"未能進洞", paren:t=>`（${t}）`,
+  win:"獲勝！", lose:"落敗…", draw:"平手",
+  rDiff:"難度：", rLimit:n=>`限時${n}分鐘`, rNoLimit:"不限時", rView:"終點：", vFull:"全文", vSum:"摘要", vTitle:"只看標題",
+  rNoCat:"禁用分類", rNoBack:"禁用上一頁", rNoSearch:"禁用搜尋", rLang:"語言：", sep:" ／ ",
+  chText:(n,k,t)=>`⚔️ 挑戰書！ ${n}的成績是 ${k}${t ? "・" + t : ""}。你贏得了嗎？`, shared:"🔗 用分享的題目來玩", rulesPre:"規則：", exitCh:"回到隨機題目",
+  someone:"某人",
+  imgOk:"桿進洞！", imgHio:"桿 一桿進洞！", imgNg:"桿，未能進洞…", route:"路線", omitted:n=>`…（省略 ${n} 頁）…`,
+  qrCaption:"挑戰同一題", tag:"#維基高爾夫",
+  copied:"已複製連結！傳給朋友吧", fileWarn:"目前是直接開啟檔案，要放到網路上，朋友才能打開連結",
+  imgCopied:"已複製圖片，貼上即可分享", cantShare:"此瀏覽器不支援分享，改為儲存", shareFail:"無法分享：", imgFail:"無法產生圖片",
+  qrOdai:"這個題目的 QR Code", qrCh:"挑戰書 QR Code", qrHint:"用手機相機掃描", copy:"📋 複製連結", sendLink:"📤 傳送", copyPrompt:"請複製這個連結",
+  qrFail:"無法產生 QR Code", more500:"（數量很多，只顯示前 500 筆）",
+  q:t=>`「${t}」`, arrowTxt:"→",
+  txtOdai:(s,g)=>`維基高爾夫的題目！\n「${s}」→「${g}」\n一起來玩吧`,
+  txtCh:(s,g,n,k)=>`維基高爾夫挑戰書！\n「${s}」→「${g}」\n${n}的成績是${k}。你贏得了嗎？`,
+  txtRes:(s,g,ok,k,t)=>`維基高爾夫\n「${s}」→「${g}」\n`+(ok?`${k}進洞！（${t}）`:`${k}，未能進洞…`),
+  txtVs:(n,k,l)=>`對 ${n}（${k}）${l}`, me:"我",
+  imgVs:(n,k,t)=>`⚔️ vs ${n}（${k}${t ? " " + t : ""}）→ `,
+  catSub:"子分類", catSubN:n=>`本分類有 ${n} 個子分類。`,
+  catPages:c=>`分類「${c}」中的頁面`, catPagesN:n=>`本分類包含 ${n} 個頁面。`,
+  catMedia:c=>`分類「${c}」中的媒體`, catMediaN:n=>`本分類包含 ${n} 個檔案。`,
+  catEmpty:"本分類目前沒有任何頁面或媒體。"
+};
+STR["zh-hans"] = {
+  quitCh:"🏠 放弃挑战书，回到首页", quitHole:"🏳 放弃这一洞",
+  appName:"维基高尔夫", start:"🏌️ 起点", goal:"🚩 终点", reroll:"重抽", readFull:"阅读全文",
+  inlinks:(n,m)=>`链入链接 ${n}${m?"+":""} 个`,
+  strokes:"杆数", time:"时间", left:"剩余",
+  routeHint:"满意题目的话，按下“开球”吧",
+  teeoff:"⛳ 开球", back:"↩ 上一页", share:"🔗 分享题目", newOdai:"🎲 新题目", settings:"⚙️ 设置",
+  placeholder:"开球后，起点条目会显示在这里。<br>只沿着条目里的链接前进，向终点出发吧。",
+  searchPh:"🔍 在条目中搜索", linkOnly:"只找链接", hits:n=>`${n} 处`,
+  loading:"加载中…", fullOf:g=>(g?"🚩 终点":"🏌️ 起点")+"全文 — 只读（链接无法点击）",
+  close:"✕ 关闭", closeBtn:"关闭",
+  lockPlay:"进行中无法更改规则（下一洞起生效）",
+  lockCh:"这是挑战书的题目，规则按链接设置固定（结束后恢复）",
+  hLang:"语言", hRules:"游戏规则", hView:"显示", hImg:"分享图片",
+  lang:"维基百科语言", langNote:"更改后界面语言也会切换，并重新出题",
+  zhVar:"中文字体", auto:"自动",
+  diff:"难度", diffNote:"下一题起生效。按链入终点的链接数挑选",
+  easy:"简单", normal:"普通", any:"什么都有",
+  cat:"分类链接", backRule:"上一页", searchRule:"条目内搜索", searchNote:"设为“不可用”后搜索框会消失",
+  yes:"可用", no:"不可用", limit:"时间限制", none:"无", min:n=>`${n} 分钟`,
+  view:"终点的显示方式", viewNote:"全文＝鼠标悬停预览，点击看全文",
+  full:"可看全文", summary:"只看摘要", titleOnly:"只看标题",
+  shape:"图片形状", wide:"横版", square:"正方形",
+  rRed:"这是还没有条目的红色链接", rExt:"外部链接不能用（OB）", rSpecial:"特殊页面无法打开", rCat:"此规则不能使用分类",
+  loadFail:"无法加载：", nextOdai:"下一题起生效",
+  fail:"无法获取…", err:"错误：", notFound:t=>`找不到条目“${t}”`, noFound:"找不到",
+  noSummary:"（无摘要）", clickFull:"点击阅读全文",
+  confirmNew:"要放弃这一洞并重新出题吗？", confirmExit:"要放弃这一洞并回到随机题目吗？",
+  cupIn:"⛳ 进洞！", hio:"⛳ 一杆进洞！！", timeUp:"⏰ 时间到…",
+  unitOk:"杆", unitNg:"杆，未能进洞", timeLbl:"时间 ",
+  nameLbl:"挑战书上的名字", namePh:"可留空",
+  sendCh:"⚔️ 发出挑战书", saveImg:"🖼 保存图片", shareImg:"📤 分享", keep:"继续阅读", next:"🎲 下一洞",
+  sk:n=>`${n}杆`, you:"你", noGoal:"未能进洞", paren:t=>`（${t}）`,
+  win:"获胜！", lose:"落败…", draw:"平局",
+  rDiff:"难度：", rLimit:n=>`限时${n}分钟`, rNoLimit:"不限时", rView:"终点：", vFull:"全文", vSum:"摘要", vTitle:"只看标题",
+  rNoCat:"禁用分类", rNoBack:"禁用上一页", rNoSearch:"禁用搜索", rLang:"语言：", sep:" ／ ",
+  chText:(n,k,t)=>`⚔️ 挑战书！ ${n}的成绩是 ${k}${t ? "・" + t : ""}。你能赢吗？`, shared:"🔗 用分享的题目来玩", rulesPre:"规则：", exitCh:"回到随机题目",
+  someone:"某人",
+  imgOk:"杆进洞！", imgHio:"杆 一杆进洞！", imgNg:"杆，未能进洞…", route:"路线", omitted:n=>`…（省略 ${n} 页）…`,
+  qrCaption:"挑战同一题", tag:"#维基高尔夫",
+  copied:"已复制链接！发给朋友吧", fileWarn:"现在是直接打开文件，要放到网上，朋友才能打开链接",
+  imgCopied:"已复制图片，粘贴即可分享", cantShare:"此浏览器不支持分享，改为保存", shareFail:"无法分享：", imgFail:"无法生成图片",
+  qrOdai:"这个题目的二维码", qrCh:"挑战书二维码", qrHint:"用手机相机扫描", copy:"📋 复制链接", sendLink:"📤 发送", copyPrompt:"请复制这个链接",
+  qrFail:"无法生成二维码", more500:"（数量很多，只显示前 500 个）",
+  q:t=>`“${t}”`, arrowTxt:"→",
+  txtOdai:(s,g)=>`维基高尔夫的题目！\n“${s}”→“${g}”\n一起来玩吧`,
+  txtCh:(s,g,n,k)=>`维基高尔夫挑战书！\n“${s}”→“${g}”\n${n}的成绩是${k}。你能赢吗？`,
+  txtRes:(s,g,ok,k,t)=>`维基高尔夫\n“${s}”→“${g}”\n`+(ok?`${k}进洞！（${t}）`:`${k}，未能进洞…`),
+  txtVs:(n,k,l)=>`对 ${n}（${k}）${l}`, me:"我",
+  imgVs:(n,k,t)=>`⚔️ vs ${n}（${k}${t ? " " + t : ""}）→ `,
+  catSub:"子分类", catSubN:n=>`本分类有 ${n} 个子分类。`,
+  catPages:c=>`分类“${c}”中的页面`, catPagesN:n=>`本分类包含 ${n} 个页面。`,
+  catMedia:c=>`分类“${c}”中的媒体`, catMediaN:n=>`本分类包含 ${n} 个文件。`,
+  catEmpty:"本分类目前没有任何页面或媒体。"
+};
+
+/* ════════ 設定 ════════ */
+function browserLang(){
+  for(const l of (navigator.languages || [navigator.language || "en"])){
+    const b = String(l).toLowerCase().split("-")[0];
+    if(WIKIS[b]) return b;
+  }
+  return "en";
+}
+const DEFAULTS = {lang:browserLang(), zhVariant:"auto", difficulty:"normal", allowCategory:true, allowBack:true,
+                  allowSearch:true, timeLimit:0, goalView:"full", shape:"wide"};
+const RULE_KEYS = ["lang","difficulty","allowCategory","allowBack","allowSearch","timeLimit","goalView"];
+
+let settings = {...DEFAULTS};
+try{ Object.assign(settings, JSON.parse(localStorage.getItem("wikiGolfSettings") || "{}")); }catch(e){}
+if(!WIKIS[settings.lang]) settings.lang = DEFAULTS.lang;
+function saveSettings(){ try{ localStorage.setItem("wikiGolfSettings", JSON.stringify(settings)); }catch(e){} }
+
+const state = {
+  start:null, goal:null, playing:false, busy:false,
+  strokes:0, stack:[], route:[], rules:null,
+  t0:0, elapsed:0, timer:null, result:null,
+  challenge:null,             // {start, goal, rules, name, strokes, time}
+  ns:{},                      // 言語ごとの名前空間 {lang: Map}
+  parsedCache:new Map()
+};
+
+/* いま効いているルール（挑戦状のときはリンクのルールが上書き） */
+function eff(){ return state.challenge ? {...settings, ...state.challenge.rules} : settings; }
+function curLang(){ return (state.playing && state.rules ? state.rules.lang : eff().lang); }
+function zhVariant(){
+  if(settings.zhVariant === "zh-tw" || settings.zhVariant === "zh-cn") return settings.zhVariant;
+  for(const l of (navigator.languages || [navigator.language || ""])){
+    const s = String(l).toLowerCase();
+    if(/^zh-(tw|hk|mo)|^zh-hant/.test(s)) return "zh-tw";
+    if(/^zh-(cn|sg|my)|^zh-hans|^zh$/.test(s)) return "zh-cn";
+  }
+  return "zh-tw";
+}
+function uiKey(lang = curLang()){
+  if(lang === "zh") return zhVariant() === "zh-cn" ? "zh-hans" : "zh-hant";
+  if(lang === "ceb") return "en";
+  return lang;
+}
+function T(key, ...args){
+  const v = (STR[uiKey()] || STR.en)[key] ?? STR.en[key] ?? STR.ja[key] ?? key;
+  return typeof v === "function" ? v(...args) : v;
+}
+function applyUI(){
+  const k = uiKey();
+  document.documentElement.lang = k === "zh-hant" ? "zh-Hant" : k === "zh-hans" ? "zh-Hans" : k;
+  document.title = T("appName");
+  document.querySelectorAll("[data-t]").forEach(el => el.textContent = T(el.dataset.t));
+  document.querySelectorAll("[data-t-html]").forEach(el => el.innerHTML = T(el.dataset.tHtml));
+  $("sInput").placeholder = T("searchPh");
+  $("myName").placeholder = T("namePh");
+  $("gearBtn").title = T("settings");
+  if(!state.playing){
+    $("route").textContent = T("routeHint");
+    resetClockLabel();
+  }else{
+    $("clockLbl").textContent = state.rules.timeLimit ? T("left") : T("time");
+  }
+  ["start","goal"].forEach(fillCard);
+  renderChallengeBar();
+}
+
+/* ════════ Wikipedia API ════════ */
+function wikiHost(lang = curLang()){ return WIKIS[lang].host; }
+async function api(params, lang = curLang()){
+  const extra = lang === "zh" ? {variant:zhVariant(), uselang:zhVariant()} : {};
+  const p = new URLSearchParams({format:"json", formatversion:"2", origin:"*", ...extra, ...params});
+  const res = await fetch(`https://${wikiHost(lang)}/w/api.php?` + p);
+  if(!res.ok) throw new Error("HTTP " + res.status);
+  const data = await res.json();
+  if(data.error) throw new Error(data.error.info || data.error.code);
+  return data;
+}
+
+const norm = t => (t || "").replace(/_/g," ").trim();
+const esc = s => String(s).replace(/[&<>"]/g, c => ({"&":"&amp;","<":"&lt;",">":"&gt;",'"':"&quot;"}[c]));
+const stripTags = h => { const d = document.createElement("div"); d.innerHTML = h || ""; return d.textContent.trim(); };
+const fmtTime = s => Math.floor(s/60) + ":" + String(Math.floor(s%60)).padStart(2,"0");
+
+/* 名前空間（Category:=14, File:=6, Special:=-1 …）を言語ごとに */
+const NS_FALLBACK = [["category",14],["file",6],["image",6],["template",10],["help",12],["wikipedia",4],["portal",100],
+  ["user",2],["special",-1],["media",-2],["talk",1],["mediawiki",8],["module",828]];
+async function ensureNs(lang = curLang()){
+  if(state.ns[lang]) return state.ns[lang];
+  const m = new Map(NS_FALLBACK);
+  try{
+    const d = await api({action:"query", meta:"siteinfo", siprop:"namespaces|namespacealiases"}, lang);
+    const add = (k,id) => { if(k) m.set(k.toLowerCase(), id); };
+    for(const ns of Object.values(d.query.namespaces)){ if(ns.id !== 0){ add(ns.name, ns.id); add(ns.canonical, ns.id); } }
+    for(const a of d.query.namespacealiases) if(a.id !== 0) add(a.alias, a.id);
+    state.ns[lang] = m;
+  }catch(e){ /* 失敗したら次に再挑戦。とりあえず英語名で判定 */ }
+  return m;
+}
+function nsOf(t, lang = curLang()){
+  const i = t.indexOf(":");
+  if(i <= 0) return 0;
+  const m = state.ns[lang] || new Map(NS_FALLBACK);
+  const id = m.get(t.slice(0,i).trim().toLowerCase());
+  return id === undefined ? 0 : id;
+}
+
+/* ════════ お題くじ ════════ */
+async function inlinkCount(title){
+  const d = await api({action:"query", list:"backlinks", bltitle:title, blnamespace:"0",
+                       bllimit:"500", blfilterredir:"nonredirects"});
+  return {n:d.query.backlinks.length, more:!!d.continue};
+}
+async function pickTitle(role, avoid){
+  const lang = curLang();
+  const conf = settings.difficulty === "any" ? {minLen:0, minIn:0}
+             : (WIKIS[lang].diff[settings.difficulty] || WIKIS[lang].diff.normal);
+  const {minLen, minIn} = conf;
+  let best = null;
+  for(let round = 0; round < 8; round++){
+    const d = await api({action:"query", generator:"random", grnnamespace:"0", grnlimit:"20",
+      grnfilterredir:"nonredirects", prop:"info|pageprops", ppprop:"disambiguation"});
+    const pages = d.query.pages.filter(p => !(p.pageprops && "disambiguation" in p.pageprops) && norm(p.title) !== norm(avoid));
+    if(!pages.length) continue;
+    pages.sort((a,b)=>b.length-a.length);
+    if(role === "start" || !minIn){
+      if(pages[0].length >= minLen) return {title:pages.find(p=>p.length>=minLen && Math.random()<.5)?.title || pages[0].title};
+      if(!best || pages[0].length > (best.length||0)) best = {title:pages[0].title, length:pages[0].length};
+      continue;
+    }
+    for(const p of pages.slice(0,3)){
+      const c = await inlinkCount(p.title);
+      if(c.n >= minIn) return {title:p.title, inlinks:c.n, more:c.more};
+      if(!best || c.n > (best.inlinks||0)) best = {title:p.title, inlinks:c.n, more:c.more};
+    }
+  }
+  return best;
+}
+async function getSummary(title){
+  const d = await api({action:"query", titles:title, redirects:"1", prop:"extracts|pageimages|info",
+    exintro:"1", explaintext:"1", exchars:"600", piprop:"thumbnail", pithumbsize:"400", inprop:"url|varianttitles"});
+  const p = d.query.pages[0];
+  if(p.missing !== undefined || p.invalid !== undefined) throw new Error(T("notFound", title));
+  return p;
+}
+/* 画面に出す題名（中文は繁體／简体に変換したもの） */
+function shown(p){
+  if(!p) return "";
+  if(curLang() === "zh" && p.varianttitles) return p.varianttitles[zhVariant()] || p.title;
+  return p.title;
+}
+
+async function draw(role, fixedTitle){
+  const card = $(role);
+  card.classList.add("loading");
+  $("teeoff").disabled = true;
+  hidePop();
+  try{
+    await ensureNs();
+    const other = role === "start" ? state.goal : state.start;
+    const pick = fixedTitle ? {title:fixedTitle} : await pickTitle(role, other && other.title);
+    if(!pick) throw new Error(T("noFound"));
+    const p = await getSummary(pick.title);
+    if(role === "goal"){
+      if(pick.inlinks === undefined){ const c = await inlinkCount(p.title); pick.inlinks = c.n; pick.more = c.more; }
+      p.inlinks = pick.inlinks; p.inlinksMore = pick.more;
+    }
+    p.lang = curLang();
+    state[role] = p;
+    fillCard(role);
+  }catch(e){
+    state[role] = null;
+    card.querySelector(".title").textContent = T("fail");
+    card.querySelector(".extract").textContent = T("err") + e.message;
+    card.querySelector(".extract").hidden = false;
+    card.querySelector("img").hidden = true;
+  }finally{
+    card.classList.remove("loading");
+    $("teeoff").disabled = !(state.start && state.goal) || state.playing;
+    $("shareOdai").disabled = !(state.start && state.goal);
+  }
+}
+
+function fillCard(role){
+  const p = state[role], card = $(role);
+  if(!p) return;
+  const view = role === "goal" ? eff().goalView : "full";
+  const title = card.querySelector(".title"), img = card.querySelector("img"),
+        ext = card.querySelector(".extract"), meta = card.querySelector(".meta"),
+        full = card.querySelector(".readFull");
+  title.textContent = shown(p);
+  title.classList.toggle("plain", view === "title");
+  ext.textContent = (p.extract || T("noSummary")).replace(/\s+/g," ");
+  ext.hidden = view === "title";
+  if(p.thumbnail && view !== "title"){ img.src = p.thumbnail.source; img.hidden = false; } else img.hidden = true;
+  full.hidden = view !== "full";
+  meta.textContent = role === "goal" && p.inlinks !== undefined ? T("inlinks", p.inlinks, p.inlinksMore) : "";
+}
+
+function setPlaying(on){
+  state.playing = on;
+  document.body.classList.toggle("playing", on);
+  if(!on) document.body.classList.remove("collapsed");
+}
+
+function resetGame(){
+  stopTimer();
+  setPlaying(false);
+  state.strokes = 0; state.stack = []; state.route = []; state.result = null; state.rules = null;
+  $("strokeNum").textContent = "0";
+  $("clockNum").classList.remove("warn");
+  resetClockLabel();
+  $("route").textContent = T("routeHint");
+  $("teeoff").hidden = false; $("backBtn").hidden = true;
+  $("findbar").hidden = true; $("findbar").classList.remove("open"); $("findToggle").hidden = true;
+  document.querySelectorAll(".card .reroll").forEach(b => { b.disabled = false; b.hidden = !!state.challenge; });
+  $("frame").onload = null;
+  $("frame").removeAttribute("srcdoc");
+  $("placeholder").hidden = false;
+}
+function resetClockLabel(){
+  const lim = eff().timeLimit;
+  $("clockNum").textContent = lim ? fmtTime(lim) : "0:00";
+  $("clockLbl").textContent = lim ? T("left") : T("time");
+}
+
+async function newOdai(){
+  exitChallenge();
+  state.start = state.goal = null;
+  resetGame();
+  applyUI();
+  state.start = state.goal = null;
+  await Promise.all([draw("start"), draw("goal")]);
+}
+async function loadChallenge(){
+  state.start = state.goal = null;
+  resetGame();
+  applyUI();
+  state.start = state.goal = null;
+  $("shareOdai").disabled = true;
+  await Promise.all([draw("start", state.challenge.start), draw("goal", state.challenge.goal)]);
+}
+/* 字体を変えたとき：同じお題のまま出し直す */
+async function redrawSame(){
+  const s = state.start && state.start.title, g = state.goal && state.goal.title;
+  applyUI();
+  if(s && g) await Promise.all([draw("start", s), draw("goal", g)]);
+}
+
+/* ════════ 記事を取ってくる ════════ */
+async function loadArticle(title){
+  if(nsOf(title) < 0) throw new Error(T("rSpecial"));
+  const d = await api({action:"parse", page:title, redirects:"1", prop:"text|displaytitle|categorieshtml",
+                       disableeditsection:"1", useskin:"vector-2022"});
+  const p = d.parse;
+  p.ns = nsOf(p.title);
+  p.shownTitle = stripTags(p.displaytitle) || p.title;
+  if(p.ns === 14) p.text += await categoryMembersHtml(p.title);
+  if(p.ns === 6)  p.text = await fileImageHtml(p.title) + p.text;
+  return p;
+}
+
+async function categoryMembersHtml(cat){
+  const d = await api({action:"query", list:"categorymembers", cmtitle:cat, cmlimit:"500", cmprop:"title|sortkeyprefix|type"});
+  const all = d.query.categorymembers, more = !!d.continue;
+  const catName = cat.slice(cat.indexOf(":")+1);
+  const strip = t => t.slice(t.indexOf(":")+1);
+  const block = items => {
+    const groups = [];
+    for(const m of items){
+      const sh = m.type === "subcat" ? strip(m.title) : m.title;
+      const key = ((m.sortkeyprefix || "").trim() || sh).charAt(0).toUpperCase() || "*";
+      if(!groups.length || groups[groups.length-1].key !== key) groups.push({key, items:[]});
+      groups[groups.length-1].items.push(`<li><a href="/wiki/${encodeURIComponent(m.title.replace(/ /g,"_"))}" title="${esc(m.title)}">${esc(sh)}</a></li>`);
+    }
+    return `<div dir="ltr" class="mw-content-ltr"><div class="mw-category${items.length > 6 ? " mw-category-columns" : ""}">` +
+      groups.map(g=>`<div class="mw-category-group"><h3>${esc(g.key)}</h3>\n<ul>${g.items.join("")}</ul></div>`).join("") + `</div></div>`;
+  };
+  const subs = all.filter(m=>m.type==="subcat"), pages = all.filter(m=>m.type==="page"), files = all.filter(m=>m.type==="file");
+  const mn = more ? T("more500") : "";
+  let h = "";
+  if(subs.length) h += `<div id="mw-subcategories"><h2>${esc(T("catSub"))}</h2><p>${esc(T("catSubN", subs.length))}${mn}</p>${block(subs)}</div>`;
+  if(pages.length) h += `<div id="mw-pages"><h2>${esc(T("catPages", catName))}</h2><p>${esc(T("catPagesN", pages.length))}${mn}</p>${block(pages)}</div>`;
+  if(files.length) h += `<div id="mw-category-media"><h2>${esc(T("catMedia", catName))}</h2><p>${esc(T("catMediaN", files.length))}</p>${block(files)}</div>`;
+  return h || `<p>${esc(T("catEmpty"))}</p>`;
+}
+async function fileImageHtml(title){
+  try{
+    const d = await api({action:"query", titles:title, prop:"imageinfo", iiprop:"url|size", iiurlwidth:"800"});
+    const ii = d.query.pages[0].imageinfo && d.query.pages[0].imageinfo[0];
+    if(!ii) return "";
+    return `<div class="fullImageLink" id="file"><a href="${esc(ii.url)}" class="external"><img src="${esc(ii.thumburl || ii.url)}" style="max-width:100%;height:auto" alt="${esc(title)}"></a>` +
+      `<div class="mw-filepage-resolutioninfo">(${ii.width} × ${ii.height} px)</div></div>`;
+  }catch(e){ return ""; }
+}
+
+/* 本物のPC版（Vector 2022）と同じ骨組み */
+function skinCss(lang){
+  const host = wikiHost(lang), l = lang === "zh" ? zhVariant() : lang;
+  return [
+    `https://${host}/w/load.php?lang=${l}&modules=` + encodeURIComponent([
+      "ext.cite.styles","ext.wikimediaBadges","jquery.makeCollapsible.styles","mediawiki.page.gallery.styles",
+      "skins.vector.icons","skins.vector.styles","wikibase.client.init","ext.uls.interlanguage"].join("|")) + "&only=styles&skin=vector-2022",
+    `https://${host}/w/load.php?lang=${l}&modules=site.styles&only=styles&skin=vector-2022`
+  ];
+}
+function buildDoc(p, extraCss = ""){
+  const lang = curLang(), W = WIKIS[lang], v = zhVariant();
+  const siteSub = typeof W.siteSub === "function" ? W.siteSub(v) : W.siteSub;
+  const redirectFrom = (p.redirects && p.redirects.length)
+    ? `<span class="mw-redirectedfrom">${esc(W.redirect(p.redirects[0].from, v))}</span>` : "";
+  const pageClass = "page-" + p.title.replace(/[^\w\u0080-￿]/g,"_");
+  const htmlLang = lang === "zh" ? v : lang;
+  return `<!DOCTYPE html>
+<html class="client-nojs skin-theme-clientpref-day vector-feature-limited-width-clientpref-1 vector-feature-page-tools-pinned-disabled vector-feature-main-menu-pinned-disabled vector-toc-not-available" lang="${htmlLang}" dir="ltr">
+<head>
+<meta charset="UTF-8">
+<base href="https://${wikiHost(lang)}/" target="_top">
+${skinCss(lang).map(u=>`<link rel="stylesheet" href="${u}">`).join("\n")}
+<style>
+  .mw-page-container{padding:0 28px;max-width:1080px;margin:0 auto}
+  .mw-page-container-inner{display:block}
+  .mw-body{padding-top:12px}
+  a.golf-blocked{cursor:not-allowed}
+  html,body{background:#fff !important;color:#202122 !important;color-scheme:light}
+  .mw-body a:not(.new):not(.external){color:#0645ad}
+  .mw-body a:not(.new):not(.external):visited{color:#0b0080}
+  .mw-body a.external{color:#3366cc}
+  .mw-body a.new{color:#d73333}
+  mark.golf-hit{background:#fce883;color:inherit;border-radius:2px}
+  mark.golf-hit.golf-cur{background:#ff9632}
+  /* スマホ幅：見た目はPC版のまま、はみ出しだけ防ぐ */
+  @media (max-width:640px){
+    .mw-page-container{padding:0 12px}
+    .vector-body{font-size:15px}
+    .mw-body h1.firstHeading{font-size:1.6em}
+    .infobox, table.infobox, .sidebar, table.sidebar{float:none !important;margin:10px 0 !important;width:100% !important;max-width:100% !important}
+    table{display:block;max-width:100%;overflow-x:auto}
+    figure[typeof~="mw:File/Thumb"], figure[typeof~="mw:File/Frame"], .thumb, .tright, .tleft{float:none !important;margin:10px auto !important;max-width:100% !important}
+    img{max-width:100%;height:auto}
+    .mw-category-columns{column-count:1 !important;columns:1 !important}
+  }
+  ${extraCss}
+</style>
+</head>
+<body class="skin--responsive skin-vector skin-vector-2022 mediawiki ltr sitedir-ltr mw-hide-empty-elt ns-${p.ns} ${p.ns % 2 ? "ns-talk" : "ns-subject"} ${esc(pageClass)} action-view">
+<div class="mw-page-container"><div class="mw-page-container-inner"><div class="mw-content-container">
+<main id="content" class="mw-body" role="main">
+  <header class="mw-body-header vector-page-titlebar">
+    <h1 id="firstHeading" class="firstHeading mw-first-heading">${p.displaytitle || esc(p.title)}</h1>
+  </header>
+  <div class="vector-page-toolbar"></div>
+  <div id="bodyContent" class="vector-body">
+    <div id="siteSub" class="noprint">${esc(siteSub)}</div>
+    <div id="contentSub"><div id="mw-content-subtitle">${redirectFrom}</div></div>
+    <div id="mw-content-text" class="mw-body-content">${p.text}</div>
+    ${p.categorieshtml || ""}
+  </div>
+</main>
+</div></div></div>
+</body>
+</html>`;
+}
+
+/* /wiki/題名 、中文の /zh-tw/題名 などから題名を取り出す */
+function linkTitle(href){
+  const m = href.match(/^\/(?:wiki|zh(?:-[a-z]+)?)\/([^?#]+)/i);
+  if(!m) return null;
+  let t = m[1];
+  try{ t = decodeURIComponent(t); }catch(e){}
+  return norm(t);
+}
+
+function fillFrame(frame, parsed, onClick, extraCss){
+  return new Promise(resolve=>{
+    frame.onload = ()=>{
+      const doc = frame.contentDocument;
+      if(!doc || !doc.body) return;
+      doc.addEventListener("click", onClick);
+      resolve(doc);
+    };
+    frame.srcdoc = buildDoc(parsed, extraCss);
+  });
+}
+function scrollToAnchor(doc, href){
+  let id = href.slice(1);
+  try{ id = decodeURIComponent(id); }catch(_){}
+  const el = doc.getElementById(id);
+  if(el) el.scrollIntoView({behavior:"smooth", block:"center"});
+}
+function linkAllowed(a, t, rules){
+  if(a.classList.contains("new")) return T("rRed");
+  if(!t) return T("rExt");
+  const ns = nsOf(t);
+  if(ns < 0) return T("rSpecial");
+  if(ns === 14 && rules && !rules.allowCategory) return T("rCat");
+  return "";
+}
+
+const narrow = matchMedia("(max-width:720px)");
+async function render(parsed){
+  const doc = await fillFrame($("frame"), parsed, onFrameClick);
+  doc.querySelectorAll("a[href]").forEach(a=>{
+    const href = a.getAttribute("href");
+    if(href.startsWith("#")) return;
+    if(linkAllowed(a, linkTitle(href), state.rules)) a.classList.add("golf-blocked");
+  });
+  // スマホ：下にスクロールしたらお題の帯を引っこめる
+  let lastY = 0;
+  const fw = $("frame").contentWindow;
+  if(fw) fw.addEventListener("scroll", ()=>{
+    if(!narrow.matches || !state.playing) return;
+    const y = $("frame").contentWindow.scrollY;
+    if(y > lastY + 12 && y > 80) document.body.classList.add("collapsed");
+    else if(y < lastY - 12 || y < 40) document.body.classList.remove("collapsed");
+    lastY = y;
+  }, {passive:true});
+  document.body.classList.remove("collapsed");
+  $("placeholder").hidden = true;
+  hits = []; cur = -1;
+  if($("sInput").value.trim()) doSearch(false); else $("sCount").textContent = "";
+}
+
+function onFrameClick(e){
+  const a = e.target.closest("a[href]");
+  if(!a) return;
+  e.preventDefault();
+  const href = a.getAttribute("href");
+  if(href.startsWith("#")) return scrollToAnchor(e.target.ownerDocument, href);
+  if(!state.playing){
+    window.open(href.startsWith("/") ? `https://${wikiHost()}` + href : a.href, "_blank", "noopener");
+    return;
+  }
+  const t = linkTitle(href);
+  const why = linkAllowed(a, t, state.rules);
+  if(why) return toast(why);
+  go(t);
+}
+
+async function go(title, {count = true, back = false} = {}){
+  if(state.busy) return;
+  state.busy = true;
+  $("frame").classList.add("busy");
+  try{
+    const parsed = await loadArticle(title);
+    if(!state.playing) return;               // 読み込み中に時間切れ
+    await render(parsed);
+    if(count){ state.strokes++; $("strokeNum").textContent = state.strokes; }
+    if(!back) state.stack.push(parsed.title);
+    state.route.push({title:parsed.title, shown:parsed.shownTitle, back});
+    drawRoute();
+    $("backBtn").disabled = state.stack.length < 2;
+    if(state.route.length > 1 && norm(parsed.title) === norm(state.goal.title)) finish(true);
+  }catch(e){
+    toast(T("loadFail") + e.message);
+  }finally{
+    state.busy = false;
+    $("frame").classList.remove("busy");
+  }
+}
+
+function drawRoute(){
+  const r = $("route");
+  r.innerHTML = "";
+  state.route.forEach((s,i)=>{
+    if(i){ const sep = document.createElement("span"); sep.className = "sep"; sep.textContent = s.back ? "↩" : "→"; r.appendChild(sep); }
+    const sp = document.createElement("span");
+    sp.className = "step" + (s.back ? " back" : "");
+    sp.textContent = s.shown;
+    r.appendChild(sp);
+  });
+  r.scrollLeft = r.scrollWidth;
+}
+
+/* ════════ タイマー ════════ */
+function startTimer(){ state.t0 = Date.now(); state.elapsed = 0; state.timer = setInterval(tick, 250); tick(); }
+function stopTimer(){
+  if(state.timer){ clearInterval(state.timer); state.timer = null; }
+  if(state.t0) state.elapsed = (Date.now() - state.t0) / 1000;
+}
+function tick(){
+  const sec = (Date.now() - state.t0) / 1000;
+  const lim = state.rules && state.rules.timeLimit;
+  if(lim){
+    const left = Math.max(0, lim - sec);
+    $("clockNum").textContent = fmtTime(Math.ceil(left));
+    $("clockNum").classList.toggle("warn", left <= 30);
+    if(left <= 0 && state.playing) finish(false);
+  }else $("clockNum").textContent = fmtTime(sec);
+}
+
+/* ════════ ボタン ════════ */
+$("teeoff").addEventListener("click", async ()=>{
+  if(!state.start || !state.goal) return;
+  state.rules = {...eff()};
+  setPlaying(true);
+  hidePop();
+  $("teeoff").hidden = true;
+  $("backBtn").hidden = !state.rules.allowBack; $("backBtn").disabled = true;
+  $("findbar").hidden = !state.rules.allowSearch;
+  $("findToggle").hidden = !state.rules.allowSearch;
+  document.querySelectorAll(".card .reroll").forEach(b => b.disabled = true);
+  $("clockLbl").textContent = state.rules.timeLimit ? T("left") : T("time");
+  await ensureNs();
+  await go(state.start.title, {count:false});
+  startTimer();
+});
+$("backBtn").addEventListener("click", ()=>{
+  if(state.stack.length < 2 || state.busy || !state.playing) return;
+  state.stack.pop();
+  go(state.stack[state.stack.length-1], {count:false, back:true});
+});
+$("newBtn").addEventListener("click", ()=>{
+  if(state.playing && state.strokes > 0 && !confirm(state.challenge ? T("confirmExit") : T("confirmNew"))) return;
+  newOdai();
+});
+document.querySelectorAll(".card .reroll").forEach(b=> b.addEventListener("click", ()=> draw(b.closest(".card").id)));
+
+/* スマホ用メニュー */
+$("menuBtn").addEventListener("click", e=>{
+  e.stopPropagation();
+  const pop = $("menuPop");
+  if(!pop.hidden){ pop.hidden = true; return; }
+  pop.querySelectorAll("button").forEach(b=>{
+    const src = $(b.dataset.for);
+    b.hidden = src.hidden; b.disabled = src.disabled;
+    if(b.dataset.for === "newBtn") b.textContent = src.textContent;
+  });
+  pop.hidden = false;
+  const r = $("menuBtn").getBoundingClientRect();
+  pop.style.top = (r.bottom + 6) + "px";
+  pop.style.left = Math.max(8, Math.min(r.right - pop.offsetWidth, innerWidth - pop.offsetWidth - 8)) + "px";
+});
+$("menuPop").addEventListener("click", e=>{
+  const b = e.target.closest("button");
+  if(!b) return;
+  $("menuPop").hidden = true;
+  $(b.dataset.for).click();
+});
+document.addEventListener("click", e=>{ if(!e.target.closest("#menuPop,#menuBtn")) $("menuPop").hidden = true; });
+$("findToggle").addEventListener("click", ()=>{
+  const fb = $("findbar");
+  fb.classList.toggle("open");
+  if(fb.classList.contains("open")) $("sInput").focus();
+});
+
+/* ════════ プレビュー・全文 ════════ */
+const canHover = matchMedia("(hover: hover)").matches;
+let popTimer;
+function showPop(role){
+  const p = state[role];
+  if(!p) return;
+  const view = role === "goal" ? eff().goalView : "full";
+  if(view === "title") return;
+  let text = (p.extract || "").trim();
+  if(text.length > 420) text = text.slice(0, 420) + "…";
+  const pop = $("pop");
+  pop.innerHTML = (p.thumbnail ? `<img src="${esc(p.thumbnail.source)}" alt="">` : "") +
+    `<div class="ptext">${esc(text) || esc(T("noSummary"))}</div>` +
+    (view === "full" ? `<div class="pfoot">${esc(T("clickFull"))}</div>` : "");
+  const r = $(role).getBoundingClientRect();
+  pop.hidden = false;
+  pop.style.left = Math.max(12, Math.min(r.left, innerWidth - pop.offsetWidth - 12)) + "px";
+  pop.style.top = (r.bottom + 6) + "px";
+}
+function hidePop(){ clearTimeout(popTimer); $("pop").hidden = true; }
+
+["start","goal"].forEach(role=>{
+  const card = $(role), title = card.querySelector(".title"), img = card.querySelector("img");
+  [title, img].forEach(el=>{
+    if(canHover){
+      el.addEventListener("mouseenter", ()=>{ clearTimeout(popTimer); popTimer = setTimeout(()=>showPop(role), 250); });
+      el.addEventListener("mouseleave", hidePop);
+    }
+    el.addEventListener("click", ()=>{
+      const view = role === "goal" ? eff().goalView : "full";
+      if(view === "full") return openReader(role);
+      if(view === "summary" && !canHover){ $("pop").hidden ? showPop(role) : hidePop(); }
+    });
+  });
+  card.querySelector(".readFull").addEventListener("click", ()=>openReader(role));
+});
+document.addEventListener("click", e=>{ if(!canHover && !e.target.closest(".card")) hidePop(); });
+
+async function openReader(role){
+  const p = state[role];
+  if(!p) return;
+  hidePop();
+  $("reader").classList.add("show");
+  $("readerNote").textContent = T("loading");
+  try{
+    const key = curLang() + ":" + zhVariant() + ":" + p.title;
+    let parsed = state.parsedCache.get(key);
+    if(!parsed){ parsed = await loadArticle(p.title); state.parsedCache.set(key, parsed); }
+    await fillFrame($("readerFrame"), parsed, e=>{
+      const a = e.target.closest("a[href]");
+      if(!a) return;
+      e.preventDefault();
+      const href = a.getAttribute("href");
+      if(href.startsWith("#")) scrollToAnchor(e.target.ownerDocument, href);
+    }, ".mw-body a{cursor:default}");
+    $("readerNote").textContent = T("fullOf", role === "goal");
+  }catch(e){
+    $("readerNote").textContent = T("loadFail") + e.message;
+  }
+}
+$("readerClose").addEventListener("click", ()=> $("reader").classList.remove("show"));
+$("reader").addEventListener("click", e=>{ if(e.target.id === "reader") $("reader").classList.remove("show"); });
+
+/* ════════ ページ内検索 ════════ */
+let hits = [], cur = -1, searchTimer;
+function doSearch(jump){
+  const doc = $("frame").contentDocument;
+  if(!doc || !doc.body) return;
+  doc.querySelectorAll("mark.golf-hit").forEach(m => m.replaceWith(m.textContent));
+  doc.body.normalize();
+  hits = []; cur = -1;
+  const q = $("sInput").value.trim().toLowerCase();
+  if(!q){ $("sCount").textContent = ""; return; }
+  const root = doc.getElementById("bodyContent") || doc.body;
+  const linkOnly = $("linkOnly").checked;
+  const tw = doc.createTreeWalker(root, NodeFilter.SHOW_TEXT, {acceptNode(n){
+    const p = n.parentElement;
+    if(!p || p.closest("style,script")) return NodeFilter.FILTER_REJECT;
+    if(linkOnly && !p.closest("a[href]")) return NodeFilter.FILTER_REJECT;
+    return n.nodeValue.toLowerCase().includes(q) ? NodeFilter.FILTER_ACCEPT : NodeFilter.FILTER_REJECT;
+  }});
+  const nodes = [];
+  while(tw.nextNode()) nodes.push(tw.currentNode);
+  for(const node of nodes){
+    let idx = node.nodeValue.toLowerCase().lastIndexOf(q);
+    while(idx >= 0){
+      const hit = node.splitText(idx);
+      hit.splitText(q.length);
+      const m = doc.createElement("mark");
+      m.className = "golf-hit";
+      hit.replaceWith(m); m.appendChild(hit);
+      idx = idx > 0 ? node.nodeValue.toLowerCase().lastIndexOf(q) : -1;
+    }
+  }
+  hits = [...root.querySelectorAll("mark.golf-hit")];
+  $("sCount").textContent = T("hits", hits.length);
+  if(jump && hits.length) step(1);
+}
+function step(d){
+  if(!hits.length) return doSearch(true);
+  if(cur >= 0) hits[cur].classList.remove("golf-cur");
+  cur = (cur + d + hits.length) % hits.length;
+  hits[cur].classList.add("golf-cur");
+  hits[cur].scrollIntoView({block:"center"});
+  $("sCount").textContent = `${cur+1} / ${hits.length}`;
+}
+$("sInput").addEventListener("input", ()=>{ clearTimeout(searchTimer); searchTimer = setTimeout(()=>doSearch(false), 200); });
+$("sInput").addEventListener("keydown", e=>{ if(e.key === "Enter"){ e.preventDefault(); step(e.shiftKey ? -1 : 1); } });
+$("sNext").addEventListener("click", ()=>step(1));
+$("sPrev").addEventListener("click", ()=>step(-1));
+$("linkOnly").addEventListener("change", ()=>doSearch(false));
+
+/* ════════ 設定画面 ════════ */
+function schema(){
+  const rows = [
+    {head:T("hLang")},
+    {key:"lang", label:T("lang"), note:T("langNote"), chOnly:true, opts:LANG_ORDER.map(l=>[l, WIKIS[l].name])}
+  ];
+  if(eff().lang === "zh") rows.push({key:"zhVariant", label:T("zhVar"), play:true,
+    opts:[["auto",T("auto")],["zh-tw","繁體"],["zh-cn","简体"]]});
+  rows.push(
+    {head:T("hRules")},
+    {key:"difficulty", label:T("diff"), note:T("diffNote"), rule:true, opts:[["easy",T("easy")],["normal",T("normal")],["any",T("any")]]},
+    {key:"allowCategory", label:T("cat"), rule:true, opts:[[true,T("yes")],[false,T("no")]]},
+    {key:"allowBack", label:T("backRule"), rule:true, opts:[[true,T("yes")],[false,T("no")]]},
+    {key:"allowSearch", label:T("searchRule"), note:T("searchNote"), rule:true, opts:[[true,T("yes")],[false,T("no")]]},
+    {key:"timeLimit", label:T("limit"), rule:true, opts:[[0,T("none")],[180,T("min",3)],[300,T("min",5)],[600,T("min",10)]]},
+    {head:T("hView")},
+    {key:"goalView", label:T("view"), note:T("viewNote"), rule:true, opts:[["full",T("full")],["summary",T("summary")],["title",T("titleOnly")]]},
+    {head:T("hImg")},
+    {key:"shape", label:T("shape"), opts:[["wide",T("wide")],["square",T("square")]]}
+  );
+  return rows;
+}
+function buildSettings(){
+  const box = $("settingRows");
+  box.innerHTML = "";
+  for(const row of schema()){
+    if(row.head){ const h = document.createElement("div"); h.className = "shead"; h.textContent = row.head; box.appendChild(h); continue; }
+    const locked = (row.rule && (state.playing || state.challenge)) || (row.play && state.playing) || (row.chOnly && state.challenge);
+    const div = document.createElement("div");
+    div.className = "srow" + (locked ? " locked" : "");
+    div.innerHTML = `<div class="slabel">${esc(row.label)}</div>` + (row.note ? `<div class="snote">${esc(row.note)}</div>` : "");
+    const seg = document.createElement("div"); seg.className = "seg";
+    for(const [val, lab] of row.opts){
+      const b = document.createElement("button");
+      b.textContent = lab;
+      if((row.rule || row.chOnly ? eff() : settings)[row.key] === val) b.classList.add("on");
+      b.addEventListener("click", ()=> changeSetting(row.key, val));
+      seg.appendChild(b);
+    }
+    div.appendChild(seg);
+    box.appendChild(div);
+  }
+  $("lockNote").hidden = !(state.playing || state.challenge);
+  $("lockNote").textContent = state.challenge ? T("lockCh") : T("lockPlay");
+  $("quitHole").hidden = !(state.playing || state.challenge);
+  $("quitHole").textContent = state.challenge ? T("quitCh") : T("quitHole");
+}
+function changeSetting(key, val){
+  const old = settings[key];
+  if(key === "lang" && old !== val && state.playing && state.strokes > 0 && !confirm(T("confirmNew"))) return;
+  settings[key] = val; saveSettings();
+  if(key === "lang" && old !== val){ newOdai(); buildSettings(); return; }
+  if(key === "zhVariant" && old !== val){ redrawSame().then(buildSettings); buildSettings(); return; }
+  buildSettings();
+  if(key === "goalView"){ fillCard("goal"); hidePop(); }
+  if(key === "timeLimit" && !state.playing) resetClockLabel();
+  if(key === "difficulty" && old !== val) toast(T("nextOdai"));
+}
+$("quitHole").addEventListener("click", ()=>{
+  if(state.playing && state.strokes > 0 && !confirm(state.challenge ? T("confirmExit") : T("confirmNew"))) return;
+  $("settings").classList.remove("show");
+  newOdai();
+});
+$("gearBtn").addEventListener("click", ()=>{ buildSettings(); $("settings").classList.add("show"); });
+$("settingsClose").addEventListener("click", ()=> $("settings").classList.remove("show"));
+$("settings").addEventListener("click", e=>{ if(e.target.id === "settings") $("settings").classList.remove("show"); });
+
+function rulesText(r){
+  const parts = [T("rDiff") + T(r.difficulty)];
+  parts.push(r.timeLimit ? T("rLimit", r.timeLimit/60) : T("rNoLimit"));
+  parts.push(T("rView") + T({full:"vFull", summary:"vSum", title:"vTitle"}[r.goalView]));
+  if(!r.allowCategory) parts.push(T("rNoCat"));
+  if(!r.allowBack) parts.push(T("rNoBack"));
+  if(!r.allowSearch) parts.push(T("rNoSearch"));
+  if(r.lang !== settings.lang || state.challenge) parts.unshift(T("rLang") + WIKIS[r.lang].name);
+  return parts.join(T("sep"));
+}
+
+/* ════════ カップイン／タイムアップ ════════ */
+function finish(success){
+  setPlaying(false);
+  stopTimer();
+  $("backBtn").disabled = true;
+  const r = state.result = {
+    success, startId:state.start.title, goalId:state.goal.title,
+    start:shown(state.start), goal:shown(state.goal), strokes:state.strokes,
+    route:state.route.map(s=>({title:s.shown, back:s.back})), elapsed:state.elapsed, rules:state.rules, date:new Date()
+  };
+  r.vs = judge(r, state.challenge);
+  $("winHead").textContent = success ? (r.strokes === 1 ? T("hio") : T("cupIn")) : T("timeUp");
+  $("winStart").textContent = r.start;
+  $("winGoal").textContent = r.goal;
+  $("winN").textContent = r.strokes;
+  $("winU").textContent = success ? T("unitOk", r.strokes) : T("unitNg");
+  $("winSub").textContent = T("timeLbl") + fmtTime(r.elapsed);
+  const path = $("winPath"); path.innerHTML = "";
+  r.route.forEach((s,i)=>{
+    if(i){ const sp = document.createElement("span"); sp.className = "sep"; sp.textContent = s.back ? " ↩ " : " → "; path.appendChild(sp); }
+    const t = document.createElement("span"); if(s.back) t.className = "back"; t.textContent = s.title; path.appendChild(t);
+  });
+  $("winRules").textContent = rulesText(r.rules);
+  const vs = $("winVs");
+  vs.hidden = !r.vs;
+  if(r.vs){
+    vs.innerHTML = "";
+    const chPart = T("sk", r.vs.strokes) + (r.vs.time != null ? T("paren", fmtTime(r.vs.time)) : "");
+    const myPart = r.success ? T("sk", r.strokes) + T("paren", fmtTime(r.elapsed)) : T("noGoal");
+    vs.append(`⚔️ ${r.vs.name} ${chPart} vs ${T("you")} ${myPart} → `);
+    const b = document.createElement("span"); b.className = r.vs.res; b.textContent = T(r.vs.res); vs.appendChild(b);
+  }
+  $("nameRow").hidden = $("sendChallenge").hidden = !success;
+  $("myName").value = myName;
+  $("win").classList.add("show");
+}
+$("winClose").addEventListener("click", ()=> $("win").classList.remove("show"));
+$("winNew").addEventListener("click", ()=>{ $("win").classList.remove("show"); newOdai(); });
+
+/* ════════ 挑戦状・お題共有 ════════ */
+const D_CODE = {easy:"e", normal:"n", any:"a"}, V_CODE = {full:"f", summary:"s", title:"t"};
+const inv = o => Object.fromEntries(Object.entries(o).map(([k,v])=>[v,k]));
+function encodeRules(r){
+  return [D_CODE[r.difficulty] || "n", r.allowCategory ? 1 : 0, r.allowBack ? 1 : 0, r.allowSearch ? 1 : 0,
+          r.timeLimit || 0, V_CODE[r.goalView] || "f"].join(".");
+}
+function decodeRules(str, lang){
+  const a = String(str || "").split(".");
+  const t = parseInt(a[4], 10);
+  return {
+    lang: WIKIS[lang] ? lang : "ja",
+    difficulty: inv(D_CODE)[a[0]] || "normal",
+    allowCategory: a[1] !== "0", allowBack: a[2] !== "0", allowSearch: a[3] !== "0",
+    timeLimit: [0,180,300,600].includes(t) ? t : 0,
+    goalView: inv(V_CODE)[a[5]] || "full"
+  };
+}
+let myName = "";
+try{ myName = localStorage.getItem("wikiGolfName") || ""; }catch(e){}
+function saveName(n){ myName = n.trim().slice(0,20); try{ localStorage.setItem("wikiGolfName", myName); }catch(e){} }
+
+const isFile = () => location.protocol === "file:";
+function baseUrl(){ return isFile() ? location.href.split(/[?#]/)[0] : location.origin + location.pathname; }
+function challengeUrl({start, goal, rules, name, strokes, time}){
+  const q = new URLSearchParams({l:rules.lang, s:start, g:goal, r:encodeRules(rules)});
+  if(strokes != null){ q.set("k", strokes); if(time != null) q.set("t", time); if(name) q.set("n", name); }
+  return baseUrl() + "?" + q.toString();
+}
+function parseChallenge(){
+  const q = new URLSearchParams(location.search);
+  const s = q.get("s"), g = q.get("g");
+  if(!s || !g) return null;
+  const k = parseInt(q.get("k"), 10), t = parseInt(q.get("t"), 10);
+  // ?l= が無い古いリンク（v0.6）は日本語版
+  return {start:s, goal:g, rules:decodeRules(q.get("r"), q.get("l") || "ja"),
+          name:(q.get("n") || "").trim().slice(0,20),
+          strokes: Number.isFinite(k) ? k : null, time: Number.isFinite(t) ? t : null};
+}
+function chName(ch){ return ch.name || T("someone"); }
+function renderChallengeBar(){
+  const ch = state.challenge, bar = $("chBar");
+  bar.hidden = !ch;
+  $("newBtn").textContent = ch ? "🏠 " + T("exitCh") : T("newOdai");
+  if(!ch) return;
+  const t = $("chText"); t.innerHTML = "";
+  const b = document.createElement("b");
+  b.textContent = ch.strokes != null ? T("chText", chName(ch), T("sk", ch.strokes), ch.time != null ? fmtTime(ch.time) : "") : T("shared");
+  const r = document.createElement("span"); r.className = "chRules"; r.textContent = "　" + T("rulesPre") + rulesText(ch.rules);
+  t.append(b, r);
+}
+function exitChallenge(){
+  if(!state.challenge) return;
+  state.challenge = null;
+  renderChallengeBar();
+  try{ history.replaceState(null, "", baseUrl()); }catch(e){}
+}
+function judge(r, ch){
+  if(!ch || ch.strokes == null) return null;
+  let res;
+  const my = Math.round(r.elapsed);
+  if(!r.success) res = "lose";
+  else if(r.strokes !== ch.strokes) res = r.strokes < ch.strokes ? "win" : "lose";
+  else if(ch.time != null && my !== ch.time) res = my < ch.time ? "win" : "lose";
+  else res = "draw";
+  return {name:chName(ch), strokes:ch.strokes, time:ch.time, res};
+}
+$("chExit").addEventListener("click", ()=>{
+  if(state.playing && state.strokes > 0 && !confirm(T("confirmExit"))) return;
+  newOdai();
+});
+
+/* ── QRコード ── */
+function makeQr(text){
+  const qr = qrcode(0, "M");
+  qr.addData(text);
+  qr.make();
+  return qr;
+}
+function drawQr(ctx, qr, x, y, size){
+  const n = qr.getModuleCount(), quiet = 2, cell = size / (n + quiet*2);
+  ctx.fillStyle = "#fff"; ctx.fillRect(x, y, size, size);
+  ctx.fillStyle = "#000";
+  for(let r = 0; r < n; r++) for(let c = 0; c < n; c++){
+    if(qr.isDark(r, c)) ctx.fillRect(x + (c+quiet)*cell, y + (r+quiet)*cell, Math.ceil(cell), Math.ceil(cell));
+  }
+}
+let qrLink = null;
+function openQr(kind, url, text, sub){
+  qrLink = {url, text};
+  $("qrTitle").textContent = kind === "ch" ? T("qrCh") : T("qrOdai");
+  $("qrSub").textContent = sub;
+  $("qrUrl").textContent = url;
+  $("qrWarn").hidden = !isFile();
+  const box = $("qrBox"); box.innerHTML = "";
+  try{
+    const qr = makeQr(url);
+    const n = qr.getModuleCount(), px = 6, size = (n + 4) * px;
+    const cv = document.createElement("canvas"); cv.width = cv.height = size;
+    drawQr(cv.getContext("2d"), qr, 0, 0, size);
+    box.appendChild(cv);
+  }catch(e){ box.textContent = T("qrFail"); }
+  $("qrSend").hidden = !navigator.share;
+  $("qrModal").classList.add("show");
+}
+$("qrCopy").addEventListener("click", async ()=>{
+  try{ await navigator.clipboard.writeText(qrLink.url); toast(T("copied")); }
+  catch(e){ window.prompt(T("copyPrompt"), qrLink.url); }
+});
+$("qrSend").addEventListener("click", async ()=>{
+  try{ await navigator.share({text:qrLink.text, url:qrLink.url}); }catch(e){}
+});
+$("qrClose").addEventListener("click", ()=> $("qrModal").classList.remove("show"));
+$("qrModal").addEventListener("click", e=>{ if(e.target.id === "qrModal") $("qrModal").classList.remove("show"); });
+
+$("shareOdai").addEventListener("click", ()=>{
+  if(!state.start || !state.goal) return;
+  const rules = state.playing ? state.rules : {...eff()};
+  const url = challengeUrl({start:state.start.title, goal:state.goal.title, rules});
+  const s = shown(state.start), g = shown(state.goal);
+  openQr("odai", url, T("txtOdai", s, g), `${T("q", s)} ${T("arrowTxt")} ${T("q", g)}`);
+});
+$("sendChallenge").addEventListener("click", ()=>{
+  const r = state.result;
+  if(!r || !r.success) return;
+  saveName($("myName").value);
+  const url = challengeUrl({start:r.startId, goal:r.goalId, rules:r.rules, name:myName, strokes:r.strokes, time:Math.round(r.elapsed)});
+  openQr("ch", url, T("txtCh", r.start, r.goal, myName || T("me"), T("sk", r.strokes)),
+         `${T("q", r.start)} ${T("arrowTxt")} ${T("q", r.goal)} ・ ${T("sk", r.strokes)}`);
+});
+$("myName").addEventListener("change", e => saveName(e.target.value));
+
+/* ════════ シェア画像 ════════ */
+function fontStack(){
+  const k = uiKey();
+  const ja = `"Hiragino Sans","Hiragino Kaku Gothic ProN","Noto Sans JP","Yu Gothic",Meiryo`;
+  const ko = `"Apple SD Gothic Neo","Malgun Gothic","Noto Sans KR"`;
+  const tc = `"PingFang TC","Microsoft JhengHei","Noto Sans TC"`;
+  const sc = `"PingFang SC","Microsoft YaHei","Noto Sans SC"`;
+  const order = k === "ko" ? [ko, ja, tc, sc] : k === "zh-hant" ? [tc, sc, ja, ko] : k === "zh-hans" ? [sc, tc, ja, ko] : [ja, ko, tc, sc];
+  return `"Helvetica Neue",Arial,${order.join(",")},sans-serif`;
+}
+const FONT = (w, s) => `${w} ${s}px ${fontStack()}`;
+const C = {bg:"#eef5ec", card:"#ffffff", ink:"#1f2a1f", sub:"#5b6b5b", green:"#2f7d3a", green2:"#e3f1e1",
+           flag:"#d6453d", flag2:"#fbe7e5", line:"#d5e2d2"};
+function rr(ctx, x, y, w, h, r){
+  ctx.beginPath();
+  ctx.moveTo(x+r, y); ctx.arcTo(x+w, y, x+w, y+h, r); ctx.arcTo(x+w, y+h, x, y+h, r);
+  ctx.arcTo(x, y+h, x, y, r); ctx.arcTo(x, y, x+w, y, r); ctx.closePath();
+}
+/* 文字ごとに折り返し（英語などは単語の途中で折らない） */
+function wrapText(ctx, text, maxW){
+  const units = text.match(/[A-Za-zÀ-ÿ0-9'’\-]+\s*|\s+|./gu) || [];
+  const lines = []; let line = "";
+  for(const u of units){
+    if(ctx.measureText(line + u).width > maxW && line.trim()){
+      lines.push(line.trimEnd()); line = u.trimStart();
+      while(ctx.measureText(line).width > maxW && line.length > 1){
+        let i = line.length - 1;
+        while(i > 1 && ctx.measureText(line.slice(0,i)).width > maxW) i--;
+        lines.push(line.slice(0,i)); line = line.slice(i);
+      }
+    }else line += u;
+  }
+  if(line.trim()) lines.push(line.trimEnd());
+  return lines;
+}
+function wrapTokens(ctx, tokens, maxW){
+  const lines = [[]]; let x = 0;
+  const push = (t, c) => { lines[lines.length-1].push({t, c}); x += ctx.measureText(t).width; };
+  const nl = () => { lines.push([]); x = 0; };
+  for(const tok of tokens){
+    const w = ctx.measureText(tok.t).width;
+    if(x + w <= maxW){ push(tok.t, tok.c); continue; }
+    if(tok.sep){ nl(); push(tok.t.trimStart(), tok.c); continue; }
+    if(w <= maxW){ nl(); push(tok.t, tok.c); continue; }
+    let buf = "";
+    for(const ch of tok.t){
+      if(x + ctx.measureText(buf + ch).width > maxW && (buf || x)){ if(buf) push(buf, tok.c); buf = ""; nl(); }
+      buf += ch;
+    }
+    if(buf) push(buf, tok.c);
+  }
+  return lines.filter(l => l.length);
+}
+function routeTokens(steps){
+  const toks = [];
+  steps.forEach((s,i)=>{
+    if(i) toks.push({t: s.back ? " ↩ " : " → ", c:C.sub, sep:true});
+    toks.push({t:s.title, c: (s.gap || s.back) ? C.sub : C.ink});
+  });
+  return toks;
+}
+function shareQrUrl(){
+  const r = state.result;
+  if(isFile()) return null;
+  return challengeUrl({start:r.startId, goal:r.goalId, rules:r.rules, name:myName,
+    strokes:r.success ? r.strokes : null, time:r.success ? Math.round(r.elapsed) : null});
+}
+
+function drawShare(measureOnly, W, H, routeFont, steps, oy = 0, qr = null){
+  const r = state.result;
+  const cv = document.createElement("canvas");
+  const S = 2;
+  cv.width = W * S; cv.height = (H || 10) * S;
+  const ctx = cv.getContext("2d");
+  ctx.scale(S, S);
+  ctx.textBaseline = "alphabetic";
+  const M = 28, PX = 64, cw = W - PX*2;
+  let y = M + 36 + oy;
+  const D = !measureOnly;
+
+  if(D){
+    ctx.fillStyle = C.bg; ctx.fillRect(0, 0, W, H);
+    ctx.fillStyle = C.card; rr(ctx, M, M, W - M*2, H - M*2, 26); ctx.fill();
+    ctx.save(); rr(ctx, M, M, W - M*2, H - M*2, 26); ctx.clip();
+    ctx.fillStyle = C.green; ctx.fillRect(M, M, W - M*2, 10); ctx.restore();
+  }
+  // ヘッダー
+  y += 16;
+  ctx.font = FONT(800, 26);
+  if(D){ ctx.fillStyle = C.ink; ctx.fillText("⛳ " + T("appName") + (r.rules.lang !== "ja" || uiKey() !== "ja" ? `  ·  ${WIKIS[r.rules.lang].name}` : ""), PX, y); }
+  const d = r.date;
+  const dateStr = `${d.getFullYear()}.${String(d.getMonth()+1).padStart(2,"0")}.${String(d.getDate()).padStart(2,"0")}`;
+  ctx.font = FONT(500, 20);
+  if(D){ ctx.fillStyle = C.sub; ctx.textAlign = "right"; ctx.fillText(dateStr, W - PX, y); ctx.textAlign = "left"; }
+  y += 30;
+
+  // スタート・ゴール
+  ctx.font = FONT(800, 21);
+  const pillW = Math.max(150, ctx.measureText(T("start")).width + 40, ctx.measureText(T("goal")).width + 40);
+  const tx = PX + pillW + 20, tw = cw - pillW - 20;
+  for(const [label, title, fg, bgc] of [[T("start"), r.start, C.green, C.green2], [T("goal"), r.goal, C.flag, C.flag2]]){
+    let fs = 46, lines;
+    do{ ctx.font = FONT(800, fs); lines = wrapText(ctx, title, tw); if(lines.length <= 2) break; fs -= 2; }while(fs > 28);
+    if(lines.length > 2){ lines = lines.slice(0,2); lines[1] = lines[1].slice(0, -1) + "…"; }
+    const lh = fs * 1.28, rowH = Math.max(52, lines.length * lh);
+    if(D){
+      const pillY = y + (Math.min(rowH, lh) - 44)/2 + 4;
+      ctx.fillStyle = bgc; rr(ctx, PX, pillY, pillW, 44, 22); ctx.fill();
+      ctx.font = FONT(800, 21); ctx.fillStyle = fg; ctx.textAlign = "center"; ctx.textBaseline = "middle";
+      ctx.fillText(label, PX + pillW/2, pillY + 23); ctx.textAlign = "left"; ctx.textBaseline = "alphabetic";
+      ctx.font = FONT(800, fs); ctx.fillStyle = C.ink;
+      lines.forEach((ln, i) => ctx.fillText(ln, tx, y + lh*(i+1) - fs*0.22));
+    }
+    y += rowH + 14;
+  }
+
+  // 打数
+  y += 6;
+  const sc = String(r.strokes);
+  ctx.font = FONT(900, 104);
+  const nw = ctx.measureText(sc).width;
+  const unit = r.success ? (r.strokes === 1 ? T("imgHio") : T("imgOk", r.strokes)) : T("imgNg");
+  ctx.font = FONT(600, 24);
+  const timeStr = T("timeLbl") + fmtTime(r.elapsed);
+  const timeW = ctx.measureText(timeStr).width;
+  let ufs = 38;
+  ctx.font = FONT(800, ufs);
+  while(ufs > 22 && PX + nw + 12 + ctx.measureText(unit).width > W - PX - timeW - 20){ ufs -= 2; ctx.font = FONT(800, ufs); }
+  if(D){
+    ctx.font = FONT(900, 104); ctx.fillStyle = r.success ? C.green : C.flag; ctx.fillText(sc, PX, y + 92);
+    ctx.font = FONT(800, ufs); ctx.fillStyle = C.ink; ctx.fillText(unit, PX + nw + 12, y + 90);
+    ctx.font = FONT(600, 24); ctx.fillStyle = C.sub; ctx.textAlign = "right";
+    ctx.fillText(timeStr, W - PX, y + 90); ctx.textAlign = "left";
+  }
+  y += 116;
+
+  // 挑戦状の結果
+  if(r.vs){
+    const vsText = T("imgVs", r.vs.name, T("sk", r.vs.strokes), r.vs.time != null ? fmtTime(r.vs.time) : "");
+    ctx.font = FONT(700, 28);
+    if(D){
+      ctx.fillStyle = C.sub; ctx.fillText(vsText, PX, y + 26);
+      const w = ctx.measureText(vsText).width;
+      ctx.font = FONT(900, 32);
+      ctx.fillStyle = r.vs.res === "win" ? C.green : r.vs.res === "lose" ? C.flag : C.ink;
+      ctx.fillText(T(r.vs.res), PX + w, y + 26);
+    }
+    y += 56;
+  }
+
+  if(D){ ctx.strokeStyle = C.line; ctx.lineWidth = 2; ctx.beginPath(); ctx.moveTo(PX, y); ctx.lineTo(W-PX, y); ctx.stroke(); }
+  y += 34;
+  ctx.font = FONT(700, 18);
+  if(D){ ctx.fillStyle = C.sub; ctx.fillText(T("route"), PX, y); }
+  y += 14;
+
+  ctx.font = FONT(600, routeFont);
+  const rl = wrapTokens(ctx, routeTokens(steps), cw);
+  const rlh = routeFont * 1.6;
+  rl.forEach(line=>{
+    y += rlh;
+    if(D){ let x = PX; for(const seg of line){ ctx.fillStyle = seg.c; ctx.fillText(seg.t, x, y - routeFont*0.3); x += ctx.measureText(seg.t).width; } }
+  });
+
+  // 下の段：ルール（左）とQR（右）
+  y += 24;
+  const Q = qr ? 132 : 0;
+  ctx.font = FONT(500, 18);
+  const rlines = wrapText(ctx, rulesText(r.rules), cw - (Q ? Q + 28 : 0));
+  const footTop = y;
+  rlines.forEach((ln, i) => { if(D){ ctx.fillStyle = C.sub; ctx.fillText(ln, PX, footTop + 22 + i*28); } });
+  let footH = rlines.length * 28 + 6;
+  if(qr){
+    if(D){
+      drawQr(ctx, qr, W - PX - Q, footTop - 6, Q);
+      ctx.font = FONT(600, 15); ctx.fillStyle = C.sub; ctx.textAlign = "center";
+      ctx.fillText(T("qrCaption"), W - PX - Q/2, footTop - 6 + Q + 20); ctx.textAlign = "left";
+    }
+    footH = Math.max(footH, Q + 22);
+  }
+  y = footTop + footH + M + 34;
+  return {height:y, canvas:cv};
+}
+
+function makeShareCanvas(){
+  const r = state.result;
+  const wide = settings.shape === "wide";
+  const W = wide ? 1200 : 1080, baseH = wide ? 630 : 1080, maxH = wide ? 1600 : 1080;
+  let qr = null;
+  const qurl = shareQrUrl();
+  if(qurl){ try{ qr = makeQr(qurl); }catch(e){ qr = null; } }
+  let steps = r.route, font = 0;
+  for(const fs of [28, 26, 24, 22, 20, 18]){
+    if(drawShare(true, W, 0, fs, steps, 0, qr).height <= maxH){ font = fs; break; }
+  }
+  if(!font){
+    font = 18;
+    for(let k = Math.floor(r.route.length/2) - 1; k >= 2; k--){
+      const s = [...r.route.slice(0,k), {title:T("omitted", r.route.length - k*2), gap:true}, ...r.route.slice(-k)];
+      steps = s;
+      if(drawShare(true, W, 0, font, s, 0, qr).height <= maxH) break;
+    }
+  }
+  const contentH = drawShare(true, W, 0, font, steps, 0, qr).height;
+  const h = Math.max(baseH, Math.min(maxH, contentH));
+  const oy = contentH < h ? (h - contentH) / 2 : 0;
+  return drawShare(false, W, h, font, steps, oy, qr).canvas;
+}
+function shareBlob(){
+  return new Promise((res, rej) => makeShareCanvas().toBlob(b => b ? res(b) : rej(new Error(T("imgFail"))), "image/png"));
+}
+function shareFileName(){
+  const d = state.result.date, p = n => String(n).padStart(2,"0");
+  return `wiki-golf-${d.getFullYear()}${p(d.getMonth()+1)}${p(d.getDate())}-${p(d.getHours())}${p(d.getMinutes())}.png`;
+}
+function shareText(){
+  const r = state.result;
+  let t = T("txtRes", r.start, r.goal, r.success, T("sk", r.strokes), fmtTime(r.elapsed));
+  if(r.vs) t += "\n" + T("txtVs", r.vs.name, T("sk", r.vs.strokes), T(r.vs.res));
+  t += "\n" + T("tag");
+  const u = shareQrUrl();
+  if(u) t += "\n" + u;
+  return t;
+}
+async function saveImage(){
+  try{
+    const blob = await shareBlob();
+    const a = document.createElement("a");
+    a.href = URL.createObjectURL(blob); a.download = shareFileName();
+    document.body.appendChild(a); a.click(); a.remove();
+    setTimeout(()=>URL.revokeObjectURL(a.href), 4000);
+  }catch(e){ toast(e.message); }
+}
+$("saveImg").addEventListener("click", ()=>{ saveName($("myName").value); saveImage(); });
+$("shareImg").addEventListener("click", async ()=>{
+  saveName($("myName").value);
+  try{
+    const blob = await shareBlob();
+    const file = new File([blob], shareFileName(), {type:"image/png"});
+    if(navigator.canShare && navigator.canShare({files:[file]})){
+      await navigator.share({files:[file], text:shareText()});
+      return;
+    }
+    if(navigator.clipboard && window.ClipboardItem){
+      await navigator.clipboard.write([new ClipboardItem({"image/png": blob})]);
+      toast(T("imgCopied"));
+      return;
+    }
+    toast(T("cantShare"));
+    saveImage();
+  }catch(e){
+    if(e.name !== "AbortError") toast(T("shareFail") + e.message);
+  }
+});
+
+/* ════════ トースト ════════ */
+let toastTimer;
+function toast(msg){
+  const t = $("toast"); t.textContent = msg; t.classList.add("show");
+  clearTimeout(toastTimer); toastTimer = setTimeout(()=>t.classList.remove("show"), 2200);
+}
+
+/* ════════ はじまり ════════ */
+state.challenge = parseChallenge();
+if(state.challenge) loadChallenge(); else newOdai();
+</script>
+</body>
+</html>
