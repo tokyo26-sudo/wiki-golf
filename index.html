@@ -285,6 +285,26 @@
   .helpLink{display:block;margin:-4px auto 6px;border:0;background:transparent;color:var(--green);font-weight:700;font-size:.92rem;text-decoration:underline;text-underline-offset:4px}
   #helpBtnGame{display:block;margin:4px 0 6px}
   #helpModal{z-index:36}
+  #pickModal{z-index:38;align-items:flex-start;padding-top:7vh}
+  #pickModal .panel{background:var(--card);border-radius:14px;padding:16px 18px;width:min(520px,100%);max-height:84vh;display:flex;flex-direction:column}
+  #pickHead{margin:0 0 10px;font-size:1.05rem}
+  #pickInput{font-size:16px;padding:10px 12px;border:2px solid var(--line);border-radius:10px;width:100%;box-sizing:border-box;background:var(--card);color:inherit;outline:none}
+  #pickInput:focus{border-color:var(--green)}
+  #pickList{overflow-y:auto;margin-top:8px;min-height:0}
+  .pickItem{display:flex;gap:10px;align-items:center;padding:7px 8px;border-radius:8px;cursor:pointer}
+  .pickItem:hover,.pickItem.cur{background:var(--green2)}
+  .pickItem img,.pickItem .ph{width:44px;height:44px;object-fit:cover;border-radius:6px;flex:none;background:var(--bg)}
+  .pickItem .pt{min-width:0}
+  .pickItem b{display:block;line-height:1.3}
+  .pickItem small{color:var(--sub);display:block;font-size:.78rem;line-height:1.35;overflow:hidden;text-overflow:ellipsis;white-space:nowrap}
+  .pickItem small.dis{color:var(--flag)}
+  #pickMsg{color:var(--sub);font-size:.85rem;min-height:1.2em;margin-top:6px}
+  #pickModal .close{margin:8px 0 0 auto;display:block}
+  #winBest{margin-top:10px;font-size:.88rem;line-height:1.6}
+  #winBest .award{font-size:1.25rem;font-weight:900;margin-bottom:4px}
+  #winBest .award.best{color:var(--green)}
+  #winBest .award.near{color:#d4890a}
+  #winBest .bestLine .sep, #winBest .bestNote{color:var(--sub)}
   #helpModal .panel{background:var(--card);border-radius:14px;padding:18px 22px;width:min(620px,100%);max-height:90vh;overflow-y:auto}
   #helpBody h3{margin:14px 0 6px;font-size:1.05rem}
   #helpBody h3:first-child{margin-top:0;font-size:1.25rem}
@@ -374,7 +394,7 @@
       <span class="tag" data-t="start"></span><span class="meta"></span>
       <div class="title">…</div>
       <p class="extract"></p>
-      <div class="btns"><button class="reroll" data-t="reroll"></button><button class="readFull" data-t="readFull"></button></div>
+      <div class="btns"><button class="reroll" data-t="reroll"></button><button class="pick" data-t="pick"></button><button class="readFull" data-t="readFull"></button></div>
     </div>
   </div>
   <div class="arrow">➜</div>
@@ -384,7 +404,7 @@
       <span class="tag" data-t="goal"></span><span class="meta"></span>
       <div class="title">…</div>
       <p class="extract"></p>
-      <div class="btns"><button class="reroll" data-t="reroll"></button><button class="readFull" data-t="readFull"></button></div>
+      <div class="btns"><button class="reroll" data-t="reroll"></button><button class="pick" data-t="pick"></button><button class="readFull" data-t="readFull"></button></div>
     </div>
   </div>
 </section>
@@ -395,7 +415,7 @@
   <div class="stat"><div class="num" id="clockNum">0:00</div><div class="lbl" id="clockLbl"></div></div>
   <div class="stat" id="pageStat" hidden><div class="num" id="pageNum">0</div><div class="lbl" data-t="pageLeft"></div></div>
   <div id="route"></div>
-  <span id="ver">v1.6</span>
+  <span id="ver">v1.7</span>
   <div id="barBtns">
     <button id="teeoff" disabled data-t="teeoff"></button>
     <button id="backBtn" hidden data-t="back"></button>
@@ -452,7 +472,7 @@
 
 <div id="settings" class="overlay">
   <div class="panel">
-    <h2><span data-t="settings"></span> <small style="font-size:.65rem;font-weight:400;color:var(--sub)">v1.6</small></h2>
+    <h2><span data-t="settings"></span> <small style="font-size:.65rem;font-weight:400;color:var(--sub)">v1.7</small></h2>
     <p class="lockNote" id="lockNote" hidden></p>
     <button id="quitHole" class="quit" hidden></button>
     <button id="toHome" data-t="toHome"></button>
@@ -480,7 +500,7 @@
 
 <div id="home">
   <div class="homeInner">
-    <div class="homeHead"><h1>⛳ <span data-t="appName"></span></h1><p data-t="homeAbout"></p><small>v1.6</small></div>
+    <div class="homeHead"><h1>⛳ <span data-t="appName"></span></h1><p data-t="homeAbout"></p><small>v1.7</small></div>
 
     <section id="homeMain">
       <div class="homeBtns">
@@ -549,6 +569,16 @@
 
 <div id="toast"></div>
 
+<div id="pickModal" class="overlay">
+  <div class="panel">
+    <h3 id="pickHead"></h3>
+    <input id="pickInput" type="search" autocomplete="off" autocapitalize="off" spellcheck="false" enterkeyhint="search">
+    <div id="pickList"></div>
+    <div id="pickMsg"></div>
+    <button class="close" id="pickClose" data-t="closeBtn"></button>
+  </div>
+</div>
+
 <div id="win" class="overlay">
   <div class="box">
     <div class="whead" id="winHead"></div>
@@ -558,6 +588,7 @@
     <div class="score"><span class="n" id="winN"></span><span class="u" id="winU"></span><span class="sub" id="winSub"></span></div>
     <div class="vs" id="winVs" hidden></div>
     <div class="path" id="winPath"></div>
+    <div id="winBest" hidden></div>
     <div class="rules" id="winRules"></div>
     <div id="mpRes" hidden></div>
     <div id="winStamps" class="stampRow" hidden></div>
@@ -1454,6 +1485,66 @@ Object.assign(STR["zh-hans"], {
   catMediaN:(n,t)=>`本分类包含以下 ${n} 个文件，共有 ${t} 个文件。`,
   catPrev:"上一页", catNext:"下一页"});
 
+/* ── v1.7 ── */
+Object.assign(STR.ja, {
+  spCalc:"🔍 最短ルートを計算中…", spRoute:n=>`🧭 最短ルート（${n}打）：`, sp4:"🧭 3打以内の道はなかった（最短は4打以上）",
+  spNotFound:"🧭 3打以内の道は見つからなかった（全部は調べきれなかった）", awBest:"🏅 最短賞！", awNear:"📍 ニアピン賞！",
+  imgBest:n=>`最短ルート ${n}打`,
+  pick:"✏️ 自分で決める", pickHead:r=>`${r} を自分で決める`, pickPh:"記事の名前を入力", pickNone:"候補が見つからない",
+  pickDis:"曖昧さ回避のページ", pickSame:"スタートとゴールが同じ記事になっちゃうよ", pickDisWarn:"⚠️ 曖昧さ回避のページだよ"});
+Object.assign(STR.en, {
+  spCalc:"🔍 Looking for the shortest route…", spRoute:n=>`🧭 Shortest route (${n}): `, sp4:"🧭 No route of 3 strokes or fewer (shortest is 4+)",
+  spNotFound:"🧭 No route of 3 strokes or fewer found (search was cut short)", awBest:"🏅 Shortest-route award!", awNear:"📍 Near-pin award!",
+  imgBest:n=>`Shortest route: ${n}`,
+  pick:"✏️ Choose", pickHead:r=>`Choose the ${r.replace(/^\S+\s/, "")}`, pickPh:"Type an article name", pickNone:"No matches",
+  pickDis:"Disambiguation page", pickSame:"Start and Goal would be the same article", pickDisWarn:"⚠️ That's a disambiguation page"});
+Object.assign(STR.fr, {
+  spCalc:"🔍 Recherche du chemin le plus court…", spRoute:n=>`🧭 Chemin le plus court (${n}) : `, sp4:"🧭 Aucun chemin en 3 coups ou moins (minimum 4)",
+  spNotFound:"🧭 Aucun chemin en 3 coups ou moins trouvé (recherche incomplète)", awBest:"🏅 Prix du plus court !", awNear:"📍 Prix de la proximité !",
+  imgBest:n=>`Chemin le plus court : ${n}`,
+  pick:"✏️ Choisir", pickHead:r=>`Choisir : ${r.replace(/^\S+\s/, "")}`, pickPh:"Nom de l'article", pickNone:"Aucun résultat",
+  pickDis:"Page d'homonymie", pickSame:"Le départ et l'arrivée seraient le même article", pickDisWarn:"⚠️ C'est une page d'homonymie"});
+Object.assign(STR.es, {
+  spCalc:"🔍 Buscando la ruta más corta…", spRoute:n=>`🧭 Ruta más corta (${n}): `, sp4:"🧭 No hay ruta de 3 golpes o menos (mínimo 4)",
+  spNotFound:"🧭 No se encontró ruta de 3 golpes o menos (búsqueda incompleta)", awBest:"🏅 ¡Premio a la ruta más corta!", awNear:"📍 ¡Premio cerca del hoyo!",
+  imgBest:n=>`Ruta más corta: ${n}`,
+  pick:"✏️ Elegir", pickHead:r=>`Elegir: ${r.replace(/^\S+\s/, "")}`, pickPh:"Escribe el nombre del artículo", pickNone:"Sin resultados",
+  pickDis:"Página de desambiguación", pickSame:"La salida y el hoyo serían el mismo artículo", pickDisWarn:"⚠️ Es una página de desambiguación"});
+Object.assign(STR.ko, {
+  spCalc:"🔍 최단 경로를 찾는 중…", spRoute:n=>`🧭 최단 경로(${n}타): `, sp4:"🧭 3타 이내의 길은 없었어요(최단 4타 이상)",
+  spNotFound:"🧭 3타 이내의 길을 찾지 못했어요(다 조사하지 못함)", awBest:"🏅 최단상!", awNear:"📍 니어핀상!",
+  imgBest:n=>`최단 경로 ${n}타`,
+  pick:"✏️ 직접 정하기", pickHead:r=>`${r} 직접 정하기`, pickPh:"문서 이름 입력", pickNone:"후보가 없어요",
+  pickDis:"동음이의 문서", pickSame:"출발과 홀이 같은 문서가 돼요", pickDisWarn:"⚠️ 동음이의 문서예요"});
+Object.assign(STR["zh-hant"], {
+  spCalc:"🔍 正在尋找最短路線…", spRoute:n=>`🧭 最短路線（${n} 桿）：`, sp4:"🧭 沒有 3 桿以內的路線（最短 4 桿以上）",
+  spNotFound:"🧭 沒找到 3 桿以內的路線（未能全部查完）", awBest:"🏅 最短獎！", awNear:"📍 近洞獎！",
+  imgBest:n=>`最短路線 ${n} 桿`,
+  pick:"✏️ 自己決定", pickHead:r=>`自己決定${r}`, pickPh:"輸入條目名稱", pickNone:"找不到候選",
+  pickDis:"消歧義頁", pickSame:"起點和終點會變成同一個條目", pickDisWarn:"⚠️ 這是消歧義頁"});
+Object.assign(STR["zh-hans"], {
+  spCalc:"🔍 正在寻找最短路线…", spRoute:n=>`🧭 最短路线（${n} 杆）：`, sp4:"🧭 没有 3 杆以内的路线（最短 4 杆以上）",
+  spNotFound:"🧭 没找到 3 杆以内的路线（未能全部查完）", awBest:"🏅 最短奖！", awNear:"📍 近洞奖！",
+  imgBest:n=>`最短路线 ${n} 杆`,
+  pick:"✏️ 自己决定", pickHead:r=>`自己决定${r}`, pickPh:"输入条目名称", pickNone:"找不到候选",
+  pickDis:"消歧义页", pickSame:"起点和终点会变成同一个条目", pickDisWarn:"⚠️ 这是消歧义页"});
+for(const [k, a, b] of [
+  ["ja", "✏️ 自分で決める：お題の記事を自分で入力して選べる（予測候補が出るよ）。対戦ではホストが使える。",
+         "🏅 最短賞・📍 ニアピン賞：ティーオフすると裏で3打以内の最短ルートを探すよ。最短と同じ打数でカップインしたら最短賞、+1打ならニアピン賞。結果画面で最短ルートも見られる。"],
+  ["en", "✏️ Choose: type an article name for the Start or Goal and pick from the suggestions. In battles, the host can use it.",
+         "🏅 Shortest-route award / 📍 Near-pin award: after tee-off the game looks for a route of 3 strokes or fewer. Match it for the Shortest-route award, one stroke more for Near-pin. The result screen shows the route."],
+  ["fr", "✏️ Choisir : tapez le nom d'un article pour le départ ou l'arrivée et choisissez dans les suggestions. En duel, l'hôte peut l'utiliser.",
+         "🏅 Prix du plus court / 📍 Prix de la proximité : après le départ, le jeu cherche un chemin de 3 coups ou moins. Égalez-le pour le prix du plus court, un coup de plus pour la proximité. L'écran de résultat montre le chemin."],
+  ["es", "✏️ Elegir: escribe el nombre de un artículo para la salida o el hoyo y elige entre las sugerencias. En duelos, lo usa el anfitrión.",
+         "🏅 Premio a la ruta más corta / 📍 Premio cerca del hoyo: al salir, el juego busca una ruta de 3 golpes o menos. Iguálala para el premio, un golpe más para «cerca del hoyo». El resultado muestra la ruta."],
+  ["ko", "✏️ 직접 정하기: 출발이나 홀 문서를 직접 입력해 후보에서 고를 수 있어요. 대전에서는 방장이 쓸 수 있어요.",
+         "🏅 최단상 / 📍 니어핀상: 티오프하면 뒤에서 3타 이내의 최단 경로를 찾아요. 최단과 같은 타수면 최단상, +1타면 니어핀상. 결과 화면에서 최단 경로도 볼 수 있어요."],
+  ["zh-hant", "✏️ 自己決定：自己輸入起點或終點的條目，從候選中選擇。對戰時由房主使用。",
+              "🏅 最短獎／📍 近洞獎：開球後會在背景尋找 3 桿以內的最短路線。桿數與最短相同得最短獎，多 1 桿得近洞獎。結果畫面可看到最短路線。"],
+  ["zh-hans", "✏️ 自己决定：自己输入起点或终点的条目，从候选中选择。对战时由房主使用。",
+              "🏅 最短奖／📍 近洞奖：开球后会在后台寻找 3 杆以内的最短路线。杆数与最短相同得最短奖，多 1 杆得近洞奖。结果画面可看到最短路线。"]
+]) STR[k].help[STR[k].help.length - 1][1].push(a, b);
+
 /* ════════ 設定 ════════ */
 function browserLang(){
   for(const l of (navigator.languages || [navigator.language || "en"])){
@@ -1680,11 +1771,12 @@ function resetGame(){
   $("route").textContent = T("routeHint");
   $("teeoff").hidden = false; $("backBtn").hidden = true;
   $("findbar").hidden = true; $("findbar").classList.remove("open"); $("findToggle").hidden = true;
-  document.querySelectorAll(".card .reroll").forEach(b => { b.disabled = false; b.hidden = !!state.challenge; });
+  document.querySelectorAll(".card .reroll, .card .pick").forEach(b => { b.disabled = false; b.hidden = !!state.challenge; });
   $("frame").onload = null;
   $("frame").removeAttribute("srcdoc");
   $("placeholder").hidden = false;
   state.backs = 0; state.reach = false; state.nsNow = 0; state.pct = 0; state.goalCheck = false; state.searchUntil = 0;
+  spCancel();
   $("pageStat").hidden = true;
   mpControls();
 }
@@ -1899,6 +1991,10 @@ ${skinCss(lang).map(u=>`<link rel="stylesheet" href="${u}">`).join("\n")}
   mark.golf-hit.golf-cur{background:#ff9632}
   /* ナビゲーションの箱：狭い画面でも必ず出す。開け閉めはこのゲームの仕組みで */
   html body .navbox{display:block !important}
+  /* カテゴリの欄：狭い画面でも必ず出す */
+  html body .catlinks:not(.catlinks-allhidden), html body #catlinks:not(.catlinks-allhidden){display:block !important;visibility:visible !important;height:auto !important}
+  html body .catlinks .mw-normal-catlinks{display:block !important}
+  .vector-body{padding-bottom:48px}
   table.golf-collapsed > tbody > tr:not(:first-child), table.golf-collapsed > tr:not(:first-child){display:none !important}
   .golf-collapsed.golf-cc > .mw-collapsible-content{display:none !important}
   div.golf-collapsed:not(.golf-cc) > :not(:first-child){display:none !important}
@@ -2169,7 +2265,7 @@ async function startGame(){
   $("backBtn").hidden = !state.rules.allowBack; $("backBtn").disabled = true;
   $("findbar").hidden = !state.rules.allowSearch;
   $("findToggle").hidden = !state.rules.allowSearch;
-  document.querySelectorAll(".card .reroll").forEach(b => b.disabled = true);
+  document.querySelectorAll(".card .reroll, .card .pick").forEach(b => b.disabled = true);
   $("clockLbl").textContent = state.rules.timeLimit ? T("left") : T("time");
   state.backs = 0; state.lastAct = Date.now();
   state.pageT0 = Date.now(); state.forcedWarned = false; state.forcedUntil = 0;
@@ -2177,6 +2273,7 @@ async function startGame(){
   if(state.rules.pageLimit) $("pageNum").textContent = state.rules.pageLimit;
   mpControls();
   renderStrip();
+  spStart();
   await ensureNs();
   await go(state.start.title, {count:false});
   startTimer();
@@ -2506,6 +2603,7 @@ function finish(success, reason){
   $("saveRecord").disabled = false; $("saveRecord").textContent = T("saveRecord");
   $("myName").value = myName;
   $("mpRes").hidden = true;
+  updateBest();
   if(state.mp){ mpOnFinish(r); mpControls(); }
   $("win").classList.add("show");
 }
@@ -2818,6 +2916,17 @@ function drawShare(measureOnly, W, H, routeFont, steps, oy = 0, qr = null){
     y += 56;
   }
 
+  // 最短賞・ニアピン賞
+  if(r.success && r.bestD){
+    const aw = r.award === "best" ? T("awBest") : r.award === "near" ? T("awNear") : "";
+    const bt = T("imgBest", r.bestD);
+    if(D){
+      let x = PX;
+      if(aw){ ctx.font = FONT(900, 32); ctx.fillStyle = r.award === "best" ? C.green : "#d4890a"; ctx.fillText(aw, x, y + 28); x += ctx.measureText(aw).width + 18; }
+      ctx.font = FONT(700, 22); ctx.fillStyle = C.sub; ctx.fillText((aw ? "· " : "🧭 ") + bt, x, y + 27);
+    }
+    y += 52;
+  }
   if(D){ ctx.strokeStyle = C.line; ctx.lineWidth = 2; ctx.beginPath(); ctx.moveTo(PX, y); ctx.lineTo(W-PX, y); ctx.stroke(); }
   y += 34;
   ctx.font = FONT(700, 18);
@@ -3381,6 +3490,11 @@ function mpOnMsg(p){
     case "stamp":
       showStamp(p.from, p.i);
       break;
+    case "sp":
+      if(!fromHost) return;
+      m.spMsg = p;
+      if(p.round === m.round && state.best && state.best.pending) spSet(p.res);
+      break;
     case "st":
       if(pl && p.round === m.round && !pl.done){ Object.assign(pl, {strokes:p.strokes, backs:p.backs, act:p.act, pct:p.pct, reach:p.reach, seen:Date.now()}); renderStrip(); }
       else if(pl && p.round !== m.round) mpLog("←", `st round ${p.round}≠${m.round} from ${pl.name}`);
@@ -3591,7 +3705,10 @@ function renderMpResults(){
     row.append(mk("span", "rk", rk || "—"));
     row.append(mk("b", "", dname(p.id) + (p.id === m.me.id ? `（${T("you")}）` : "")));
     let res;
-    if(p.done) res = p.success ? `${T("sk", p.strokes)}${T("paren", fmtTime(p.elapsed))}` : T("mpDnf");
+    if(p.done){
+      const aw = bestAward(p.strokes, p.success);
+      res = p.success ? `${T("sk", p.strokes)}${T("paren", fmtTime(p.elapsed))}${aw === "best" ? " 🏅" : aw === "near" ? " 📍" : ""}` : T("mpDnf");
+    }
     else if(p.left) res = "📴 " + T("mpOffline");
     else res = `${T("mpPlayingNow")}… ⛳${p.strokes}`;
     row.append(" ", res);
@@ -3688,6 +3805,10 @@ function renderLobbyOdai(){
       rr.disabled = m.drawing;
       rr.addEventListener("click", ()=> mpHostReroll(role));
       btns.append(rr);
+      const pk = mk("button", "", T("pick"));
+      pk.disabled = m.drawing;
+      pk.addEventListener("click", ()=> mpHostPick(role));
+      btns.append(pk);
     }
     if(canRead){ const rd = mk("button", "", T("readFull")); rd.addEventListener("click", ()=> openReader(role)); btns.append(rd); }
     card.append(btns);
@@ -3757,6 +3878,200 @@ $("mpCopy").addEventListener("click", async ()=>{
 
 /* ════════ トースト ════════ */
 let toastTimer;
+/* ════════ v1.7 最短ルート探し（3打まで・ティーオフしたら裏で） ════════ */
+const SP_BUDGET = 160;
+let spRun = null;
+function spCancel(){ if(spRun) spRun.cancelled = true; spRun = null; state.best = null; }
+async function spApi(run, q){
+  while(state.busy && !run.cancelled) await new Promise(r => setTimeout(r, 150));   // プレイヤーの記事読み込みが先
+  await new Promise(r => setTimeout(r, 40));
+  if(run.cancelled) throw new Error("cancel");
+  run.n++;
+  return api(q, run.lang);
+}
+async function spLinksOut(run, title){
+  const out = new Set(); let cont = {};
+  for(let i = 0; i < 4; i++){
+    const d = await spApi(run, {action:"query", generator:"links", titles:title, gplnamespace:"0", gpllimit:"max", redirects:"1", ...cont});
+    for(const p of (d.query && d.query.pages) || []) if(p.missing === undefined && p.ns === 0) out.add(p.title);
+    if(!d.continue) return {set:[...out], full:true};
+    cont = d.continue;
+  }
+  return {set:[...out], full:false};
+}
+async function spLinksIn(run, title){
+  const set = new Set(); let cont = {};
+  for(let i = 0; i < 4; i++){
+    const d = await spApi(run, {action:"query", list:"backlinks", bltitle:title, blnamespace:"0", bllimit:"max", blredirect:"1", ...cont});
+    for(const b of (d.query && d.query.backlinks) || []){
+      if(!b.redirect) set.add(b.title);
+      for(const x of b.redirlinks || []) set.add(x.title);
+    }
+    if(!d.continue) return {set:[...set], full:true};
+    cont = d.continue;
+  }
+  return {set:[...set], full:false};
+}
+async function spSearch(run, S, G){
+  const fo = await spLinksOut(run, S);
+  if(fo.set.includes(G)) return {d:1, path:[S, G]};
+  const bi = await spLinksIn(run, G);
+  const F = fo.set.filter(t => t !== G && t !== S), Bs = new Set(bi.set);
+  const mid = F.find(t => Bs.has(t));
+  if(mid) return {d:2, path:[S, mid, G]};
+  const B = bi.set.filter(t => t !== S && t !== G);
+  let complete = fo.full && bi.full;
+  for(let i = 0; i < F.length; i += 50) for(let j = 0; j < B.length; j += 50){
+    if(run.n >= SP_BUDGET) return {d:0, complete:false};
+    const d = await spApi(run, {action:"query", prop:"links", titles:F.slice(i, i+50).join("|"),
+                                pltitles:B.slice(j, j+50).join("|"), plnamespace:"0", pllimit:"max"});
+    for(const p of (d.query && d.query.pages) || []) if(p.links && p.links.length) return {d:3, path:[S, p.title, p.links[0].title, G]};
+  }
+  return {d:0, complete};
+}
+function spStart(){
+  spCancel();
+  const m = state.mp;
+  state.best = {pending:true};
+  if(m && !isHost()){                       // 対戦：ホストが計算して配る
+    if(m.spMsg && m.spMsg.round === m.round) spSet(m.spMsg.res);
+    return;
+  }
+  const run = spRun = {cancelled:false, n:0, lang:curLang(), round:m ? m.round : 0};
+  const done = res => {
+    if(run.cancelled) return;
+    spRun = null;
+    spSet(res);
+    if(state.mp && isHost()) mpSend({t:"sp", round:run.round, res}, 3);
+  };
+  spSearch(run, state.start.title, state.goal.title).then(done, e => { if(e.message !== "cancel") done({err:true}); });
+}
+function spSet(res){
+  state.best = res;
+  updateBest();
+  if(state.mp && state.result) renderMpResults();
+}
+function bestAward(strokes, success){
+  const b = state.best;
+  if(!success || !b || !b.d) return "";
+  if(strokes <= b.d) return "best";
+  if(strokes === b.d + 1) return "near";
+  return "";
+}
+function updateBest(){
+  const box = $("winBest"), r = state.result, b = state.best;
+  if(!box) return;
+  if(r){ r.award = bestAward(r.strokes, r.success); r.bestD = b && b.d || 0; }
+  if(!r || !b || b.err){ box.hidden = true; return; }
+  box.hidden = false; box.innerHTML = "";
+  if(b.pending){ box.append(mk("div", "bestNote", T("spCalc"))); return; }
+  if(r.award) box.append(mk("div", "award " + r.award, r.award === "best" ? T("awBest") : T("awNear")));
+  if(b.d){
+    const line = mk("div", "bestLine");
+    line.append(mk("b", "", T("spRoute", b.d)));
+    b.path.forEach((t, i) => { if(i) line.append(mk("span", "sep", " → ")); line.append(t); });
+    box.append(line);
+  }else box.append(mk("div", "bestNote", b.complete ? T("sp4") : T("spNotFound")));
+}
+
+/* ════════ v1.7 お題を自分で決める（予測候補つき） ════════ */
+let pickSeq = 0, pickTimer = null, pickItems = [], pickCur = -1, pickDone = null, pickRole = null;
+function openPicker(role, onPick){
+  pickRole = role; pickDone = onPick;
+  $("pickHead").textContent = T("pickHead", T(role));
+  $("pickInput").value = ""; $("pickInput").placeholder = T("pickPh");
+  $("pickList").innerHTML = ""; $("pickMsg").textContent = "";
+  pickItems = []; pickCur = -1;
+  $("pickModal").classList.add("show");
+  setTimeout(() => $("pickInput").focus(), 60);
+}
+function closePicker(){ $("pickModal").classList.remove("show"); pickSeq++; clearTimeout(pickTimer); }
+async function pickSuggest(q){
+  const seq = ++pickSeq;
+  if(!q.trim()){ pickItems = []; renderPickList(); $("pickMsg").textContent = ""; return; }
+  try{
+    await ensureNs();
+    const lang = curLang();
+    const d = await api({action:"query", generator:"prefixsearch", gpssearch:q, gpsnamespace:"0", gpslimit:"10", redirects:"1",
+      prop:"pageimages|description|pageprops|info", piprop:"thumbnail", pithumbsize:"88", pilimit:"10",
+      ppprop:"disambiguation", inprop:"varianttitles"});
+    if(seq !== pickSeq) return;
+    const from = {};
+    for(const r of (d.query && d.query.redirects) || []) if(!from[r.to]) from[r.to] = r.from;
+    const pages = ((d.query && d.query.pages) || []).filter(p => p.missing === undefined && p.invalid === undefined)
+                    .sort((a, b) => (a.index || 0) - (b.index || 0));
+    pickItems = pages.map(p => ({
+      title:p.title,
+      shown:lang === "zh" && p.varianttitles ? (p.varianttitles[zhVariant()] || p.title) : p.title,
+      from:from[p.title], desc:p.description || "", img:p.thumbnail && p.thumbnail.source,
+      dis:!!(p.pageprops && "disambiguation" in p.pageprops)}));
+    pickCur = pickItems.length ? 0 : -1;
+    renderPickList();
+    $("pickMsg").textContent = pickItems.length ? "" : T("pickNone");
+  }catch(e){ if(seq === pickSeq) $("pickMsg").textContent = T("err") + e.message; }
+}
+function renderPickList(){
+  const box = $("pickList");
+  box.innerHTML = "";
+  pickItems.forEach((it, i) => {
+    const row = mk("div", "pickItem" + (i === pickCur ? " cur" : ""));
+    if(it.img){ const im = document.createElement("img"); im.src = it.img; im.alt = ""; row.append(im); }
+    else row.append(mk("span", "ph"));
+    const tx = mk("div", "pt");
+    tx.append(mk("b", "", it.shown));
+    if(it.from && it.from !== it.title) tx.append(mk("small", "", "← " + it.from));
+    if(it.dis) tx.append(mk("small", "dis", "⚠️ " + T("pickDis")));
+    else if(it.desc) tx.append(mk("small", "", it.desc));
+    row.append(tx);
+    row.addEventListener("click", () => pickChoose(it));
+    box.append(row);
+  });
+}
+function pickChoose(it){
+  if(!it) return;
+  const other = state[pickRole === "start" ? "goal" : "start"];
+  if(other && norm(other.title) === norm(it.title)){ $("pickMsg").textContent = T("pickSame"); return; }
+  const fn = pickDone;
+  closePicker();
+  if(it.dis) toast(T("pickDisWarn"));
+  if(fn) fn(it.title);
+}
+$("pickInput").addEventListener("input", () => {
+  clearTimeout(pickTimer);
+  const q = $("pickInput").value;
+  pickTimer = setTimeout(() => pickSuggest(q), 250);
+});
+$("pickInput").addEventListener("keydown", e => {
+  if(e.isComposing) return;
+  if(e.key === "ArrowDown" || e.key === "ArrowUp"){
+    e.preventDefault();
+    if(!pickItems.length) return;
+    pickCur = (pickCur + (e.key === "ArrowDown" ? 1 : -1) + pickItems.length) % pickItems.length;
+    renderPickList();
+  }else if(e.key === "Enter"){
+    e.preventDefault();
+    if(pickItems.length) pickChoose(pickItems[Math.max(0, pickCur)]);
+  }else if(e.key === "Escape") closePicker();
+});
+$("pickClose").addEventListener("click", closePicker);
+$("pickModal").addEventListener("click", e => { if(e.target.id === "pickModal") closePicker(); });
+document.querySelectorAll(".card .pick").forEach(b => b.addEventListener("click", () => {
+  const role = b.closest(".card").id;
+  openPicker(role, title => draw(role, title));
+}));
+async function mpHostPick(role){
+  const m = state.mp;
+  if(!isHost() || m.drawing) return;
+  openPicker(role, async title => {
+    if(!isHost() || m.drawing) return;
+    m.drawing = true; renderLobby();
+    await draw(role, title);
+    if(state.mp !== m) return;
+    m.drawing = false;
+    mpSendOdai(); renderLobby();
+  });
+}
+
 function toast(msg){
   const t = $("toast"); t.textContent = msg; t.classList.add("show");
   clearTimeout(toastTimer); toastTimer = setTimeout(()=>t.classList.remove("show"), 2200);
