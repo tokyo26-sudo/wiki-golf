@@ -171,6 +171,8 @@
   .homeBtns{display:grid;grid-template-columns:1.3fr 1fr 1fr;gap:10px;margin:16px 0}
   .homeBtns button{padding:14px 10px;font-size:1rem;font-weight:700;border-radius:12px;white-space:normal}
   .homeBtns .prime,#mpCreate,#lbStart,#mpJoin.prime{background:var(--green);color:var(--onGreen);border-color:var(--green);font-weight:700}
+  .moreBtn{display:block;width:100%;margin:4px 0 0;padding:10px;border-radius:12px;font-weight:700;color:var(--sub);background:transparent;border:1px dashed var(--line)}
+  #lbMoreBtn{margin:8px 0}
   #hBack{border:0;background:transparent;color:var(--sub);padding:4px 0;margin-bottom:4px}
   .homeCard h2{margin:12px 0 4px;font-size:1.2rem}
   .homeCard .about{font-size:.85rem;color:var(--sub);margin:0 0 6px}
@@ -382,7 +384,7 @@
   <div class="stat"><div class="num" id="clockNum">0:00</div><div class="lbl" id="clockLbl"></div></div>
   <div class="stat" id="pageStat" hidden><div class="num" id="pageNum">0</div><div class="lbl" data-t="pageLeft"></div></div>
   <div id="route"></div>
-  <span id="ver">v1.1</span>
+  <span id="ver">v1.2</span>
   <div id="barBtns">
     <button id="teeoff" disabled data-t="teeoff"></button>
     <button id="backBtn" hidden data-t="back"></button>
@@ -438,7 +440,7 @@
 
 <div id="settings" class="overlay">
   <div class="panel">
-    <h2><span data-t="settings"></span> <small style="font-size:.65rem;font-weight:400;color:var(--sub)">v1.1</small></h2>
+    <h2><span data-t="settings"></span> <small style="font-size:.65rem;font-weight:400;color:var(--sub)">v1.2</small></h2>
     <p class="lockNote" id="lockNote" hidden></p>
     <button id="quitHole" class="quit" hidden></button>
     <button id="toHome" data-t="toHome"></button>
@@ -465,7 +467,7 @@
 
 <div id="home">
   <div class="homeInner">
-    <div class="homeHead"><h1>⛳ <span data-t="appName"></span></h1><p data-t="homeAbout"></p><small>v1.1</small></div>
+    <div class="homeHead"><h1>⛳ <span data-t="appName"></span></h1><p data-t="homeAbout"></p><small>v1.2</small></div>
 
     <section id="homeMain">
       <div class="homeBtns">
@@ -474,6 +476,8 @@
         <button id="hSaved" data-t="savedList"></button>
       </div>
       <div class="homeCard" id="homeSettings"></div>
+      <button id="homeMoreBtn" class="moreBtn"></button>
+      <div class="homeCard" id="homeMore" hidden></div>
     </section>
 
     <section id="homeMp" hidden>
@@ -502,6 +506,8 @@
         <div id="lbOdai"></div>
         <div id="lbRulesGuest" hidden><b data-t="lbRulesGuest"></b><span id="lbRulesText"></span></div>
         <div id="lbRules"></div>
+        <button id="lbMoreBtn" class="moreBtn" hidden></button>
+        <div id="lbMore" hidden></div>
         <div id="lbStamps" class="stampRow"></div>
         <p id="mpHint"></p>
         <button id="lbStart" data-t="lbStart"></button>
@@ -1193,6 +1199,15 @@ Object.assign(STR["zh-hans"], {
   stamps:["游刃有余","好紧张","思考中","笑死","拜托…","成功！"],
   mpHintHost:"重抽决定题目后按“全员开始”，按下就立刻开始！", mpHintGuest:"房主正在决定题目。先读全文想好路线吧"
 });
+
+/* ── v1.2 の言葉 ── */
+Object.assign(STR.ja, {limit:"1ホールの制限時間", pageLimit:"1打の制限時間", rPage:n=>n>=60?`1打${n/60}分`:`1打${n}秒`});
+Object.assign(STR.en, {limit:"Time limit per hole", pageLimit:"Time limit per stroke", rPage:n=>n>=60?`${n/60} min per stroke`:`${n} s per stroke`});
+Object.assign(STR.fr, {limit:"Temps limite par trou", pageLimit:"Temps limite par coup", rPage:n=>n>=60?`${n/60} min par coup`:`${n} s par coup`});
+Object.assign(STR.es, {limit:"Tiempo límite por hoyo", pageLimit:"Tiempo límite por golpe", rPage:n=>n>=60?`${n/60} min por golpe`:`${n} s por golpe`});
+Object.assign(STR.ko, {limit:"홀 제한 시간", pageLimit:"타당 제한 시간", rPage:n=>n>=60?`타당 ${n/60}분`:`타당 ${n}초`});
+Object.assign(STR["zh-hant"], {limit:"每洞時間限制", pageLimit:"每桿時間限制", rPage:n=>n>=60?`每桿 ${n/60} 分鐘`:`每桿 ${n} 秒`});
+Object.assign(STR["zh-hans"], {limit:"每洞时间限制", pageLimit:"每杆时间限制", rPage:n=>n>=60?`每杆 ${n/60} 分钟`:`每杆 ${n} 秒`});
 
 /* ════════ 設定 ════════ */
 function browserLang(){
@@ -1935,18 +1950,18 @@ $("linkOnly").addEventListener("change", ()=>doSearch(false));
 function schema(){
   const rows = [
     {head:T("hLang")},
-    {key:"lang", label:T("lang"), note:T("langNote"), chOnly:true, opts:LANG_ORDER.map(l=>[l, WIKIS[l].name])}
+    {key:"lang", label:T("lang"), note:T("langNote"), chOnly:true, main:true, opts:LANG_ORDER.map(l=>[l, WIKIS[l].name])}
   ];
-  if(eff().lang === "zh") rows.push({key:"zhVariant", label:T("zhVar"), play:true,
+  if(eff().lang === "zh") rows.push({key:"zhVariant", label:T("zhVar"), play:true, main:true,
     opts:[["auto",T("auto")],["zh-tw","繁體"],["zh-cn","简体"]]});
   rows.push(
     {head:T("hRules")},
-    {key:"difficulty", label:T("diff"), note:T("diffNote2"), rule:true, opts:[["easy",T("easy"),T("easyD")],["normal",T("normal"),T("normalD")],["any",T("any"),T("anyD")]]},
+    {key:"difficulty", label:T("diff"), note:T("diffNote2"), rule:true, main:true, opts:[["easy",T("easy"),T("easyD")],["normal",T("normal"),T("normalD")],["any",T("any"),T("anyD")]]},
     {key:"allowCategory", label:T("cat"), rule:true, opts:[[true,T("yes")],[false,T("no")]]},
     {key:"allowBack", label:T("backRule"), rule:true, opts:[[true,T("yes")],[false,T("no")]]},
     {key:"allowSearch", label:T("searchRule"), note:T("searchNote"), rule:true, opts:[[true,T("yes")],[false,T("no")]]},
-    {key:"timeLimit", label:T("limit"), rule:true, opts:[[0,T("none")],[180,T("min",3)],[300,T("min",5)],[600,T("min",10)]]},
-    {key:"pageLimit", label:T("pageLimit"), note:T("pageNote"), rule:true, opts:[[0,T("none")],[30,T("sec",30)],[60,T("min",1)],[120,T("min",2)]]},
+    {key:"timeLimit", label:T("limit"), rule:true, main:true, opts:[[0,T("none")],[300,T("min",5)],[600,T("min",10)]]},
+    {key:"pageLimit", label:T("pageLimit"), note:T("pageNote"), rule:true, main:true, opts:[[0,T("none")],[30,T("sec",30)],[180,T("min",3)]]},
     {head:T("hView")},
     {key:"goalView", label:T("view"), note:T("viewNote"), rule:true, opts:[["full",T("full")],["summary",T("summary")],["title",T("titleOnly")]]},
     {key:"theme", label:T("theme"), opts:[["auto",T("themeAuto")],["light",T("themeLight")],["dark",T("themeDark")]]},
@@ -1955,6 +1970,21 @@ function schema(){
     {key:"routeImg", label:T("routeImg"), note:T("routeNote"), opts:[["hide",T("routeHide")],["show",T("routeShow")]]}
   );
   return rows;
+}
+/* 設定を「トップに出すもの」と「⚙️ 設定にまとめるもの」に分ける（見出しは中身がある所だけ残す） */
+function pickRows(rows, keep){
+  const out = [];
+  for(const r of rows){
+    if(r.head){ out.push(r); continue; }
+    if(keep(r)) out.push(r);
+  }
+  return out.filter((r, i) => !r.head || (out[i + 1] && !out[i + 1].head));
+}
+const mainRows = () => pickRows(schema(), r => r.main);
+const moreRows = (rulesOnly) => pickRows(schema(), r => !r.main && (!rulesOnly || r.rule));
+function moreToggle(btn, box, flag){
+  btn.textContent = `${T("settings")} ${state[flag] ? "▲" : "▼"}`;
+  box.hidden = !state[flag];
 }
 function buildSettings(){
   renderRows($("settingRows"), schema());
@@ -2101,7 +2131,7 @@ function decodeRules(str, lang){
     allowCategory: a[1] !== "0", allowBack: a[2] !== "0", allowSearch: a[3] !== "0",
     timeLimit: [0,180,300,600].includes(t) ? t : 0,
     goalView: inv(V_CODE)[a[5]] || "full",
-    pageLimit: [0,30,60,120].includes(parseInt(a[6], 10)) ? parseInt(a[6], 10) : 0
+    pageLimit: [0,30,60,120,180].includes(parseInt(a[6], 10)) ? parseInt(a[6], 10) : 0
   };
 }
 let myName = "";
@@ -2629,11 +2659,17 @@ function hideHome(){
 }
 function renderHome(){
   if(state.screen !== "home") return;
-  if(state.homeView === "main") renderRows($("homeSettings"), schema());
+  if(state.homeView === "main"){
+    renderRows($("homeSettings"), mainRows());
+    renderRows($("homeMore"), moreRows(false));
+    moreToggle($("homeMoreBtn"), $("homeMore"), "moreOpen");
+  }
   if(state.homeView === "mp") renderMpJoin();
   if(state.homeView === "lobby") renderLobby();
 }
 $("hSolo").addEventListener("click", ()=>{ hideHome(); newOdai(); });
+$("homeMoreBtn").addEventListener("click", ()=>{ state.moreOpen = !state.moreOpen; renderHome(); });
+$("lbMoreBtn").addEventListener("click", ()=>{ state.lbMoreOpen = !state.lbMoreOpen; renderLobby(); });
 $("hBattle").addEventListener("click", ()=>{ state.invite = null; $("mpErr").textContent = ""; showHome("mp"); });
 $("hSaved").addEventListener("click", ()=>{ renderSaved(); $("savedModal").classList.add("show"); });
 $("hBack").addEventListener("click", ()=>{ state.invite = null; try{ history.replaceState(null, "", baseUrl()); }catch(_){} showHome("main"); });
@@ -3275,9 +3311,13 @@ function renderLobby(){
   if(isHost()){
     $("lbRulesGuest").hidden = true;
     $("lbRules").hidden = false;
-    renderRows($("lbRules"), lobbyRows());
+    renderRows($("lbRules"), mainRows());
+    renderRows($("lbMore"), moreRows(true));
+    $("lbMoreBtn").hidden = false;
+    moreToggle($("lbMoreBtn"), $("lbMore"), "lbMoreOpen");
   }else{
     $("lbRules").hidden = true; $("lbRules").innerHTML = "";
+    $("lbMoreBtn").hidden = true; $("lbMore").hidden = true; $("lbMore").innerHTML = "";
     $("lbRulesGuest").hidden = false;
     const r = m.rules;
     $("lbRulesText").textContent = r ? `${WIKIS[r.lang] ? WIKIS[r.lang].name : r.lang}${T("sep")}${rulesText({...r, lang:settings.lang})}` : "…";
