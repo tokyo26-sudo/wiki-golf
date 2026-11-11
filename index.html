@@ -395,7 +395,7 @@
   <div class="stat"><div class="num" id="clockNum">0:00</div><div class="lbl" id="clockLbl"></div></div>
   <div class="stat" id="pageStat" hidden><div class="num" id="pageNum">0</div><div class="lbl" data-t="pageLeft"></div></div>
   <div id="route"></div>
-  <span id="ver">v1.5</span>
+  <span id="ver">v1.6</span>
   <div id="barBtns">
     <button id="teeoff" disabled data-t="teeoff"></button>
     <button id="backBtn" hidden data-t="back"></button>
@@ -452,7 +452,7 @@
 
 <div id="settings" class="overlay">
   <div class="panel">
-    <h2><span data-t="settings"></span> <small style="font-size:.65rem;font-weight:400;color:var(--sub)">v1.5</small></h2>
+    <h2><span data-t="settings"></span> <small style="font-size:.65rem;font-weight:400;color:var(--sub)">v1.6</small></h2>
     <p class="lockNote" id="lockNote" hidden></p>
     <button id="quitHole" class="quit" hidden></button>
     <button id="toHome" data-t="toHome"></button>
@@ -480,7 +480,7 @@
 
 <div id="home">
   <div class="homeInner">
-    <div class="homeHead"><h1>⛳ <span data-t="appName"></span></h1><p data-t="homeAbout"></p><small>v1.5</small></div>
+    <div class="homeHead"><h1>⛳ <span data-t="appName"></span></h1><p data-t="homeAbout"></p><small>v1.6</small></div>
 
     <section id="homeMain">
       <div class="homeBtns">
@@ -1417,6 +1417,42 @@ Object.assign(STR.es, {wkShow:"mostrar", wkHide:"ocultar"});
 Object.assign(STR.ko, {wkShow:"보이기", wkHide:"숨기기"});
 Object.assign(STR["zh-hant"], {wkShow:"顯示", wkHide:"隱藏"});
 Object.assign(STR["zh-hans"], {wkShow:"显示", wkHide:"隐藏"});
+/* ── v1.6：カテゴリのページを本物と同じ形に ── */
+Object.assign(STR.ja, {
+  catSubN:(n,t)=>`このカテゴリには ${t} 個の下位カテゴリがあり、そのうち以下の ${n} 個を表示しています。`,
+  catPagesN:(n,t)=>`このカテゴリには ${t} ページが含まれており、そのうち以下の ${n} ページを表示しています。`,
+  catMediaN:(n,t)=>`このカテゴリには ${t} 個のファイルが含まれており、そのうち以下の ${n} 個を表示しています。`,
+  catPrev:"前のページ", catNext:"次のページ"});
+Object.assign(STR.en, {
+  catSubN:(n,t)=>`This category has the following ${n} subcategories, out of ${t} total.`,
+  catPagesN:(n,t)=>`The following ${n} pages are in this category, out of ${t} total.`,
+  catMediaN:(n,t)=>`The following ${n} files are in this category, out of ${t} total.`,
+  catPrev:"previous page", catNext:"next page"});
+Object.assign(STR.fr, {
+  catSubN:(n,t)=>`Cette catégorie comprend ${t} sous-catégories, dont les ${n} ci-dessous.`,
+  catPagesN:(n,t)=>`Cette catégorie contient ${t} pages, dont les ${n} ci-dessous.`,
+  catMediaN:(n,t)=>`Cette catégorie contient ${t} fichiers, dont les ${n} ci-dessous.`,
+  catPrev:"page précédente", catNext:"page suivante"});
+Object.assign(STR.es, {
+  catSubN:(n,t)=>`Esta categoría contiene las siguientes ${n} subcategorías, de un total de ${t}.`,
+  catPagesN:(n,t)=>`Las siguientes ${n} páginas pertenecen a esta categoría, de un total de ${t}.`,
+  catMediaN:(n,t)=>`Los siguientes ${n} archivos pertenecen a esta categoría, de un total de ${t}.`,
+  catPrev:"página anterior", catNext:"página siguiente"});
+Object.assign(STR.ko, {
+  catSubN:(n,t)=>`이 분류에는 하위 분류 ${t}개가 있으며, 다음은 그 중 ${n}개입니다.`,
+  catPagesN:(n,t)=>`이 분류에 속하는 문서 ${t}개 중 다음 ${n}개를 표시하고 있습니다.`,
+  catMediaN:(n,t)=>`이 분류에 속하는 파일 ${t}개 중 다음 ${n}개를 표시하고 있습니다.`,
+  catPrev:"이전 페이지", catNext:"다음 페이지"});
+Object.assign(STR["zh-hant"], {
+  catSubN:(n,t)=>`本分類有以下 ${n} 個子分類，共有 ${t} 個子分類。`,
+  catPagesN:(n,t)=>`本分類包含以下 ${n} 個頁面，共有 ${t} 個頁面。`,
+  catMediaN:(n,t)=>`本分類包含以下 ${n} 個檔案，共有 ${t} 個檔案。`,
+  catPrev:"上一頁", catNext:"下一頁"});
+Object.assign(STR["zh-hans"], {
+  catSubN:(n,t)=>`本分类有以下 ${n} 个子分类，共有 ${t} 个子分类。`,
+  catPagesN:(n,t)=>`本分类包含以下 ${n} 个页面，共有 ${t} 个页面。`,
+  catMediaN:(n,t)=>`本分类包含以下 ${n} 个文件，共有 ${t} 个文件。`,
+  catPrev:"上一页", catNext:"下一页"});
 
 /* ════════ 設定 ════════ */
 function browserLang(){
@@ -1695,30 +1731,126 @@ async function loadArticle(title){
   return p;
 }
 
-async function categoryMembersHtml(cat){
-  const d = await api({action:"query", list:"categorymembers", cmtitle:cat, cmlimit:"500", cmprop:"title|sortkeyprefix|type"});
-  const all = d.query.categorymembers, more = !!d.continue;
-  const catName = cat.slice(cat.indexOf(":")+1);
+/* カテゴリのページ：本物と同じく「下位カテゴリ / ページ / メディア」を別々に200件ずつ。
+   多いときは（前のページ）（次のページ）で送る（打数には数えない） */
+const CAT_LIMIT = 200;
+const CAT_SEC = {subcat:"mw-subcategories", page:"mw-pages", file:"mw-category-media"};
+async function catFetch(cat, type, cont){
+  const q = {action:"query", list:"categorymembers", cmtitle:cat, cmtype:type, cmlimit:String(CAT_LIMIT), cmprop:"title|sortkeyprefix|type"};
+  if(cont) q.cmcontinue = cont;
+  const d = await api(q);
+  const items = d.query.categorymembers || [];
+  const info = type === "subcat" ? await catInfo(items.map(m=>m.title)) : {};
+  return {items, next: d.continue ? d.continue.cmcontinue : null, info};
+}
+async function catInfo(titles){
+  const info = {}, jobs = [];
+  for(let i = 0; i < titles.length; i += 50)
+    jobs.push(api({action:"query", prop:"categoryinfo", titles:titles.slice(i, i+50).join("|")}).then(r=>{
+      for(const pg of (r.query.pages || [])) info[pg.title] = pg.categoryinfo || {};
+    }).catch(()=>{}));
+  await Promise.all(jobs);
+  return info;
+}
+function catLink(title, shownText){
+  return `<a href="/wiki/${encodeURIComponent(title.replace(/ /g,"_"))}" title="${esc(title)}">${esc(shownText)}</a>`;
+}
+function catCounts(ci){
+  if(!ci) return "";
+  const parts = [];
+  if(ci.subcats) parts.push(`${ci.subcats} C`);
+  if(ci.pages) parts.push(`${ci.pages} P`);
+  if(ci.files) parts.push(`${ci.files} F`);
+  return parts.length ? ` <span class="golf-ct-count">(${parts.join(", ")})</span>` : "";
+}
+function catTreeItem(title, ci){
+  const sh = title.slice(title.indexOf(":")+1);
+  const has = ci && ci.subcats > 0;
+  return `<div class="CategoryTreeItem"><span class="golf-ct${has ? "" : " empty"}"${has ? ` data-golfct="${esc(title)}"` : ""}>►</span>` +
+         `${catLink(title, sh)}${catCounts(ci)}</div>`;
+}
+function catList(type, items, info){
   const strip = t => t.slice(t.indexOf(":")+1);
-  const block = items => {
-    const groups = [];
-    for(const m of items){
-      const sh = m.type === "subcat" ? strip(m.title) : m.title;
-      const key = ((m.sortkeyprefix || "").trim() || sh).charAt(0).toUpperCase() || "*";
-      if(!groups.length || groups[groups.length-1].key !== key) groups.push({key, items:[]});
-      groups[groups.length-1].items.push(`<li><a href="/wiki/${encodeURIComponent(m.title.replace(/ /g,"_"))}" title="${esc(m.title)}">${esc(sh)}</a></li>`);
-    }
-    return `<div dir="ltr" class="mw-content-ltr"><div class="mw-category${items.length > 6 ? " mw-category-columns" : ""}">` +
-      groups.map(g=>`<div class="mw-category-group"><h3>${esc(g.key)}</h3>\n<ul>${g.items.join("")}</ul></div>`).join("") + `</div></div>`;
-  };
-  const subs = all.filter(m=>m.type==="subcat"), pages = all.filter(m=>m.type==="page"), files = all.filter(m=>m.type==="file");
-  const mn = more ? T("more500") : "";
+  const groups = [];
+  for(const m of items){
+    const sh = m.type === "subcat" ? strip(m.title) : m.title;
+    const pre = m.sortkeyprefix || "";
+    let key = (pre || sh).charAt(0).toUpperCase();
+    if(!key.trim()) key = " ";
+    if(!groups.length || groups[groups.length-1].key !== key) groups.push({key, items:[]});
+    groups[groups.length-1].items.push(type === "subcat" ? `<li class="golf-ct-li">${catTreeItem(m.title, info[m.title])}</li>` : `<li>${catLink(m.title, sh)}</li>`);
+  }
+  return `<div dir="ltr" class="mw-content-ltr"><div class="mw-category${items.length > 6 ? " mw-category-columns" : ""}">` +
+    groups.map(g=>`<div class="mw-category-group"><h3>${esc(g.key)}</h3>\n<ul>${g.items.join("")}</ul></div>`).join("") + `</div></div>`;
+}
+function catNav(hasPrev, hasNext){
+  const one = (dir, ok, label) => ok ? `<a href="#" data-golfcat="${dir}">${esc(label)}</a>` : esc(label);
+  return `<div class="golf-catnav">(${one("prev", hasPrev, T("catPrev"))}) (${one("next", hasNext, T("catNext"))})</div>`;
+}
+function catSectionInner(catName, type, total, res, idx){
+  const head = type === "subcat" ? T("catSub") : type === "page" ? T("catPages", catName) : T("catMedia", catName);
+  const nKey = type === "subcat" ? "catSubN" : type === "page" ? "catPagesN" : "catMediaN";
+  const paged = idx > 0 || !!res.next;
+  const nav = paged ? catNav(idx > 0, !!res.next) : "";
+  return `<h2>${esc(head)}</h2><p>${esc(T(nKey, res.items.length, Math.max(total, res.items.length)))}</p>${nav}${catList(type, res.items, res.info)}${nav}`;
+}
+async function categoryMembersHtml(cat){
+  const catName = cat.slice(cat.indexOf(":")+1);
+  let ci = {};
+  try{ ci = (await catInfo([cat]))[cat] || {}; }catch(_){}
+  const types = ["subcat", "page", "file"];
+  const res = await Promise.all(types.map(t => catFetch(cat, t, null)));
+  const total = {subcat: ci.subcats || 0, page: ci.pages || 0, file: ci.files || 0};
   let h = "";
-  if(subs.length) h += `<div id="mw-subcategories"><h2>${esc(T("catSub"))}</h2><p>${esc(T("catSubN", subs.length))}${mn}</p>${block(subs)}</div>`;
-  if(pages.length) h += `<div id="mw-pages"><h2>${esc(T("catPages", catName))}</h2><p>${esc(T("catPagesN", pages.length))}${mn}</p>${block(pages)}</div>`;
-  if(files.length) h += `<div id="mw-category-media"><h2>${esc(T("catMedia", catName))}</h2><p>${esc(T("catMediaN", files.length))}</p>${block(files)}</div>`;
+  types.forEach((t, i) => {
+    if(!res[i].items.length) return;
+    const conts = JSON.stringify(res[i].next ? [null, res[i].next] : [null]);
+    h += `<div id="${CAT_SEC[t]}" data-golfcat-sec="${t}" data-cat="${esc(cat)}" data-total="${total[t]}" data-idx="0" data-conts="${esc(conts)}">` +
+         catSectionInner(catName, t, total[t], res[i], 0) + `</div>`;
+  });
   return h || `<p>${esc(T("catEmpty"))}</p>`;
 }
+/* （前のページ）（次のページ）と ► の展開：記事の中の操作なので打数に数えない */
+async function catUiClick(e){
+  const doc = e.currentTarget;
+  const nav = e.target.closest("a[data-golfcat]"), ct = e.target.closest("[data-golfct]");
+  if(!nav && !ct) return;
+  e.preventDefault(); e.stopImmediatePropagation();
+  if(nav){
+    const sec = nav.closest("[data-golfcat-sec]");
+    if(!sec || sec._busy) return;
+    const type = sec.dataset.golfcatSec, cat = sec.dataset.cat, total = +sec.dataset.total;
+    const conts = JSON.parse(sec.dataset.conts), idx = +sec.dataset.idx + (nav.dataset.golfcat === "next" ? 1 : -1);
+    if(idx < 0 || idx >= conts.length) return;
+    sec._busy = true; sec.style.opacity = ".5";
+    try{
+      const res = await catFetch(cat, type, conts[idx]);
+      if(res.next && conts.length === idx + 1) conts.push(res.next);
+      sec.dataset.conts = JSON.stringify(conts); sec.dataset.idx = String(idx);
+      sec.innerHTML = catSectionInner(cat.slice(cat.indexOf(":")+1), type, total, res, idx);
+      sec.scrollIntoView({block:"start"});
+    }catch(err){ toast(err.message); }
+    sec._busy = false; sec.style.opacity = "";
+  }else{
+    const item = ct.closest(".CategoryTreeItem");
+    const open = item.nextElementSibling && item.nextElementSibling.classList.contains("CategoryTreeChildren") ? item.nextElementSibling : null;
+    if(open){ open.hidden = !open.hidden; ct.textContent = open.hidden ? "►" : "▼"; return; }
+    if(ct._busy) return;
+    ct._busy = true; ct.textContent = "…";
+    try{
+      const res = await catFetch(ct.dataset.golfct, "subcat", null);
+      const box = doc.createElement("div");
+      box.className = "CategoryTreeChildren";
+      box.innerHTML = res.items.map(m => catTreeItem(m.title, res.info[m.title])).join("") +
+                      (res.next ? `<div class="golf-ct-more">…</div>` : "");
+      item.after(box);
+      ct.textContent = "▼";
+    }catch(err){ ct.textContent = "►"; toast(err.message); }
+    ct._busy = false;
+  }
+  if(doc === ($("frame") && $("frame").contentDocument)) markLinks(doc);
+}
+
 async function fileImageHtml(title){
   try{
     const d = await api({action:"query", titles:title, prop:"imageinfo", iiprop:"url|size", iiurlwidth:"800"});
@@ -1736,7 +1868,8 @@ function skinCss(lang){
     `https://${host}/w/load.php?lang=${l}&modules=` + encodeURIComponent([
       "ext.cite.styles","ext.wikimediaBadges","jquery.makeCollapsible.styles","mediawiki.page.gallery.styles",
       "skins.vector.icons","skins.vector.styles","wikibase.client.init","ext.uls.interlanguage"].join("|")) + "&only=styles&skin=vector-2022",
-    `https://${host}/w/load.php?lang=${l}&modules=site.styles&only=styles&skin=vector-2022`
+    `https://${host}/w/load.php?lang=${l}&modules=site.styles&only=styles&skin=vector-2022`,
+    `https://${host}/w/load.php?lang=${l}&modules=${encodeURIComponent("mediawiki.action.styles|mediawiki.action.view.categoryPage.styles|ext.categoryTree.styles")}&only=styles&skin=vector-2022`
   ];
 }
 function buildDoc(p, extraCss = ""){
@@ -1772,6 +1905,16 @@ ${skinCss(lang).map(u=>`<link rel="stylesheet" href="${u}">`).join("\n")}
   .mw-collapsible-toggle{display:none !important}
   .golf-toggle{float:right;font-weight:normal;font-size:.85em;color:#0645ad;cursor:pointer;margin-left:.6em;user-select:none;white-space:nowrap}
   .golf-toggle:hover{text-decoration:underline}
+  .golf-catnav{margin:.4em 0}
+  li.golf-ct-li{list-style:none;margin-left:0}
+  .mw-category ul:has(> .golf-ct-li){margin-left:.2em}
+  .mw-category .golf-ct-li{list-style:none}
+  .CategoryTreeItem{margin:.1em 0}
+  .golf-ct{display:inline-block;width:1.2em;font-size:.8em;color:#36c;cursor:pointer;user-select:none}
+  .golf-ct.empty{color:#a2a9b1;cursor:default}
+  .golf-ct-count{color:#54595d;font-size:.95em}
+  .CategoryTreeChildren{margin-left:1.4em}
+  .golf-ct-more{color:#54595d;margin-left:1.2em}
   /* スマホ幅：見た目はPC版のまま、はみ出しだけ防ぐ */
   @media (max-width:640px){
     .mw-page-container{padding:0 12px}
@@ -1850,6 +1993,7 @@ function fillFrame(frame, parsed, onClick, extraCss){
     frame.onload = ()=>{
       const doc = frame.contentDocument;
       if(!doc || !doc.body) return;
+      doc.addEventListener("click", catUiClick, true);
       doc.addEventListener("click", onClick);
       resolve(doc);
     };
@@ -1871,10 +2015,7 @@ function linkAllowed(a, t, rules){
   return "";
 }
 
-const narrow = matchMedia("(max-width:720px)");
-async function render(parsed){
-  const doc = await fillFrame($("frame"), parsed, onFrameClick);
-  prepCollapsibles(doc);
+function markLinks(doc, quiet){
   doc.querySelectorAll("a[href]").forEach(a=>{
     const href = a.getAttribute("href");
     if(href.startsWith("#")) return;
@@ -1886,6 +2027,13 @@ async function render(parsed){
     const t = linkTitle(a.getAttribute("href") || "");
     return t && t.toLowerCase() === goalKey;
   });
+  if(!quiet){ mpAct(); if($("sInput").value.trim()) doSearch(false); }
+}
+const narrow = matchMedia("(max-width:720px)");
+async function render(parsed){
+  const doc = await fillFrame($("frame"), parsed, onFrameClick);
+  prepCollapsibles(doc);
+  markLinks(doc, true);
   // スマホ：下にスクロールしたらお題の帯を引っこめる
   let lastY = 0;
   const fw = $("frame").contentWindow;
