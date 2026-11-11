@@ -179,7 +179,7 @@
   .mpRow{display:flex;gap:8px;flex-wrap:wrap;align-items:center;margin:12px 0}
   .mpRow label{font-size:.85rem;color:var(--sub)}
   #mpName,#mpCode{font:inherit;padding:7px 10px;border:1px solid var(--line);border-radius:8px;background:var(--card);color:var(--ink)}
-  #mpCode{width:7em;text-transform:uppercase;letter-spacing:.15em}
+  #mpCode{width:6.5em;letter-spacing:.3em;font-variant-numeric:tabular-nums}
   #mpInvite{font-size:1.15rem;font-weight:800;margin:14px 0 4px}
   #mpErr{color:var(--flag);font-size:.88rem;min-height:1.2em;margin:6px 0}
   .mpCodeBig{text-align:center;margin:10px 0 4px}
@@ -280,6 +280,17 @@
     body.inmp #barBtns > #stampBtn:not([hidden]){display:inline-block}
     #stampLayer{top:auto;bottom:70px;right:10px}
   }
+
+  /* 遊び方 */
+  .helpLink{display:block;margin:-4px auto 6px;border:0;background:transparent;color:var(--green);font-weight:700;font-size:.92rem;text-decoration:underline;text-underline-offset:4px}
+  #helpBtnGame{display:block;margin:4px 0 6px}
+  #helpModal{z-index:36}
+  #helpModal .panel{background:var(--card);border-radius:14px;padding:18px 22px;width:min(620px,100%);max-height:90vh;overflow-y:auto}
+  #helpBody h3{margin:14px 0 6px;font-size:1.05rem}
+  #helpBody h3:first-child{margin-top:0;font-size:1.25rem}
+  #helpBody ol,#helpBody ul{margin:0;padding-left:1.4em}
+  #helpBody li{margin:4px 0;font-size:.92rem;line-height:1.6;text-wrap:pretty;word-break:auto-phrase}
+  #helpModal .close{display:block;margin:16px 0 0 auto}
 
   /* トースト */
   #toast{position:fixed;left:50%;bottom:24px;transform:translateX(-50%);background:var(--ink);color:var(--bg);
@@ -384,7 +395,7 @@
   <div class="stat"><div class="num" id="clockNum">0:00</div><div class="lbl" id="clockLbl"></div></div>
   <div class="stat" id="pageStat" hidden><div class="num" id="pageNum">0</div><div class="lbl" data-t="pageLeft"></div></div>
   <div id="route"></div>
-  <span id="ver">v1.2</span>
+  <span id="ver">v1.4</span>
   <div id="barBtns">
     <button id="teeoff" disabled data-t="teeoff"></button>
     <button id="backBtn" hidden data-t="back"></button>
@@ -407,6 +418,7 @@
   <button data-for="shareOdai" data-t="share"></button>
   <button data-for="stampBtn" data-t="stampTitle"></button>
   <button data-for="gearBtn" data-t="settings"></button>
+  <button data-for="helpBtnGame" data-t="helpBtn"></button>
   <button data-for="toHome" data-t="toHome"></button>
 </div>
 
@@ -440,10 +452,11 @@
 
 <div id="settings" class="overlay">
   <div class="panel">
-    <h2><span data-t="settings"></span> <small style="font-size:.65rem;font-weight:400;color:var(--sub)">v1.2</small></h2>
+    <h2><span data-t="settings"></span> <small style="font-size:.65rem;font-weight:400;color:var(--sub)">v1.4</small></h2>
     <p class="lockNote" id="lockNote" hidden></p>
     <button id="quitHole" class="quit" hidden></button>
     <button id="toHome" data-t="toHome"></button>
+    <button id="helpBtnGame" data-t="helpBtn"></button>
     <div id="settingRows"></div>
     <button class="close" id="settingsClose" data-t="closeBtn"></button>
   </div>
@@ -467,7 +480,7 @@
 
 <div id="home">
   <div class="homeInner">
-    <div class="homeHead"><h1>⛳ <span data-t="appName"></span></h1><p data-t="homeAbout"></p><small>v1.2</small></div>
+    <div class="homeHead"><h1>⛳ <span data-t="appName"></span></h1><p data-t="homeAbout"></p><small>v1.4</small></div>
 
     <section id="homeMain">
       <div class="homeBtns">
@@ -475,6 +488,7 @@
         <button id="hBattle" data-t="hBattle"></button>
         <button id="hSaved" data-t="savedList"></button>
       </div>
+      <button id="helpBtnHome" class="helpLink" data-t="helpBtn"></button>
       <div class="homeCard" id="homeSettings"></div>
       <button id="homeMoreBtn" class="moreBtn"></button>
       <div class="homeCard" id="homeMore" hidden></div>
@@ -488,7 +502,7 @@
         <p id="mpInvite" hidden></p>
         <div class="mpRow"><label data-t="mpName"></label><input id="mpName" maxlength="20"></div>
         <div class="mpRow" id="mpCreateRow"><button id="mpCreate" data-t="mpCreate"></button></div>
-        <div class="mpRow"><span id="mpCodeRow"><label data-t="mpCodeLbl"></label> <input id="mpCode" maxlength="4" placeholder="ABCD" autocomplete="off"></span> <button id="mpJoin" class="prime"></button></div>
+        <div class="mpRow"><span id="mpCodeRow"><label data-t="mpCodeLbl"></label> <input id="mpCode" maxlength="4" placeholder="1234" autocomplete="off" inputmode="numeric" pattern="[0-9]*"></span> <button id="mpJoin" class="prime"></button></div>
         <div id="mpErr"></div>
       </div>
     </section>
@@ -514,6 +528,13 @@
         <div class="mpRow" style="justify-content:center"><button id="mpLeaveBtn" data-t="mpLeave"></button></div>
       </div>
     </section>
+  </div>
+</div>
+
+<div id="helpModal" class="overlay">
+  <div class="panel">
+    <div id="helpBody"></div>
+    <button class="close" id="helpClose" data-t="closeBtn"></button>
   </div>
 </div>
 
@@ -1208,6 +1229,185 @@ Object.assign(STR.es, {limit:"Tiempo límite por hoyo", pageLimit:"Tiempo límit
 Object.assign(STR.ko, {limit:"홀 제한 시간", pageLimit:"타당 제한 시간", rPage:n=>n>=60?`타당 ${n/60}분`:`타당 ${n}초`});
 Object.assign(STR["zh-hant"], {limit:"每洞時間限制", pageLimit:"每桿時間限制", rPage:n=>n>=60?`每桿 ${n/60} 分鐘`:`每桿 ${n} 秒`});
 Object.assign(STR["zh-hans"], {limit:"每洞时间限制", pageLimit:"每杆时间限制", rPage:n=>n>=60?`每杆 ${n/60} 分钟`:`每杆 ${n} 秒`});
+
+/* ── v1.3 ── */
+Object.assign(STR.ja, {mpCodeBad:"4桁の数字を入れてね"});
+Object.assign(STR.en, {mpCodeBad:"Enter the 4-digit code"});
+Object.assign(STR.fr, {mpCodeBad:"Saisissez le code à 4 chiffres"});
+Object.assign(STR.es, {mpCodeBad:"Escribe el código de 4 cifras"});
+Object.assign(STR.ko, {mpCodeBad:"4자리 숫자를 입력하세요"});
+Object.assign(STR["zh-hant"], {mpCodeBad:"請輸入 4 位數字"});
+Object.assign(STR["zh-hans"], {mpCodeBad:"请输入 4 位数字"});
+
+/* ── 遊び方 ── */
+Object.assign(STR.ja, {helpBtn:"❓ 遊び方", help:[
+  ["⛳ 遊び方", [
+    "ランダムに選ばれた「スタート」と「ゴール」、2つの記事が出るよ。",
+    "「ティーオフ」を押すと、スタートの記事が開く。",
+    "記事の中のリンクだけをたどって、ゴールの記事を目指そう。リンクを1回押すごとに1打。",
+    "ゴールの記事に着いたら「カップイン」！ 打数が少ないほどナイスショット。"]],
+  ["📏 ルール", [
+    "使えないリンク：赤リンク（まだない記事）、外部リンク、特別ページ。押すと🚫が出るよ。",
+    "↩ 1つ戻る：戻るのは0打。でも、まちがえたリンクに使った1打は消えない。",
+    "1ホールの制限時間：ホール全体の時間。0になるとタイムアップ。",
+    "1打の制限時間：1つのページにいられる時間。過ぎると記事の中のリンクに🎲強制ショット（1打）。そのままゴールに入ることも！",
+    "難易度：「かんたん」はスタートとゴールのリンクが多め、「なんでもあり」は完全ランダム。",
+    "カテゴリのリンク・1つ戻る・ページ内検索などは「⚙️ 設定」で変えられるよ。"]],
+  ["⚔️ 対戦（2〜4人）", [
+    "「対戦する」→「部屋を作る」で、4桁の部屋コードとQRが出るよ。友達はQRを読むか、コードを入れて参加。",
+    "ホストが待合室でお題とルールを決めて「全員でスタート」。始まったら部屋は締め切り。",
+    "プレイ中は、ほかの人の様子（打数・検索中・🔥リーチなど）が見える。記事名は見えないよ。スタンプも送れる。",
+    "全員がゴールかギブアップしたら答え合わせ。打数が少ない人の勝ち、同じならタイムが速い人の勝ち。"]],
+  ["🧰 そのほか", [
+    "🔗 お題を共有：同じお題をリンクやQRで送れる。",
+    "⚔️ 挑戦状：カップインしたあと、自分の打数入りのお題を送って勝負。",
+    "⭐ 保存／📁：気に入ったお題や記録を、このブラウザに残せる。",
+    "🖼 シェア画像：結果を画像に。途中の道のりは伏字になるよ（設定で変えられる）。"]]
+]});
+Object.assign(STR.en, {helpBtn:"❓ How to play", help:[
+  ["⛳ How to play", [
+    "You get two random articles: a Start and a Goal.",
+    "Press “Tee off” and the Start article opens.",
+    "Follow only the links inside articles to reach the Goal. Each link you click is one stroke.",
+    "Land on the Goal article and you're in the hole! Fewer strokes is better."]],
+  ["📏 Rules", [
+    "Off-limits links: red links (articles that don't exist yet), external links and special pages. Clicking them shows 🚫.",
+    "↩ Back costs 0 strokes — but the stroke you spent on the wrong link stays.",
+    "Time limit per hole: the time for the whole hole. Hit zero and it's time up.",
+    "Time limit per stroke: how long you may stay on one page. When it runs out you take a 🎲 forced shot to a random link (1 stroke) — which might even go in!",
+    "Difficulty: “Easy” picks well-linked start and goal articles; “Anything goes” is completely random.",
+    "Category links, Back, Find in article and more can be changed under “⚙️ Settings”."]],
+  ["⚔️ Battle (2–4 players)", [
+    "“Battle” → “Create a room” shows a 4-digit room code and a QR code. Friends scan the QR or type the code to join.",
+    "The host picks the course and rules in the lobby and presses “Start for everyone”. Once started, the room is closed.",
+    "While playing you see the others' status (strokes, searching, 🔥 so close…) but never their article. You can send stamps too.",
+    "When everyone has finished or given up, compare routes. Fewest strokes wins; ties go to the faster time."]],
+  ["🧰 More", [
+    "🔗 Share course: send the same course by link or QR.",
+    "⚔️ Challenge: after holing out, send the course with your score attached.",
+    "⭐ Save / 📁: keep courses and records you like in this browser.",
+    "🖼 Share image: turn your result into a picture. The route in between is hidden (changeable in settings)."]]
+]});
+Object.assign(STR.fr, {helpBtn:"❓ Comment jouer", help:[
+  ["⛳ Comment jouer", [
+    "Deux articles tirés au hasard : un Départ et une Arrivée.",
+    "Appuyez sur « Départ » : l'article de départ s'ouvre.",
+    "Suivez uniquement les liens des articles pour atteindre l'Arrivée. Chaque lien cliqué compte pour un coup.",
+    "Arrivé sur l'article final, c'est dans le trou ! Moins de coups, c'est mieux."]],
+  ["📏 Règles", [
+    "Liens interdits : liens rouges (articles inexistants), liens externes et pages spéciales. Ils affichent 🚫.",
+    "↩ Retour ne coûte aucun coup, mais le coup joué sur le mauvais lien reste compté.",
+    "Temps limite par trou : le temps pour tout le trou. À zéro, c'est fini.",
+    "Temps limite par coup : le temps maximal sur une page. Ensuite, 🎲 coup forcé vers un lien au hasard (1 coup) — qui peut même finir dans le trou !",
+    "Difficulté : « Facile » choisit des articles bien reliés, « Tout est permis » est entièrement aléatoire.",
+    "Liens de catégorie, retour, recherche, etc. se règlent dans « ⚙️ Réglages »."]],
+  ["⚔️ Duel (2 à 4 joueurs)", [
+    "« Duel » → « Créer un salon » affiche un code à 4 chiffres et un QR code. Vos amis scannent le QR ou saisissent le code.",
+    "L'hôte choisit le parcours et les règles dans le salon puis « Lancer pour tous ». Une fois lancé, le salon est fermé.",
+    "Pendant la partie, vous voyez l'état des autres (coups, recherche, 🔥 tout près…) mais jamais leur article. Vous pouvez aussi envoyer des tampons.",
+    "Quand tout le monde a fini ou abandonné, comparez les parcours. Le moins de coups gagne ; en cas d'égalité, le plus rapide."]],
+  ["🧰 Autres fonctions", [
+    "🔗 Partager le parcours : envoyez-le par lien ou QR code.",
+    "⚔️ Défi : après le trou, envoyez le parcours avec votre score.",
+    "⭐ Enregistrer / 📁 : gardez parcours et scores dans ce navigateur.",
+    "🖼 Image à partager : votre résultat en image. Le parcours intermédiaire est masqué (modifiable dans les réglages)."]]
+]});
+Object.assign(STR.es, {helpBtn:"❓ Cómo jugar", help:[
+  ["⛳ Cómo jugar", [
+    "Salen dos artículos al azar: una Salida y un Hoyo.",
+    "Pulsa «Salida» y se abre el artículo de salida.",
+    "Sigue solo los enlaces de los artículos hasta llegar al Hoyo. Cada enlace que pulses es un golpe.",
+    "Al llegar al artículo del Hoyo, ¡embocada! Cuantos menos golpes, mejor."]],
+  ["📏 Reglas", [
+    "Enlaces prohibidos: enlaces rojos (artículos que no existen), enlaces externos y páginas especiales. Muestran 🚫.",
+    "↩ Volver no cuesta golpes, pero el golpe gastado en el enlace equivocado se queda.",
+    "Tiempo límite por hoyo: el tiempo de todo el hoyo. Al llegar a cero, se acabó.",
+    "Tiempo límite por golpe: cuánto puedes quedarte en una página. Al agotarse, 🎲 golpe forzado a un enlace al azar (1 golpe), ¡que hasta puede entrar!",
+    "Dificultad: «Fácil» elige artículos con muchos enlaces; «Todo vale» es totalmente aleatorio.",
+    "Los enlaces de categoría, volver, buscar y más se cambian en «⚙️ Ajustes»."]],
+  ["⚔️ Duelo (2–4 jugadores)", [
+    "«Duelo» → «Crear sala» muestra un código de 4 cifras y un código QR. Tus amigos escanean el QR o escriben el código.",
+    "El anfitrión elige el recorrido y las reglas en la sala y pulsa «Empezar todos». Una vez empezado, la sala se cierra.",
+    "Mientras juegas ves el estado de los demás (golpes, buscando, 🔥 muy cerca…) pero nunca su artículo. También puedes enviar sellos.",
+    "Cuando todos terminan o se rinden, comparad recorridos. Gana quien use menos golpes; si empatan, el más rápido."]],
+  ["🧰 Más", [
+    "🔗 Compartir recorrido: envíalo por enlace o QR.",
+    "⚔️ Reto: tras embocar, envía el recorrido con tu marca.",
+    "⭐ Guardar / 📁: guarda recorridos y resultados en este navegador.",
+    "🖼 Imagen para compartir: tu resultado en una imagen. El recorrido intermedio va oculto (se cambia en ajustes)."]]
+]});
+Object.assign(STR.ko, {helpBtn:"❓ 플레이 방법", help:[
+  ["⛳ 플레이 방법", [
+    "무작위로 고른 ‘출발’과 ‘홀’ 두 문서가 나와요.",
+    "‘티샷’을 누르면 출발 문서가 열려요.",
+    "문서 안의 링크만 따라가서 홀 문서를 노려 보세요. 링크를 한 번 누를 때마다 1타.",
+    "홀 문서에 도착하면 ‘홀인’! 타수가 적을수록 좋아요."]],
+  ["📏 규칙", [
+    "쓸 수 없는 링크: 빨간 링크(아직 없는 문서), 외부 링크, 특수 문서. 누르면 🚫가 떠요.",
+    "↩ 뒤로는 0타. 하지만 잘못 누른 링크의 1타는 그대로예요.",
+    "홀 제한 시간: 홀 전체 시간. 0이 되면 시간 종료.",
+    "타당 제한 시간: 한 문서에 머물 수 있는 시간. 지나면 문서 안의 링크로 🎲 강제 샷(1타). 그대로 홀인할 수도 있어요!",
+    "난이도: ‘쉬움’은 링크가 많은 문서, ‘아무거나’는 완전 무작위.",
+    "분류 링크·뒤로·문서 내 찾기 등은 ‘⚙️ 설정’에서 바꿀 수 있어요."]],
+  ["⚔️ 대전(2~4명)", [
+    "‘대전하기’ → ‘방 만들기’를 누르면 4자리 방 코드와 QR 코드가 나와요. 친구는 QR을 찍거나 코드를 입력해 참가.",
+    "방장이 대기실에서 코스와 규칙을 정하고 ‘모두 시작’. 시작하면 방은 마감돼요.",
+    "플레이 중에는 다른 사람의 상태(타수·찾는 중·🔥리치 등)가 보여요. 문서 이름은 안 보여요. 스탬프도 보낼 수 있어요.",
+    "모두 홀인하거나 기권하면 경로 비교. 타수가 적은 사람이 승리, 같으면 시간이 빠른 사람."]],
+  ["🧰 그 밖의 기능", [
+    "🔗 코스 공유: 같은 코스를 링크나 QR로 보내요.",
+    "⚔️ 도전장: 홀인한 뒤 내 타수가 들어간 코스를 보내 승부.",
+    "⭐ 저장 / 📁: 마음에 드는 코스와 기록을 이 브라우저에 남겨요.",
+    "🖼 공유 이미지: 결과를 이미지로. 중간 경로는 가려져요(설정에서 변경 가능)."]]
+]});
+Object.assign(STR["zh-hant"], {helpBtn:"❓ 玩法說明", help:[
+  ["⛳ 玩法", [
+    "會出現隨機選出的「起點」和「終點」兩個條目。",
+    "按下「開球」，起點條目就會打開。",
+    "只沿著條目中的連結前進，朝終點條目出發。每點一次連結算 1 桿。",
+    "抵達終點條目就「進洞」！桿數越少越好。"]],
+  ["📏 規則", [
+    "不能用的連結：紅色連結（還沒有的條目）、外部連結、特殊頁面。點了會出現🚫。",
+    "↩ 上一頁不算桿數，但點錯連結的那 1 桿不會消失。",
+    "每洞時間限制：整洞的時間，歸零就時間到。",
+    "每桿時間限制：在一個頁面能停留的時間。超過就會🎲強制擊球到隨機連結（1 桿），也可能直接進洞！",
+    "難度：「簡單」選連結多的條目，「什麼都有」完全隨機。",
+    "分類連結、上一頁、條目內搜尋等可在「⚙️ 設定」更改。"]],
+  ["⚔️ 對戰（2～4 人）", [
+    "「對戰」→「建立房間」會出現 4 位數房間代碼和 QR Code。朋友掃描 QR 或輸入代碼加入。",
+    "房主在等候室決定題目和規則後按「全員開始」。開始後房間就截止。",
+    "遊戲中可以看到其他人的狀態（桿數、搜尋中、🔥聽牌等），但看不到條目名稱。也能傳貼圖。",
+    "大家都進洞或棄權後對答案。桿數最少的人獲勝，同桿數就比時間。"]],
+  ["🧰 其他功能", [
+    "🔗 分享題目：用連結或 QR 傳送同一題。",
+    "⚔️ 挑戰書：進洞後送出附上自己桿數的題目一決勝負。",
+    "⭐ 儲存 / 📁：把喜歡的題目和紀錄留在這個瀏覽器。",
+    "🖼 分享圖片：把結果做成圖片。中間的路線會遮住（可在設定更改）。"]]
+]});
+Object.assign(STR["zh-hans"], {helpBtn:"❓ 玩法说明", help:[
+  ["⛳ 玩法", [
+    "会出现随机选出的“起点”和“终点”两个条目。",
+    "按下“开球”，起点条目就会打开。",
+    "只沿着条目里的链接前进，向终点条目出发。每点一次链接算 1 杆。",
+    "到达终点条目就“进洞”！杆数越少越好。"]],
+  ["📏 规则", [
+    "不能用的链接：红色链接（还没有的条目）、外部链接、特殊页面。点了会出现🚫。",
+    "↩ 上一页不算杆数，但点错链接的那 1 杆不会消失。",
+    "每洞时间限制：整洞的时间，归零就时间到。",
+    "每杆时间限制：在一个页面能停留的时间。超过就会🎲强制击球到随机链接（1 杆），也可能直接进洞！",
+    "难度：“简单”选链接多的条目，“什么都有”完全随机。",
+    "分类链接、上一页、条目内搜索等可在“⚙️ 设置”更改。"]],
+  ["⚔️ 对战（2～4 人）", [
+    "“对战”→“创建房间”会出现 4 位数房间代码和二维码。朋友扫描二维码或输入代码加入。",
+    "房主在等候室决定题目和规则后按“全员开始”。开始后房间就截止。",
+    "游戏中可以看到其他人的状态（杆数、搜索中、🔥听牌等），但看不到条目名称。也能发贴图。",
+    "大家都进洞或弃权后对答案。杆数最少的人获胜，同杆数就比时间。"]],
+  ["🧰 其他功能", [
+    "🔗 分享题目：用链接或二维码发送同一题。",
+    "⚔️ 挑战书：进洞后发出附上自己杆数的题目一决胜负。",
+    "⭐ 保存 / 📁：把喜欢的题目和记录留在这个浏览器。",
+    "🖼 分享图片：把结果做成图片。中间的路线会遮住（可在设置更改）。"]]
+]});
 
 /* ════════ 設定 ════════ */
 function browserLang(){
@@ -2668,6 +2868,22 @@ function renderHome(){
   if(state.homeView === "lobby") renderLobby();
 }
 $("hSolo").addEventListener("click", ()=>{ hideHome(); newOdai(); });
+function openHelp(){
+  const box = $("helpBody"); box.innerHTML = "";
+  (T("help") || []).forEach(([h, items], i)=>{
+    box.append(mk("h3", "", h));
+    const list = mk(i === 0 ? "ol" : "ul", "");
+    items.forEach(t => list.append(mk("li", "", t)));
+    box.append(list);
+  });
+  $("settings").classList.remove("show");
+  $("helpModal").classList.add("show");
+  $("helpBody").parentElement.scrollTop = 0;
+}
+$("helpBtnHome").addEventListener("click", openHelp);
+$("helpBtnGame").addEventListener("click", openHelp);
+$("helpClose").addEventListener("click", ()=> $("helpModal").classList.remove("show"));
+$("helpModal").addEventListener("click", e=>{ if(e.target.id === "helpModal") $("helpModal").classList.remove("show"); });
 $("homeMoreBtn").addEventListener("click", ()=>{ state.moreOpen = !state.moreOpen; renderHome(); });
 $("lbMoreBtn").addEventListener("click", ()=>{ state.lbMoreOpen = !state.lbMoreOpen; renderLobby(); });
 $("hBattle").addEventListener("click", ()=>{ state.invite = null; $("mpErr").textContent = ""; showHome("mp"); });
@@ -2709,7 +2925,7 @@ function loadSupabase(){
   });
 }
 const rid = () => Math.random().toString(36).slice(2, 10);
-const ROOM_CHARS = "ABCDEFGHJKLMNPQRSTUVWXYZ23456789";
+const ROOM_CHARS = "0123456789";
 const newRoomCode = () => Array.from({length:4}, () => ROOM_CHARS[Math.floor(Math.random() * ROOM_CHARS.length)]).join("");
 const freshStats = () => ({strokes:0, backs:0, act:"", pct:0, reach:false, done:false, success:false, elapsed:0, route:null, inRound:false, seen:0});
 const byId = (a, b) => a.id < b.id ? -1 : 1;
@@ -2731,7 +2947,7 @@ async function mpSend(payload, tries = 2){
 }
 function mpTrack(){
   const m = state.mp;
-  if(m && m.ch) m.ch.track({id:m.me.id, name:m.me.name, joinedAt:m.me.joinedAt, host:m.amHost});
+  if(m && m.ch) m.ch.track({id:m.me.id, name:m.me.name, joinedAt:m.me.joinedAt, host:m.amHost, creator:!!m.creating});
 }
 /* 名前が同じ人がいたら、あとから来た人に (2) を付ける */
 function dname(id){
@@ -2768,7 +2984,7 @@ async function mpConnect(room, creating){
       if(status === "SUBSCRIBED"){
         if(m.subscribed) return;
         m.subscribed = true;
-        await ch.track({id:me.id, name:me.name, joinedAt:me.joinedAt, host:m.amHost});
+        await ch.track({id:me.id, name:me.name, joinedAt:me.joinedAt, host:m.amHost, creator:!!creating});
         $("mpErr").textContent = "";
         try{ history.replaceState(null, "", baseUrl() + "?room=" + room); }catch(_){}
         showHome("lobby");
@@ -2825,14 +3041,18 @@ function mpOnSync(){
     }
   }
   // ホストは「ホスト札」を持っている人（端末の時計は使わない）。いなくなったら id のいちばん小さい人へ
-  const holders = active.filter(x => x.host).sort(byId);
+  // 札を持っている人が複数いたら：部屋を作った人 → いま認めているホスト → id の小さい人
+  const holders = active.filter(x => x.host).sort((a, b) =>
+    (!!b.creator - !!a.creator) || ((b.id === m.hostId) - (a.id === m.hostId)) || (a.id < b.id ? -1 : 1));
+  if(holders.length) m.hostSeen = true;
   let hostId = holders.length ? holders[0].id : null;
-  if(!hostId && active.length){
+  // ホストが「いたのに、いなくなった」ときだけ札を渡す（入った直後で、まだホストが見えていないだけのときは渡さない）
+  if(!hostId && m.hostSeen && active.length){
     const members = active.filter(x => mpIsMember(x.id));
     hostId = (members.length ? members : active).sort(byId)[0].id;
     if(hostId === m.me.id && !m.amHost){ m.amHost = true; mpTrack(); mpLog("◎", "I am host now"); }
   }
-  if(holders.length > 1 && m.amHost && hostId !== m.me.id){ m.amHost = false; mpTrack(); }
+  if(holders.length > 1 && m.amHost && hostId !== m.me.id){ m.amHost = false; mpTrack(); mpLog("◎", "host flag returned"); }
   const wasHost = m.hostId === m.me.id;
   m.hostId = hostId;
   m.order = active.map(x => x.id).sort((a, b) => (b === hostId) - (a === hostId) || m.arrival.indexOf(a) - m.arrival.indexOf(b));
@@ -3224,7 +3444,7 @@ function renderMpJoin(){
 }
 $("mpCreate").addEventListener("click", ()=> mpConnect(newRoomCode(), true));
 $("mpJoin").addEventListener("click", ()=>{
-  const code = (state.invite || $("mpCode").value).toUpperCase().replace(/[^A-Z0-9]/g, "");
+  const code = (state.invite || $("mpCode").value).replace(/[０-９]/g, c => String.fromCharCode(c.charCodeAt(0) - 0xFEE0)).toUpperCase().replace(/[^A-Z0-9]/g, "");
   if(code.length !== 4){ $("mpErr").textContent = T("mpCodeBad"); return; }
   mpConnect(code, false);
 });
