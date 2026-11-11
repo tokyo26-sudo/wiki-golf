@@ -395,7 +395,7 @@
   <div class="stat"><div class="num" id="clockNum">0:00</div><div class="lbl" id="clockLbl"></div></div>
   <div class="stat" id="pageStat" hidden><div class="num" id="pageNum">0</div><div class="lbl" data-t="pageLeft"></div></div>
   <div id="route"></div>
-  <span id="ver">v1.4</span>
+  <span id="ver">v1.5</span>
   <div id="barBtns">
     <button id="teeoff" disabled data-t="teeoff"></button>
     <button id="backBtn" hidden data-t="back"></button>
@@ -452,7 +452,7 @@
 
 <div id="settings" class="overlay">
   <div class="panel">
-    <h2><span data-t="settings"></span> <small style="font-size:.65rem;font-weight:400;color:var(--sub)">v1.4</small></h2>
+    <h2><span data-t="settings"></span> <small style="font-size:.65rem;font-weight:400;color:var(--sub)">v1.5</small></h2>
     <p class="lockNote" id="lockNote" hidden></p>
     <button id="quitHole" class="quit" hidden></button>
     <button id="toHome" data-t="toHome"></button>
@@ -480,7 +480,7 @@
 
 <div id="home">
   <div class="homeInner">
-    <div class="homeHead"><h1>⛳ <span data-t="appName"></span></h1><p data-t="homeAbout"></p><small>v1.4</small></div>
+    <div class="homeHead"><h1>⛳ <span data-t="appName"></span></h1><p data-t="homeAbout"></p><small>v1.5</small></div>
 
     <section id="homeMain">
       <div class="homeBtns">
@@ -1409,6 +1409,15 @@ Object.assign(STR["zh-hans"], {helpBtn:"❓ 玩法说明", help:[
     "🖼 分享图片：把结果做成图片。中间的路线会遮住（可在设置更改）。"]]
 ]});
 
+/* ── v1.5 ── */
+Object.assign(STR.ja, {wkShow:"表示", wkHide:"非表示"});
+Object.assign(STR.en, {wkShow:"show", wkHide:"hide"});
+Object.assign(STR.fr, {wkShow:"afficher", wkHide:"masquer"});
+Object.assign(STR.es, {wkShow:"mostrar", wkHide:"ocultar"});
+Object.assign(STR.ko, {wkShow:"보이기", wkHide:"숨기기"});
+Object.assign(STR["zh-hant"], {wkShow:"顯示", wkHide:"隱藏"});
+Object.assign(STR["zh-hans"], {wkShow:"显示", wkHide:"隐藏"});
+
 /* ════════ 設定 ════════ */
 function browserLang(){
   for(const l of (navigator.languages || [navigator.language || "en"])){
@@ -1755,6 +1764,14 @@ ${skinCss(lang).map(u=>`<link rel="stylesheet" href="${u}">`).join("\n")}
   .mw-body a.new{color:#d73333}
   mark.golf-hit{background:#fce883;color:inherit;border-radius:2px}
   mark.golf-hit.golf-cur{background:#ff9632}
+  /* ナビゲーションの箱：狭い画面でも必ず出す。開け閉めはこのゲームの仕組みで */
+  html body .navbox{display:block !important}
+  table.golf-collapsed > tbody > tr:not(:first-child), table.golf-collapsed > tr:not(:first-child){display:none !important}
+  .golf-collapsed.golf-cc > .mw-collapsible-content{display:none !important}
+  div.golf-collapsed:not(.golf-cc) > :not(:first-child){display:none !important}
+  .mw-collapsible-toggle{display:none !important}
+  .golf-toggle{float:right;font-weight:normal;font-size:.85em;color:#0645ad;cursor:pointer;margin-left:.6em;user-select:none;white-space:nowrap}
+  .golf-toggle:hover{text-decoration:underline}
   /* スマホ幅：見た目はPC版のまま、はみ出しだけ防ぐ */
   @media (max-width:640px){
     .mw-page-container{padding:0 12px}
@@ -1765,6 +1782,8 @@ ${skinCss(lang).map(u=>`<link rel="stylesheet" href="${u}">`).join("\n")}
     figure[typeof~="mw:File/Thumb"], figure[typeof~="mw:File/Frame"], .thumb, .tright, .tleft{float:none !important;margin:10px auto !important;max-width:100% !important}
     img{max-width:100%;height:auto}
     .mw-category-columns{column-count:1 !important;columns:1 !important}
+    .navbox{overflow-x:auto}
+    .navbox table, table.navbox-inner, table.navbox-subgroup{display:table !important;width:100% !important}
   }
   ${extraCss}
 </style>
@@ -1799,6 +1818,33 @@ function linkTitle(href){
   return norm(t);
 }
 
+/* 折りたたみ（ナビゲーションの箱など）：最初の行だけ残してたたみ、［表示］で開く */
+function prepCollapsibles(doc){
+  if(!doc) return;
+  const narrowNow = (doc.defaultView ? doc.defaultView.innerWidth : 1000) <= 720;
+  const navCount = doc.querySelectorAll(".navbox").length;
+  doc.querySelectorAll(".mw-collapsible").forEach(el => {
+    if(el._golfSet) return;
+    let head;
+    if(el.tagName === "TABLE"){
+      const tr = el.querySelector(":scope > tbody > tr, :scope > tr");
+      head = tr && tr.querySelector(":scope > th, :scope > td");
+    }else head = el.firstElementChild;
+    if(!head) return;
+    const inNav = !!el.closest(".navbox");
+    const collapse = el.classList.contains("mw-collapsed") || el.classList.contains("collapsed") ||
+                     (el.classList.contains("autocollapse") && navCount > 1) || (narrowNow && inNav);
+    el.classList.remove("mw-collapsed", "collapsed");
+    if(el.tagName !== "TABLE" && el.querySelector(":scope > .mw-collapsible-content")) el.classList.add("golf-cc");
+    const btn = doc.createElement("span");
+    btn.className = "golf-toggle";
+    const set = c => { el.classList.toggle("golf-collapsed", c); btn.textContent = `[${c ? T("wkShow") : T("wkHide")}]`; };
+    set(collapse);
+    btn.addEventListener("click", e => { e.preventDefault(); e.stopPropagation(); set(!el.classList.contains("golf-collapsed")); });
+    head.insertBefore(btn, head.firstChild);
+    el._golfSet = set;
+  });
+}
 function fillFrame(frame, parsed, onClick, extraCss){
   return new Promise(resolve=>{
     frame.onload = ()=>{
@@ -1828,6 +1874,7 @@ function linkAllowed(a, t, rules){
 const narrow = matchMedia("(max-width:720px)");
 async function render(parsed){
   const doc = await fillFrame($("frame"), parsed, onFrameClick);
+  prepCollapsibles(doc);
   doc.querySelectorAll("a[href]").forEach(a=>{
     const href = a.getAttribute("href");
     if(href.startsWith("#")) return;
@@ -2081,13 +2128,14 @@ async function openReader(role){
     const key = curLang() + ":" + zhVariant() + ":" + p.title;
     let parsed = state.parsedCache.get(key);
     if(!parsed){ parsed = await loadArticle(p.title); state.parsedCache.set(key, parsed); }
-    await fillFrame($("readerFrame"), parsed, e=>{
+    const rdoc = await fillFrame($("readerFrame"), parsed, e=>{
       const a = e.target.closest("a[href]");
       if(!a) return;
       e.preventDefault();
       const href = a.getAttribute("href");
       if(href.startsWith("#")) scrollToAnchor(e.target.ownerDocument, href);
     }, ".mw-body a{cursor:default}");
+    prepCollapsibles(rdoc);
     $("readerNote").textContent = T("fullOf", role === "goal");
   }catch(e){
     $("readerNote").textContent = T("loadFail") + e.message;
@@ -2137,6 +2185,10 @@ function step(d){
   if(cur >= 0) hits[cur].classList.remove("golf-cur");
   cur = (cur + d + hits.length) % hits.length;
   hits[cur].classList.add("golf-cur");
+  // たたまれた箱の中なら、外側から順に開く
+  for(let c = hits[cur].closest(".golf-collapsed"); c; c = c.parentElement && c.parentElement.closest(".golf-collapsed")){
+    if(c._golfSet) c._golfSet(false);
+  }
   hits[cur].scrollIntoView({block:"center"});
   $("sCount").textContent = `${cur+1} / ${hits.length}`;
 }
