@@ -331,6 +331,7 @@
   .shFlowInfo .giri{color:#d4890a}
   #shGoalBar.bomb{background:var(--flag2);border-color:var(--flag);color:var(--ink)}
   #shGoalBar.bomb small{color:var(--sub)}
+  #shGoalBar .blv{font-size:.85em;color:var(--flag);margin-left:4px;white-space:nowrap}
   #shGoalBar .bnews{display:block;margin-top:3px;color:var(--flag);font-weight:900;animation:shShake .4s}
   #shGoalBar .bmov{display:block;margin-top:3px;color:var(--flag);animation:shDrum .5s steps(2) infinite}
   .shStep.bh{border-top:2px solid var(--flag2)}
@@ -338,6 +339,10 @@
   .shStep.hit.b3 .rs{color:#d4890a}
   .shGiri{font-size:1.05rem;font-weight:900;color:#d4890a}
   .shLink .giri{font-weight:800;color:#d4890a;margin-left:4px}
+  .shLink .rare{font-weight:800;color:#a061d1;margin-left:4px;font-size:.85em}
+  .shRare{font-size:1.05rem;font-weight:900;color:#a061d1;margin-top:2px}
+  .shRare.r1{font-size:1.3rem;animation:shShake .4s}
+  .shFlowInfo .rare{color:#a061d1}
   #shHistModal{z-index:34}
   #shHistModal .panel{background:var(--card);border-radius:14px;padding:16px 18px;width:min(640px,100%);max-height:88vh;overflow-y:auto}
   .shRec{display:block;width:100%;text-align:left;border:1px solid var(--line);border-radius:10px;padding:8px 12px;margin:6px 0;background:var(--bg);cursor:pointer;color:inherit}
@@ -625,7 +630,7 @@
   <div class="stat"><div class="num" id="clockNum">0:00</div><div class="lbl" id="clockLbl"></div></div>
   <div class="stat" id="pageStat" hidden><div class="num" id="pageNum">0</div><div class="lbl" data-t="pageLeft"></div></div>
   <div id="route"></div>
-  <span id="ver">v3.3</span>
+  <span id="ver">v3.6</span>
   <div id="barBtns">
     <button id="teeoff" disabled data-t="teeoff"></button>
     <button id="backBtn" hidden data-t="back"></button>
@@ -683,7 +688,7 @@
 
 <div id="settings" class="overlay">
   <div class="panel">
-    <h2><span data-t="settings"></span> <small style="font-size:.65rem;font-weight:400;color:var(--sub)">v3.3</small></h2>
+    <h2><span data-t="settings"></span> <small style="font-size:.65rem;font-weight:400;color:var(--sub)">v3.6</small></h2>
     <p class="lockNote" id="lockNote" hidden></p>
     <button id="quitHole" class="quit" hidden></button>
     <button id="toHome" data-t="toHome"></button>
@@ -711,7 +716,7 @@
 
 <div id="home">
   <div class="homeInner">
-    <div class="homeHead"><h1>⛳ <span data-t="appName"></span></h1><p data-t="homeAbout"></p><small>v3.3</small></div>
+    <div class="homeHead"><h1>⛳ <span data-t="appName"></span></h1><p data-t="homeAbout"></p><small>v3.6</small></div>
 
     <section id="homeMain">
       <div class="homeBtns">
@@ -1960,13 +1965,13 @@ Object.assign(STR["zh-hans"], {
   shFinal:(n,p)=>`结果：接了 ${n} 个・${p} 分`, shUndo:"↩ 收回这个词", shAgain:"再玩一次",
   shUsed:w=>`“${w}”已经用过了`, shOnlyArticle:"只能用普通条目"});
 for(const [k, a] of [
-  ["ja", "🔗 リンクしりとり（タイトル画面から）：前の言葉から2〜3打で着く記事を言ってつなげる遊び。2打+1点、3打+3点、1打と4打以上はドボン。"],
-  ["en", "🔗 Link chain (from the title screen): name articles 2–3 clicks from the previous one. 2 clicks +1, 3 clicks +3, 1 or 4+ is a bust."],
-  ["fr", "🔗 Chaîne de liens (écran titre) : proposez des articles à 2–3 clics du précédent. 2 clics +1, 3 clics +3, 1 ou 4+ : perdu."],
-  ["es", "🔗 Cadena de enlaces (pantalla de título): di artículos a 2–3 clics del anterior. 2 clics +1, 3 clics +3, 1 o 4+: fuera."],
-  ["ko", "🔗 링크 끝말잇기(타이틀 화면): 앞 단어에서 2~3타로 닿는 문서를 말해 이어 가요. 2타 +1점, 3타 +3점, 1타와 4타 이상은 아웃."],
-  ["zh-hant", "🔗 連結接龍（標題畫面）：說出從上一個條目 2～3 桿能到的條目。2 桿 +1、3 桿 +3，1 桿或 4 桿以上出局。"],
-  ["zh-hans", "🔗 链接接龙（标题画面）：说出从上一个条目 2～3 杆能到的条目。2 杆 +1、3 杆 +3，1 杆或 4 杆以上出局。"]
+  ["ja", "🔗 リンクしりとり（タイトル画面から）：前の言葉からちょうど2打で着く記事を言ってつなげる遊び。1打は近すぎ、3打以上は遠すぎでドボン。2打の道が少ないほど🌟レアで高得点（1本 +3、2〜5本 +2、それ以上 +1）。"],
+  ["en", "🔗 Link chain (from the title screen): name articles exactly 2 clicks from the previous one. 1 click is too close, 3+ too far — bust. Fewer 2-click routes = 🌟 rarer = more points (1 route +3, 2–5 +2, more +1)."],
+  ["fr", "🔗 Chaîne de liens (écran titre) : proposez des articles à exactement 2 clics du précédent. 1 clic : trop près, 3+ : trop loin — perdu. Moins il y a de chemins, plus c’est 🌟 rare (1 chemin +3, 2–5 +2, plus +1)."],
+  ["es", "🔗 Cadena de enlaces (pantalla de título): di artículos a exactamente 2 clics del anterior. 1 clic: demasiado cerca; 3+: demasiado lejos — fuera. Menos rutas = 🌟 más raro (1 ruta +3, 2–5 +2, más +1)."],
+  ["ko", "🔗 링크 끝말잇기(타이틀 화면): 앞 단어에서 딱 2타로 닿는 문서를 말해 이어 가요. 1타는 너무 가깝고 3타 이상은 너무 멀어서 아웃. 2타 길이 적을수록 🌟 레어(1개 +3, 2~5개 +2, 그 이상 +1)."],
+  ["zh-hant", "🔗 連結接龍（標題畫面）：說出從上一個條目剛好 2 桿能到的條目。1 桿太近、3 桿以上太遠都出局。2 桿路線越少越 🌟 稀有（1 條 +3、2～5 條 +2、更多 +1）。"],
+  ["zh-hans", "🔗 链接接龙（标题画面）：说出从上一个条目刚好 2 杆能到的条目。1 杆太近、3 杆以上太远都出局。2 杆路线越少越 🌟 稀有（1 条 +3、2～5 条 +2、更多 +1）。"]
 ]) STR[k].help[STR[k].help.length - 1][1].push(a);
 Object.assign(STR['ja'], {shBothR:'🎲 スタートとゴールを両方おまかせ', shPeek:'押すと記事を読めるよ'});
 Object.assign(STR['en'], {shBothR:'🎲 Random start and goal', shPeek:'Click to read the article'});
@@ -2145,6 +2150,22 @@ function uiKey(lang = curLang()){
   if(lang === "ceb") return "en";
   return lang;
 }
+/* v3.5 ちょうど2打ルール */
+Object.assign(STR["ja"], {shAbout:"前の言葉の記事から、リンクをちょうど2打たどって着ける記事を言ってつなげよう。1打（直接リンク）は近すぎ、3打以上は遠すぎでドボン！", shRule:"⛳ ちょうど2打＝セーフ　🌟 道が1本 +3・2〜5本 +2・それ以上 +1　💥 1打・3打以上＝ドボン　🚩 ゴールを言えたら +5点", shRuleBomb:"💣 爆弾から2打以内＝ドカン", shUnsure:"🤔 2打の道が見つからなかった（全部は調べきれなかった）。みんなで決めて！", shKindNoteGoal:"ゴールの言葉を1〜2打で言えたら勝ち！", shKindNoteBomb:"爆弾から2打以内の言葉を言ったらドカン（ドボン）。爆弾は一巡ごと（1人なら3つつなぐごと）に移動するよ", shBombNote:"（ここから2打以内の言葉はドカン！）", shBUnsure:"🤔 爆弾までの道を調べきれなかった。みんなで決めて！", shMiss2:"✗ 2打では届かない（遠すぎ）", shPh:w=>`「${w}」からちょうど2打の記事は？`, shWhy4:(a,b)=>`「${a}」から「${b}」へは2打で届かなかった（3打以上・遠すぎ）`, shDobonD:d=>d===1?`💥 ドボン（1打・近すぎ）`:`💥 ドボン（3打以上・遠すぎ）`, shGoalNote:n=>`（ゴールは1〜2打で言えたら勝ち！ +${n}点）`, shRare:(n,p)=>n===1?`🌟 2打の道は1本だけ！レア +${p}`:`🌟 2打の道は${n}本 +${p}`, shRareS:n=>`🌟${n}本`});
+Object.assign(STR["en"], {shAbout:"Name an article exactly 2 clicks from the previous one. 1 click (a direct link) is too close, 3 or more is too far — bust!", shRule:"⛳ exactly 2 clicks = safe  🌟 1 route +3 · 2–5 +2 · more +1  💥 1 or 3+ = bust", shRuleBomb:"💣 within 2 of the bomb = boom", shUnsure:"🤔 No 2-click route found (search was cut short). You decide!", shKindNoteGoal:"Name the goal within 1–2 clicks to win!", shKindNoteBomb:"Name a word within 2 clicks of the bomb and it explodes (bust). The bomb moves every round (solo: every 3 links).", shBombNote:" (words within 2 clicks of it explode!)", shMiss2:"✗ Not in 2 (too far)", shPh:w=>`An article exactly 2 clicks from “${w}”?`, shWhy4:(a,b)=>`“${b}” can't be reached from “${a}” in 2 clicks (3+, too far)`, shDobonD:d=>d===1?`💥 Bust (1 click, too close)`:`💥 Bust (3+, too far)`, shGoalNote:n=>` (name the goal within 1–2 clicks to win: +${n})`, shRare:(n,p)=>n===1?`🌟 Only 1 two-click route! Rare +${p}`:`🌟 ${n} two-click routes +${p}`, shRareS:n=>`🌟${n}`});
+Object.assign(STR["fr"], {shAbout:"Proposez un article à exactement 2 clics du précédent. 1 clic (lien direct) : trop près ; 3 ou plus : trop loin — perdu !", shRule:"⛳ 2 clics pile = sauf  🌟 1 chemin +3 · 2–5 +2 · plus +1  💥 1 ou 3+ = perdu", shRuleBomb:"💣 à 2 clics ou moins de la bombe = boum", shUnsure:"🤔 Aucun chemin en 2 clics trouvé (recherche incomplète). À vous de décider !", shKindNoteGoal:"Citez l’arrivée en 1–2 clics pour gagner !", shKindNoteBomb:"Un mot à 2 clics ou moins de la bombe : boum (perdu). La bombe bouge à chaque tour (seul : tous les 3 liens).", shBombNote:" (à 2 clics ou moins : boum !)", shMiss2:"✗ Pas en 2 (trop loin)", shPh:w=>`Un article à 2 clics pile de « ${w} » ?`, shWhy4:(a,b)=>`« ${b} » n’est pas accessible depuis « ${a} » en 2 clics (3+, trop loin)`, shDobonD:d=>d===1?`💥 Perdu (1 clic, trop près)`:`💥 Perdu (3+, trop loin)`, shGoalNote:n=>` (la citer en 1–2 clics : +${n} et la victoire)`, shRare:(n,p)=>n===1?`🌟 Un seul chemin ! Rare +${p}`:`🌟 ${n} chemins +${p}`, shRareS:n=>`🌟${n}`});
+Object.assign(STR["es"], {shAbout:"Di un artículo a exactamente 2 clics del anterior. 1 clic (enlace directo): demasiado cerca; 3 o más: demasiado lejos — ¡fuera!", shRule:"⛳ justo 2 clics = a salvo  🌟 1 ruta +3 · 2–5 +2 · más +1  💥 1 o 3+ = fuera", shRuleBomb:"💣 a 2 o menos de la bomba = bum", shUnsure:"🤔 No se encontró ruta de 2 clics (búsqueda incompleta). ¡Decidid!", shKindNoteGoal:"¡Nombra la meta a 1–2 clics para ganar!", shKindNoteBomb:"Una palabra a 2 clics o menos de la bomba: ¡bum! (fuera). La bomba se mueve cada vuelta (solo: cada 3 enlaces).", shBombNote:" (a 2 clics o menos: ¡bum!)", shMiss2:"✗ No en 2 (demasiado lejos)", shPh:w=>`¿Un artículo a justo 2 clics de «${w}»?`, shWhy4:(a,b)=>`No se llega a «${b}» desde «${a}» en 2 clics (3+, demasiado lejos)`, shDobonD:d=>d===1?`💥 Fuera (1 clic, demasiado cerca)`:`💥 Fuera (3+, demasiado lejos)`, shGoalNote:n=>` (nómbrala a 1–2 clics: +${n} y ganas)`, shRare:(n,p)=>n===1?`🌟 ¡Solo 1 ruta! Raro +${p}`:`🌟 ${n} rutas +${p}`, shRareS:n=>`🌟${n}`});
+Object.assign(STR["ko"], {shAbout:"앞 단어의 문서에서 링크를 딱 2타 따라가서 닿는 문서를 말해요. 1타(직접 링크)는 너무 가깝고, 3타 이상은 너무 멀어서 아웃!", shRule:"⛳ 딱 2타 = 세이프　🌟 길 1개 +3・2~5개 +2・그 이상 +1　💥 1타・3타 이상 = 아웃", shRuleBomb:"💣 폭탄에서 2타 이내 = 쾅", shUnsure:"🤔 2타 길을 못 찾았어요(다 조사하지 못함). 정해 주세요!", shKindNoteGoal:"골 단어를 1~2타로 말하면 승리!", shKindNoteBomb:"폭탄에서 2타 이내인 단어를 말하면 쾅(아웃). 폭탄은 한 바퀴마다(혼자면 3개 이을 때마다) 이동해요.", shBombNote:"(여기서 2타 이내는 쾅!)", shMiss2:"✗ 2타로 안 닿음(너무 멂)", shPh:w=>`“${w}”에서 딱 2타 걸리는 문서는?`, shWhy4:(a,b)=>`“${a}”에서 “${b}”까지 2타로 닿지 않았어요(3타 이상·너무 멂)`, shDobonD:d=>d===1?`💥 아웃(1타·너무 가까움)`:`💥 아웃(3타 이상·너무 멂)`, shGoalNote:n=>`(골을 1~2타로 말하면 +${n}점으로 승리)`, shRare:(n,p)=>n===1?`🌟 2타 길이 딱 1개! 레어 +${p}`:`🌟 2타 길 ${n}개 +${p}`, shRareS:n=>`🌟${n}개`});
+Object.assign(STR["zh-hant"], {shAbout:"說出從上一個條目剛好 2 桿能到的條目。1 桿（直接連結）太近、3 桿以上太遠，都出局！", shRule:"⛳ 剛好 2 桿＝安全　🌟 1 條路 +3・2～5 條 +2・更多 +1　💥 1 桿・3 桿以上＝出局", shRuleBomb:"💣 離炸彈 2 桿以內＝爆炸", shUnsure:"🤔 沒找到 2 桿的路線（未能全部查完）。大家決定吧！", shKindNoteGoal:"在 1～2 桿內說出終點就贏！", shKindNoteBomb:"說出離炸彈 2 桿以內的詞就爆炸（出局）。炸彈每一輪（一個人時每接 3 個）會移動。", shBombNote:"（2 桿以內會爆炸！）", shMiss2:"✗ 2 桿到不了（太遠）", shPh:w=>`從「${w}」剛好 2 桿能到的條目？`, shWhy4:(a,b)=>`從「${a}」2 桿到不了「${b}」（3 桿以上・太遠）`, shDobonD:d=>d===1?`💥 出局（1 桿・太近）`:`💥 出局（3 桿以上・太遠）`, shGoalNote:n=>`（1～2 桿說出終點 +${n} 分並獲勝）`, shRare:(n,p)=>n===1?`🌟 2 桿路線只有 1 條！稀有 +${p}`:`🌟 2 桿路線 ${n} 條 +${p}`, shRareS:n=>`🌟${n}條`});
+Object.assign(STR["zh-hans"], {shAbout:"说出从上一个条目刚好 2 杆能到的条目。1 杆（直接链接）太近、3 杆以上太远，都出局！", shRule:"⛳ 刚好 2 杆＝安全　🌟 1 条路 +3・2～5 条 +2・更多 +1　💥 1 杆・3 杆以上＝出局", shRuleBomb:"💣 离炸弹 2 杆以内＝爆炸", shUnsure:"🤔 没找到 2 杆的路线（未能全部查完）。大家决定吧！", shKindNoteGoal:"在 1～2 杆内说出终点就赢！", shKindNoteBomb:"说出离炸弹 2 杆以内的词就爆炸（出局）。炸弹每一轮（一个人时每接 3 个）会移动。", shBombNote:"（2 杆以内会爆炸！）", shMiss2:"✗ 2 杆到不了（太远）", shPh:w=>`从“${w}”刚好 2 杆能到的条目？`, shWhy4:(a,b)=>`从“${a}”2 杆到不了“${b}”（3 杆以上・太远）`, shDobonD:d=>d===1?`💥 出局（1 杆・太近）`:`💥 出局（3 杆以上・太远）`, shGoalNote:n=>`（1～2 杆说出终点 +${n} 分并获胜）`, shRare:(n,p)=>n===1?`🌟 2 杆路线只有 1 条！稀有 +${p}`:`🌟 2 杆路线 ${n} 条 +${p}`, shRareS:n=>`🌟${n}条`});
+/* v3.6 爆弾の強さ */
+Object.assign(STR["ja"], {shLv:["弱","中","強"], shInN:n=>n>2000?"被リンク2000以上":`被リンク約${n}`, shKindNoteBomb:"爆弾から2打以内の言葉を言ったらドカン（ドボン）。爆弾は一巡ごと（1人なら3つつなぐごと）に移動して、そのたびに強くなる（💣弱→💣💣中→💣💣💣強）。被リンクが多い爆弾ほど近づきやすいから注意！"});
+Object.assign(STR["en"], {shLv:["weak","medium","strong"], shInN:n=>n>2000?"2000+ inlinks":`~${n} inlinks`, shKindNoteBomb:"Name a word within 2 clicks of the bomb and it explodes (bust). The bomb moves every round (solo: every 3 links) and gets stronger each time (💣 weak → 💣💣 medium → 💣💣💣 strong). More inlinks = easier to stumble into!"});
+Object.assign(STR["fr"], {shLv:["faible","moyenne","forte"], shInN:n=>n>2000?"2000+ liens entrants":`~${n} liens entrants`, shKindNoteBomb:"Un mot à 2 clics ou moins de la bombe : boum (perdu). La bombe bouge à chaque tour (seul : tous les 3 liens) et devient plus forte (💣 → 💣💣 → 💣💣💣). Plus elle a de liens entrants, plus elle est dangereuse !"});
+Object.assign(STR["es"], {shLv:["débil","media","fuerte"], shInN:n=>n>2000?"2000+ enlaces entrantes":`~${n} enlaces entrantes`, shKindNoteBomb:"Una palabra a 2 clics o menos de la bomba: ¡bum! (fuera). La bomba se mueve cada vuelta (solo: cada 3 enlaces) y se hace más fuerte (💣 → 💣💣 → 💣💣💣). ¡Cuantos más enlaces entrantes, más peligrosa!"});
+Object.assign(STR["ko"], {shLv:["약","중","강"], shInN:n=>n>2000?"역링크 2000 이상":`역링크 약 ${n}`, shKindNoteBomb:"폭탄에서 2타 이내인 단어를 말하면 쾅(아웃). 폭탄은 한 바퀴마다(혼자면 3개 이을 때마다) 이동하고 점점 강해져요(💣약→💣💣중→💣💣💣강). 역링크가 많을수록 위험!"});
+Object.assign(STR["zh-hant"], {shLv:["弱","中","強"], shInN:n=>n>2000?"反向連結 2000 以上":`反向連結約 ${n}`, shKindNoteBomb:"說出離炸彈 2 桿以內的詞就爆炸（出局）。炸彈每一輪（一個人時每接 3 個）移動，而且越來越強（💣弱→💣💣中→💣💣💣強）。反向連結越多越危險！"});
+Object.assign(STR["zh-hans"], {shLv:["弱","中","强"], shInN:n=>n>2000?"反向链接 2000 以上":`反向链接约 ${n}`, shKindNoteBomb:"说出离炸弹 2 杆以内的词就爆炸（出局）。炸弹每一轮（一个人时每接 3 个）移动，而且越来越强（💣弱→💣💣中→💣💣💣强）。反向链接越多越危险！"});
 function T(key, ...args){
   const v = (STR[uiKey()] || STR.en)[key] ?? STR.en[key] ?? STR.ja[key] ?? key;
   return typeof v === "function" ? v(...args) : v;
@@ -4674,6 +4695,7 @@ async function mpHostPick(role){
    ③ 画面 renderShiri()：状態 sh から毎回描き直す */
 const SH_KEY = "wikiGolfShiri2";
 const SH_PTS = {2:1, 3:3};
+const shRarePts = n => n === 1 ? 3 : n <= 5 ? 2 : 1;      // v3.5 2打の道の本数で点
 const SH_GOAL_PTS = 5, SH_LONG_PTS = 3, SH_GIRI_PTS = 2, SH_SURVIVE_PTS = 3, SH_TURN_SEC = 60;
 const SH_REC_KEY = "wikiGolfShiriRec", SH_REC_MAX = 30;
 const SH_COLORS = ["#e03131", "#1c7ed6", "#2f9e44", "#f08c00"], SH_DOTS = ["🔴", "🔵", "🟢", "🟡"];
@@ -4696,7 +4718,7 @@ function shName(i){ const p = sh.players[i]; return p ? `${SH_DOTS[i]} ${p.name}
 function shDefName(i){ return T("shPNames")[i]; }
 
 /* ① 判定エンジン（1打→2打→3打の順。途中経過を onStep で知らせる） */
-async function shJudge(S, G, onStep){
+async function shJudge(S, G, onStep, maxD = 3){
   const run = {cancelled:false, n:0, lang:curLang()};
   const wait = (t0, ms) => new Promise(r => setTimeout(r, Math.max(0, ms - (Date.now() - t0))));
   let t0 = Date.now();
@@ -4708,10 +4730,11 @@ async function shJudge(S, G, onStep){
   t0 = Date.now(); onStep({k:2, st:"run"});
   const bi = await spLinksIn(run, G);
   const F = fo.set.filter(t => t !== G && t !== S), Bs = new Set(bi.set);
-  const mid = F.find(t => Bs.has(t));
+  const mids = F.filter(t => Bs.has(t)), mid = mids[0];
   await wait(t0, 1700);
-  if(mid){ onStep({k:2, st:"hit"}); return {d:2, path:[S, mid, G]}; }
+  if(mid){ onStep({k:2, st:"hit"}); return {d:2, path:[S, mid, G], n:mids.length}; }
   onStep({k:2, st:"miss"});
+  if(maxD === 2) return {d:0, complete:fo.full && bi.full};      // v3.5 ちょうど2打ルール：3打は調べない
   t0 = Date.now(); onStep({k:3, st:"run"});
   const B = bi.set.filter(t => t !== S && t !== G);
   let res = null, complete = fo.full && bi.full;
@@ -4776,16 +4799,16 @@ function shDobon(p, info){
   if(info.kind === "bomb"){ lg.via = info.via || []; lg.bd = info.bd; lg.bvia = info.bvia || []; lg.bomb = info.bomb; }
   sh.log.push(lg);
 }
-function shCommitSafe(j, d, via, goalOk, giri, x){
+function shCommitSafe(j, d, via, goalOk, giri, x, n){
   const p = sh.players[j.by];
-  const pts = SH_PTS[d] || 0, gg = giri ? SH_GIRI_PTS : 0;
+  const pts = d === 2 && n ? shRarePts(n) : (SH_PTS[d] || 0), gg = giri ? SH_GIRI_PTS : 0;
   const gb = goalOk ? SH_GOAL_PTS : 0, lb = goalOk && d === 3 ? SH_LONG_PTS : 0;
-  sh.chain.push({title:j.title, shown:j.shown, by:j.by, d, via, pts:pts + gg, goal:goalOk, giri:!!giri});
+  sh.chain.push({title:j.title, shown:j.shown, by:j.by, d, via, pts:pts + gg, goal:goalOk, giri:!!giri, n:n || 0});
   p.score += pts + gb + lb + gg;
   sh.judging = null;
-  sh.last = {kind:"safe", d, pts, by:j.by, goal:goalOk, gb, lb, gg};
+  sh.last = {kind:"safe", d, pts, by:j.by, goal:goalOk, gb, lb, gg, n:n || 0};
   sh.log.push({by:j.by, round:sh.round, kind:goalOk ? "goal" : (x ? "safeX" : "safe"), title:j.title, shown:j.shown, d, via,
-               pts:pts + gb + lb + gg, giri:!!giri, prev:sh.chain[sh.chain.length - 2].title});
+               pts:pts + gb + lb + gg, giri:!!giri, n:n || 0, prev:sh.chain[sh.chain.length - 2].title});
   if(goalOk) return shFinish("goal", j.by);
   if(shIsBomb() && !shMulti() && (sh.chain.length - 1) % 3 === 0) sh.bombDue = true;   // 1人：3つつないだら移動
   shAdvance();
@@ -4803,7 +4826,7 @@ async function shRunBomb(){
   const j = sh.judging; if(!j || !j.first || !sh.bomb) return;
   const lang = sh.lang, b = sh.bomb;
   try{
-    const res = await shJudge(j.title, b.title, s => { if(sh.judging === j) shApply({t:"bstep", ...s}); });
+    const res = await shJudge(j.title, b.title, s => { if(sh.judging === j) shApply({t:"bstep", ...s}); }, 2);
     if(sh.lang !== lang || sh.judging !== j) return;
     shApply({t:"bresult", res});
   }catch(e){ if(sh.judging === j) shApply({t:"bunsure"}); }
@@ -4815,6 +4838,52 @@ async function shNear2(S, G){
   const bi = new Set((await spLinksIn(run, G)).set);
   return fo.set.some(t => bi.has(t));
 }
+/* v3.6 爆弾の強さ：被リンク数で 弱→中→強。2000をこえる超ハブは出さない */
+const SH_BOMB_LV = [[50, 200], [200, 1000], [1000, 2000]];
+const shLvFromN = n => n == null ? 0 : n < 200 ? 0 : n < 1000 ? 1 : 2;
+function shRoundN(n){ return n > 2000 ? n : n >= 100 ? Math.round(n / 10) * 10 : n; }
+function shBombTag(b){
+  if(!b) return "";
+  const lv = b.lv != null ? b.lv : shLvFromN(b.inN);
+  return `${"💣".repeat(lv + 1)} ${T("shLv")[lv]}` + (b.inN != null ? `・${T("shInN", shRoundN(b.inN))}` : "");
+}
+async function shInCount(title, cap = 2000){
+  let n = 0, cont = {};
+  for(let i = 0; i < Math.ceil(cap / 500); i++){
+    const d = await api({action:"query", list:"backlinks", bltitle:title, blnamespace:"0", bllimit:"500", blfilterredir:"nonredirects", ...cont});
+    n += ((d.query && d.query.backlinks) || []).length;
+    if(!d.continue) return {n, more:false};
+    if(n > cap) break;
+    cont = d.continue;
+  }
+  return {n:Math.max(n, cap + 1), more:true};
+}
+async function shPickBomb(lv, avoid){
+  const [lo, hi] = SH_BOMB_LV[lv];
+  let best = null, bestGap = Infinity;
+  for(let k = 0; k < 8; k++){
+    const d = await api({action:"query", generator:"random", grnnamespace:"0", grnlimit:"10", grnfilterredir:"nonredirects", prop:"info"});
+    const pages = (d.query && d.query.pages) || [];
+    let cands;
+    if(lv === 0) cands = pages.map(p => p.title);
+    else{
+      // 中・強は「よその記事からリンクされている記事」から選ぶ（人気の記事が出やすい）
+      pages.sort((a, b) => (b.length || 0) - (a.length || 0));
+      if(!pages[0]) continue;
+      const L = await api({action:"query", generator:"links", titles:pages[0].title, gplnamespace:"0", gpllimit:"max", redirects:"1", prop:"pageprops", ppprop:"disambiguation"});
+      cands = ((L.query && L.query.pages) || []).filter(p => p.missing === undefined && p.ns === 0 && !(p.pageprops && "disambiguation" in p.pageprops)).map(p => p.title);
+    }
+    for(let i = cands.length - 1; i > 0; i--){ const j = Math.floor(Math.random() * (i + 1)); [cands[i], cands[j]] = [cands[j], cands[i]]; }
+    for(const t of cands.slice(0, 5)){
+      if(avoid && avoid(t)) continue;
+      const c = await shInCount(t, hi);
+      if(c.n >= lo && c.n <= hi) return {title:t, inN:c.n, lv};
+      const gap = c.n < lo ? lo - c.n : c.n - hi;
+      if(!c.more && gap < bestGap){ best = {title:t, inN:c.n, lv:shLvFromN(c.n)}; bestGap = gap; }
+    }
+  }
+  return best;
+}
 let shBombRun = false;
 async function shMoveBomb(){
   const lang = sh.lang;
@@ -4823,13 +4892,14 @@ async function shMoveBomb(){
     await ensureNs();
     const last = sh.chain[sh.chain.length - 1];
     let pick = null;
-    for(let k = 0; k < 6 && !pick; k++){
-      const p = await pickTitle("goal"); if(!p) continue;
-      const w = await shResolve(p.title);
-      if(nsOf(w.title) !== 0) continue;
-      if(sh.chain.some(c => norm(c.title) === norm(w.title)) || (sh.bomb && norm(w.title) === norm(sh.bomb.title))) continue;
+    const lv = Math.min(2, sh.log.filter(e => e.kind === "bombmove").length + 1);   // 1回目の移動＝中、2回目から強
+    const used = t => sh.chain.some(c => norm(c.title) === norm(t)) || (sh.bomb && norm(t) === norm(sh.bomb.title));
+    for(let k = 0; k < 4 && !pick; k++){
+      const c = await shPickBomb(lv, used); if(!c) continue;
+      const w = await shResolve(c.title);
+      if(nsOf(w.title) !== 0 || used(w.title)) continue;
       if(await shNear2(last.title, w.title)) continue;             // 今の言葉の近くには落とさない
-      pick = w;
+      pick = {...w, inN:c.inN, lv:c.lv};
     }
     if(sh.lang !== lang || sh.phase !== "play") return;
     shApply(pick ? {t:"bomb", w:pick} : {t:"bmovefail"});
@@ -4853,7 +4923,7 @@ function shApply(ev){
         : Array.from({length:s.n}, (_, i) => ({name:(s.names[i] || "").trim() || shDefName(i),
                      alive:true, life:s.mode === "r3" ? 1 : 0, pass:s.n > 1 ? 1 : 0, score:0}));
       sh.chain = [{title:s.start.title, shown:s.start.shown, by:-1}];
-      sh.bomb = s.gtype === "bomb" && s.goal ? {title:s.goal.title, shown:s.goal.shown} : null;
+      sh.bomb = s.gtype === "bomb" && s.goal ? {title:s.goal.title, shown:s.goal.shown, inN:s.goal.inN, lv:shLvFromN(s.goal.inN)} : null;
       sh.turnEnds = s.mode === "r3" ? Date.now() + SH_TURN_SEC * 1000 : 0;
       break;
     }
@@ -4869,16 +4939,16 @@ function shApply(ev){
     case "result": {
       const j = sh.judging; if(!j) break;
       const r = ev.res, p = sh.players[j.by];
-      const goalOk = j.isGoal && (r.d === 1 || r.d === 2 || r.d === 3);    // ゴールの言葉は1打でもOK
-      if(goalOk || r.d === 2 || r.d === 3 || ev.force === "safe"){
+      const goalOk = j.isGoal && (r.d === 1 || r.d === 2);    // ゴールの言葉は1打でもOK（v3.5：1〜2打）
+      if(goalOk || r.d === 2 || ev.force === "safe"){
         const d = r.d || 0, via = r.path ? r.path.slice(1, -1) : [];
         if(shIsBomb()){                                   // 💣 つぎは爆弾チェック
           if(norm(j.title) === norm(sh.bomb.title)){ shBoom(j, d, via, {d:0}); break; }
-          j.first = {d, via, x:!r.d}; j.bsteps = {}; j.unsure = false;
+          j.first = {d, via, x:!r.d, n:r.n || 0}; j.bsteps = {}; j.unsure = false;
           if(!shNet || shIsHost()) setTimeout(shRunBomb, 0);
           break;
         }
-        shCommitSafe(j, d, via, goalOk, false, !r.d);
+        shCommitSafe(j, d, via, goalOk, false, !r.d, r.n || 0);
       }else if(r.d === 0 && !r.complete && !ev.force){
         j.unsure = true;
       }else{
@@ -4908,8 +4978,9 @@ function shApply(ev){
     case "bresult": {
       const j = sh.judging; if(!j || !j.first) break;
       const r = ev.res || {};
+      if(!ev.force && r.d === 0 && r.complete === false){ j.bunsure = true; break; }
       if(ev.force === "boom" || (!ev.force && (r.d === 1 || r.d === 2))) shBoom(j, j.first.d, j.first.via, r);
-      else shCommitSafe(j, j.first.d, j.first.via, false, !ev.force && r.d === 3, j.first.x);
+      else shCommitSafe(j, j.first.d, j.first.via, false, false, j.first.x, j.first.n);
       break;
     }
     case "bmove": sh.bombMoving = true; sh.turnEnds = 0; break;
@@ -4919,8 +4990,8 @@ function shApply(ev){
       break;
     case "bomb": {
       if(!ev.w) break;
-      sh.bomb = {title:ev.w.title, shown:ev.w.shown}; sh.bombMoving = false; sh.bombNews = true;
-      sh.log.push({by:-1, round:sh.round, kind:"bombmove", title:ev.w.title, shown:ev.w.shown});
+      sh.bomb = {title:ev.w.title, shown:ev.w.shown, inN:ev.w.inN, lv:ev.w.lv}; sh.bombMoving = false; sh.bombNews = true;
+      sh.log.push({by:-1, round:sh.round, kind:"bombmove", title:ev.w.title, shown:ev.w.shown, inN:ev.w.inN, lv:ev.w.lv});
       sh.turnEnds = sh.setup.mode === "r3" ? Date.now() + SH_TURN_SEC * 1000 : 0;
       break;
     }
@@ -4964,7 +5035,7 @@ function renderShSetup(){
   for(const role of ["start", "goal"]){
     const w = s[role];
     const el = $(role === "start" ? "shsStart" : "shsGoal");
-    el.textContent = w ? w.shown : (role === "goal" ? T("shNoGoal") : T("shNotSet"));
+    el.textContent = w ? w.shown + (role === "goal" && s.gtype === "bomb" && w.inN != null ? `（${shBombTag(w)}）` : "") : (role === "goal" ? T("shNoGoal") : T("shNotSet"));
     el.classList.toggle("empty", !w);
     el.classList.toggle("set", !!w);
     el.title = w ? T("shPeek") : "";
@@ -4997,7 +5068,7 @@ function renderShPlay(){
   const bombOn = shIsBomb(), g = bombOn ? null : sh.setup.goal, gb = $("shGoalBar");
   gb.hidden = !g && !bombOn; gb.classList.toggle("bomb", bombOn); gb.innerHTML = "";
   if(bombOn){
-    gb.append(mk("span", "", T("shBombIs")), shWordBtn(sh.bomb.shown, sh.bomb.title, null), mk("small", "", T("shBombNote")));
+    gb.append(mk("span", "", T("shBombIs")), shWordBtn(sh.bomb.shown, sh.bomb.title, null), mk("span", "blv", " " + shBombTag(sh.bomb)), mk("small", "", T("shBombNote")));
     if(sh.bombMoving) gb.append(mk("span", "bmov", T("shBombMoving")));
     else if(sh.bombNews && playing) gb.append(mk("span", "bnews", T("shBombMoved")));
   }else if(g){ gb.append(mk("span", "", T("shGoalIs")), shWordBtn(g.shown, g.title, null), mk("small", "", T("shGoalNote", SH_GOAL_PTS))); }
@@ -5036,6 +5107,7 @@ function renderShPlay(){
         lk.append(v);
       }
       if(c.giri) lk.append(mk("span", "giri", T("shGiri")));
+      if(c.n) lk.append(mk("span", "rare", T("shRareS", c.n)));
       if(c.pts) lk.append(mk("span", "pt", "+" + c.pts));
       box.append(lk);
     }
@@ -5092,12 +5164,13 @@ function renderShPlay(){
     if(L.kind === "safe" && L.goal){
       jb.append(mk("div", "shGoalHit", who + T("shGoalLink", L.d)));
       const parts = [];
-      if(L.pts) parts.push(T("shPtsLine", L.d === 3 ? T("shNice3") : T("shSafe2"), L.pts));
+      if(L.pts) parts.push(L.n ? T("shRare", L.n, L.pts) : T("shPtsLine", L.d === 3 ? T("shNice3") : T("shSafe2"), L.pts));
       parts.push(T("shPtsLine", T("shGoalWord"), L.gb));
       if(L.lb) parts.push(T("shPtsLine", T("shLong"), L.lb));
       parts.forEach(t => jb.append(mk("div", "shPtsRow", t)));
     }else if(L.kind === "safe"){
-      jb.append(mk("div", "shSafeBig d" + L.d, who + (L.d === 3 ? T("shNice3") : L.d === 2 ? T("shSafe2") : T("shSafeX")) + (L.pts ? `  +${L.pts}` : "")));
+      jb.append(mk("div", "shSafeBig d" + L.d, who + (L.d === 3 ? T("shNice3") : L.d === 2 ? T("shSafe2") : T("shSafeX")) + (L.pts && !L.n ? `  +${L.pts}` : "")));
+      if(L.n) jb.append(mk("div", "shRare" + (L.n === 1 ? " r1" : ""), T("shRare", L.n, L.pts)));
       if(L.gg) jb.append(mk("div", "shGiri", `${T("shGiri")}  +${L.gg}`));
     }else if(L.kind === "pass"){
       jb.append(mk("div", "shPassBig", who + T("shPassed")));
@@ -5245,18 +5318,19 @@ function shRenderLog(box, log, names, multi, start, goal, gtype){
   };
   const mark = (text, fill) => { const g = mk("span", "shFg"); g.append(btn(text, "bm", fill)); line.append(g); };
   const openBtn = (title, next) => { const o = mk("button", "shWord open", T("shFlowOpen")); o.addEventListener("click", () => shOpen(title, next || null)); return o; };
-  const bombFill = w => el => { el.append(mk("b", "lab bmlab", T("shFlowBomb")), mk("span", "", w.shown), openBtn(w.title)); };
+  const bombFill = w => el => { el.append(mk("b", "lab bmlab", T("shFlowBomb")), mk("span", "", w.shown + "　" + shBombTag(w)), openBtn(w.title)); };
+  const bombIcon = w => "💣".repeat((w.lv != null ? w.lv : shLvFromN(w.inN)) + 1);
   const viaWords = (via, title) => {
     const hop = [...via, title];
     via.forEach((t, i) => put(t, "via", el => { el.append(mk("b", "lab", T("shFlowVia")), mk("span", "", t), openBtn(t, hop[i + 1])); }));
   };
   const whoTag = (el, e) => { if(e.by >= 0 && multi){ const w = mk("span", "who", `${SH_DOTS[e.by]} ${names[e.by]}`); w.style.setProperty("--pc", SH_COLORS[e.by]); el.append(w); } };
   if(start) put(start.shown, "odai", el => { el.append(mk("b", "lab", T("shFlowStart")), mk("span", "", start.shown), openBtn(start.title)); });
-  if(bombMode && goal) mark("💣 " + goal.shown, bombFill(goal));
+  if(bombMode && goal) mark(bombIcon(goal) + " " + goal.shown, bombFill(goal));
   log.forEach(e => {
     if(e.kind === "pass"){ arrows++; return; }
     if(e.kind === "undo" || e.kind === "left") return;
-    if(e.kind === "bombmove"){ mark("💣 " + e.shown, bombFill(e)); return; }
+    if(e.kind === "bombmove"){ mark(bombIcon(e) + " " + e.shown, bombFill(e)); return; }
     const fill = el => {
       el.classList.add(e.kind);
       whoTag(el, e);
@@ -5274,6 +5348,7 @@ function shRenderLog(box, log, names, multi, start, goal, gtype){
                     e.d === 3 ? T("shNice3") : e.d === 2 ? T("shSafe2") : T("shSafeX");
         el.append(mk("b", "lab", lab));
         if(e.giri) el.append(mk("b", "lab giri", T("shGiri")));
+        if(e.n) el.append(mk("b", "lab rare", T("shRareS", e.n)));
         el.append(mk("span", "", e.shown));
         if(e.pts) el.append(mk("span", "pt", ` +${e.pts}`));
         el.append(openBtn(e.title));
@@ -5383,7 +5458,7 @@ async function shRunJudge(w){
   const lang = sh.lang;
   shApply({t:"judge", ...w});
   try{
-    const res = await shJudge(last.title, w.title, s => shApply({t:"step", ...s}));
+    const res = await shJudge(last.title, w.title, s => shApply({t:"step", ...s}), 2);
     if(sh.lang !== lang || !sh.judging) return;
     shApply({t:"result", res});
   }catch(e){
@@ -5402,11 +5477,13 @@ async function shRandom(role){
   try{
     await ensureNs();
     const other = sh.setup[role === "start" ? "goal" : "start"];
+    const bombPick = role === "goal" && sh.setup.gtype === "bomb";
     for(let k = 0; k < 4; k++){
-      const p = await pickTitle(role);
+      const p = bombPick ? await shPickBomb(0, t => other && norm(other.title) === norm(t)) : await pickTitle(role);
       if(!p) continue;
       const w = await shResolve(p.title);
       if(other && norm(other.title) === norm(w.title)) continue;
+      if(bombPick) w.inN = p.inN;
       sh.setup[role] = w; break;
     }
     shSave(); renderShiri();
@@ -5416,7 +5493,11 @@ async function shRandom(role){
 function shPick(role){
   const other = sh.setup[role === "start" ? "goal" : "start"];
   openPicker(role, async title => {
-    try{ const w = await shResolve(title); sh.setup[role] = w; shSave(); renderShiri(); }catch(e){ toast(T("err") + e.message); }
+    try{
+      const w = await shResolve(title);
+      if(role === "goal" && sh.setup.gtype === "bomb") w.inN = (await shInCount(w.title, 2000)).n;
+      sh.setup[role] = w; shSave(); renderShiri();
+    }catch(e){ toast(T("err") + e.message); }
   }, other ? other.title : "");
 }
 async function shRandomBoth(){
@@ -5425,10 +5506,12 @@ async function shRandomBoth(){
   try{
     await ensureNs();
     for(let k = 0; k < 4; k++){
-      const [a, b] = await Promise.all([pickTitle("start"), pickTitle("goal")]);
+      const bombPick = sh.setup.gtype === "bomb";
+      const [a, b] = await Promise.all([pickTitle("start"), bombPick ? shPickBomb(0) : pickTitle("goal")]);
       if(!a || !b) continue;
       const [ws, wg] = await Promise.all([shResolve(a.title), shResolve(b.title)]);
       if(norm(ws.title) === norm(wg.title)) continue;
+      if(bombPick) wg.inN = b.inN;
       sh.setup.start = ws; sh.setup.goal = wg; break;
     }
     shSave(); renderShiri();
@@ -5446,7 +5529,13 @@ $("shsGoalP").addEventListener("click", () => shPick("goal"));
 $("shsGoalX").addEventListener("click", () => { sh.setup.goal = null; shSave(); renderShiri(); });
 document.querySelectorAll("#shsN button").forEach(b => b.addEventListener("click", () => { sh.setup.n = +b.dataset.n; shSave(); renderShiri(); }));
 document.querySelectorAll("#shsMode button").forEach(b => b.addEventListener("click", () => { sh.setup.mode = b.dataset.m; shSave(); renderShiri(); }));
-document.querySelectorAll("#shsKind button").forEach(b => b.addEventListener("click", () => { sh.setup.gtype = b.dataset.k; shSave(); renderShiri(); }));
+document.querySelectorAll("#shsKind button").forEach(b => b.addEventListener("click", async () => {
+  sh.setup.gtype = b.dataset.k; shSave(); renderShiri();
+  const g = sh.setup.goal;                                     // 爆弾にしたとき、被リンク数をまだ数えてなければ数える
+  if(b.dataset.k === "bomb" && g && g.inN == null){
+    try{ const c = await shInCount(g.title, 2000); if(sh.setup.goal === g){ g.inN = c.n; shSave(); renderShiri(); } }catch(_){}
+  }
+}));
 $("shsBegin").addEventListener("click", () => { if(!sh.setup.start) return; if(shNet) shNetBegin(); else shApply({t:"begin"}); });
 /* 過去の記録 */
 function shFmtDate(t){ try{ return new Date(t).toLocaleString(uiKey(), {year:"numeric", month:"numeric", day:"numeric", hour:"2-digit", minute:"2-digit"}); }catch(_){ return ""; } }
@@ -5871,7 +5960,10 @@ $("shNetCopy").addEventListener("click", async () => {
   try{ await navigator.clipboard.writeText(url); toast(T("copied")); }catch(_){ prompt(T("copyPrompt"), url); }
 });
 $("shGo").addEventListener("click", shSubmit);
-$("hShiri").addEventListener("click", () => showHome("shiri"));
+$("hShiri").addEventListener("click", () => {
+  if(!shNet && sh.phase === "end"){ sh = shNewSetup(sh.setup); shSave(); }   // v3.4 終わったゲームは残さず準備画面へ
+  showHome("shiri");
+});
 $("shBack").addEventListener("click", async () => { if(shNet){ if(sh.phase === "play" && !confirm(T("shNetLeaveQ"))) return; await shNetLeave(true); } showHome("main"); });
 function shEnter(){
   if(!shNet && sh.lang !== curLang()){ const s = sh.setup; s.start = null; s.goal = null; sh = shNewSetup(s); }
