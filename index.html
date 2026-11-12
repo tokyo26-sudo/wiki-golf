@@ -184,6 +184,29 @@
   .moreBtn{display:block;width:100%;margin:4px 0 0;padding:10px;border-radius:12px;font-weight:700;color:var(--sub);background:transparent;border:1px dashed var(--line)}
   #lbMoreBtn{margin:8px 0}
   #hBack,#shBack{border:0;background:transparent;color:var(--sub);padding:4px 0;margin-bottom:4px}
+  /* v5.0 Wikipediaゲーム集のトップ */
+  .homeLang{padding:4px 14px 8px}
+  .homeLang .shead{display:none}
+  .homeLang .srow{border:0;padding:4px 0}
+  .gameCard{background:var(--card);border:1px solid var(--line);border-radius:16px;padding:12px 18px 14px;margin:12px 0}
+  .gameCard h2{margin:2px 0 4px;font-size:1.25rem}
+  .gameCard > p{margin:0 0 10px;color:var(--sub);font-size:.88rem;text-wrap:pretty;word-break:auto-phrase}
+  .gameCard .homeBtns{margin:10px 0 8px}
+  .gcGolf{border-top:5px solid var(--green)}
+  .gcShiri{border-top:5px solid #36c}
+  .gcMine{border-top:5px solid var(--flag)}
+  .gameCards2{display:grid;grid-template-columns:1fr 1fr;gap:12px}
+  .gameCards2 .gameCard{margin:0;display:flex;flex-direction:column}
+  .gameCards2 .gameCard > p{flex:1}
+  .gameCards2 .prime{width:100%;padding:12px;font-size:1rem;font-weight:700;border-radius:12px;color:#fff;border:0}
+  .gcShiri .prime{background:#36c}
+  .gcMine .prime{background:var(--flag)}
+  #mineIcon{cursor:default;user-select:none;-webkit-user-select:none}
+  #homeSettings{margin-top:6px}
+  .homeFoot{display:flex;justify-content:center;gap:18px;margin:14px 0 4px;flex-wrap:wrap}
+  @media (max-width:560px){ .gameCards2{grid-template-columns:1fr} }
+  #innTip{position:fixed;z-index:60;pointer-events:none;background:rgba(20,20,20,.88);color:#fff;font-size:.8rem;font-weight:700;padding:3px 8px;border-radius:8px;white-space:nowrap}
+  #innTip[hidden]{display:none}
   .shiriBtn{display:block;width:100%;margin:-4px 0 12px;padding:12px;font-size:1rem;font-weight:700;border-radius:12px;border:2px dashed var(--green);background:var(--card);color:var(--green)}
   #homeShiri h2{margin:4px 0 6px}
   #shRule{font-size:.82rem;font-weight:700;margin:0 0 10px;background:var(--green2);color:var(--green);border-radius:10px;padding:6px 10px}
@@ -649,7 +672,7 @@
   <div class="stat"><div class="num" id="clockNum">0:00</div><div class="lbl" id="clockLbl"></div></div>
   <div class="stat" id="pageStat" hidden><div class="num" id="pageNum">0</div><div class="lbl" data-t="pageLeft"></div></div>
   <div id="route"></div>
-  <span id="ver">v4.5</span>
+  <span id="ver">v5.0</span>
   <div id="barBtns">
     <button id="teeoff" disabled data-t="teeoff"></button>
     <button id="backBtn" hidden data-t="back"></button>
@@ -707,7 +730,7 @@
 
 <div id="settings" class="overlay">
   <div class="panel">
-    <h2><span data-t="settings"></span> <small style="font-size:.65rem;font-weight:400;color:var(--sub)">v4.5</small></h2>
+    <h2><span data-t="settings"></span> <small style="font-size:.65rem;font-weight:400;color:var(--sub)">v5.0</small></h2>
     <p class="lockNote" id="lockNote" hidden></p>
     <button id="quitHole" class="quit" hidden></button>
     <button id="toHome" data-t="toHome"></button>
@@ -735,17 +758,37 @@
 
 <div id="home">
   <div class="homeInner">
-    <div class="homeHead"><h1>⛳ <span data-t="appName"></span></h1><p data-t="homeAbout"></p><small>v4.5</small></div>
+    <div class="homeHead"><h1>🎮 <span data-t="gamesName"></span></h1><p data-t="gamesAbout"></p><small>v5.0</small></div>
 
     <section id="homeMain">
-      <div class="homeBtns">
-        <button id="hSolo" class="prime" data-t="hSolo"></button>
-        <button id="hBattle" data-t="hBattle"></button>
-        <button id="hSaved" data-t="savedList"></button>
+      <div class="homeCard homeLang" id="homeLang"></div>
+      <div class="gameCard gcGolf">
+        <h2>⛳ <span data-t="appName"></span></h2>
+        <p data-t="homeAbout"></p>
+        <div class="homeBtns">
+          <button id="hSolo" class="prime" data-t="hSolo"></button>
+          <button id="hBattle" data-t="hBattle"></button>
+          <button id="hSaved" data-t="savedList"></button>
+        </div>
+        <button id="golfRulesBtn" class="moreBtn"></button>
+        <div id="homeSettings" hidden></div>
       </div>
-      <button id="hShiri" class="shiriBtn" data-t="hShiri"></button>
-      <button id="helpBtnHome" class="helpLink" data-t="helpBtn"></button>
-      <div class="homeCard" id="homeSettings"></div>
+      <div class="gameCards2">
+        <div class="gameCard gcShiri">
+          <h2 data-t="gcGoalShiri"></h2>
+          <p data-t="gcGoalShiriD"></p>
+          <button id="hShiri" class="prime" data-t="gcPlay"></button>
+        </div>
+        <div class="gameCard gcMine">
+          <h2><span id="mineIcon">💣</span> <span data-t="gcMineShiri"></span></h2>
+          <p data-t="gcMineShiriD"></p>
+          <button id="hMine" class="prime" data-t="gcPlay"></button>
+        </div>
+      </div>
+      <div class="homeFoot">
+        <button id="helpBtnHome" class="helpLink" data-t="helpBtn"></button>
+        <button id="hShiriRec" class="helpLink" data-t="gcShiriRec"></button>
+      </div>
       <button id="homeMoreBtn" class="moreBtn"></button>
       <div class="homeCard" id="homeMore" hidden></div>
     </section>
@@ -790,13 +833,13 @@
             </div>
           </div>
           <div class="shsRow"><span class="lbl" data-t="shsStartL"></span><b id="shsStart" class="shsW"></b><span class="shsBtns"><button id="shsStartR" title="random">🎲</button><button id="shsStartP">✏️</button></span></div>
-          <div class="shsRow"><span class="lbl" data-t="shsKindL"></span><span id="shsKind" class="seg"><button data-k="goal" data-t="shKindGoal"></button><button data-k="bomb" data-t="shKindBomb"></button><button data-k="foot" data-t="shKindFoot"></button></span></div>
           <p class="shsNote" id="shsKindNote"></p>
           <div class="shsRow" id="shsGoalRow"><span class="lbl" id="shsGoalLbl"></span><b id="shsGoal" class="shsW"></b><span class="shsBtns"><button id="shsGoalR" title="random">🎲</button><button id="shsGoalP">✏️</button><button id="shsGoalX">✖</button></span></div>
           <div class="shsRow shsBothRow"><button id="shsBothR" data-t="shBothR"></button></div>
           <div class="shsRow shsLocalOnly"><span class="lbl" data-t="shsNL"></span><span id="shsN" class="seg"><button data-n="1">1</button><button data-n="2">2</button><button data-n="3">3</button><button data-n="4">4</button></span></div>
           <div id="shsNames" class="shsLocalOnly"></div>
-          <div class="shsRow"><span class="lbl" data-t="shsModeL"></span><span id="shsMode" class="seg"><button data-m="free" data-t="shModeFree"></button><button data-m="r3" data-t="shModeR3"></button></span></div>
+          <div class="shsRow"><span class="lbl" data-t="shsLifeL"></span><span id="shsLife" class="seg"><button data-v="0" data-t="shLifeNone"></button><button data-v="3">♥♥♥</button></span></div>
+          <div class="shsRow"><span class="lbl" data-t="shsTimeL"></span><span id="shsTime" class="seg"><button data-v="0" data-t="shTimeNone"></button><button data-v="60" data-t="shTime60"></button></span></div>
           <p class="shsNote" id="shsModeNote"></p>
           <p class="shsNote" id="shsPassNote" data-t="shsPassNote"></p>
           <button id="shsBegin" data-t="shsBegin"></button>
@@ -871,6 +914,7 @@
 
 <div id="toast"></div>
 
+<div id="innTip" hidden></div>
 <div id="shBombPop" hidden><div class="bp"></div></div>
 <div id="shHistModal" class="overlay">
   <div class="panel">
@@ -2226,6 +2270,14 @@ Object.assign(STR["es"], {shKindFoot:"💣 Minas", shFootIs:"💣 Minas: ", shFA
 Object.assign(STR["ko"], {shKindFoot:"💣 지뢰", shFootIs:"💣 지뢰: ", shFAsk:"💣 지뢰(앞에 나온 단어)에 링크했나?", shFootHit:"💥 지뢰를 밟았다!", shRuleFoot:"💣 지뢰(앞에 나온 단어)에 링크 = 아웃", shTitleFoot:"💣 링크 지뢰 끝말잇기"});
 Object.assign(STR["zh-hant"], {shKindFoot:"💣 地雷", shFootIs:"💣 地雷：", shFAsk:"💣 有連到地雷（之前的詞）？", shFootHit:"💥 踩到地雷了！", shRuleFoot:"💣 連到地雷（之前的詞）＝出局", shTitleFoot:"💣 連結地雷接龍"});
 Object.assign(STR["zh-hans"], {shKindFoot:"💣 地雷", shFootIs:"💣 地雷：", shFAsk:"💣 有链接到地雷（之前的词）？", shFootHit:"💥 踩到地雷了！", shRuleFoot:"💣 链接到地雷（之前的词）＝出局", shTitleFoot:"💣 链接地雷接龙"});
+/* v5.0 ゲーム集・ライフ・バケモン地雷 */
+Object.assign(STR["ja"], {gamesName:"Wikipediaゲーム集", gamesAbout:"記事の中のリンクでつないで遊ぶ、ちょっと頭をつかうゲームいろいろ。", gcGoalShiri:"🔗 ゴールしりとり", gcGoalShiriD:"前の言葉からちょうど2打でたどれる記事を言ってつなげよう。ゴールの言葉を言えたら勝ち！", gcMineShiri:"リンク地雷しりとり", gcMineShiriD:"つなぐルールは同じ。でも前に出た言葉がどんどん地雷になる。地雷にリンクしてる記事を言ったらアウト！", gcPlay:"あそぶ", gcShiriRec:"📚 しりとりの記録", golfRules:"⛳ ゴルフのルール（難易度・制限時間）", shTitleGoal:"🔗 ゴールしりとり", shTitleBomb:"💣💣 爆弾しりとり（ひみつ）", shSecret:"🤫 ひみつの爆弾しりとり！", shsLifeL:"❤️ ライフ", shLifeNone:"なし", shsTimeL:"⏱ 1手の時間", shTimeNone:"なし", shTime60:"60秒", shLifeNote3:"ドボン・地雷・時間切れで♥がひとつ減って、0点で次の人へ。♥がなくなったら脱落", shLifeNote0:"1回ミスしたら脱落（サドンデス）", shLife3S:"♥3", shLife0S:"ライフなし", shTime60S:"1手60秒", shTime0S:"時間なし", shBakeHit:"👹 バケモンに捕まった！", shKindNoteGoal:"ゴールの言葉を1〜2打で言えたら勝ち！（✖でゴールなしにもできる）"});
+Object.assign(STR["en"], {gamesName:"Wikipedia Games", gamesAbout:"A few brainy games played by following the links inside articles.", gcGoalShiri:"🔗 Goal Chain", gcGoalShiriD:"Name an article exactly 2 clicks from the previous word. Reach the goal word to win!", gcMineShiri:"Link Minefield", gcMineShiriD:"Same chaining rule, but every earlier word becomes a mine. Name something that links to a mine and you're out!", gcPlay:"Play", gcShiriRec:"📚 Chain records", golfRules:"⛳ Golf rules (difficulty · time limits)", shTitleGoal:"🔗 Goal Chain", shTitleBomb:"💣💣 Bomb Chain (secret)", shSecret:"🤫 Secret bomb chain!", shsLifeL:"❤️ Lives", shLifeNone:"None", shsTimeL:"⏱ Time per turn", shTimeNone:"None", shTime60:"60 s", shLifeNote3:"A bust, mine or timeout costs a ♥ and passes the turn with 0 points. Out when your hearts run out.", shLifeNote0:"One mistake and you're out (sudden death)", shLife3S:"♥3", shLife0S:"no lives", shTime60S:"60 s/turn", shTime0S:"no time limit", shBakeHit:"👹 Caught by a monster!", shKindNoteGoal:"Name the goal within 1–2 clicks to win! (✖ for no goal)"});
+Object.assign(STR["fr"], {gamesName:"Jeux Wikipédia", gamesAbout:"Quelques jeux de réflexion en suivant les liens des articles.", gcGoalShiri:"🔗 Chaîne à arrivée", gcGoalShiriD:"Proposez un article à 2 clics pile du précédent. Atteignez l’arrivée pour gagner !", gcMineShiri:"Champ de mines de liens", gcMineShiriD:"Même règle, mais chaque mot déjà dit devient une mine. Un article qui y renvoie : perdu !", gcPlay:"Jouer", gcShiriRec:"📚 Historique", golfRules:"⛳ Règles du golf", shTitleGoal:"🔗 Chaîne à arrivée", shTitleBomb:"💣💣 Chaîne à bombes (secret)", shSecret:"🤫 Mode secret !", shsLifeL:"❤️ Vies", shLifeNone:"Aucune", shsTimeL:"⏱ Temps par coup", shTimeNone:"Aucun", shTime60:"60 s", shLifeNote3:"Une erreur coûte un ♥ (0 point, tour suivant). Plus de ♥ : éliminé.", shLifeNote0:"Une erreur et c’est fini", shLife3S:"♥3", shLife0S:"sans vie", shTime60S:"60 s/coup", shTime0S:"sans limite", shBakeHit:"👹 Attrapé par un monstre !"});
+Object.assign(STR["es"], {gamesName:"Juegos de Wikipedia", gamesAbout:"Algunos juegos de ingenio siguiendo los enlaces de los artículos.", gcGoalShiri:"🔗 Cadena con meta", gcGoalShiriD:"Di un artículo a 2 clics justos del anterior. ¡Llega a la meta para ganar!", gcMineShiri:"Campo de minas de enlaces", gcMineShiriD:"Misma regla, pero cada palabra dicha se vuelve mina. ¡Si enlazas a una, fuera!", gcPlay:"Jugar", gcShiriRec:"📚 Historial", golfRules:"⛳ Reglas del golf", shTitleGoal:"🔗 Cadena con meta", shTitleBomb:"💣💣 Cadena de bombas (secreto)", shSecret:"🤫 ¡Modo secreto!", shsLifeL:"❤️ Vidas", shLifeNone:"Ninguna", shsTimeL:"⏱ Tiempo por turno", shTimeNone:"Sin límite", shTime60:"60 s", shLifeNote3:"Un fallo cuesta un ♥ (0 puntos, turno siguiente). Sin ♥: fuera.", shLifeNote0:"Un fallo y fuera", shLife3S:"♥3", shLife0S:"sin vidas", shTime60S:"60 s/turno", shTime0S:"sin límite", shBakeHit:"👹 ¡Te atrapó un monstruo!"});
+Object.assign(STR["ko"], {gamesName:"위키백과 게임 모음", gamesAbout:"문서 속 링크를 따라가며 머리를 쓰는 게임들.", gcGoalShiri:"🔗 골 끝말잇기", gcGoalShiriD:"앞 단어에서 딱 2타로 닿는 문서를 말해 이어요. 골 단어를 말하면 승리!", gcMineShiri:"링크 지뢰 끝말잇기", gcMineShiriD:"규칙은 같지만 앞에 나온 단어가 지뢰가 돼요. 지뢰에 링크한 문서를 말하면 아웃!", gcPlay:"하기", gcShiriRec:"📚 끝말잇기 기록", golfRules:"⛳ 골프 규칙", shTitleGoal:"🔗 골 끝말잇기", shTitleBomb:"💣💣 폭탄 끝말잇기(비밀)", shSecret:"🤫 비밀 모드!", shsLifeL:"❤️ 라이프", shLifeNone:"없음", shsTimeL:"⏱ 한 수 시간", shTimeNone:"없음", shTime60:"60초", shLifeNote3:"아웃·지뢰·시간 초과로 ♥가 하나 줄고 0점으로 다음 사람에게. ♥가 없으면 탈락", shLifeNote0:"한 번 실수하면 탈락", shLife3S:"♥3", shLife0S:"라이프 없음", shTime60S:"한 수 60초", shTime0S:"시간 무제한", shBakeHit:"👹 괴물에게 잡혔다!"});
+Object.assign(STR["zh-hant"], {gamesName:"維基百科遊戲集", gamesAbout:"沿著條目裡的連結動動腦的小遊戲。", gcGoalShiri:"🔗 終點接龍", gcGoalShiriD:"說出從上一個詞剛好 2 桿能到的條目，說出終點就贏！", gcMineShiri:"連結地雷接龍", gcMineShiriD:"規則一樣，但說過的詞會變成地雷。連到地雷就出局！", gcPlay:"開始", gcShiriRec:"📚 接龍紀錄", golfRules:"⛳ 高爾夫規則", shTitleGoal:"🔗 終點接龍", shTitleBomb:"💣💣 炸彈接龍（秘密）", shSecret:"🤫 秘密模式！", shsLifeL:"❤️ 生命", shLifeNone:"無", shsTimeL:"⏱ 每手時間", shTimeNone:"無", shTime60:"60 秒", shLifeNote3:"出局、地雷、超時會少一顆 ♥，0 分換下一人。♥ 用完就淘汰", shLifeNote0:"失誤一次就淘汰", shLife3S:"♥3", shLife0S:"無生命", shTime60S:"每手 60 秒", shTime0S:"不限時", shBakeHit:"👹 被怪物抓到了！"});
+Object.assign(STR["zh-hans"], {gamesName:"维基百科游戏集", gamesAbout:"沿着条目里的链接动动脑的小游戏。", gcGoalShiri:"🔗 终点接龙", gcGoalShiriD:"说出从上一个词刚好 2 杆能到的条目，说出终点就赢！", gcMineShiri:"链接地雷接龙", gcMineShiriD:"规则一样，但说过的词会变成地雷。链接到地雷就出局！", gcPlay:"开始", gcShiriRec:"📚 接龙记录", golfRules:"⛳ 高尔夫规则", shTitleGoal:"🔗 终点接龙", shTitleBomb:"💣💣 炸弹接龙（秘密）", shSecret:"🤫 秘密模式！", shsLifeL:"❤️ 生命", shLifeNone:"无", shsTimeL:"⏱ 每手时间", shTimeNone:"无", shTime60:"60 秒", shLifeNote3:"出局、地雷、超时会少一颗 ♥，0 分换下一人。♥ 用完就淘汰", shLifeNote0:"失误一次就淘汰", shLife3S:"♥3", shLife0S:"无生命", shTime60S:"每手 60 秒", shTime0S:"不限时", shBakeHit:"👹 被怪物抓到了！"});
 function T(key, ...args){
   const v = (STR[uiKey()] || STR.en)[key] ?? STR.en[key] ?? STR.ja[key] ?? key;
   return typeof v === "function" ? v(...args) : v;
@@ -2233,7 +2285,7 @@ function T(key, ...args){
 function applyUI(){
   const k = uiKey();
   document.documentElement.lang = k === "zh-hant" ? "zh-Hant" : k === "zh-hans" ? "zh-Hans" : k;
-  document.title = T("appName");
+  document.title = T("gamesName");
   document.querySelectorAll("[data-t]").forEach(el => el.textContent = T(el.dataset.t));
   document.querySelectorAll("[data-t-html]").forEach(el => el.innerHTML = T(el.dataset.tHtml));
   $("sInput").placeholder = T("searchPh");
@@ -3146,6 +3198,8 @@ function pickRows(rows, keep){
   return out.filter((r, i) => !r.head || (out[i + 1] && !out[i + 1].head));
 }
 const mainRows = () => pickRows(schema(), r => r.main);
+const langRows = () => pickRows(schema(), r => r.main && !r.rule);      // v5.0 言語はトップの上に（全部のゲーム共通）
+const golfRuleRows = () => pickRows(schema(), r => r.main && r.rule);   // ゴルフのルールはゴルフのカードにしまう
 const moreRows = (rulesOnly) => pickRows(schema(), r => !r.main && (!rulesOnly || r.rule));
 function moreToggle(btn, box, flag){
   btn.textContent = `${T("settings")} ${state[flag] ? "▲" : "▼"}`;
@@ -3839,7 +3893,10 @@ function hideHome(){
 function renderHome(){
   if(state.screen !== "home") return;
   if(state.homeView === "main"){
-    renderRows($("homeSettings"), mainRows());
+    renderRows($("homeLang"), langRows());
+    renderRows($("homeSettings"), golfRuleRows());
+    $("golfRulesBtn").textContent = `${T("golfRules")} ${state.golfRulesOpen ? "▲" : "▼"}`;
+    $("homeSettings").hidden = !state.golfRulesOpen;
     renderRows($("homeMore"), moreRows(false));
     moreToggle($("homeMoreBtn"), $("homeMore"), "moreOpen");
   }
@@ -3865,6 +3922,7 @@ $("helpBtnGame").addEventListener("click", openHelp);
 $("helpClose").addEventListener("click", ()=> $("helpModal").classList.remove("show"));
 $("helpModal").addEventListener("click", e=>{ if(e.target.id === "helpModal") $("helpModal").classList.remove("show"); });
 $("homeMoreBtn").addEventListener("click", ()=>{ state.moreOpen = !state.moreOpen; renderHome(); });
+$("golfRulesBtn").addEventListener("click", ()=>{ state.golfRulesOpen = !state.golfRulesOpen; renderHome(); });
 $("lbMoreBtn").addEventListener("click", ()=>{ state.lbMoreOpen = !state.lbMoreOpen; renderLobby(); });
 $("hBattle").addEventListener("click", ()=>{ state.invite = null; $("mpErr").textContent = ""; showHome("mp"); });
 $("hSaved").addEventListener("click", ()=>{ renderSaved(); $("savedModal").classList.add("show"); });
@@ -4762,20 +4820,36 @@ const SH_COLORS = ["#e03131", "#1c7ed6", "#2f9e44", "#f08c00"], SH_DOTS = ["🔴
 let sh = shLoad();
 function shNewSetup(prev){
   return {v:2, lang:curLang(), phase:"setup",
-    setup: prev || {n:1, mode:"free", start:null, goal:null, gtype:"goal", names:["", "", "", ""]},
+    setup: prev || {n:1, mode:"free", lives:3, turnSec:60, start:null, goal:null, gtype:"goal", names:["", "", "", ""]},
     players:[], turn:0, round:1, chain:[], judging:null, last:null, turnEnds:0, end:null, log:[], recId:null,
     bomb:null, bombs:[], bombDue:false, bombMoving:false, bombNews:false};
 }
 function shLoad(){
-  try{ const o = JSON.parse(localStorage.getItem(SH_KEY) || "null"); if(o && o.v === 2){ o.judging = null; o.log = o.log || []; if(o.bombMoving){ o.bombMoving = false; o.bombDue = true; } if(!o.bombs) o.bombs = o.bomb ? [o.bomb] : []; return o; } }catch(_){}
+  try{ const o = JSON.parse(localStorage.getItem(SH_KEY) || "null"); if(o && o.v === 2){ o.judging = null; o.log = o.log || []; if(o.bombMoving){ o.bombMoving = false; o.bombDue = true; } shFixSetup(o.setup); if(!o.bombs) o.bombs = o.bomb ? [o.bomb] : []; return o; } }catch(_){}
   return shNewSetup();
 }
 function shSave(){ if(shNet){ if(shIsHost()) shNetSync(); return; } try{ localStorage.setItem(SH_KEY, JSON.stringify({...sh, judging:null})); }catch(_){} }
 const shMulti = () => sh.players.length > 1;
+/* v5.0 「制限なし／3周」のかわりにライフ（なし／♥3）と1手の時間（なし／60秒） */
+function shFixSetup(s){
+  if(!s) return s;
+  if(s.lives === undefined) s.lives = s.mode === "r3" ? 3 : 0;
+  if(s.turnSec === undefined) s.turnSec = s.mode === "r3" ? 60 : 0;
+  return s;
+}
+const shHearts = p => "♥".repeat(Math.max(0, p.life || 0)) + "♡".repeat(Math.max(0, (sh.setup.lives || 0) - (p.life || 0)));
+const shTurnEnd = () => sh.setup.turnSec ? Date.now() + sh.setup.turnSec * 1000 : 0;
 const shIsBomb = () => sh.setup.gtype === "bomb" && sh.phase !== "setup";
 const shIsFoot = () => sh.setup.gtype === "foot" && sh.phase !== "setup";
 // v4.3 地雷のリスト：💣なら爆弾、👣なら今まで出た言葉（スタート含む・ひとつ前は除く）
-const shTrapList = () => shIsFoot() ? sh.chain.slice(0, -1).map(c => ({title:c.title, shown:c.shown, foot:true})) : shBombList();
+const SH_BAKE = 30000;          // v5.0 被リンク3万以上の地雷は👹バケモン
+const shTrapList = () => shIsFoot() ? sh.chain.slice(0, -1).map(c => ({title:c.title, shown:c.shown, foot:true, inN:c.inN})) : shBombList();
+const shMineIc = n => n != null && n >= SH_BAKE ? "👹" : "💣";
+function shFootCount(title){         // つながった言葉の被リンク数を裏で数える（ホスト／その1台だけ）
+  if(!shIsFoot() || (shNet && !shIsHost())) return;
+  const lang = sh.lang;
+  shInCount(title, 5000).then(c => { if(sh.lang === lang && shIsFoot()) shApply({t:"inn", title, n:c.n}); }).catch(() => {});
+}
 const shBombList = () => sh.bombs && sh.bombs.length ? sh.bombs : (sh.bomb ? [sh.bomb] : []);
 const shCur = () => sh.players[sh.turn];
 function shName(i){ const p = sh.players[i]; return p ? `${SH_DOTS[i]} ${p.name}` : ""; }
@@ -4855,9 +4929,8 @@ function shAdvance(){
     if(i <= prev){ sh.round++; if(shMulti() && shIsBomb()) sh.bombDue = true; }
     if(sh.players[i].alive) break;
   }
-  if(sh.setup.mode === "r3" && sh.round > 3) return shFinish("rounds");
   sh.turn = i;
-  sh.turnEnds = sh.setup.mode === "r3" ? Date.now() + SH_TURN_SEC * 1000 : 0;
+  sh.turnEnds = shTurnEnd();
 }
 function shFinish(why, winner){
   const bonus = [];
@@ -4865,6 +4938,11 @@ function shFinish(why, winner){
   sh.end = {why, winner:winner === undefined ? null : winner, bonus};
   sh.phase = "end"; sh.turnEnds = 0;
   shRecSave();
+}
+function shRecRule(r){
+  const s = r.setup || {};
+  if(s.lives === undefined) return s.mode === "r3" ? T("shModeR3") : T("shModeFree");
+  return `${s.lives ? T("shLife3S") : T("shLife0S")}・${s.turnSec ? T("shTime60S") : T("shTime0S")}`;
 }
 /* 終わったゲームをブラウザに保存 */
 function shRecLoad(){ try{ const a = JSON.parse(localStorage.getItem(SH_REC_KEY) || "[]"); return Array.isArray(a) ? a : []; }catch(_){ return []; } }
@@ -4874,7 +4952,7 @@ function shRecSave(){
   const id = sh.recId || (Date.now().toString(36) + Math.random().toString(36).slice(2, 6));
   sh.recId = id;
   const rec = {id, at:Date.now(), lang:sh.lang,
-    setup:{n:sh.setup.n, mode:sh.setup.mode, start:sh.setup.start, goal:sh.setup.gtype === "bomb" || sh.setup.gtype === "foot" ? null : sh.setup.goal, gtype:sh.setup.gtype || "goal"},
+    setup:{n:sh.setup.n, mode:sh.setup.mode, lives:sh.setup.lives, turnSec:sh.setup.turnSec, start:sh.setup.start, goal:sh.setup.gtype === "bomb" || sh.setup.gtype === "foot" ? null : sh.setup.goal, gtype:sh.setup.gtype || "goal"},
     players:sh.players.map(p => ({name:p.name, score:p.score, alive:p.alive})),
     end:sh.end, chain:sh.chain, log:sh.log};
   const i = recs.findIndex(r => r.id === id);
@@ -4882,12 +4960,12 @@ function shRecSave(){
   shRecWrite(recs);
 }
 function shDobon(p, info){
-  if(sh.setup.mode === "r3" && p.life > 0) p.life--;
+  if(sh.setup.lives){ p.life = Math.max(0, (p.life || 0) - 1); if(p.life <= 0) p.alive = false; }   // ♥がなくなったら脱落
   else p.alive = false;
   sh.last = {...info, by:sh.turn, out:!p.alive};
   const lg = {by:sh.turn, round:sh.round, kind:info.kind, title:info.title, shown:info.shown, d:info.d,
                prev:info.prev ? info.prev.title : null, out:!p.alive};
-  if(info.kind === "bomb"){ lg.via = info.via || []; lg.bd = info.bd; lg.bvia = info.bvia || []; lg.bomb = info.bomb; lg.bombT = info.bombT; lg.bombLv = info.bombLv; lg.foot = info.foot; }
+  if(info.kind === "bomb"){ lg.via = info.via || []; lg.bd = info.bd; lg.bvia = info.bvia || []; lg.bomb = info.bomb; lg.bombT = info.bombT; lg.bombLv = info.bombLv; lg.foot = info.foot; lg.bombInN = info.bombInN; }
   sh.log.push(lg);
 }
 function shCommitSafe(j, d, via, goalOk, giri, x, n){
@@ -4900,6 +4978,7 @@ function shCommitSafe(j, d, via, goalOk, giri, x, n){
   sh.last = {kind:"safe", d, pts, by:j.by, goal:goalOk, gb, lb, gg, n:n || 0};
   sh.log.push({by:j.by, round:sh.round, kind:goalOk ? "goal" : (x ? "safeX" : "safe"), title:j.title, shown:j.shown, d, via,
                pts:pts + gb + lb + gg, giri:!!giri, n:n || 0, prev:sh.chain[sh.chain.length - 2].title});
+  if(shIsFoot()) setTimeout(() => shFootCount(j.title), 0);
   if(goalOk) return shFinish("goal", j.by);
   if(shIsBomb() && !shMulti() && (sh.chain.length - 1) % 3 === 0) sh.bombDue = true;   // 1人：3つつないだら移動
   shAdvance();
@@ -4908,7 +4987,7 @@ function shBoom(j, d, via, r){
   const p = sh.players[j.by];
   sh.judging = null;
   shDobon(p, {kind:"bomb", title:j.title, shown:j.shown, d, via, bd:r.d === undefined ? null : r.d,
-              bvia:r.path ? r.path.slice(1, -1) : [], bomb:r.bomb ? r.bomb.shown : "", bombT:r.bomb ? r.bomb.title : "", bombLv:r.bomb && !r.bomb.foot ? r.bomb.lv : null, foot:!!(r.bomb && r.bomb.foot) || shIsFoot(), prev:sh.chain[sh.chain.length - 1]});
+              bvia:r.path ? r.path.slice(1, -1) : [], bomb:r.bomb ? r.bomb.shown : "", bombT:r.bomb ? r.bomb.title : "", bombLv:r.bomb && !r.bomb.foot ? r.bomb.lv : null, foot:!!(r.bomb && r.bomb.foot) || shIsFoot(), bombInN:r.bomb ? r.bomb.inN : null, prev:sh.chain[sh.chain.length - 1]});
   if(!shMulti() && !p.alive) shFinish("allOut");
   else shAdvance();
 }
@@ -5071,13 +5150,14 @@ function shApply(ev){
       sh.phase = "play";
       if(ev.players){ s.n = ev.players.length; sh.lang = curLang(); }
       sh.players = ev.players
-        ? ev.players.map(p => ({id:p.id, name:p.name, alive:true, life:s.mode === "r3" ? 1 : 0, pass:1, score:0}))
+        ? ev.players.map(p => ({id:p.id, name:p.name, alive:true, life:s.lives || 0, pass:1, score:0}))
         : Array.from({length:s.n}, (_, i) => ({name:(s.names[i] || "").trim() || shDefName(i),
-                     alive:true, life:s.mode === "r3" ? 1 : 0, pass:s.n > 1 ? 1 : 0, score:0}));
+                     alive:true, life:s.lives || 0, pass:s.n > 1 ? 1 : 0, score:0}));
       sh.chain = [{title:s.start.title, shown:s.start.shown, by:-1}];
       sh.bomb = null; sh.bombs = [];
       if(s.gtype === "bomb"){ sh.bombMoving = true; sh.turnEnds = 0; }      // v3.9 爆弾は伏せておいて、スタートで発表
-      sh.turnEnds = s.mode === "r3" ? Date.now() + SH_TURN_SEC * 1000 : 0;
+      if(s.gtype === "foot") setTimeout(() => shFootCount(s.start.title), 0);
+      sh.turnEnds = s.turnSec ? Date.now() + s.turnSec * 1000 : 0;
       break;
     }
     case "judge": {
@@ -5127,6 +5207,7 @@ function shApply(ev){
       shAdvance();
       break;
     }
+    case "inn": sh.chain.forEach(c => { if(norm(c.title) === norm(ev.title)) c.inN = ev.n; }); break;
     case "bstep": if(sh.judging && sh.judging.bsteps) sh.judging.bsteps[ev.k] = ev.st; break;
     case "bunsure": if(sh.judging && sh.judging.first) sh.judging.bunsure = true; break;
     case "bresult": {
@@ -5140,7 +5221,7 @@ function shApply(ev){
     case "bmove": sh.bombMoving = true; sh.turnEnds = 0; break;
     case "bmovefail":
       sh.bombMoving = false;
-      sh.turnEnds = sh.setup.mode === "r3" ? Date.now() + SH_TURN_SEC * 1000 : 0;
+      sh.turnEnds = shTurnEnd();
       break;
     case "bomb": {
       if(!ev.w) break;
@@ -5149,16 +5230,16 @@ function shApply(ev){
       sh.bombs = [...prev, sh.bomb];                      // v4.0 消えずにたまっていく
       sh.bombNews = first ? "drop" : "add";
       sh.log.push({by:-1, round:sh.round, kind:"bombmove", title:ev.w.title, shown:ev.w.shown, inN:ev.w.inN, lv:ev.w.lv});
-      sh.turnEnds = sh.setup.mode === "r3" ? Date.now() + SH_TURN_SEC * 1000 : 0;
+      sh.turnEnds = shTurnEnd();
       break;
     }
     case "finish": if(sh.phase === "play") shFinish("quit"); break;
     case "undo": {                                       // ひとりのときだけ：ドボンを取り消す
       if(shMulti() || !sh.last || sh.last.kind === "safe") break;
-      const p = sh.players[0]; p.alive = true; if(sh.setup.mode === "r3" && !sh.last.out) p.life++;
+      const p = sh.players[0]; p.alive = true; if(sh.setup.lives) p.life = Math.min(sh.setup.lives, (p.life || 0) + 1);
       sh.log.push({by:0, round:sh.round, kind:"undo"});
       sh.last = null; sh.end = null; sh.phase = "play"; sh.round = Math.max(1, sh.round);
-      sh.turnEnds = sh.setup.mode === "r3" ? Date.now() + SH_TURN_SEC * 1000 : 0;
+      sh.turnEnds = shTurnEnd();
       break;
     }
   }
@@ -5181,7 +5262,7 @@ function renderShiri(){
   $("shPlay").hidden = setupMode;
   $("home").classList.toggle("shWide", !setupMode);
   const tb = shThumbBase(); if(tb && !(shThumbWant && shThumbWant.kind === "cand" && shItems.length)) shThumbShow(tb.title, tb.kind);
-  $("shTitleH").textContent = sh.setup.gtype === "foot" ? T("shTitleFoot") : T("shTitle");
+  $("shTitleH").textContent = sh.setup.gtype === "foot" ? T("shTitleFoot") : sh.setup.gtype === "bomb" ? T("shTitleBomb") : T("shTitleGoal");
   { const r = T("shRule"), i = r.indexOf("🚩");
     const tail = sh.setup.gtype === "bomb" ? T("shRuleBomb") : sh.setup.gtype === "foot" ? T("shRuleFoot") : "";
     $("shRule").textContent = tail ? (i > 0 ? r.slice(0, i) : r + "　") + tail : r; }
@@ -5208,8 +5289,10 @@ function renderShSetup(){
   document.querySelectorAll("#shsKind button").forEach(b => b.classList.toggle("on", b.dataset.k === (s.gtype || "goal")));
   $("shsKindNote").textContent = fk ? T("shKindNoteFoot") : bk ? T("shKindNoteBomb") : T("shKindNoteGoal");
   document.querySelectorAll("#shsN button").forEach(b => b.classList.toggle("on", +b.dataset.n === s.n));
-  document.querySelectorAll("#shsMode button").forEach(b => b.classList.toggle("on", b.dataset.m === s.mode));
-  $("shsModeNote").textContent = s.mode === "r3" ? T("shModeR3Note") : T("shModeFreeNote");
+  shFixSetup(s);
+  document.querySelectorAll("#shsLife button").forEach(b => b.classList.toggle("on", +b.dataset.v === s.lives));
+  document.querySelectorAll("#shsTime button").forEach(b => b.classList.toggle("on", +b.dataset.v === s.turnSec));
+  $("shsModeNote").textContent = s.lives ? T("shLifeNote3") : T("shLifeNote0");
   const nb = $("shsNames"); nb.innerHTML = "";
   if(s.n > 1) for(let i = 0; i < s.n; i++){
     const row = mk("label", "shsName");
@@ -5229,7 +5312,10 @@ function renderShPlay(){
   // ゴール・周回
   const bombOn = shIsBomb(), footOn = shIsFoot(), g = bombOn || footOn ? null : sh.setup.goal, gb = $("shGoalBar");
   gb.hidden = !g && !bombOn && !footOn; gb.classList.toggle("bomb", bombOn); gb.classList.toggle("foot", footOn); gb.innerHTML = "";
-  if(footOn){ gb.append(mk("span", "", T("shFootIs") + "×" + Math.max(0, sh.chain.length - 1) + "　"), mk("small", "", T("shFootNote"))); }
+  if(footOn){
+    const ms = sh.chain.slice(0, -1), bk = ms.filter(c => c.inN >= SH_BAKE).length;
+    gb.append(mk("span", "", T("shFootIs") + "×" + ms.length + (bk ? `（👹×${bk}）` : "") + "　"), mk("small", "", T("shFootNote")));
+  }
   if(bombOn){
     const bs = shBombList(), b = sh.bomb;
     if(bs.length){
@@ -5248,7 +5334,7 @@ function renderShPlay(){
     }
     if(sh.bombMoving) gb.append(mk("span", "bmov", b ? T("shBombMoving") : T("shBombFirst")));
   }else if(g){ gb.append(mk("span", "", T("shGoalIs")), shWordBtn(g.shown, g.title, null), mk("small", "", T("shGoalNote", SH_GOAL_PTS))); }
-  $("shRound").textContent = sh.setup.mode === "r3" ? T("shRoundOf", Math.min(sh.round, 3), 3) : "";
+  $("shRound").textContent = "";
   // 点数ボード
   const sb = $("shBoard"); sb.innerHTML = "";
   if(multi){
@@ -5258,14 +5344,14 @@ function renderShPlay(){
       c.append(mk("span", "nm", `${SH_DOTS[i]} ${p.name}`), mk("b", "sc", T("shPts", p.score)));
       const st = mk("span", "st");
       if(!p.alive) st.textContent = T("shOut");
-      else st.textContent = (sh.setup.mode === "r3" ? (p.life ? "♥" : "♡") + " " : "") + (p.pass ? "⏭️" : "");
+      else st.textContent = (sh.setup.lives ? shHearts(p) + " " : "") + (p.pass ? "⏭️" : "");
       c.append(st);
       sb.append(c);
     });
   }else{
     const p = sh.players[0];
     sb.append(mk("span", "soloN", T("shLinks", sh.chain.length - 1)), mk("b", "soloP", T("shPts", p.score)));
-    if(sh.setup.mode === "r3") sb.append(mk("span", "soloL", p.life ? "♥" : "♡"));
+    if(sh.setup.lives) sb.append(mk("span", "soloL", shHearts(p)));
   }
   // つながり
   const box = $("shChain"); box.innerHTML = "";
@@ -5293,7 +5379,7 @@ function renderShPlay(){
     const tt = shWordBtn(c.shown, c.title, nx ? ((nx.via && nx.via[0]) || nx.title) : null);
     tt.classList.add("tt");
     bd.append(mk("span", "no", String(i + 1)));
-    if(shIsFoot() && i < sh.chain.length - 1) bd.append(mk("span", "mine", "💣"));   // v4.4 いま地雷になってる言葉
+    if(shIsFoot() && i < sh.chain.length - 1){ const m = mk("span", "mine", shMineIc(c.inN)); if(c.inN != null) m.dataset.inn = c.inN; bd.append(m); }   // v4.4 いま地雷になってる言葉
     bd.append(tt);
     box.append(bd);
   });
@@ -5355,7 +5441,7 @@ function renderShPlay(){
     }else if(L.kind === "left"){
       jb.append(mk("div", "shPassBig", who + T("shLogLeft")));
     }else{
-      jb.append(mk("div", "shDobon", (multi ? who : "") + (L.kind === "timeout" ? T("shTimeUp") : L.kind === "bomb" ? (L.foot ? T("shFootHit") : T("shBoom")) : T("shDobon"))));
+      jb.append(mk("div", "shDobon", (multi ? who : "") + (L.kind === "timeout" ? T("shTimeUp") : L.kind === "bomb" ? (L.foot ? (L.bombInN >= SH_BAKE ? T("shBakeHit") : T("shFootHit")) : T("shBoom")) : T("shDobon"))));
       if(L.kind === "bomb"){
         const bic = L.bombLv != null ? SH_BOMB_IC[Math.min(3, L.bombLv)] + " " : "";
         const why = mk("div", "shWhy", L.bd === 0 ? T("shBoomSame", L.shown) : L.bd && L.bomb ? T("shBoomBy", L.shown, bic + L.bomb) : L.bd ? T("shBoomWhy", L.shown, L.bd) : "");
@@ -5416,7 +5502,7 @@ function renderShPlay(){
   // 履歴
   $("shLogSum").textContent = T("shHist", sh.log.length);
   $("shLogBox").hidden = !sh.log.length;
-  shRenderLog($("shLogList"), sh.log, sh.players.map(p => p.name), multi, sh.setup.start, sh.setup.gtype === "bomb" || sh.setup.gtype === "foot" ? null : sh.setup.goal, sh.setup.gtype);
+  shRenderLog($("shLogList"), sh.log, sh.players.map(p => p.name), multi, sh.setup.start, sh.setup.gtype === "bomb" || sh.setup.gtype === "foot" ? null : sh.setup.goal, sh.setup.gtype, sh.chain);
   // 入力
   const myTurn = shMyTurn();
   const lock = judging || !playing || !myTurn || !!sh.bombMoving;
@@ -5442,6 +5528,17 @@ function renderShPlay(){
   shBombKick();
   shBombPopRender();
 }
+/* v5.0 💣👹にカーソル／タップで被リンク数のふきだし */
+(() => {
+  const tip = $("innTip"); let tm = null;
+  const show = (el, x, y) => { tip.textContent = T("shInN", shRoundN(+el.dataset.inn)); tip.hidden = false; tip.style.left = Math.min(x + 14, innerWidth - tip.offsetWidth - 6) + "px"; tip.style.top = (y + 16) + "px"; };
+  document.addEventListener("mousemove", e => { const el = e.target.closest && e.target.closest("[data-inn]"); if(el) show(el, e.clientX, e.clientY); else if(!tm) tip.hidden = true; });
+  document.addEventListener("touchstart", e => {
+    const el = e.target.closest && e.target.closest("[data-inn]"); if(!el) return;
+    const t = e.touches[0]; show(el, t.clientX, t.clientY - 40);
+    clearTimeout(tm); tm = setTimeout(() => { tip.hidden = true; tm = null; }, 2000);
+  }, {passive:true});
+})();
 /* v4.1 爆弾のお知らせ（まんなか） */
 let shPopSeen = 0, shPopTimer = null;
 function shBombPopRender(){
@@ -5505,7 +5602,7 @@ function shThumbBase(){
 $("shThumbCover").addEventListener("click", () => { if(shThumbCur) shOpen(shThumbCur, null); });
 shWideMQ.addEventListener("change", () => { const b = shThumbBase(); if(b) shThumbShow(b.title, b.kind); });
 /* 履歴の一覧（ゲーム中・過去の記録で共通） */
-function shRenderLog(box, log, names, multi, start, goal, gtype){
+function shRenderLog(box, log, names, multi, start, goal, gtype, chain){
   // v3.2/3.3：スタート → 経由 → 言葉 → … → ゴール の一本道。言葉を押すとくわしく出る
   box.innerHTML = "";
   const bombMode = gtype === "bomb";
@@ -5537,9 +5634,11 @@ function shRenderLog(box, log, names, multi, start, goal, gtype){
   const hopOf = e => e ? ((e.via && e.via[0]) || e.title) : null;
   const nextOf = e => hopOf(lands[lands.indexOf(e) + 1]);
   const footMode = gtype === "foot", lastLand = lands[lands.length - 1];
-  const mineMark = (isStart, e) => footMode && (isStart ? lands.length > 0 : e !== lastLand) ? "💣 " : "";
+  const innOf = t => { const c = (chain || []).find(c => norm(c.title) === norm(t)); return c ? c.inN : null; };
+  const mineMark = (isStart, e) => footMode && (isStart ? lands.length > 0 : e !== lastLand) ? shMineIc(innOf(isStart ? start.title : e.title)) + " " : "";
   const whoTag = (el, e) => { if(e.by >= 0 && multi){ const w = mk("span", "who", `${SH_DOTS[e.by]} ${names[e.by]}`); w.style.setProperty("--pc", SH_COLORS[e.by]); el.append(w); } };
-  if(start) put(mineMark(true) + start.shown, "odai", el => { el.append(mk("b", "lab", T("shFlowStart")), mk("span", "", start.shown), openBtn(start.title, hopOf(lands[0]))); });
+  if(start) put(mineMark(true) + start.shown, "odai" + (mineMark(true) ? " mine" : ""), el => { el.append(mk("b", "lab", T("shFlowStart")), mk("span", "", start.shown), openBtn(start.title, hopOf(lands[0]))); });
+  if(footMode && start && innOf(start.title) != null && btns[0]) btns[0].dataset.inn = innOf(start.title);
   if(bombMode && goal) mark(bombIcon(goal) + " " + goal.shown, bombFill(goal));
   log.forEach(e => {
     if(e.kind === "pass"){ arrows++; return; }
@@ -5577,7 +5676,7 @@ function shRenderLog(box, log, names, multi, start, goal, gtype){
     else{
       viaWords(e.via || [], e.title);
       if(e.kind === "goal"){ goalHit = true; put(e.shown + " 🚩", "odai", fill); }
-      else put(mineMark(false, e) + e.shown, "inp" + (mineMark(false, e) ? " mine" : ""), fill);
+      else{ put(mineMark(false, e) + e.shown, "inp" + (mineMark(false, e) ? " mine" : ""), fill); if(mineMark(false, e) && innOf(e.title) != null) btns[btns.length - 1].dataset.inn = innOf(e.title); }
     }
   });
   if(goal && !goalHit && !bombMode) put("🚩 " + goal.shown, "odai far", el => { el.append(mk("b", "lab", T("shFlowGoalFar")), mk("span", "", goal.shown), openBtn(goal.title)); }, "⇢");
@@ -5745,7 +5844,8 @@ $("shsStartP").addEventListener("click", () => shPick("start"));
 $("shsGoalP").addEventListener("click", () => shPick("goal"));
 $("shsGoalX").addEventListener("click", () => { sh.setup.goal = null; shSave(); renderShiri(); });
 document.querySelectorAll("#shsN button").forEach(b => b.addEventListener("click", () => { sh.setup.n = +b.dataset.n; shSave(); renderShiri(); }));
-document.querySelectorAll("#shsMode button").forEach(b => b.addEventListener("click", () => { sh.setup.mode = b.dataset.m; shSave(); renderShiri(); }));
+document.querySelectorAll("#shsLife button").forEach(b => b.addEventListener("click", () => { sh.setup.lives = +b.dataset.v; shSave(); renderShiri(); }));
+document.querySelectorAll("#shsTime button").forEach(b => b.addEventListener("click", () => { sh.setup.turnSec = +b.dataset.v; shSave(); renderShiri(); }));
 document.querySelectorAll("#shsKind button").forEach(b => b.addEventListener("click", async () => {
   sh.setup.gtype = b.dataset.k; shSave(); renderShiri();
   const g = sh.setup.goal;                                     // 爆弾にしたとき、被リンク数をまだ数えてなければ数える
@@ -5764,7 +5864,7 @@ function shHistList(){
   if(!recs.length){ box.append(mk("p", "shsNote", T("shPastNone"))); return; }
   recs.forEach(r => {
     const b = mk("button", "shRec");
-    b.append(mk("small", "", `${shFmtDate(r.at)} ・ ${r.setup.n}${T("shPpl")} ・ ${r.setup.mode === "r3" ? T("shModeR3") : T("shModeFree")}`));
+    b.append(mk("small", "", `${shFmtDate(r.at)} ・ ${r.setup.n}${T("shPpl")} ・ ${shRecRule(r)}`));
     b.append(mk("b", "", `${r.setup.start ? r.setup.start.shown : ""}${r.setup.gtype === "foot" ? "　💣" + T("shKindFoot").replace(/^💣\s*/, "") : r.setup.gtype === "bomb" ? "　💣" + (r.setup.goal ? " " + r.setup.goal.shown : "") : r.setup.goal ? " → 🚩 " + r.setup.goal.shown : ""}`));
     const sc = r.players.map((p, i) => `${r.setup.n > 1 ? SH_DOTS[i] + " " : ""}${p.name} ${T("shPts", p.score)}`).join("　");
     b.append(mk("span", "sc", `${T("shLinks", Math.max(0, (r.chain || []).length - 1))} ・ ${sc}`));
@@ -5780,7 +5880,7 @@ function shHistDetail(id){
   const back = mk("button", "", T("shBackList")); back.addEventListener("click", shHistList);
   box.append(back);
   box.append(mk("h3", "", `${r.setup.start ? r.setup.start.shown : ""}${r.setup.gtype === "foot" ? "　💣" + T("shKindFoot").replace(/^💣\s*/, "") : r.setup.gtype === "bomb" ? "　💣" + (r.setup.goal ? " " + r.setup.goal.shown : "") : r.setup.goal ? " → 🚩 " + r.setup.goal.shown : ""}`));
-  box.append(mk("p", "shsNote", `${shFmtDate(r.at)} ・ ${r.setup.n}${T("shPpl")} ・ ${r.setup.mode === "r3" ? T("shModeR3") : T("shModeFree")}`));
+  box.append(mk("p", "shsNote", `${shFmtDate(r.at)} ・ ${r.setup.n}${T("shPpl")} ・ ${shRecRule(r)}`));
   const multi = r.setup.n > 1;
   const order = r.players.map((p, i) => ({p, i})).sort((a, b) => b.p.score - a.p.score);
   const ol = mk("ol", "shRank");
@@ -5795,7 +5895,7 @@ function shHistDetail(id){
   box.append(ol);
   box.append(mk("h3", "", T("shHist", (r.log || []).length)));
   const lg = mk("div", "shFlow");
-  shRenderLog(lg, r.log || [], r.players.map(p => p.name), multi, r.setup.start, r.setup.goal, r.setup.gtype);
+  shRenderLog(lg, r.log || [], r.players.map(p => p.name), multi, r.setup.start, r.setup.goal, r.setup.gtype, r.chain);
   box.append(lg);
   const del = mk("button", "", T("shDelOne"));
   del.addEventListener("click", () => { if(confirm(T("shDelOneQ"))){ shRecWrite(shRecLoad().filter(x => x.id !== id)); shHistList(); } });
@@ -6114,7 +6214,7 @@ function renderShNet(){
   document.querySelectorAll(".shsLocalOnly").forEach(el => el.hidden = !!n);
   const host = !n || shIsHost();
   ["shsStartR", "shsStartP", "shsGoalR", "shsGoalP", "shsGoalX", "shsBothR"].forEach(id => $(id).disabled = !host);
-  document.querySelectorAll("#shsMode button").forEach(b => b.disabled = !host);
+  document.querySelectorAll("#shsLife button, #shsTime button").forEach(b => b.disabled = !host);
   document.querySelectorAll("#shsKind button").forEach(b => b.disabled = !host);
   $("shsPast").hidden = !!n;
   if(!n){ if(!$("shNetName").value) $("shNetName").value = myName || ""; return; }
@@ -6177,10 +6277,23 @@ $("shNetCopy").addEventListener("click", async () => {
   try{ await navigator.clipboard.writeText(url); toast(T("copied")); }catch(_){ prompt(T("copyPrompt"), url); }
 });
 $("shGo").addEventListener("click", shSubmit);
-$("hShiri").addEventListener("click", () => {
-  if(!shNet && sh.phase === "end"){ sh = shNewSetup(sh.setup); shSave(); }   // v3.4 終わったゲームは残さず準備画面へ
+/* v5.0 入口でゲームを決める（ゴールしりとり／地雷しりとり／ひみつの爆弾しりとり） */
+function shEnterKind(kind){
+  if(!shNet){
+    if(sh.phase === "end" || (sh.phase !== "setup" && sh.setup.gtype !== kind)){ sh = shNewSetup({...sh.setup, gtype:kind}); }   // v3.4 終わったゲームは準備画面へ
+    else sh.setup.gtype = kind;
+    shSave();
+  }
   showHome("shiri");
+}
+$("hShiri").addEventListener("click", () => shEnterKind("goal"));
+$("hMine").addEventListener("click", () => shEnterKind("foot"));
+let mineTaps = [];
+$("mineIcon").addEventListener("click", () => {          // 💣を5回タップでひみつの爆弾しりとり
+  const now = Date.now(); mineTaps = mineTaps.filter(t => now - t < 3000); mineTaps.push(now);
+  if(mineTaps.length >= 5){ mineTaps = []; toast(T("shSecret")); shEnterKind("bomb"); }
 });
+$("hShiriRec").addEventListener("click", () => { shHistList(); $("shHistModal").classList.add("show"); });
 $("shBack").addEventListener("click", async () => { $("shBombPop").hidden = true; if(shNet){ if(sh.phase === "play" && !confirm(T("shNetLeaveQ"))) return; await shNetLeave(true); } showHome("main"); });
 function shEnter(){
   if(!shNet && sh.lang !== curLang()){ const s = sh.setup; s.start = null; s.goal = null; sh = shNewSetup(s); }
