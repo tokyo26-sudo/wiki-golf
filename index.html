@@ -232,6 +232,7 @@
   .shSafeBig{font-size:1.35rem;font-weight:900;color:var(--green)}
   .shSafeBig.d3{color:#d4890a}
   .shGoalHit{font-size:1.4rem;font-weight:900;color:#f08c00;animation:shShake .4s}
+  .shPtsRow{font-weight:800;font-size:.95rem;margin:2px 0;color:#8a5a00}
   .shPassBig{font-size:1.2rem;font-weight:800;color:var(--sub)}
   .shLife{font-size:.88rem;font-weight:700;margin:4px 0}
   .shNext{margin-top:8px;font-weight:800;font-size:1.05rem}
@@ -242,6 +243,28 @@
   .shRank .rk{min-width:1.6em;font-weight:900}
   .shRank .nm{flex:1;font-weight:700}
   .shRank small{color:var(--sub)}
+  #shLogBox{margin:8px 0;border:1px solid var(--line);border-radius:10px;padding:4px 10px;background:var(--card)}
+  #shLogBox[hidden]{display:none}
+  #shLogBox summary{cursor:pointer;font-weight:800;padding:4px 0}
+  .shLogList{margin:4px 0 6px;padding-left:1.8em;font-size:.86rem}
+  .shLogList li{padding:3px 0;border-bottom:1px dotted var(--line)}
+  .shLogList li .who{font-weight:800;color:var(--pc, inherit);margin-right:6px}
+  .shLogList li .lab{margin:0 2px}
+  .shLogList li.goal .lab{color:#f08c00}
+  .shLogList li.dobon .lab, .shLogList li.timeout .bd{color:var(--flag)}
+  .shLogList li.dobon .shWord.shWord:first-child{text-decoration:line-through}
+  .shLogList li .via{color:var(--sub)}
+  .shLogList li .via .shWord{color:#36c}
+  .shLogList li .pt{font-weight:800;color:var(--green)}
+  .shLogList li .out{font-weight:800}
+  #shHistModal{z-index:34}
+  #shHistModal .panel{background:var(--card);border-radius:14px;padding:16px 18px;width:min(640px,100%);max-height:88vh;overflow-y:auto}
+  .shRec{display:block;width:100%;text-align:left;border:1px solid var(--line);border-radius:10px;padding:8px 12px;margin:6px 0;background:var(--bg);cursor:pointer;color:inherit}
+  .shRec small{display:block;color:var(--sub);font-size:.75rem}
+  .shRec b{font-size:.95rem}
+  .shRec .sc{display:block;font-size:.82rem;margin-top:2px}
+  #shHistBody h3{margin:6px 0}
+  #reader{z-index:39}
   #shChain{display:flex;flex-direction:column;align-items:flex-start;margin:6px 0 10px}
   .shBead{display:flex;gap:8px;align-items:center;background:var(--bg);border:1px solid var(--line);border-radius:999px;padding:6px 14px 6px 6px;font-weight:700;max-width:100%}
   .shBead .no{display:inline-grid;place-items:center;min-width:24px;height:24px;border-radius:50%;background:var(--green);color:var(--onGreen);font-size:.75rem}
@@ -264,7 +287,7 @@
   .shStep.run .rs{animation:shDrum .5s steps(2) infinite}
   .shStep.hit .rs{color:var(--green)}
   .shStep.miss .rs{color:var(--sub)}
-  .shStep.hit:first-of-type .rs{color:var(--flag)}
+  .shStep.hit.k1 .rs{color:var(--flag)}
   @keyframes shDrum{50%{opacity:.25}}
   .shDobon{font-size:1.6rem;font-weight:900;color:var(--flag);animation:shShake .4s}
   @keyframes shShake{25%{transform:translateX(-6px)}75%{transform:translateX(6px)}}
@@ -521,7 +544,7 @@
   <div class="stat"><div class="num" id="clockNum">0:00</div><div class="lbl" id="clockLbl"></div></div>
   <div class="stat" id="pageStat" hidden><div class="num" id="pageNum">0</div><div class="lbl" data-t="pageLeft"></div></div>
   <div id="route"></div>
-  <span id="ver">v2.2</span>
+  <span id="ver">v2.4</span>
   <div id="barBtns">
     <button id="teeoff" disabled data-t="teeoff"></button>
     <button id="backBtn" hidden data-t="back"></button>
@@ -579,7 +602,7 @@
 
 <div id="settings" class="overlay">
   <div class="panel">
-    <h2><span data-t="settings"></span> <small style="font-size:.65rem;font-weight:400;color:var(--sub)">v2.2</small></h2>
+    <h2><span data-t="settings"></span> <small style="font-size:.65rem;font-weight:400;color:var(--sub)">v2.4</small></h2>
     <p class="lockNote" id="lockNote" hidden></p>
     <button id="quitHole" class="quit" hidden></button>
     <button id="toHome" data-t="toHome"></button>
@@ -607,7 +630,7 @@
 
 <div id="home">
   <div class="homeInner">
-    <div class="homeHead"><h1>⛳ <span data-t="appName"></span></h1><p data-t="homeAbout"></p><small>v2.2</small></div>
+    <div class="homeHead"><h1>⛳ <span data-t="appName"></span></h1><p data-t="homeAbout"></p><small>v2.4</small></div>
 
     <section id="homeMain">
       <div class="homeBtns">
@@ -651,6 +674,7 @@
           <p class="shsNote" id="shsModeNote"></p>
           <p class="shsNote" id="shsPassNote" data-t="shsPassNote"></p>
           <button id="shsBegin" data-t="shsBegin"></button>
+          <button id="shsPast" class="moreBtn" data-t="shPast"></button>
         </div>
         <div id="shPlay" hidden>
           <div id="shGoalBar" hidden></div>
@@ -658,6 +682,7 @@
           <div id="shBoard"></div>
           <div id="shChain"></div>
           <div id="shJudge" hidden></div>
+          <details id="shLogBox"><summary id="shLogSum"></summary><ol id="shLogList" class="shLogList"></ol></details>
           <div id="shTurn" hidden></div>
           <div id="shInputRow">
             <div class="shField"><input id="shInput" type="search" autocomplete="off" autocapitalize="off" spellcheck="false" enterkeyhint="go"><div id="shSug" hidden></div></div>
@@ -710,6 +735,13 @@
 </div>
 
 <div id="toast"></div>
+
+<div id="shHistModal" class="overlay">
+  <div class="panel">
+    <div id="shHistBody"></div>
+    <div class="mpRow" style="justify-content:space-between"><button id="shHistDelAll" data-t="shDelAll"></button><button class="close" id="shHistClose" data-t="closeBtn"></button></div>
+  </div>
+</div>
 
 <div id="pickModal" class="overlay">
   <div class="panel">
@@ -1815,14 +1847,29 @@ Object.assign(STR['es'], {shBothR:'🎲 Salida y meta al azar', shPeek:'Pulsa pa
 Object.assign(STR['ko'], {shBothR:'🎲 출발과 골 둘 다 맡기기', shPeek:'누르면 문서를 볼 수 있어요'});
 Object.assign(STR['zh-hant'], {shBothR:'🎲 起點和終點都隨機', shPeek:'點一下可以閱讀條目'});
 Object.assign(STR['zh-hans'], {shBothR:'🎲 起点和终点都随机', shPeek:'点一下可以阅读条目'});
+Object.assign(STR['ja'], {mapNA:'🗺 地図（ここでは表示できません）'});
+Object.assign(STR['en'], {mapNA:"🗺 Map (can't be shown here)"});
+Object.assign(STR['fr'], {mapNA:'🗺 Carte (indisponible ici)'});
+Object.assign(STR['es'], {mapNA:'🗺 Mapa (no disponible aquí)'});
+Object.assign(STR['ko'], {mapNA:'🗺 지도(여기서는 표시할 수 없어요)'});
+Object.assign(STR['zh-hant'], {mapNA:'🗺 地圖（此處無法顯示）'});
+Object.assign(STR['zh-hans'], {mapNA:'🗺 地图（此处无法显示）'});
 /* ── v2.0 リンクしりとり（まわしプレイ） ── */
+Object.assign(STR['ja'], {shGoalLink:d=>`🚩 ${d}打でゴール！`, shHitGoal:"🚩 ゴールに届いた！", shLong:"🎯 ロングショット", shGoalWord:"🚩 ゴール", shPtsLine:(a,n)=>`${a} +${n}`, shHist:n=>`📜 履歴（${n}）`, shPast:"📚 過去の記録", shPastNone:"まだ記録はないよ。ゲームが終わると自動で保存されるよ（このブラウザの中だけ）", shDelOne:"🗑 この記録を消す", shDelOneQ:"この記録を消す？", shDelAll:"🗑 全部消す", shDelAllQ:"しりとりの記録を全部消す？", shBackList:"← 一覧にもどる", shPpl:"人", shTimeUpS:"⏱ 時間切れ（ドボン）", shUndone:"↩ ドボンを取り消し", shDobonD:d=>d===1?`💥 ドボン（1打・近すぎ）`:`💥 ドボン（4打以上）`, shOutMark:"💀 脱落"});
+Object.assign(STR['en'], {shGoalLink:d=>`🚩 Goal in ${d}!`, shHitGoal:"🚩 Reached the goal!", shLong:"🎯 Long shot", shGoalWord:"🚩 Goal", shPtsLine:(a,n)=>`${a} +${n}`, shHist:n=>`📜 History (${n})`, shPast:"📚 Past games", shPastNone:"No games yet. Finished games are saved automatically (in this browser only).", shDelOne:"🗑 Delete this game", shDelOneQ:"Delete this game?", shDelAll:"🗑 Delete all", shDelAllQ:"Delete all saved link-chain games?", shBackList:"← Back to list", shPpl:" players", shTimeUpS:"⏱ Time up (bust)", shUndone:"↩ Bust undone", shDobonD:d=>d===1?`💥 Bust (1 click, too close)`:`💥 Bust (4+)`, shOutMark:"💀 out"});
+Object.assign(STR['fr'], {shGoalLink:d=>`🚩 Arrivée en ${d} !`, shHitGoal:"🚩 Arrivée atteinte !", shLong:"🎯 Coup lointain", shGoalWord:"🚩 Arrivée", shPtsLine:(a,n)=>`${a} +${n}`, shHist:n=>`📜 Historique (${n})`, shPast:"📚 Parties passées", shPastNone:"Aucune partie. Les parties terminées sont enregistrées automatiquement (dans ce navigateur).", shDelOne:"🗑 Supprimer cette partie", shDelOneQ:"Supprimer cette partie ?", shDelAll:"🗑 Tout supprimer", shDelAllQ:"Supprimer toutes les parties ?", shBackList:"← Retour à la liste", shPpl:" joueurs", shTimeUpS:"⏱ Temps écoulé (perdu)", shUndone:"↩ Erreur annulée", shDobonD:d=>d===1?`💥 Perdu (1 clic, trop près)`:`💥 Perdu (4+)`, shOutMark:"💀 éliminé"});
+Object.assign(STR['es'], {shGoalLink:d=>`🚩 ¡Meta en ${d}!`, shHitGoal:"🚩 ¡Meta alcanzada!", shLong:"🎯 Tiro largo", shGoalWord:"🚩 Meta", shPtsLine:(a,n)=>`${a} +${n}`, shHist:n=>`📜 Historial (${n})`, shPast:"📚 Partidas anteriores", shPastNone:"Aún no hay partidas. Se guardan al terminar (solo en este navegador).", shDelOne:"🗑 Borrar esta partida", shDelOneQ:"¿Borrar esta partida?", shDelAll:"🗑 Borrar todo", shDelAllQ:"¿Borrar todas las partidas?", shBackList:"← Volver a la lista", shPpl:" jugadores", shTimeUpS:"⏱ Tiempo (fuera)", shUndone:"↩ Fallo anulado", shDobonD:d=>d===1?`💥 Fuera (1 clic, demasiado cerca)`:`💥 Fuera (4+)`, shOutMark:"💀 eliminado"});
+Object.assign(STR['ko'], {shGoalLink:d=>`🚩 ${d}타로 골!`, shHitGoal:"🚩 골에 닿았다!", shLong:"🎯 롱샷", shGoalWord:"🚩 골", shPtsLine:(a,n)=>`${a} +${n}`, shHist:n=>`📜 기록(${n})`, shPast:"📚 지난 기록", shPastNone:"아직 기록이 없어요. 게임이 끝나면 자동 저장돼요(이 브라우저에만).", shDelOne:"🗑 이 기록 삭제", shDelOneQ:"이 기록을 삭제할까요?", shDelAll:"🗑 전부 삭제", shDelAllQ:"끝말잇기 기록을 전부 삭제할까요?", shBackList:"← 목록으로", shPpl:"명", shTimeUpS:"⏱ 시간 초과(아웃)", shUndone:"↩ 아웃 취소", shDobonD:d=>d===1?`💥 아웃(1타·너무 가까움)`:`💥 아웃(4타 이상)`, shOutMark:"💀 탈락"});
+Object.assign(STR['zh-hant'], {shGoalLink:d=>`🚩 ${d} 桿進終點！`, shHitGoal:"🚩 到達終點！", shLong:"🎯 遠射", shGoalWord:"🚩 終點", shPtsLine:(a,n)=>`${a} +${n}`, shHist:n=>`📜 紀錄（${n}）`, shPast:"📚 過去的紀錄", shPastNone:"還沒有紀錄。遊戲結束會自動儲存（只在這個瀏覽器）。", shDelOne:"🗑 刪除這筆紀錄", shDelOneQ:"刪除這筆紀錄？", shDelAll:"🗑 全部刪除", shDelAllQ:"刪除所有接龍紀錄？", shBackList:"← 回到列表", shPpl:" 人", shTimeUpS:"⏱ 時間到（出局）", shUndone:"↩ 取消出局", shDobonD:d=>d===1?`💥 出局（1 桿・太近）`:`💥 出局（4 桿以上）`, shOutMark:"💀 淘汰"});
+Object.assign(STR['zh-hans'], {shGoalLink:d=>`🚩 ${d} 杆进终点！`, shHitGoal:"🚩 到达终点！", shLong:"🎯 远射", shGoalWord:"🚩 终点", shPtsLine:(a,n)=>`${a} +${n}`, shHist:n=>`📜 记录（${n}）`, shPast:"📚 过去的记录", shPastNone:"还没有记录。游戏结束会自动保存（只在这个浏览器）。", shDelOne:"🗑 删除这条记录", shDelOneQ:"删除这条记录？", shDelAll:"🗑 全部删除", shDelAllQ:"删除所有接龙记录？", shBackList:"← 回到列表", shPpl:" 人", shTimeUpS:"⏱ 时间到（出局）", shUndone:"↩ 取消出局", shDobonD:d=>d===1?`💥 出局（1 杆・太近）`:`💥 出局（4 杆以上）`, shOutMark:"💀 淘汰"});
+
 Object.assign(STR.ja, {
   shPNames:["先攻","後攻","3番手","4番手"], shNotSet:"（未設定）", shNoGoal:"なし",
   shsStartL:"🏁 スタート", shsGoalL:"🚩 ゴール", shsNL:"👥 人数", shsModeL:"⚙️ モード", shModeFree:"制限なし", shModeR3:"3周",
   shModeFreeNote:"ライフなし（1回ドボンで脱落）・周回も持ち時間も無制限",
   shModeR3Note:"♥1つ（1回目のドボンは助かる、2回目で脱落）・3周で終わり・1手60秒",
   shsPassNote:"⏭️ ひとり1回だけパスできる。最後まで生き残った人は +3点。合計点で順位！", shsBegin:"▶ はじめる",
-  shGoalIs:"🚩 ゴール：", shGoalNote:n=>`（ゴールを2〜3打で言えたら +${n}点で勝ち）`, shRoundOf:(a,b)=>`${a}周目 / ${b}`,
+  shGoalIs:"🚩 ゴール：", shGoalNote:n=>`（ゴールは1〜3打で言えたら勝ち！ +${n}点、3打ならさらに +3）`, shRoundOf:(a,b)=>`${a}周目 / ${b}`,
   shOut:"脱落", shGoalHit:n=>`🚩 ゴール！ +${n}点`, shPassed:"⏭️ パス", shTimeUp:"⏱ 時間切れ！ ドボン",
   shOutNow:"💀 脱落…", shLifeLost:"💔 ♥がひとつ減った（まだ生きてる）", shNextTurn:w=>`次は ${w} の番！`,
   shEndGoal:w=>`🚩 ${w} ゴール！`, shEndRounds:"🏁 3周おわり！", shEndLast:"🏁 最後の1人！", shEndOver:"🏁 おしまい",
@@ -1834,7 +1881,7 @@ Object.assign(STR.en, {
   shModeFreeNote:"No lives (one bust and you're out) · unlimited rounds and time",
   shModeR3Note:"♥1 (survive your first bust, out on the second) · ends after 3 rounds · 60 s per turn",
   shsPassNote:"⏭️ One pass each. Survivors get +3. Highest total wins!", shsBegin:"▶ Start",
-  shGoalIs:"🚩 Goal: ", shGoalNote:n=>` (name the goal in 2–3 clicks for +${n} and the win)`, shRoundOf:(a,b)=>`Round ${a} / ${b}`,
+  shGoalIs:"🚩 Goal: ", shGoalNote:n=>` (name the goal within 1–3 clicks to win: +${n}, +3 more from 3)`, shRoundOf:(a,b)=>`Round ${a} / ${b}`,
   shOut:"out", shGoalHit:n=>`🚩 Goal! +${n}`, shPassed:"⏭️ Pass", shTimeUp:"⏱ Time's up! Bust",
   shOutNow:"💀 Out…", shLifeLost:"💔 Lost a ♥ (still in)", shNextTurn:w=>`Next: ${w}!`,
   shEndGoal:w=>`🚩 ${w} reached the goal!`, shEndRounds:"🏁 3 rounds done!", shEndLast:"🏁 Last one standing!", shEndOver:"🏁 Game over",
@@ -2331,6 +2378,7 @@ function buildDoc(p, extraCss = ""){
 <html class="client-nojs skin-theme-clientpref-day vector-feature-limited-width-clientpref-1 vector-feature-page-tools-pinned-disabled vector-feature-main-menu-pinned-disabled vector-toc-not-available" lang="${htmlLang}" dir="ltr">
 <head>
 <meta charset="UTF-8">
+<meta name="referrer" content="no-referrer">
 <base href="https://${wikiHost(lang)}/" target="_top">
 ${skinCss(lang).map(u=>`<link rel="stylesheet" href="${u}">`).join("\n")}
 <style>
@@ -2447,9 +2495,26 @@ function fillFrame(frame, parsed, onClick, extraCss){
       if(!doc || !doc.body) return;
       doc.addEventListener("click", catUiClick, true);
       doc.addEventListener("click", onClick);
+      fixMaps(doc);
       resolve(doc);
     };
     frame.srcdoc = buildDoc(parsed, extraCss);
+  });
+}
+/* 地図（Kartographer）の画像が出せないときは、壊れた絵の代わりに案内を出す */
+function fixMaps(doc){
+  doc.querySelectorAll('img[src*="maps.wikimedia.org"]').forEach(img => {
+    const swap = () => {
+      const box = img.closest(".mw-kartographer-map, .mw-kartographer-container, a") || img;
+      const ph = doc.createElement("div");
+      ph.className = "golf-mapph";
+      ph.style.cssText = `width:${Math.max(160, img.width || 300)}px;max-width:100%;height:${Math.min(Math.max(90, img.height || 160), 220)}px;display:flex;align-items:center;justify-content:center;background:#eaecf0;color:#54595d;border:1px solid #c8ccd1;font-size:.9em;text-align:center`;
+      ph.textContent = T("mapNA");
+      box.replaceWith(ph);
+      ph.parentElement && ph.parentElement.querySelectorAll(".mw-kartographer-map-overlay, .mw-kartographer-mapDialog-map").forEach(x => x.remove());
+    };
+    if(img.complete && img.naturalWidth === 0) swap();
+    else img.addEventListener("error", swap, {once:true});
   });
 }
 /* 記事の窓：前の記事が一瞬見えないように、いったん白くしてから出す */
@@ -4455,16 +4520,17 @@ async function mpHostPick(role){
    ③ 画面 renderShiri()：状態 sh から毎回描き直す */
 const SH_KEY = "wikiGolfShiri2";
 const SH_PTS = {2:1, 3:3};
-const SH_GOAL_PTS = 5, SH_SURVIVE_PTS = 3, SH_TURN_SEC = 60;
+const SH_GOAL_PTS = 5, SH_LONG_PTS = 3, SH_SURVIVE_PTS = 3, SH_TURN_SEC = 60;
+const SH_REC_KEY = "wikiGolfShiriRec", SH_REC_MAX = 30;
 const SH_COLORS = ["#e03131", "#1c7ed6", "#2f9e44", "#f08c00"], SH_DOTS = ["🔴", "🔵", "🟢", "🟡"];
 let sh = shLoad();
 function shNewSetup(prev){
   return {v:2, lang:curLang(), phase:"setup",
     setup: prev || {n:1, mode:"free", start:null, goal:null, names:["", "", "", ""]},
-    players:[], turn:0, round:1, chain:[], judging:null, last:null, turnEnds:0, end:null};
+    players:[], turn:0, round:1, chain:[], judging:null, last:null, turnEnds:0, end:null, log:[], recId:null};
 }
 function shLoad(){
-  try{ const o = JSON.parse(localStorage.getItem(SH_KEY) || "null"); if(o && o.v === 2){ o.judging = null; return o; } }catch(_){}
+  try{ const o = JSON.parse(localStorage.getItem(SH_KEY) || "null"); if(o && o.v === 2){ o.judging = null; o.log = o.log || []; return o; } }catch(_){}
   return shNewSetup();
 }
 function shSave(){ try{ localStorage.setItem(SH_KEY, JSON.stringify({...sh, judging:null})); }catch(_){} }
@@ -4528,11 +4594,29 @@ function shFinish(why, winner){
   if(shMulti()) sh.players.forEach((p, i) => { if(p.alive){ p.score += SH_SURVIVE_PTS; bonus.push(i); } });
   sh.end = {why, winner:winner === undefined ? null : winner, bonus};
   sh.phase = "end"; sh.turnEnds = 0;
+  shRecSave();
+}
+/* 終わったゲームをブラウザに保存 */
+function shRecLoad(){ try{ const a = JSON.parse(localStorage.getItem(SH_REC_KEY) || "[]"); return Array.isArray(a) ? a : []; }catch(_){ return []; } }
+function shRecWrite(a){ try{ localStorage.setItem(SH_REC_KEY, JSON.stringify(a.slice(0, SH_REC_MAX))); }catch(_){} }
+function shRecSave(){
+  const recs = shRecLoad();
+  const id = sh.recId || (Date.now().toString(36) + Math.random().toString(36).slice(2, 6));
+  sh.recId = id;
+  const rec = {id, at:Date.now(), lang:sh.lang,
+    setup:{n:sh.setup.n, mode:sh.setup.mode, start:sh.setup.start, goal:sh.setup.goal},
+    players:sh.players.map(p => ({name:p.name, score:p.score, alive:p.alive})),
+    end:sh.end, chain:sh.chain, log:sh.log};
+  const i = recs.findIndex(r => r.id === id);
+  if(i >= 0) recs[i] = rec; else recs.unshift(rec);
+  shRecWrite(recs);
 }
 function shDobon(p, info){
   if(sh.setup.mode === "r3" && p.life > 0) p.life--;
   else p.alive = false;
   sh.last = {...info, by:sh.turn, out:!p.alive};
+  sh.log.push({by:sh.turn, round:sh.round, kind:info.kind, title:info.title, shown:info.shown, d:info.d,
+               prev:info.prev ? info.prev.title : null, out:!p.alive});
 }
 function shApply(ev){
   switch(ev.t){
@@ -4547,21 +4631,30 @@ function shApply(ev){
       sh.turnEnds = s.mode === "r3" ? Date.now() + SH_TURN_SEC * 1000 : 0;
       break;
     }
-    case "judge": sh.last = null; sh.judging = {title:ev.title, shown:ev.shown, by:sh.turn, steps:{}, left:sh.turnEnds ? sh.turnEnds - Date.now() : 0}; sh.turnEnds = 0; break;
+    case "judge": {
+      const g = sh.setup.goal;
+      sh.last = null;
+      sh.judging = {title:ev.title, shown:ev.shown, by:sh.turn, steps:{}, left:sh.turnEnds ? sh.turnEnds - Date.now() : 0,
+                    isGoal:!!g && norm(ev.title) === norm(g.title)};
+      sh.turnEnds = 0; break;
+    }
     case "step": if(sh.judging) sh.judging.steps[ev.k] = ev.st; break;
     case "result": {
       const j = sh.judging; if(!j) break;
       const r = ev.res, p = sh.players[j.by];
-      if(r.d === 2 || r.d === 3 || ev.force === "safe"){
+      const goalOk = j.isGoal && (r.d === 1 || r.d === 2 || r.d === 3);    // ゴールの言葉は1打でもOK
+      if(goalOk || r.d === 2 || r.d === 3 || ev.force === "safe"){
         const d = r.d || 0, pts = SH_PTS[d] || 0;
-        sh.chain.push({title:j.title, shown:j.shown, by:j.by, d, via:r.path ? r.path.slice(1, -1) : [], pts});
-        p.score += pts;
+        const gb = goalOk ? SH_GOAL_PTS : 0, lb = goalOk && d === 3 ? SH_LONG_PTS : 0;
+        const via = r.path ? r.path.slice(1, -1) : [];
+        sh.chain.push({title:j.title, shown:j.shown, by:j.by, d, via, pts, goal:goalOk});
+        p.score += pts + gb + lb;
         sh.judging = null;
-        sh.last = {kind:"safe", d, pts, by:j.by};
-        if(sh.setup.goal && norm(j.title) === norm(sh.setup.goal.title)){
-          p.score += SH_GOAL_PTS; sh.last.goal = true;
-          shFinish("goal", j.by);
-        }else shAdvance();
+        sh.last = {kind:"safe", d, pts, by:j.by, goal:goalOk, gb, lb};
+        sh.log.push({by:j.by, round:sh.round, kind:goalOk ? "goal" : (r.d ? "safe" : "safeX"), title:j.title, shown:j.shown, d, via,
+                     pts:pts + gb + lb, prev:sh.chain[sh.chain.length - 2].title});
+        if(goalOk) shFinish("goal", j.by);
+        else shAdvance();
       }else if(r.d === 0 && !r.complete && !ev.force){
         j.unsure = true;
       }else{
@@ -4582,6 +4675,7 @@ function shApply(ev){
     case "pass": {
       const p = shCur(); if(!p || p.pass < 1 || sh.judging) break;
       p.pass--; sh.last = {kind:"pass", by:sh.turn};
+      sh.log.push({by:sh.turn, round:sh.round, kind:"pass"});
       shAdvance();
       break;
     }
@@ -4589,6 +4683,7 @@ function shApply(ev){
     case "undo": {                                       // ひとりのときだけ：ドボンを取り消す
       if(shMulti() || !sh.last || sh.last.kind === "safe") break;
       const p = sh.players[0]; p.alive = true; if(sh.setup.mode === "r3" && !sh.last.out) p.life++;
+      sh.log.push({by:0, round:sh.round, kind:"undo"});
       sh.last = null; sh.end = null; sh.phase = "play"; sh.round = Math.max(1, sh.round);
       sh.turnEnds = sh.setup.mode === "r3" ? Date.now() + SH_TURN_SEC * 1000 : 0;
       break;
@@ -4674,7 +4769,7 @@ function renderShPlay(){
       const lk = mk("div", "shLink d" + c.d);
       lk.append(mk("span", "ar", "↓"));
       if(multi && c.by >= 0) lk.append(mk("span", "who", SH_DOTS[c.by]));
-      lk.append(mk("span", "jd", c.d === 3 ? T("shNice3") : c.d === 2 ? T("shSafe2") : T("shSafeX")));
+      lk.append(mk("span", "jd", c.goal ? T("shGoalLink", c.d) : c.d === 3 ? T("shNice3") : c.d === 2 ? T("shSafe2") : T("shSafeX")));
       if(c.via && c.via.length){
         const v = mk("span", "via"), hop = [...c.via, c.title];
         v.append(T("shViaPre"));
@@ -4698,12 +4793,12 @@ function renderShPlay(){
   jb.hidden = !judging && !sh.last && sh.phase !== "end";
   if(judging){
     const j = sh.judging;
-    jb.append(mk("div", "shQ", `${multi ? SH_DOTS[j.by] + " " : ""}${last.shown} → ${j.shown}`));
+    jb.append(mk("div", "shQ", `${multi ? SH_DOTS[j.by] + " " : ""}${last.shown} → ${j.isGoal ? "🚩 " : ""}${j.shown}`));
     for(const k of [1, 2, 3]){
       const st = j.steps[k]; if(!st) continue;
-      const row = mk("div", "shStep " + st + (k === 1 ? " k1" : ""));
+      const row = mk("div", "shStep " + st + (k === 1 && !j.isGoal ? " k1" : ""));
       row.append(mk("span", "", T("shAsk" + k)));
-      row.append(mk("span", "rs", st === "run" ? T("shDrum") : st === "hit" ? (k === 1 ? T("shHit1") : T("shHitN")) : T("shMiss" + k)));
+      row.append(mk("span", "rs", st === "run" ? T("shDrum") : st === "hit" ? (j.isGoal ? T("shHitGoal") : k === 1 ? T("shHit1") : T("shHitN")) : T("shMiss" + k)));
       jb.append(row);
     }
     if(j.unsure){
@@ -4716,9 +4811,15 @@ function renderShPlay(){
     }
   }else if(sh.last){
     const L = sh.last, who = multi ? shName(L.by) + " " : "";
-    if(L.kind === "safe"){
+    if(L.kind === "safe" && L.goal){
+      jb.append(mk("div", "shGoalHit", who + T("shGoalLink", L.d)));
+      const parts = [];
+      if(L.pts) parts.push(T("shPtsLine", L.d === 3 ? T("shNice3") : T("shSafe2"), L.pts));
+      parts.push(T("shPtsLine", T("shGoalWord"), L.gb));
+      if(L.lb) parts.push(T("shPtsLine", T("shLong"), L.lb));
+      parts.forEach(t => jb.append(mk("div", "shPtsRow", t)));
+    }else if(L.kind === "safe"){
       jb.append(mk("div", "shSafeBig d" + L.d, who + (L.d === 3 ? T("shNice3") : L.d === 2 ? T("shSafe2") : T("shSafeX")) + (L.pts ? `  +${L.pts}` : "")));
-      if(L.goal) jb.append(mk("div", "shGoalHit", T("shGoalHit", SH_GOAL_PTS)));
     }else if(L.kind === "pass"){
       jb.append(mk("div", "shPassBig", who + T("shPassed")));
     }else{
@@ -4748,7 +4849,7 @@ function renderShPlay(){
         li.style.setProperty("--pc", SH_COLORS[i]);
         li.append(mk("span", "rk", rank === 1 ? "🏆" : `${rank}`), mk("span", "nm", `${SH_DOTS[i]} ${p.name}`), mk("b", "", T("shPts", p.score)));
         if((E.bonus || []).includes(i)) li.append(mk("small", "", T("shBonus", SH_SURVIVE_PTS)));
-        if(E.winner === i) li.append(mk("small", "", T("shGoalBonus", SH_GOAL_PTS)));
+        if(E.winner === i && sh.last && sh.last.goal) li.append(mk("small", "", T("shGoalBonus", sh.last.gb + sh.last.lb)));
         ol.append(li);
       });
       jb.append(ol);
@@ -4763,6 +4864,10 @@ function renderShPlay(){
     const set = mk("button", "", T("shToSetup")); set.addEventListener("click", () => shApply({t:"setup"}));
     r.append(again, set); jb.append(r);
   }
+  // 履歴
+  $("shLogSum").textContent = T("shHist", sh.log.length);
+  $("shLogBox").hidden = !sh.log.length;
+  shRenderLog($("shLogList"), sh.log, sh.players.map(p => p.name), multi);
   // 入力
   const lock = judging || !playing;
   $("shInputRow").hidden = !playing;
@@ -4780,6 +4885,37 @@ function renderShPlay(){
   $("shQuit").hidden = !playing;
   $("shQuit").disabled = judging;
   shTick();
+}
+/* 履歴の一覧（ゲーム中・過去の記録で共通） */
+function shRenderLog(ol, log, names, multi){
+  ol.innerHTML = "";
+  log.forEach((e, k) => {
+    const li = mk("li", "lg " + e.kind);
+    if(e.by >= 0 && multi) li.style.setProperty("--pc", SH_COLORS[e.by]);
+    li.append(mk("span", "who", multi ? `${SH_DOTS[e.by]} ${names[e.by]}` : ""));
+    const body = mk("span", "bd");
+    if(e.kind === "pass") body.append(T("shPassed"));
+    else if(e.kind === "timeout") body.append(T("shTimeUpS"));
+    else if(e.kind === "undo") body.append(T("shUndone"));
+    else{
+      const w = shWordBtn(e.shown, e.title, null);
+      body.append(w, " ");
+      const lab = e.kind === "goal" ? T("shGoalLink", e.d) : e.kind === "dobon" ? T("shDobonD", e.d) :
+                  e.d === 3 ? T("shNice3") : e.d === 2 ? T("shSafe2") : T("shSafeX");
+      body.append(mk("b", "lab", lab));
+      if(e.via && e.via.length){
+        const v = mk("span", "via"), hop = [...e.via, e.title];
+        v.append(T("shViaPre"));
+        e.via.forEach((t, i) => { if(i) v.append(" → "); v.append(shWordBtn(t, t, hop[i + 1])); });
+        v.append(T("shViaPost")); body.append(" ", v);
+      }
+      if(e.kind === "dobon" && e.d === 1 && e.prev){ const ck = mk("button", "shWord chk", T("shCheck")); ck.addEventListener("click", () => shOpen(e.prev, e.title)); body.append(" ", ck); }
+      if(e.pts) body.append(mk("span", "pt", ` +${e.pts}`));
+    }
+    if(e.out) body.append(mk("span", "out", " " + T("shOutMark")));
+    li.append(body);
+    ol.append(li);
+  });
 }
 /* 1手の持ち時間（3周モード） */
 let shTimerId = null;
@@ -4918,6 +5054,58 @@ $("shsGoalX").addEventListener("click", () => { sh.setup.goal = null; shSave(); 
 document.querySelectorAll("#shsN button").forEach(b => b.addEventListener("click", () => { sh.setup.n = +b.dataset.n; shSave(); renderShiri(); }));
 document.querySelectorAll("#shsMode button").forEach(b => b.addEventListener("click", () => { sh.setup.mode = b.dataset.m; shSave(); renderShiri(); }));
 $("shsBegin").addEventListener("click", () => { if(sh.setup.start) shApply({t:"begin"}); });
+/* 過去の記録 */
+function shFmtDate(t){ try{ return new Date(t).toLocaleString(uiKey(), {year:"numeric", month:"numeric", day:"numeric", hour:"2-digit", minute:"2-digit"}); }catch(_){ return ""; } }
+function shHistList(){
+  const box = $("shHistBody"); box.innerHTML = "";
+  box.append(mk("h3", "", T("shPast")));
+  const recs = shRecLoad();
+  $("shHistDelAll").hidden = !recs.length;
+  if(!recs.length){ box.append(mk("p", "shsNote", T("shPastNone"))); return; }
+  recs.forEach(r => {
+    const b = mk("button", "shRec");
+    b.append(mk("small", "", `${shFmtDate(r.at)} ・ ${r.setup.n}${T("shPpl")} ・ ${r.setup.mode === "r3" ? T("shModeR3") : T("shModeFree")}`));
+    b.append(mk("b", "", `${r.setup.start ? r.setup.start.shown : ""}${r.setup.goal ? " → 🚩 " + r.setup.goal.shown : ""}`));
+    const sc = r.players.map((p, i) => `${r.setup.n > 1 ? SH_DOTS[i] + " " : ""}${p.name} ${T("shPts", p.score)}`).join("　");
+    b.append(mk("span", "sc", `${T("shLinks", Math.max(0, (r.chain || []).length - 1))} ・ ${sc}`));
+    b.addEventListener("click", () => shHistDetail(r.id));
+    box.append(b);
+  });
+}
+function shHistDetail(id){
+  const r = shRecLoad().find(x => x.id === id);
+  if(!r) return shHistList();
+  const box = $("shHistBody"); box.innerHTML = "";
+  $("shHistDelAll").hidden = true;
+  const back = mk("button", "", T("shBackList")); back.addEventListener("click", shHistList);
+  box.append(back);
+  box.append(mk("h3", "", `${r.setup.start ? r.setup.start.shown : ""}${r.setup.goal ? " → 🚩 " + r.setup.goal.shown : ""}`));
+  box.append(mk("p", "shsNote", `${shFmtDate(r.at)} ・ ${r.setup.n}${T("shPpl")} ・ ${r.setup.mode === "r3" ? T("shModeR3") : T("shModeFree")}`));
+  const multi = r.setup.n > 1;
+  const order = r.players.map((p, i) => ({p, i})).sort((a, b) => b.p.score - a.p.score);
+  const ol = mk("ol", "shRank");
+  let rank = 0, prev = null;
+  order.forEach(({p, i}, k) => {
+    if(p.score !== prev){ rank = k + 1; prev = p.score; }
+    const li = mk("li", rank === 1 && multi ? "top" : "");
+    li.style.setProperty("--pc", multi ? SH_COLORS[i] : "var(--green)");
+    li.append(mk("span", "rk", multi ? (rank === 1 ? "🏆" : `${rank}`) : ""), mk("span", "nm", `${multi ? SH_DOTS[i] + " " : ""}${p.name}`), mk("b", "", T("shPts", p.score)));
+    ol.append(li);
+  });
+  box.append(ol);
+  box.append(mk("h3", "", T("shHist", (r.log || []).length)));
+  const lg = mk("ol", "shLogList");
+  shRenderLog(lg, r.log || [], r.players.map(p => p.name), multi);
+  box.append(lg);
+  const del = mk("button", "", T("shDelOne"));
+  del.addEventListener("click", () => { if(confirm(T("shDelOneQ"))){ shRecWrite(shRecLoad().filter(x => x.id !== id)); shHistList(); } });
+  box.append(mk("div", "mpRow"));
+  box.lastChild.append(del);
+}
+$("shsPast").addEventListener("click", () => { shHistList(); $("shHistModal").classList.add("show"); });
+$("shHistClose").addEventListener("click", () => $("shHistModal").classList.remove("show"));
+$("shHistModal").addEventListener("click", e => { if(e.target.id === "shHistModal") $("shHistModal").classList.remove("show"); });
+$("shHistDelAll").addEventListener("click", () => { if(confirm(T("shDelAllQ"))){ shRecWrite([]); shHistList(); } });
 $("shPass").addEventListener("click", () => shApply({t:"pass"}));
 $("shQuit").addEventListener("click", () => { if(confirm(T("shQuitQ"))) shApply({t:"finish"}); });
 
