@@ -173,7 +173,47 @@
   .homeBtns .prime,#mpCreate,#lbStart,#mpJoin.prime{background:var(--green);color:var(--onGreen);border-color:var(--green);font-weight:700}
   .moreBtn{display:block;width:100%;margin:4px 0 0;padding:10px;border-radius:12px;font-weight:700;color:var(--sub);background:transparent;border:1px dashed var(--line)}
   #lbMoreBtn{margin:8px 0}
-  #hBack{border:0;background:transparent;color:var(--sub);padding:4px 0;margin-bottom:4px}
+  #hBack,#shBack{border:0;background:transparent;color:var(--sub);padding:4px 0;margin-bottom:4px}
+  .shiriBtn{display:block;width:100%;margin:-4px 0 12px;padding:12px;font-size:1rem;font-weight:700;border-radius:12px;border:2px dashed var(--green);background:var(--card);color:var(--green)}
+  #homeShiri h2{margin:4px 0 6px}
+  #shRule{font-size:.82rem;font-weight:700;margin:0 0 10px;background:var(--green2);color:var(--green);border-radius:10px;padding:6px 10px}
+  #shScore{display:flex;gap:12px;align-items:baseline;margin:6px 0}
+  #shScore .n{font-weight:800;font-size:1.1rem}
+  #shScore .p{font-weight:900;font-size:1.5rem;color:var(--green)}
+  #shChain{display:flex;flex-direction:column;align-items:flex-start;margin:6px 0 10px}
+  .shBead{display:flex;gap:8px;align-items:center;background:var(--bg);border:1px solid var(--line);border-radius:999px;padding:6px 14px 6px 6px;font-weight:700;max-width:100%}
+  .shBead .no{display:inline-grid;place-items:center;min-width:24px;height:24px;border-radius:50%;background:var(--green);color:var(--onGreen);font-size:.75rem}
+  .shBead .tt{overflow-wrap:anywhere}
+  .shBead.cur{border:2px solid var(--green);font-size:1.15rem}
+  .shLink{display:flex;flex-wrap:wrap;gap:6px;align-items:baseline;padding:4px 0 4px 16px;font-size:.82rem;color:var(--sub)}
+  .shLink .ar{font-size:1rem}
+  .shLink .jd{font-weight:800;color:var(--green)}
+  .shLink.d3 .jd{color:#d4890a}
+  .shLink .pt{font-weight:900;color:var(--green)}
+  .shLink.d3 .pt{color:#d4890a}
+  #shJudge{border:2px solid var(--line);border-radius:12px;padding:10px 14px;margin:8px 0;background:var(--card)}
+  .shQ{font-weight:800;font-size:1.05rem;margin-bottom:6px}
+  .shStep{display:flex;flex-wrap:wrap;justify-content:space-between;gap:2px 10px;padding:5px 0;border-top:1px dotted var(--line);font-size:.92rem}
+  .shStep .rs{font-weight:800}
+  .shStep.run .rs{animation:shDrum .5s steps(2) infinite}
+  .shStep.hit .rs{color:var(--green)}
+  .shStep.miss .rs{color:var(--sub)}
+  .shStep.hit:first-of-type .rs{color:var(--flag)}
+  @keyframes shDrum{50%{opacity:.25}}
+  .shDobon{font-size:1.6rem;font-weight:900;color:var(--flag);animation:shShake .4s}
+  @keyframes shShake{25%{transform:translateX(-6px)}75%{transform:translateX(6px)}}
+  .shWhy{font-size:.88rem;margin:4px 0}
+  .shFinal{font-weight:800;margin:6px 0}
+  .shUnsure{font-size:.88rem;margin:6px 0}
+  #shJudge .mpRow button.prime{background:var(--green);color:var(--onGreen);border-color:var(--green)}
+  #shInputRow{display:flex;gap:8px;align-items:flex-start}
+  .shField{position:relative;flex:1;min-width:0}
+  #shInput{font-size:16px;padding:10px 12px;border:2px solid var(--line);border-radius:10px;width:100%;box-sizing:border-box;background:var(--card);color:inherit;outline:none}
+  #shInput:focus{border-color:var(--green)}
+  #shGo{padding:10px 16px;font-size:1rem;font-weight:800;border-radius:10px;background:var(--green);color:var(--onGreen);border-color:var(--green);white-space:nowrap}
+  #shSug{position:absolute;left:0;right:0;top:calc(100% + 4px);z-index:5;background:var(--card);border:1px solid var(--line);border-radius:10px;box-shadow:0 10px 30px rgba(0,0,0,.15);max-height:50vh;overflow-y:auto;padding:4px}
+  #shMsg{color:var(--flag);font-size:.85rem;min-height:1.2em;margin-top:6px}
+  .shCtrl{justify-content:flex-start}
   .homeCard h2{margin:12px 0 4px;font-size:1.2rem}
   .homeCard .about{font-size:.85rem;color:var(--sub);margin:0 0 6px}
   .mpRow{display:flex;gap:8px;flex-wrap:wrap;align-items:center;margin:12px 0}
@@ -415,7 +455,7 @@
   <div class="stat"><div class="num" id="clockNum">0:00</div><div class="lbl" id="clockLbl"></div></div>
   <div class="stat" id="pageStat" hidden><div class="num" id="pageNum">0</div><div class="lbl" data-t="pageLeft"></div></div>
   <div id="route"></div>
-  <span id="ver">v1.7</span>
+  <span id="ver">v1.8</span>
   <div id="barBtns">
     <button id="teeoff" disabled data-t="teeoff"></button>
     <button id="backBtn" hidden data-t="back"></button>
@@ -472,7 +512,7 @@
 
 <div id="settings" class="overlay">
   <div class="panel">
-    <h2><span data-t="settings"></span> <small style="font-size:.65rem;font-weight:400;color:var(--sub)">v1.7</small></h2>
+    <h2><span data-t="settings"></span> <small style="font-size:.65rem;font-weight:400;color:var(--sub)">v1.8</small></h2>
     <p class="lockNote" id="lockNote" hidden></p>
     <button id="quitHole" class="quit" hidden></button>
     <button id="toHome" data-t="toHome"></button>
@@ -500,7 +540,7 @@
 
 <div id="home">
   <div class="homeInner">
-    <div class="homeHead"><h1>⛳ <span data-t="appName"></span></h1><p data-t="homeAbout"></p><small>v1.7</small></div>
+    <div class="homeHead"><h1>⛳ <span data-t="appName"></span></h1><p data-t="homeAbout"></p><small>v1.8</small></div>
 
     <section id="homeMain">
       <div class="homeBtns">
@@ -508,6 +548,7 @@
         <button id="hBattle" data-t="hBattle"></button>
         <button id="hSaved" data-t="savedList"></button>
       </div>
+      <button id="hShiri" class="shiriBtn" data-t="hShiri"></button>
       <button id="helpBtnHome" class="helpLink" data-t="helpBtn"></button>
       <div class="homeCard" id="homeSettings"></div>
       <button id="homeMoreBtn" class="moreBtn"></button>
@@ -524,6 +565,24 @@
         <div class="mpRow" id="mpCreateRow"><button id="mpCreate" data-t="mpCreate"></button></div>
         <div class="mpRow"><span id="mpCodeRow"><label data-t="mpCodeLbl"></label> <input id="mpCode" maxlength="4" placeholder="1234" autocomplete="off" inputmode="numeric" pattern="[0-9]*"></span> <button id="mpJoin" class="prime"></button></div>
         <div id="mpErr"></div>
+      </div>
+    </section>
+
+    <section id="homeShiri" hidden>
+      <div class="homeCard">
+        <button id="shBack" data-t="hBack"></button>
+        <h2 data-t="shTitle"></h2>
+        <p class="about" data-t="shAbout"></p>
+        <p id="shRule"></p>
+        <div id="shScore"></div>
+        <div id="shChain"></div>
+        <div id="shJudge" hidden></div>
+        <div id="shInputRow">
+          <div class="shField"><input id="shInput" type="search" autocomplete="off" autocapitalize="off" spellcheck="false" enterkeyhint="go"><div id="shSug" hidden></div></div>
+          <button id="shGo" class="prime"></button>
+        </div>
+        <div id="shMsg"></div>
+        <div class="mpRow shCtrl"><button id="shRand" data-t="shRand"></button><button id="shReset" data-t="shReset"></button></div>
       </div>
     </section>
 
@@ -1544,6 +1603,114 @@ for(const [k, a, b] of [
   ["zh-hans", "✏️ 自己决定：自己输入起点或终点的条目，从候选中选择。对战时由房主使用。",
               "🏅 最短奖／📍 近洞奖：开球后会在后台寻找 3 杆以内的最短路线。杆数与最短相同得最短奖，多 1 杆得近洞奖。结果画面可看到最短路线。"]
 ]) STR[k].help[STR[k].help.length - 1][1].push(a, b);
+/* ── v1.8 リンクしりとり ── */
+Object.assign(STR.ja, {
+  hShiri:"🔗 リンクしりとり", shTitle:"🔗 Wikipediaリンクしりとり",
+  shAbout:"前の言葉の記事から、リンクを2打か3打たどって着ける記事を言ってつなげよう。1打（直接リンク）は近すぎてドボン、4打以上は遠すぎてドボン！",
+  shRule:"⛳ 2打＝セーフ +1点　🎯 3打＝ナイス！ +3点　💥 1打・4打以上＝ドボン",
+  shLinks:n=>`${n}つながり`, shPts:n=>`${n}点`, shPh:w=>`「${w}」から2〜3打の記事は？`, shPhFirst:"最初の言葉を入力（または🎲）",
+  shGo:"判定！", shBegin:"これで始める", shRand:"🎲 最初の言葉をおまかせ", shReset:"最初から",
+  shResetQ:"つながりを消して最初からやり直す？",
+  shSafe2:"⛳ 2打 セーフ", shNice3:"🎯 3打 ナイス！", shSafeX:"⛳ セーフ（判定できず）", shVia:v=>`（${v} 経由）`,
+  shAsk1:"1打でつながってる？", shAsk2:"2打で行ける？", shAsk3:"3打で行ける？", shDrum:"……",
+  shHit1:"💥 直接リンクあり！", shHitN:"✅ つながった！", shMiss1:"✓ 直接はつながってない", shMiss2:"✗ 2打では届かない", shMiss3:"✗ 3打でも届かない",
+  shUnsure:"🤔 3打以内の道が見つからなかった（全部は調べきれなかった）。みんなで決めて！", shSafeBtn:"セーフにする（0点）", shDobonBtn:"ドボンにする",
+  shDobon:"💥 ドボン！", shWhy1:(a,b)=>`「${a}」の記事に「${b}」へのリンクが直接あった（1打）`, shWhy4:(a,b)=>`「${a}」から「${b}」へは3打以内で届かなかった`,
+  shFinal:(n,p)=>`結果：${n}つながり・${p}点`, shUndo:"↩ いまの言葉を取り消す", shAgain:"もう一回",
+  shUsed:w=>`「${w}」はもう使ったよ`, shOnlyArticle:"ふつうの記事だけ使えるよ"});
+Object.assign(STR.en, {
+  hShiri:"🔗 Link chain", shTitle:"🔗 Wikipedia Link Chain",
+  shAbout:"Name an article you can reach from the previous one in 2 or 3 clicks. 1 click (a direct link) is too close — bust! 4 or more is too far — bust!",
+  shRule:"⛳ 2 clicks = safe +1  🎯 3 clicks = nice! +3  💥 1 or 4+ = bust",
+  shLinks:n=>`${n} links`, shPts:n=>`${n} pts`, shPh:w=>`An article 2–3 clicks from “${w}”?`, shPhFirst:"Type the first word (or 🎲)",
+  shGo:"Judge!", shBegin:"Start with this", shRand:"🎲 Random first word", shReset:"Start over",
+  shResetQ:"Clear the chain and start over?",
+  shSafe2:"⛳ 2 clicks — safe", shNice3:"🎯 3 clicks — nice!", shSafeX:"⛳ Safe (undecided)", shVia:v=>` (via ${v})`,
+  shAsk1:"Linked in 1 click?", shAsk2:"Reachable in 2?", shAsk3:"Reachable in 3?", shDrum:"…",
+  shHit1:"💥 Direct link!", shHitN:"✅ Connected!", shMiss1:"✓ Not linked directly", shMiss2:"✗ Not in 2", shMiss3:"✗ Not in 3 either",
+  shUnsure:"🤔 No route of 3 or fewer found (search was cut short). You decide!", shSafeBtn:"Call it safe (0 pts)", shDobonBtn:"Call it a bust",
+  shDobon:"💥 Bust!", shWhy1:(a,b)=>`“${a}” links directly to “${b}” (1 click)`, shWhy4:(a,b)=>`“${b}” can't be reached from “${a}” in 3 clicks`,
+  shFinal:(n,p)=>`Result: ${n} links, ${p} pts`, shUndo:"↩ Take back that word", shAgain:"Play again",
+  shUsed:w=>`“${w}” was already used`, shOnlyArticle:"Only regular articles can be used"});
+Object.assign(STR.fr, {
+  hShiri:"🔗 Chaîne de liens", shTitle:"🔗 Chaîne de liens Wikipédia",
+  shAbout:"Proposez un article accessible depuis le précédent en 2 ou 3 clics. 1 clic (lien direct) : trop près, perdu ! 4 ou plus : trop loin, perdu !",
+  shRule:"⛳ 2 clics = sauf +1  🎯 3 clics = bravo ! +3  💥 1 ou 4+ = perdu",
+  shLinks:n=>`${n} liens`, shPts:n=>`${n} pts`, shPh:w=>`Un article à 2–3 clics de « ${w} » ?`, shPhFirst:"Premier mot (ou 🎲)",
+  shGo:"Juger !", shBegin:"Commencer avec", shRand:"🎲 Premier mot au hasard", shReset:"Recommencer",
+  shResetQ:"Effacer la chaîne et recommencer ?",
+  shSafe2:"⛳ 2 clics — sauf", shNice3:"🎯 3 clics — bravo !", shSafeX:"⛳ Sauf (indécis)", shVia:v=>` (via ${v})`,
+  shAsk1:"Lié en 1 clic ?", shAsk2:"Accessible en 2 ?", shAsk3:"Accessible en 3 ?", shDrum:"…",
+  shHit1:"💥 Lien direct !", shHitN:"✅ Relié !", shMiss1:"✓ Pas de lien direct", shMiss2:"✗ Pas en 2", shMiss3:"✗ Pas en 3 non plus",
+  shUnsure:"🤔 Aucun chemin en 3 clics trouvé (recherche incomplète). À vous de décider !", shSafeBtn:"Sauf (0 pt)", shDobonBtn:"Perdu",
+  shDobon:"💥 Perdu !", shWhy1:(a,b)=>`« ${a} » renvoie directement vers « ${b} » (1 clic)`, shWhy4:(a,b)=>`« ${b} » n'est pas accessible depuis « ${a} » en 3 clics`,
+  shFinal:(n,p)=>`Résultat : ${n} liens, ${p} pts`, shUndo:"↩ Retirer ce mot", shAgain:"Rejouer",
+  shUsed:w=>`« ${w} » a déjà été utilisé`, shOnlyArticle:"Seuls les articles sont acceptés"});
+Object.assign(STR.es, {
+  hShiri:"🔗 Cadena de enlaces", shTitle:"🔗 Cadena de enlaces de Wikipedia",
+  shAbout:"Di un artículo al que se llegue desde el anterior en 2 o 3 clics. 1 clic (enlace directo) está demasiado cerca: ¡fuera! 4 o más, demasiado lejos: ¡fuera!",
+  shRule:"⛳ 2 clics = a salvo +1  🎯 3 clics = ¡genial! +3  💥 1 o 4+ = fuera",
+  shLinks:n=>`${n} enlaces`, shPts:n=>`${n} pts`, shPh:w=>`¿Un artículo a 2–3 clics de «${w}»?`, shPhFirst:"Primera palabra (o 🎲)",
+  shGo:"¡Juzgar!", shBegin:"Empezar con esta", shRand:"🎲 Primera palabra al azar", shReset:"Empezar de nuevo",
+  shResetQ:"¿Borrar la cadena y empezar de nuevo?",
+  shSafe2:"⛳ 2 clics — a salvo", shNice3:"🎯 3 clics — ¡genial!", shSafeX:"⛳ A salvo (sin decidir)", shVia:v=>` (vía ${v})`,
+  shAsk1:"¿Enlazado en 1 clic?", shAsk2:"¿Se llega en 2?", shAsk3:"¿Se llega en 3?", shDrum:"…",
+  shHit1:"💥 ¡Enlace directo!", shHitN:"✅ ¡Conectado!", shMiss1:"✓ Sin enlace directo", shMiss2:"✗ No en 2", shMiss3:"✗ Tampoco en 3",
+  shUnsure:"🤔 No se encontró ruta de 3 o menos (búsqueda incompleta). ¡Decidid vosotros!", shSafeBtn:"A salvo (0 pts)", shDobonBtn:"Fuera",
+  shDobon:"💥 ¡Fuera!", shWhy1:(a,b)=>`«${a}» enlaza directamente a «${b}» (1 clic)`, shWhy4:(a,b)=>`No se llega a «${b}» desde «${a}» en 3 clics`,
+  shFinal:(n,p)=>`Resultado: ${n} enlaces, ${p} pts`, shUndo:"↩ Retirar esa palabra", shAgain:"Otra vez",
+  shUsed:w=>`«${w}» ya se usó`, shOnlyArticle:"Solo se aceptan artículos normales"});
+Object.assign(STR.ko, {
+  hShiri:"🔗 링크 끝말잇기", shTitle:"🔗 위키백과 링크 끝말잇기",
+  shAbout:"앞 단어의 문서에서 링크를 2타나 3타 따라가서 닿는 문서를 말해 이어 가요. 1타(직접 링크)는 너무 가까워서 아웃, 4타 이상은 너무 멀어서 아웃!",
+  shRule:"⛳ 2타 = 세이프 +1점　🎯 3타 = 나이스! +3점　💥 1타·4타 이상 = 아웃",
+  shLinks:n=>`${n}개 연결`, shPts:n=>`${n}점`, shPh:w=>`“${w}”에서 2~3타 걸리는 문서는?`, shPhFirst:"첫 단어 입력(또는 🎲)",
+  shGo:"판정!", shBegin:"이걸로 시작", shRand:"🎲 첫 단어 맡기기", shReset:"처음부터",
+  shResetQ:"연결을 지우고 처음부터 할까요?",
+  shSafe2:"⛳ 2타 세이프", shNice3:"🎯 3타 나이스!", shSafeX:"⛳ 세이프(판정 불가)", shVia:v=>` (${v} 경유)`,
+  shAsk1:"1타로 이어져 있나?", shAsk2:"2타로 갈 수 있나?", shAsk3:"3타로 갈 수 있나?", shDrum:"……",
+  shHit1:"💥 직접 링크 있음!", shHitN:"✅ 이어졌다!", shMiss1:"✓ 직접은 안 이어짐", shMiss2:"✗ 2타로는 안 닿음", shMiss3:"✗ 3타로도 안 닿음",
+  shUnsure:"🤔 3타 이내의 길을 못 찾았어요(다 조사하지 못함). 다 같이 정해요!", shSafeBtn:"세이프(0점)", shDobonBtn:"아웃",
+  shDobon:"💥 아웃!", shWhy1:(a,b)=>`“${a}” 문서에 “${b}”(으)로 가는 링크가 직접 있었어요(1타)`, shWhy4:(a,b)=>`“${a}”에서 “${b}”까지 3타 안에 닿지 않았어요`,
+  shFinal:(n,p)=>`결과: ${n}개 연결·${p}점`, shUndo:"↩ 방금 단어 취소", shAgain:"한 번 더",
+  shUsed:w=>`“${w}”은(는) 이미 썼어요`, shOnlyArticle:"일반 문서만 쓸 수 있어요"});
+Object.assign(STR["zh-hant"], {
+  hShiri:"🔗 連結接龍", shTitle:"🔗 維基百科連結接龍",
+  shAbout:"說出從上一個條目點 2 或 3 次連結能到達的條目，接下去。1 次（直接連結）太近出局，4 次以上太遠出局！",
+  shRule:"⛳ 2 桿＝安全 +1 分　🎯 3 桿＝漂亮！ +3 分　💥 1 桿・4 桿以上＝出局",
+  shLinks:n=>`接了 ${n} 個`, shPts:n=>`${n} 分`, shPh:w=>`從「${w}」2～3 桿能到的條目？`, shPhFirst:"輸入第一個詞（或 🎲）",
+  shGo:"判定！", shBegin:"就從這個開始", shRand:"🎲 隨機第一個詞", shReset:"從頭開始",
+  shResetQ:"清除接龍，從頭開始？",
+  shSafe2:"⛳ 2 桿 安全", shNice3:"🎯 3 桿 漂亮！", shSafeX:"⛳ 安全（無法判定）", shVia:v=>`（經由 ${v}）`,
+  shAsk1:"1 桿就連到了？", shAsk2:"2 桿能到？", shAsk3:"3 桿能到？", shDrum:"……",
+  shHit1:"💥 有直接連結！", shHitN:"✅ 連上了！", shMiss1:"✓ 沒有直接連結", shMiss2:"✗ 2 桿到不了", shMiss3:"✗ 3 桿也到不了",
+  shUnsure:"🤔 沒找到 3 桿以內的路線（未能全部查完）。大家決定吧！", shSafeBtn:"算安全（0 分）", shDobonBtn:"算出局",
+  shDobon:"💥 出局！", shWhy1:(a,b)=>`「${a}」條目直接連到「${b}」（1 桿）`, shWhy4:(a,b)=>`從「${a}」3 桿內到不了「${b}」`,
+  shFinal:(n,p)=>`結果：接了 ${n} 個・${p} 分`, shUndo:"↩ 收回這個詞", shAgain:"再玩一次",
+  shUsed:w=>`「${w}」已經用過了`, shOnlyArticle:"只能用一般條目"});
+Object.assign(STR["zh-hans"], {
+  hShiri:"🔗 链接接龙", shTitle:"🔗 维基百科链接接龙",
+  shAbout:"说出从上一个条目点 2 或 3 次链接能到达的条目，接下去。1 次（直接链接）太近出局，4 次以上太远出局！",
+  shRule:"⛳ 2 杆＝安全 +1 分　🎯 3 杆＝漂亮！ +3 分　💥 1 杆・4 杆以上＝出局",
+  shLinks:n=>`接了 ${n} 个`, shPts:n=>`${n} 分`, shPh:w=>`从“${w}”2～3 杆能到的条目？`, shPhFirst:"输入第一个词（或 🎲）",
+  shGo:"判定！", shBegin:"就从这个开始", shRand:"🎲 随机第一个词", shReset:"从头开始",
+  shResetQ:"清除接龙，从头开始？",
+  shSafe2:"⛳ 2 杆 安全", shNice3:"🎯 3 杆 漂亮！", shSafeX:"⛳ 安全（无法判定）", shVia:v=>`（经由 ${v}）`,
+  shAsk1:"1 杆就连到了？", shAsk2:"2 杆能到？", shAsk3:"3 杆能到？", shDrum:"……",
+  shHit1:"💥 有直接链接！", shHitN:"✅ 连上了！", shMiss1:"✓ 没有直接链接", shMiss2:"✗ 2 杆到不了", shMiss3:"✗ 3 杆也到不了",
+  shUnsure:"🤔 没找到 3 杆以内的路线（未能全部查完）。大家决定吧！", shSafeBtn:"算安全（0 分）", shDobonBtn:"算出局",
+  shDobon:"💥 出局！", shWhy1:(a,b)=>`“${a}”条目直接链接到“${b}”（1 杆）`, shWhy4:(a,b)=>`从“${a}”3 杆内到不了“${b}”`,
+  shFinal:(n,p)=>`结果：接了 ${n} 个・${p} 分`, shUndo:"↩ 收回这个词", shAgain:"再玩一次",
+  shUsed:w=>`“${w}”已经用过了`, shOnlyArticle:"只能用普通条目"});
+for(const [k, a] of [
+  ["ja", "🔗 リンクしりとり（タイトル画面から）：前の言葉から2〜3打で着く記事を言ってつなげる遊び。2打+1点、3打+3点、1打と4打以上はドボン。"],
+  ["en", "🔗 Link chain (from the title screen): name articles 2–3 clicks from the previous one. 2 clicks +1, 3 clicks +3, 1 or 4+ is a bust."],
+  ["fr", "🔗 Chaîne de liens (écran titre) : proposez des articles à 2–3 clics du précédent. 2 clics +1, 3 clics +3, 1 ou 4+ : perdu."],
+  ["es", "🔗 Cadena de enlaces (pantalla de título): di artículos a 2–3 clics del anterior. 2 clics +1, 3 clics +3, 1 o 4+: fuera."],
+  ["ko", "🔗 링크 끝말잇기(타이틀 화면): 앞 단어에서 2~3타로 닿는 문서를 말해 이어 가요. 2타 +1점, 3타 +3점, 1타와 4타 이상은 아웃."],
+  ["zh-hant", "🔗 連結接龍（標題畫面）：說出從上一個條目 2～3 桿能到的條目。2 桿 +1、3 桿 +3，1 桿或 4 桿以上出局。"],
+  ["zh-hans", "🔗 链接接龙（标题画面）：说出从上一个条目 2～3 杆能到的条目。2 杆 +1、3 杆 +3，1 杆或 4 杆以上出局。"]
+]) STR[k].help[STR[k].help.length - 1][1].push(a);
 
 /* ════════ 設定 ════════ */
 function browserLang(){
@@ -3159,6 +3326,7 @@ function showHome(view = "main"){
   $("homeMain").hidden = view !== "main";
   $("homeMp").hidden = view !== "mp";
   $("homeLobby").hidden = view !== "lobby";
+  $("homeShiri").hidden = view !== "shiri";
   renderHome();
   renderStrip();
 }
@@ -3175,6 +3343,7 @@ function renderHome(){
   }
   if(state.homeView === "mp") renderMpJoin();
   if(state.homeView === "lobby") renderLobby();
+  if(state.homeView === "shiri") shEnter();
 }
 $("hSolo").addEventListener("click", ()=>{ hideHome(); newOdai(); });
 function openHelp(){
@@ -3986,25 +4155,30 @@ function openPicker(role, onPick){
   setTimeout(() => $("pickInput").focus(), 60);
 }
 function closePicker(){ $("pickModal").classList.remove("show"); pickSeq++; clearTimeout(pickTimer); }
+/* 予測候補（「自分で決める」とリンクしりとりで共通） */
+async function suggestFetch(q){
+  await ensureNs();
+  const lang = curLang();
+  const d = await api({action:"query", generator:"prefixsearch", gpssearch:q, gpsnamespace:"0", gpslimit:"10", redirects:"1",
+    prop:"pageimages|description|pageprops|info", piprop:"thumbnail", pithumbsize:"88", pilimit:"10",
+    ppprop:"disambiguation", inprop:"varianttitles"});
+  const from = {};
+  for(const r of (d.query && d.query.redirects) || []) if(!from[r.to]) from[r.to] = r.from;
+  const pages = ((d.query && d.query.pages) || []).filter(p => p.missing === undefined && p.invalid === undefined)
+                  .sort((a, b) => (a.index || 0) - (b.index || 0));
+  return pages.map(p => ({
+    title:p.title,
+    shown:lang === "zh" && p.varianttitles ? (p.varianttitles[zhVariant()] || p.title) : p.title,
+    from:from[p.title], desc:p.description || "", img:p.thumbnail && p.thumbnail.source,
+    dis:!!(p.pageprops && "disambiguation" in p.pageprops)}));
+}
 async function pickSuggest(q){
   const seq = ++pickSeq;
   if(!q.trim()){ pickItems = []; renderPickList(); $("pickMsg").textContent = ""; return; }
   try{
-    await ensureNs();
-    const lang = curLang();
-    const d = await api({action:"query", generator:"prefixsearch", gpssearch:q, gpsnamespace:"0", gpslimit:"10", redirects:"1",
-      prop:"pageimages|description|pageprops|info", piprop:"thumbnail", pithumbsize:"88", pilimit:"10",
-      ppprop:"disambiguation", inprop:"varianttitles"});
+    const items = await suggestFetch(q);
     if(seq !== pickSeq) return;
-    const from = {};
-    for(const r of (d.query && d.query.redirects) || []) if(!from[r.to]) from[r.to] = r.from;
-    const pages = ((d.query && d.query.pages) || []).filter(p => p.missing === undefined && p.invalid === undefined)
-                    .sort((a, b) => (a.index || 0) - (b.index || 0));
-    pickItems = pages.map(p => ({
-      title:p.title,
-      shown:lang === "zh" && p.varianttitles ? (p.varianttitles[zhVariant()] || p.title) : p.title,
-      from:from[p.title], desc:p.description || "", img:p.thumbnail && p.thumbnail.source,
-      dis:!!(p.pageprops && "disambiguation" in p.pageprops)}));
+    pickItems = items;
     pickCur = pickItems.length ? 0 : -1;
     renderPickList();
     $("pickMsg").textContent = pickItems.length ? "" : T("pickNone");
@@ -4070,6 +4244,232 @@ async function mpHostPick(role){
     m.drawing = false;
     mpSendOdai(); renderLobby();
   });
+}
+
+/* ════════ v1.8 リンクしりとり（ひとり用プロトタイプ） ════════
+   しくみを3つに分けてある（あとで対戦にするとき、②の出来事をそのまま配れば同じ画面が作れる）
+   ① 判定エンジン shJudge(S, G, onStep)：1打→2打→3打の順に調べ、途中経過を onStep で知らせる
+   ② ゲームの出来事 shApply(ev)：{t:"start"|"judge"|"result"|"undo"|"reset", ...} で状態を変える
+   ③ 画面 renderShiri()：状態 sh から毎回描き直す */
+const SH_KEY = "wikiGolfShiri";
+const SH_PTS = {2:1, 3:3};
+let sh = shLoad();
+function shNew(){ return {v:1, lang:curLang(), chain:[], score:0, over:null, judging:null, players:[{id:"me", name:""}], turn:0}; }
+function shLoad(){
+  try{ const o = JSON.parse(localStorage.getItem(SH_KEY) || "null"); if(o && o.v === 1){ o.judging = null; return o; } }catch(_){}
+  return shNew();
+}
+function shSave(){ try{ localStorage.setItem(SH_KEY, JSON.stringify({...sh, judging:null})); }catch(_){} }
+
+/* ① 判定エンジン */
+async function shJudge(S, G, onStep){
+  const run = {cancelled:false, n:0, lang:curLang()};
+  const wait = (t0, ms) => new Promise(r => setTimeout(r, Math.max(0, ms - (Date.now() - t0))));
+  let t0 = Date.now();
+  onStep({k:1, st:"run"});
+  const fo = await spLinksOut(run, S);
+  await wait(t0, 1500);
+  if(fo.set.includes(G)){ onStep({k:1, st:"hit"}); return {d:1, path:[S, G]}; }
+  onStep({k:1, st:"miss"});
+  t0 = Date.now(); onStep({k:2, st:"run"});
+  const bi = await spLinksIn(run, G);
+  const F = fo.set.filter(t => t !== G && t !== S), Bs = new Set(bi.set);
+  const mid = F.find(t => Bs.has(t));
+  await wait(t0, 1700);
+  if(mid){ onStep({k:2, st:"hit"}); return {d:2, path:[S, mid, G]}; }
+  onStep({k:2, st:"miss"});
+  t0 = Date.now(); onStep({k:3, st:"run"});
+  const B = bi.set.filter(t => t !== S && t !== G);
+  let res = null, complete = fo.full && bi.full;
+  outer: for(let i = 0; i < F.length; i += 50) for(let j = 0; j < B.length; j += 50){
+    if(run.n >= SP_BUDGET){ complete = false; break outer; }
+    const d = await spApi(run, {action:"query", prop:"links", titles:F.slice(i, i+50).join("|"),
+                                pltitles:B.slice(j, j+50).join("|"), plnamespace:"0", pllimit:"max"});
+    for(const p of (d.query && d.query.pages) || []) if(p.links && p.links.length){ res = {d:3, path:[S, p.title, p.links[0].title, G]}; break outer; }
+  }
+  await wait(t0, 2200);
+  if(res){ onStep({k:3, st:"hit"}); return res; }
+  onStep({k:3, st:"miss"});
+  return {d:0, complete};
+}
+
+/* ② 出来事 */
+function shApply(ev){
+  switch(ev.t){
+    case "reset": sh = shNew(); break;
+    case "start": sh = shNew(); sh.chain.push({title:ev.title, shown:ev.shown, by:ev.by || "me"}); break;
+    case "judge": sh.judging = {title:ev.title, shown:ev.shown, by:ev.by || "me", steps:{}}; break;
+    case "step": if(sh.judging) sh.judging.steps[ev.k] = ev.st; break;
+    case "result": {
+      const j = sh.judging; if(!j) break;
+      const r = ev.res;
+      if(r.d === 2 || r.d === 3 || ev.force === "safe"){
+        const d = r.d || 0, pts = SH_PTS[d] || 0;
+        sh.chain.push({title:j.title, shown:j.shown, by:j.by, d, via:r.path ? r.path.slice(1, -1) : [], pts});
+        sh.score += pts;
+        sh.judging = null;
+      }else if(r.d === 0 && !r.complete && !ev.force){
+        j.unsure = true;                                   // 調べきれなかった：人間が決める
+      }else{
+        sh.over = {title:j.title, shown:j.shown, by:j.by, d:r.d, path:r.path || null};
+        sh.judging = null;
+      }
+      break;
+    }
+    case "undo": sh.over = null; sh.judging = null; break;
+  }
+  if(ev.t !== "step") shSave();
+  renderShiri();
+  if(ev.t === "judge" || ev.t === "result"){ const jb = $("shJudge"); if(!jb.hidden) jb.scrollIntoView({behavior:"smooth", block:"nearest"}); }
+}
+
+/* ③ 画面 */
+function renderShiri(){
+  if(state.homeView !== "shiri") return;
+  const last = sh.chain[sh.chain.length - 1];
+  const started = !!last, judging = !!sh.judging;
+  $("shScore").innerHTML = "";
+  if(started){
+    $("shScore").append(mk("span", "n", T("shLinks", sh.chain.length - 1)), mk("span", "p", T("shPts", sh.score)));
+  }
+  // つながり
+  const box = $("shChain"); box.innerHTML = "";
+  sh.chain.forEach((c, i) => {
+    if(i){
+      const lk = mk("div", "shLink d" + c.d);
+      lk.append(mk("span", "ar", "↓"));
+      lk.append(mk("span", "jd", c.d === 3 ? T("shNice3") : c.d === 2 ? T("shSafe2") : T("shSafeX")));
+      if(c.via && c.via.length) lk.append(mk("span", "via", T("shVia", c.via.join(" → "))));
+      if(c.pts) lk.append(mk("span", "pt", "+" + c.pts));
+      box.append(lk);
+    }
+    const bd = mk("div", "shBead" + (i === sh.chain.length - 1 ? " cur" : ""));
+    bd.append(mk("span", "no", String(i + 1)), mk("span", "tt", c.shown));
+    box.append(bd);
+  });
+  // 判定中
+  const jb = $("shJudge"); jb.innerHTML = ""; jb.hidden = !judging && !sh.over;
+  if(judging){
+    const j = sh.judging;
+    jb.append(mk("div", "shQ", `${last ? last.shown : ""} → ${j.shown}`));
+    for(const k of [1, 2, 3]){
+      const st = j.steps[k];
+      if(!st) continue;
+      const row = mk("div", "shStep " + st);
+      const q = T("shAsk" + k);
+      row.append(mk("span", "", q));
+      row.append(mk("span", "rs", st === "run" ? T("shDrum") : st === "hit" ? (k === 1 ? T("shHit1") : T("shHitN")) : T("shMiss" + k)));
+      jb.append(row);
+    }
+    if(j.unsure){
+      jb.append(mk("div", "shUnsure", T("shUnsure")));
+      const r = mk("div", "mpRow");
+      const s = mk("button", "", T("shSafeBtn")), d = mk("button", "", T("shDobonBtn"));
+      s.addEventListener("click", () => shApply({t:"result", res:{d:0}, force:"safe"}));
+      d.addEventListener("click", () => shApply({t:"result", res:{d:0, complete:true}, force:"dobon"}));
+      r.append(s, d); jb.append(r);
+    }
+  }else if(sh.over){
+    const o = sh.over;
+    jb.append(mk("div", "shDobon", T("shDobon")));
+    jb.append(mk("div", "shWhy", o.d === 1 ? T("shWhy1", last.shown, o.shown) : T("shWhy4", last.shown, o.shown)));
+    jb.append(mk("div", "shFinal", T("shFinal", sh.chain.length - 1, sh.score)));
+    const r = mk("div", "mpRow");
+    const u = mk("button", "", T("shUndo")), n = mk("button", "prime", T("shAgain"));
+    u.addEventListener("click", () => shApply({t:"undo"}));
+    n.addEventListener("click", () => shApply({t:"reset"}));
+    r.append(u, n); jb.append(r);
+  }
+  // 入力
+  const lock = judging || !!sh.over;
+  $("shInput").disabled = lock;
+  $("shGo").disabled = lock;
+  $("shInput").placeholder = started ? T("shPh", last.shown) : T("shPhFirst");
+  $("shGo").textContent = started ? T("shGo") : T("shBegin");
+  $("shRand").hidden = started;
+  $("shReset").hidden = !started || judging;
+  $("shRule").textContent = T("shRule");
+}
+
+/* 入力：予測候補 */
+let shSeq = 0, shTimer = null, shItems = [], shCur = -1;
+function shSug(){
+  const box = $("shSug"); box.innerHTML = "";
+  box.hidden = !shItems.length;
+  shItems.forEach((it, i) => {
+    const row = mk("div", "pickItem" + (i === shCur ? " cur" : ""));
+    if(it.img){ const im = document.createElement("img"); im.src = it.img; im.alt = ""; row.append(im); } else row.append(mk("span", "ph"));
+    const tx = mk("div", "pt"); tx.append(mk("b", "", it.shown));
+    if(it.dis) tx.append(mk("small", "dis", "⚠️ " + T("pickDis"))); else if(it.desc) tx.append(mk("small", "", it.desc));
+    row.append(tx);
+    row.addEventListener("mousedown", e => e.preventDefault());
+    row.addEventListener("click", () => { $("shInput").value = it.shown; $("shInput").dataset.title = it.title; shItems = []; shSug(); shSubmit(); });
+    box.append(row);
+  });
+}
+$("shInput").addEventListener("input", () => {
+  delete $("shInput").dataset.title;
+  $("shMsg").textContent = "";
+  clearTimeout(shTimer);
+  const q = $("shInput").value, seq = ++shSeq;
+  if(!q.trim()){ shItems = []; shSug(); return; }
+  shTimer = setTimeout(async () => {
+    try{ const items = await suggestFetch(q); if(seq !== shSeq) return; shItems = items; shCur = -1; shSug(); }catch(_){}
+  }, 250);
+});
+$("shInput").addEventListener("keydown", e => {
+  if(e.isComposing) return;
+  if((e.key === "ArrowDown" || e.key === "ArrowUp") && shItems.length){
+    e.preventDefault();
+    shCur = (shCur + (e.key === "ArrowDown" ? 1 : -1) + shItems.length) % shItems.length; shSug();
+  }else if(e.key === "Enter"){
+    e.preventDefault();
+    if(shCur >= 0 && shItems[shCur]){ $("shInput").value = shItems[shCur].shown; $("shInput").dataset.title = shItems[shCur].title; }
+    shItems = []; shSug(); shSubmit();
+  }else if(e.key === "Escape"){ shItems = []; shSug(); }
+});
+$("shInput").addEventListener("blur", () => setTimeout(() => { shItems = []; shSug(); }, 150));
+
+/* 言葉を出す */
+async function shResolve(text){
+  const p = await getSummary(text);            // 別名なら本当の題名に
+  return {title:p.title, shown:shown(p)};
+}
+async function shSubmit(){
+  const inp = $("shInput"), raw = (inp.dataset.title || inp.value).trim();
+  if(!raw || sh.judging || sh.over) return;
+  $("shMsg").textContent = "";
+  let w;
+  try{ await ensureNs(); w = await shResolve(raw); }
+  catch(e){ $("shMsg").textContent = T("notFound", raw); return; }
+  if(nsOf(w.title) !== 0){ $("shMsg").textContent = T("shOnlyArticle"); return; }
+  if(!sh.chain.length){ shApply({t:"start", ...w}); inp.value = ""; delete inp.dataset.title; return; }
+  if(sh.chain.some(c => norm(c.title) === norm(w.title))){ $("shMsg").textContent = T("shUsed", w.shown); return; }
+  inp.value = ""; delete inp.dataset.title;
+  const last = sh.chain[sh.chain.length - 1];
+  const lang = sh.lang;
+  shApply({t:"judge", ...w});
+  try{
+    const res = await shJudge(last.title, w.title, s => shApply({t:"step", ...s}));
+    if(sh.lang !== lang || !sh.judging) return;
+    shApply({t:"result", res});
+  }catch(e){
+    if(sh.judging){ sh.judging = null; renderShiri(); $("shMsg").textContent = T("err") + e.message; }
+  }
+}
+$("shGo").addEventListener("click", shSubmit);
+$("shRand").addEventListener("click", async () => {
+  $("shRand").disabled = true;
+  try{ await ensureNs(); const p = await pickTitle("start"); if(p){ const w = await shResolve(p.title); shApply({t:"start", ...w}); } }
+  catch(e){ $("shMsg").textContent = T("err") + e.message; }
+  $("shRand").disabled = false;
+});
+$("shReset").addEventListener("click", () => { if(confirm(T("shResetQ"))) shApply({t:"reset"}); });
+$("hShiri").addEventListener("click", () => showHome("shiri"));
+$("shBack").addEventListener("click", () => showHome("main"));
+function shEnter(){
+  if(sh.lang !== curLang()) sh = shNew();
+  renderShiri();
 }
 
 function toast(msg){
