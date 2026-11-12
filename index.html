@@ -346,6 +346,17 @@
   .shRare.r1{font-size:1.3rem;animation:shShake .4s}
   .shFlowInfo .rare{color:#a061d1}
   #shHistModal{z-index:34}
+  /* v4.1 爆弾のお知らせを画面のまんなかに */
+  #shBombPop{position:fixed;inset:0;display:flex;align-items:center;justify-content:center;z-index:45;pointer-events:none;padding:16px}
+  #shBombPop[hidden]{display:none}
+  #shBombPop .bp{pointer-events:auto;cursor:pointer;background:var(--card);border:3px solid var(--flag);border-radius:18px;padding:18px 26px;max-width:min(520px,100%);
+    text-align:center;box-shadow:0 10px 40px rgba(0,0,0,.35);animation:shPop .35s cubic-bezier(.2,1.6,.4,1)}
+  #shBombPop .bp .ic{font-size:3.4rem;line-height:1.1}
+  #shBombPop .bp .hd{font-size:1.5rem;font-weight:900;color:var(--flag);margin-top:4px}
+  #shBombPop .bp .wd{font-size:1.25rem;font-weight:800;margin-top:6px;color:var(--ink)}
+  #shBombPop .bp .sm{font-size:.85rem;color:var(--sub);margin-top:4px}
+  #shBombPop .bp.mov .hd{animation:shDrum .5s steps(2) infinite}
+  @keyframes shPop{from{transform:scale(.4);opacity:0}to{transform:scale(1);opacity:1}}
   #shHistModal .panel{background:var(--card);border-radius:14px;padding:16px 18px;width:min(640px,100%);max-height:88vh;overflow-y:auto}
   .shRec{display:block;width:100%;text-align:left;border:1px solid var(--line);border-radius:10px;padding:8px 12px;margin:6px 0;background:var(--bg);cursor:pointer;color:inherit}
   .shRec small{display:block;color:var(--sub);font-size:.75rem}
@@ -632,7 +643,7 @@
   <div class="stat"><div class="num" id="clockNum">0:00</div><div class="lbl" id="clockLbl"></div></div>
   <div class="stat" id="pageStat" hidden><div class="num" id="pageNum">0</div><div class="lbl" data-t="pageLeft"></div></div>
   <div id="route"></div>
-  <span id="ver">v4.0</span>
+  <span id="ver">v4.2</span>
   <div id="barBtns">
     <button id="teeoff" disabled data-t="teeoff"></button>
     <button id="backBtn" hidden data-t="back"></button>
@@ -690,7 +701,7 @@
 
 <div id="settings" class="overlay">
   <div class="panel">
-    <h2><span data-t="settings"></span> <small style="font-size:.65rem;font-weight:400;color:var(--sub)">v4.0</small></h2>
+    <h2><span data-t="settings"></span> <small style="font-size:.65rem;font-weight:400;color:var(--sub)">v4.2</small></h2>
     <p class="lockNote" id="lockNote" hidden></p>
     <button id="quitHole" class="quit" hidden></button>
     <button id="toHome" data-t="toHome"></button>
@@ -718,7 +729,7 @@
 
 <div id="home">
   <div class="homeInner">
-    <div class="homeHead"><h1>⛳ <span data-t="appName"></span></h1><p data-t="homeAbout"></p><small>v4.0</small></div>
+    <div class="homeHead"><h1>⛳ <span data-t="appName"></span></h1><p data-t="homeAbout"></p><small>v4.2</small></div>
 
     <section id="homeMain">
       <div class="homeBtns">
@@ -854,6 +865,7 @@
 
 <div id="toast"></div>
 
+<div id="shBombPop" hidden><div class="bp"></div></div>
 <div id="shHistModal" class="overlay">
   <div class="panel">
     <div id="shHistBody"></div>
@@ -4950,6 +4962,28 @@ async function shPickBomb(lv, avoid, near){
     }
     return null;
   };
+  if(near && lv >= 1){
+    // v4.2 花火・爆弾・バケモンは、検索で「被リンクが多い順」に並べて上から数える（ハズレを引かない）
+    //  ① 今の言葉にリンクしている記事（linksto:）を多い順　② 今の言葉が出てくる記事を多い順
+    const bySearch = async q => {
+      const d = await api({action:"query", list:"search", srsearch:q, srnamespace:"0", srlimit:"30", srsort:"incoming_links_desc", srprop:"", srinfo:""});
+      const list = ((d.query && d.query.search) || []).map(x => x.title);
+      let tried = 0;
+      for(const t of list){
+        if(avoid && avoid(t)) continue;
+        if(tried++ >= 15) break;
+        const c = await shInCount(t, 5000);
+        if(c.n >= lo && c.n <= hi) return {title:t, inN:c.n, lv};
+        const gap = c.n < lo ? lo - c.n : c.n - hi;
+        if(gap < bestGap){ best = {title:t, inN:c.n, lv:shLvFromN(c.n)}; bestGap = gap; }
+        if(c.n < lo) break;                         // 多い順なので、ここから先はもっと少ない
+      }
+      return null;
+    };
+    for(const q of [`linksto:"${near.replace(/"/g, "")}"`, near.replace(/"/g, "")]){
+      try{ const hit = await bySearch(q); if(hit) return hit; }catch(_){}
+    }
+  }
   if(near){
     // v3.9 まず「今の言葉の記事に書いてあるリンク先」から、その段階に合う記事をさがす（近所のハブが爆弾になる）
     const L = await api({action:"query", generator:"links", titles:near, gplnamespace:"0", gpllimit:"max", redirects:"1", prop:"pageprops", ppprop:"disambiguation"});
@@ -5124,7 +5158,7 @@ function renderShiri(){
   const tb = shThumbBase(); if(tb && !(shThumbWant && shThumbWant.kind === "cand" && shItems.length)) shThumbShow(tb.title, tb.kind);
   { const r = T("shRule"), i = r.indexOf("🚩");
     $("shRule").textContent = sh.setup.gtype === "bomb" ? (i > 0 ? r.slice(0, i) : r + "　") + T("shRuleBomb") : r; }
-  if(setupMode) return renderShSetup();
+  if(setupMode){ shBombPopRender(); return renderShSetup(); }
   renderShPlay();
 }
 function renderShSetup(){
@@ -5375,7 +5409,35 @@ function renderShPlay(){
   $("shQuit").disabled = judging;
   shTick();
   shBombKick();
+  shBombPopRender();
 }
+/* v4.1 爆弾のお知らせ（まんなか） */
+let shPopSeen = 0, shPopTimer = null;
+function shBombPopRender(){
+  const box = $("shBombPop"), bp = box.firstElementChild;
+  const on = shIsBomb() && sh.phase === "play" && state.homeView === "shiri" && state.screen === "home";
+  const bs = on ? shBombList() : [];
+  if(!on){ box.hidden = true; shPopSeen = 0; clearTimeout(shPopTimer); return; }
+  if(sh.bombMoving){
+    clearTimeout(shPopTimer);
+    bp.className = "bp mov"; bp.innerHTML = "";
+    bp.append(mk("div", "ic", SH_BOMB_IC[Math.min(3, bs.length)]), mk("div", "hd", bs.length ? T("shBombMoving") : T("shBombFirst")));
+    box.hidden = false; return;
+  }
+  if(bs.length > shPopSeen && sh.bomb){
+    shPopSeen = bs.length;
+    const b = sh.bomb, lv = Math.min(3, b.lv != null ? b.lv : shLvFromN(b.inN)), ic = SH_BOMB_IC[lv], nm = T("shLv")[lv];
+    bp.className = "bp"; bp.innerHTML = "";
+    bp.append(mk("div", "ic", ic), mk("div", "hd", T(bs.length === 1 ? "shBombDrop" : "shBombAdd", "", nm).trim()), mk("div", "wd", b.shown),
+              mk("div", "sm", (b.inN != null ? T("shInN", shRoundN(b.inN)) + "　" : "") + T("shBombsN", bs.length).replace(/[：:]\s*$/, "")));
+    box.hidden = false;
+    clearTimeout(shPopTimer); shPopTimer = setTimeout(() => { box.hidden = true; }, 2800);
+    return;
+  }
+  if(!bp.classList.contains("mov")) return;     // 移動中の表示だけ消す（お知らせは時間で消える）
+  box.hidden = true;
+}
+$("shBombPop").addEventListener("click", () => { clearTimeout(shPopTimer); $("shBombPop").hidden = true; });
 /* 右側のサムネイル（広い画面だけ）。文字は読めない大きさ、押すと記事の窓で読める */
 const shWideMQ = matchMedia("(min-width:1100px)");
 let shThumbCur = null, shThumbTok = 0, shThumbTimer = null, shThumbWant = null;
@@ -6086,7 +6148,7 @@ $("hShiri").addEventListener("click", () => {
   if(!shNet && sh.phase === "end"){ sh = shNewSetup(sh.setup); shSave(); }   // v3.4 終わったゲームは残さず準備画面へ
   showHome("shiri");
 });
-$("shBack").addEventListener("click", async () => { if(shNet){ if(sh.phase === "play" && !confirm(T("shNetLeaveQ"))) return; await shNetLeave(true); } showHome("main"); });
+$("shBack").addEventListener("click", async () => { $("shBombPop").hidden = true; if(shNet){ if(sh.phase === "play" && !confirm(T("shNetLeaveQ"))) return; await shNetLeave(true); } showHome("main"); });
 function shEnter(){
   if(!shNet && sh.lang !== curLang()){ const s = sh.setup; s.start = null; s.goal = null; sh = shNewSetup(s); }
   renderShiri();
