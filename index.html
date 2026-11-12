@@ -261,7 +261,7 @@
   #shsBothR{padding:6px 12px}
   .shsBtns{display:flex;gap:4px}
   .shsBtns button{padding:4px 10px}
-  .seg{display:inline-flex;border:1px solid var(--line);border-radius:10px;overflow:hidden}
+  .seg{display:inline-flex;gap:0;border:1px solid var(--line);border-radius:10px;overflow:hidden}
   .seg button{border:0;border-radius:0;padding:6px 14px;background:var(--card)}
   .seg button+button{border-left:1px solid var(--line)}
   .seg button.on{background:var(--green);color:var(--onGreen);font-weight:800}
@@ -276,6 +276,18 @@
   .shTop{display:flex;justify-content:space-between;align-items:center;min-height:1.2em;font-size:.85rem;color:var(--sub);font-weight:700}
   #shTimer{font-size:1.2rem;font-weight:900;color:var(--green);font-variant-numeric:tabular-nums}
   #shTimer.warn{color:var(--flag);animation:shDrum .5s steps(2) infinite}
+  /* v5.1 残り時間を入力欄のすぐ上に大きく */
+  #shTimeBox{display:flex;align-items:center;gap:10px;margin:6px 0 6px}
+  #shTimeBox[hidden]{display:none}
+  #shTimeNum{font-size:1.9rem;font-weight:900;font-variant-numeric:tabular-nums;color:var(--green);min-width:3.2em;line-height:1}
+  #shTimeBox .tbar{flex:1;height:12px;border-radius:999px;background:var(--line);overflow:hidden}
+  #shTimeBar{display:block;height:100%;width:100%;border-radius:999px;background:var(--green);transition:width .25s linear,background .3s}
+  #shTimeBox.mid #shTimeNum{color:#e8a200} #shTimeBox.mid #shTimeBar{background:#f2b705}
+  #shTimeBox.warn #shTimeNum{color:var(--flag);animation:shBeat .5s ease-in-out infinite} #shTimeBox.warn #shTimeBar{background:var(--flag)}
+  @keyframes shBeat{0%,100%{transform:scale(1)}50%{transform:scale(1.18)}}
+  #shInputRow.danger #shInput{animation:shBlink .5s steps(2) infinite}
+  @keyframes shBlink{0%{border-color:var(--flag);box-shadow:0 0 0 3px rgba(224,49,49,.35)}100%{border-color:var(--line);box-shadow:none}}
+  .shsRow[hidden]{display:none !important}
   #shBoard{display:flex;flex-wrap:wrap;gap:6px;margin:6px 0 10px;align-items:baseline}
   .shPl{display:flex;flex-direction:column;align-items:flex-start;border:2px solid var(--line);border-left:6px solid var(--pc);border-radius:10px;padding:4px 10px;min-width:6.5em;background:var(--card)}
   .shPl .nm{font-size:.82rem;font-weight:700}
@@ -672,7 +684,7 @@
   <div class="stat"><div class="num" id="clockNum">0:00</div><div class="lbl" id="clockLbl"></div></div>
   <div class="stat" id="pageStat" hidden><div class="num" id="pageNum">0</div><div class="lbl" data-t="pageLeft"></div></div>
   <div id="route"></div>
-  <span id="ver">v5.0</span>
+  <span id="ver">v5.1</span>
   <div id="barBtns">
     <button id="teeoff" disabled data-t="teeoff"></button>
     <button id="backBtn" hidden data-t="back"></button>
@@ -730,7 +742,7 @@
 
 <div id="settings" class="overlay">
   <div class="panel">
-    <h2><span data-t="settings"></span> <small style="font-size:.65rem;font-weight:400;color:var(--sub)">v5.0</small></h2>
+    <h2><span data-t="settings"></span> <small style="font-size:.65rem;font-weight:400;color:var(--sub)">v5.1</small></h2>
     <p class="lockNote" id="lockNote" hidden></p>
     <button id="quitHole" class="quit" hidden></button>
     <button id="toHome" data-t="toHome"></button>
@@ -758,7 +770,7 @@
 
 <div id="home">
   <div class="homeInner">
-    <div class="homeHead"><h1>🎮 <span data-t="gamesName"></span></h1><p data-t="gamesAbout"></p><small>v5.0</small></div>
+    <div class="homeHead"><h1>🎮 <span data-t="gamesName"></span></h1><p data-t="gamesAbout"></p><small>v5.1</small></div>
 
     <section id="homeMain">
       <div class="homeCard homeLang" id="homeLang"></div>
@@ -855,6 +867,7 @@
           <details id="shLogBox"><summary id="shLogSum"></summary><div id="shLogList" class="shFlow"></div></details>
           <div id="shTurn" hidden></div>
           <div id="shTyping" hidden></div>
+          <div id="shTimeBox" hidden><b id="shTimeNum"></b><div class="tbar"><i id="shTimeBar"></i></div></div>
           <div id="shInputRow">
             <div class="shField"><input id="shInput" type="search" autocomplete="off" autocapitalize="off" spellcheck="false" enterkeyhint="go"><div id="shSug" hidden></div></div>
             <button id="shGo" class="prime" data-t="shGo"></button>
@@ -2278,6 +2291,14 @@ Object.assign(STR["es"], {gamesName:"Juegos de Wikipedia", gamesAbout:"Algunos j
 Object.assign(STR["ko"], {gamesName:"위키백과 게임 모음", gamesAbout:"문서 속 링크를 따라가며 머리를 쓰는 게임들.", gcGoalShiri:"🔗 골 끝말잇기", gcGoalShiriD:"앞 단어에서 딱 2타로 닿는 문서를 말해 이어요. 골 단어를 말하면 승리!", gcMineShiri:"링크 지뢰 끝말잇기", gcMineShiriD:"규칙은 같지만 앞에 나온 단어가 지뢰가 돼요. 지뢰에 링크한 문서를 말하면 아웃!", gcPlay:"하기", gcShiriRec:"📚 끝말잇기 기록", golfRules:"⛳ 골프 규칙", shTitleGoal:"🔗 골 끝말잇기", shTitleBomb:"💣💣 폭탄 끝말잇기(비밀)", shSecret:"🤫 비밀 모드!", shsLifeL:"❤️ 라이프", shLifeNone:"없음", shsTimeL:"⏱ 한 수 시간", shTimeNone:"없음", shTime60:"60초", shLifeNote3:"아웃·지뢰·시간 초과로 ♥가 하나 줄고 0점으로 다음 사람에게. ♥가 없으면 탈락", shLifeNote0:"한 번 실수하면 탈락", shLife3S:"♥3", shLife0S:"라이프 없음", shTime60S:"한 수 60초", shTime0S:"시간 무제한", shBakeHit:"👹 괴물에게 잡혔다!"});
 Object.assign(STR["zh-hant"], {gamesName:"維基百科遊戲集", gamesAbout:"沿著條目裡的連結動動腦的小遊戲。", gcGoalShiri:"🔗 終點接龍", gcGoalShiriD:"說出從上一個詞剛好 2 桿能到的條目，說出終點就贏！", gcMineShiri:"連結地雷接龍", gcMineShiriD:"規則一樣，但說過的詞會變成地雷。連到地雷就出局！", gcPlay:"開始", gcShiriRec:"📚 接龍紀錄", golfRules:"⛳ 高爾夫規則", shTitleGoal:"🔗 終點接龍", shTitleBomb:"💣💣 炸彈接龍（秘密）", shSecret:"🤫 秘密模式！", shsLifeL:"❤️ 生命", shLifeNone:"無", shsTimeL:"⏱ 每手時間", shTimeNone:"無", shTime60:"60 秒", shLifeNote3:"出局、地雷、超時會少一顆 ♥，0 分換下一人。♥ 用完就淘汰", shLifeNote0:"失誤一次就淘汰", shLife3S:"♥3", shLife0S:"無生命", shTime60S:"每手 60 秒", shTime0S:"不限時", shBakeHit:"👹 被怪物抓到了！"});
 Object.assign(STR["zh-hans"], {gamesName:"维基百科游戏集", gamesAbout:"沿着条目里的链接动动脑的小游戏。", gcGoalShiri:"🔗 终点接龙", gcGoalShiriD:"说出从上一个词刚好 2 杆能到的条目，说出终点就赢！", gcMineShiri:"链接地雷接龙", gcMineShiriD:"规则一样，但说过的词会变成地雷。链接到地雷就出局！", gcPlay:"开始", gcShiriRec:"📚 接龙记录", golfRules:"⛳ 高尔夫规则", shTitleGoal:"🔗 终点接龙", shTitleBomb:"💣💣 炸弹接龙（秘密）", shSecret:"🤫 秘密模式！", shsLifeL:"❤️ 生命", shLifeNone:"无", shsTimeL:"⏱ 每手时间", shTimeNone:"无", shTime60:"60 秒", shLifeNote3:"出局、地雷、超时会少一颗 ♥，0 分换下一人。♥ 用完就淘汰", shLifeNote0:"失误一次就淘汰", shLife3S:"♥3", shLife0S:"无生命", shTime60S:"每手 60 秒", shTime0S:"不限时", shBakeHit:"👹 被怪物抓到了！"});
+/* v5.1 */
+Object.assign(STR["ja"], {shLifeNote0:"♥なし：一発アウト。1回でもミスしたら脱落", shPassLife:"⏭️ パス（♥−1）"});
+Object.assign(STR["en"], {shLifeNote0:"No ♥: one strike and you're out. Any mistake eliminates you.", shPassLife:"⏭️ Pass (♥−1)"});
+Object.assign(STR["fr"], {shLifeNote0:"Sans ♥ : une erreur et c’est fini.", shPassLife:"⏭️ Passer (♥−1)"});
+Object.assign(STR["es"], {shLifeNote0:"Sin ♥: un fallo y fuera.", shPassLife:"⏭️ Pasar (♥−1)"});
+Object.assign(STR["ko"], {shLifeNote0:"♥ 없음: 한 번에 아웃. 한 번이라도 실수하면 탈락", shPassLife:"⏭️ 패스(♥−1)"});
+Object.assign(STR["zh-hant"], {shLifeNote0:"無 ♥：一次出局。失誤一次就淘汰", shPassLife:"⏭️ 跳過（♥−1）"});
+Object.assign(STR["zh-hans"], {shLifeNote0:"无 ♥：一次出局。失误一次就淘汰", shPassLife:"⏭️ 跳过（♥−1）"});
 function T(key, ...args){
   const v = (STR[uiKey()] || STR.en)[key] ?? STR.en[key] ?? STR.ja[key] ?? key;
   return typeof v === "function" ? v(...args) : v;
@@ -5201,8 +5222,9 @@ function shApply(ev){
       break;
     }
     case "pass": {
-      const p = shCur(); if(!p || p.pass < 1 || sh.judging) break;
-      p.pass--; sh.last = {kind:"pass", by:sh.turn};
+      const p = shCur(); if(!p || sh.judging || sh.bombMoving) break;
+      if(!sh.setup.lives || (p.life || 0) < 2) break;            // v5.1 パスは♥で買う（♥1のときはできない、ライフなしはパスなし）
+      p.life--; sh.last = {kind:"pass", by:sh.turn};
       sh.log.push({by:sh.turn, round:sh.round, kind:"pass"});
       shAdvance();
       break;
@@ -5283,6 +5305,7 @@ function renderShSetup(){
   }
   const bk = s.gtype === "bomb", fk = s.gtype === "foot";
   $("shsGoalRow").hidden = fk;
+  $("shsBothR").parentElement.hidden = fk || bk;          // v5.1 ゴールがないゲームでは「両方おまかせ」は出さない
   $("shsGoalX").hidden = !s.goal || bk;
   $("shsGoalR").hidden = bk; $("shsGoalP").hidden = bk;
   $("shsGoalLbl").textContent = bk ? T("shsBombL") : T("shsGoalL");
@@ -5344,7 +5367,7 @@ function renderShPlay(){
       c.append(mk("span", "nm", `${SH_DOTS[i]} ${p.name}`), mk("b", "sc", T("shPts", p.score)));
       const st = mk("span", "st");
       if(!p.alive) st.textContent = T("shOut");
-      else st.textContent = (sh.setup.lives ? shHearts(p) + " " : "") + (p.pass ? "⏭️" : "");
+      else st.textContent = sh.setup.lives ? shHearts(p) : "";
       c.append(st);
       sb.append(c);
     });
@@ -5520,8 +5543,9 @@ function renderShPlay(){
   shRenderStamps();
   $("shNetLeave2").hidden = !shNet;
   const cp = shCur();
-  $("shPass").hidden = !playing || !multi || !cp || cp.pass < 1 || !myTurn;
-  $("shPass").disabled = judging || !!sh.bombMoving;
+  $("shPass").hidden = !playing || !multi || !cp || !myTurn || !sh.setup.lives;
+  $("shPass").textContent = T("shPassLife");
+  $("shPass").disabled = judging || !!sh.bombMoving || !cp || (cp.life || 0) < 2;
   $("shQuit").hidden = !playing || (shNet && !shIsHost());
   $("shQuit").disabled = judging;
   shTick();
@@ -5697,11 +5721,17 @@ let shTimerId = null;
 function shTick(){
   const el = $("shTimer");
   const on = sh.phase === "play" && sh.turnEnds && !sh.judging && !sh.bombMoving && state.homeView === "shiri" && state.screen === "home";
-  el.hidden = !on;
-  if(!on){ clearInterval(shTimerId); shTimerId = null; return; }
-  const left = Math.max(0, Math.ceil((sh.turnEnds - Date.now()) / 1000));
-  el.textContent = `⏱ ${left}`;
-  el.classList.toggle("warn", left <= 10);
+  el.hidden = true;                                    // v5.1 右上の小さい表示はやめて、入力欄の上の大きい表示に
+  const box = $("shTimeBox");
+  box.hidden = !on;
+  if(!on){ $("shInputRow").classList.remove("danger"); clearInterval(shTimerId); shTimerId = null; return; }
+  const ms = Math.max(0, sh.turnEnds - Date.now()), left = Math.ceil(ms / 1000);
+  const tot = (sh.setup.turnSec || 60) * 1000, r = Math.min(1, ms / tot);
+  $("shTimeNum").textContent = `⏱ ${left}`;
+  $("shTimeBar").style.width = (r * 100).toFixed(1) + "%";
+  box.classList.toggle("warn", left <= 10);
+  box.classList.toggle("mid", left > 10 && r <= 0.5);
+  $("shInputRow").classList.toggle("danger", left <= 5);
   if(left <= 0){ clearInterval(shTimerId); shTimerId = null; if(!shNet || shIsHost()) shApply({t:"timeout"}); return; }
   if(!shTimerId) shTimerId = setInterval(shTick, 250);
 }
