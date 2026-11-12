@@ -109,6 +109,13 @@
   #reader .rhead{flex:none;display:flex;justify-content:space-between;align-items:center;gap:8px;padding:8px 12px;
     background:#f8f9fa;border-bottom:1px solid #c8ccd1;color:#202122;font-size:.85rem}
   #reader .rhead button{background:#fff;color:#202122;border-color:#a2a9b1}
+  #reader .rtools{display:flex;gap:6px;align-items:center;flex:none}
+  #readerHits{display:inline-flex;gap:4px;align-items:center;background:#fef6e7;border:1px solid #fc3;border-radius:6px;padding:2px 4px}
+  #readerHits[hidden]{display:none}
+  #readerHits button{padding:2px 8px}
+  #readerExt{color:#36c;text-decoration:none;white-space:nowrap}
+  #readerNote{min-width:0;overflow-wrap:anywhere}
+  @media (max-width:720px){#reader .rhead{flex-wrap:wrap} #readerNote{flex:1 1 100%} #reader .rtools{margin-left:auto}}
   #readerFrame{flex:1;border:0;width:100%}
 
   #settings .panel{background:var(--card);border-radius:14px;padding:18px 20px;width:min(540px,100%);max-height:90vh;overflow-y:auto}
@@ -184,6 +191,10 @@
   .shBead{display:flex;gap:8px;align-items:center;background:var(--bg);border:1px solid var(--line);border-radius:999px;padding:6px 14px 6px 6px;font-weight:700;max-width:100%}
   .shBead .no{display:inline-grid;place-items:center;min-width:24px;height:24px;border-radius:50%;background:var(--green);color:var(--onGreen);font-size:.75rem}
   .shBead .tt{overflow-wrap:anywhere}
+  .shWord{border:0;background:transparent;padding:0;font:inherit;color:inherit;cursor:pointer;text-decoration:underline dotted;text-underline-offset:3px;text-align:left}
+  .shWord:hover{color:var(--green);text-decoration-style:solid}
+  .shLink .via .shWord{color:#36c}
+  .shWord.chk{color:#36c;font-weight:700}
   .shBead.cur{border:2px solid var(--green);font-size:1.15rem}
   .shLink{display:flex;flex-wrap:wrap;gap:6px;align-items:baseline;padding:4px 0 4px 16px;font-size:.82rem;color:var(--sub)}
   .shLink .ar{font-size:1rem}
@@ -455,7 +466,7 @@
   <div class="stat"><div class="num" id="clockNum">0:00</div><div class="lbl" id="clockLbl"></div></div>
   <div class="stat" id="pageStat" hidden><div class="num" id="pageNum">0</div><div class="lbl" data-t="pageLeft"></div></div>
   <div id="route"></div>
-  <span id="ver">v1.8</span>
+  <span id="ver">v1.9</span>
   <div id="barBtns">
     <button id="teeoff" disabled data-t="teeoff"></button>
     <button id="backBtn" hidden data-t="back"></button>
@@ -505,14 +516,14 @@
 
 <div id="reader" class="overlay">
   <div class="panel">
-    <div class="rhead"><span id="readerNote"></span><button id="readerClose" data-t="close"></button></div>
+    <div class="rhead"><span id="readerNote"></span><span class="rtools"><span id="readerHits" hidden><button id="rhPrev">▲</button><b id="rhCount"></b><button id="rhNext">▼</button></span><a id="readerExt" target="_blank" rel="noopener" hidden>↗ Wikipedia</a><button id="readerClose" data-t="close"></button></span></div>
     <iframe id="readerFrame" title="full text"></iframe>
   </div>
 </div>
 
 <div id="settings" class="overlay">
   <div class="panel">
-    <h2><span data-t="settings"></span> <small style="font-size:.65rem;font-weight:400;color:var(--sub)">v1.8</small></h2>
+    <h2><span data-t="settings"></span> <small style="font-size:.65rem;font-weight:400;color:var(--sub)">v1.9</small></h2>
     <p class="lockNote" id="lockNote" hidden></p>
     <button id="quitHole" class="quit" hidden></button>
     <button id="toHome" data-t="toHome"></button>
@@ -540,7 +551,7 @@
 
 <div id="home">
   <div class="homeInner">
-    <div class="homeHead"><h1>⛳ <span data-t="appName"></span></h1><p data-t="homeAbout"></p><small>v1.8</small></div>
+    <div class="homeHead"><h1>⛳ <span data-t="appName"></span></h1><p data-t="homeAbout"></p><small>v1.9</small></div>
 
     <section id="homeMain">
       <div class="homeBtns">
@@ -1604,6 +1615,20 @@ for(const [k, a, b] of [
               "🏅 最短奖／📍 近洞奖：开球后会在后台寻找 3 杆以内的最短路线。杆数与最短相同得最短奖，多 1 杆得近洞奖。结果画面可看到最短路线。"]
 ]) STR[k].help[STR[k].help.length - 1][1].push(a, b);
 /* ── v1.8 リンクしりとり ── */
+Object.assign(STR.ja, {shViaPre:"（", shViaPost:" 経由）", shCheck:"🔍 確かめる", shReadOnly:t=>`「${t}」`,
+  shReadNote:(a,b)=>`「${a}」の中の「${b}」へのリンク`, shReadNone:(a,b)=>`「${a}」の中に「${b}」へのリンクが見つからなかった（テンプレートの中などかも）`});
+Object.assign(STR.en, {shViaPre:" (via ", shViaPost:")", shCheck:"🔍 Check", shReadOnly:t=>`“${t}”`,
+  shReadNote:(a,b)=>`Links to “${b}” in “${a}”`, shReadNone:(a,b)=>`No visible link to “${b}” in “${a}” (maybe inside a template)`});
+Object.assign(STR.fr, {shViaPre:" (via ", shViaPost:")", shCheck:"🔍 Vérifier", shReadOnly:t=>`« ${t} »`,
+  shReadNote:(a,b)=>`Liens vers « ${b} » dans « ${a} »`, shReadNone:(a,b)=>`Aucun lien visible vers « ${b} » dans « ${a} » (peut-être dans un modèle)`});
+Object.assign(STR.es, {shViaPre:" (vía ", shViaPost:")", shCheck:"🔍 Comprobar", shReadOnly:t=>`«${t}»`,
+  shReadNote:(a,b)=>`Enlaces a «${b}» en «${a}»`, shReadNone:(a,b)=>`No hay enlace visible a «${b}» en «${a}» (quizá dentro de una plantilla)`});
+Object.assign(STR.ko, {shViaPre:" (", shViaPost:" 경유)", shCheck:"🔍 확인", shReadOnly:t=>`“${t}”`,
+  shReadNote:(a,b)=>`“${a}” 안의 “${b}” 링크`, shReadNone:(a,b)=>`“${a}” 안에서 “${b}” 링크를 찾지 못했어요(틀 안일 수도)`});
+Object.assign(STR["zh-hant"], {shViaPre:"（經由 ", shViaPost:"）", shCheck:"🔍 確認", shReadOnly:t=>`「${t}」`,
+  shReadNote:(a,b)=>`「${a}」中連到「${b}」的連結`, shReadNone:(a,b)=>`在「${a}」中找不到連到「${b}」的連結（可能在模板裡）`});
+Object.assign(STR["zh-hans"], {shViaPre:"（经由 ", shViaPost:"）", shCheck:"🔍 确认", shReadOnly:t=>`“${t}”`,
+  shReadNote:(a,b)=>`“${a}”中链接到“${b}”的链接`, shReadNone:(a,b)=>`在“${a}”中找不到链接到“${b}”的链接（可能在模板里）`});
 Object.assign(STR.ja, {
   hShiri:"🔗 リンクしりとり", shTitle:"🔗 Wikipediaリンクしりとり",
   shAbout:"前の言葉の記事から、リンクを2打か3打たどって着ける記事を言ってつなげよう。1打（直接リンク）は近すぎてドボン、4打以上は遠すぎてドボン！",
@@ -2536,6 +2561,7 @@ async function openReader(role){
   if(role === "goal" && state.playing){ state.goalCheck = true; mpAct(); }
   $("reader").classList.add("show");
   $("readerNote").textContent = T("loading");
+  $("readerHits").hidden = true; $("readerExt").hidden = true;
   try{
     const key = curLang() + ":" + zhVariant() + ":" + p.title;
     let parsed = state.parsedCache.get(key);
@@ -4339,12 +4365,27 @@ function renderShiri(){
       const lk = mk("div", "shLink d" + c.d);
       lk.append(mk("span", "ar", "↓"));
       lk.append(mk("span", "jd", c.d === 3 ? T("shNice3") : c.d === 2 ? T("shSafe2") : T("shSafeX")));
-      if(c.via && c.via.length) lk.append(mk("span", "via", T("shVia", c.via.join(" → "))));
+      if(c.via && c.via.length){
+        const v = mk("span", "via");
+        const hop = [...c.via, c.title];
+        v.append(T("shViaPre"));
+        c.via.forEach((t, k) => {
+          if(k) v.append(" → ");
+          const b = mk("button", "shWord", t);
+          b.addEventListener("click", () => shOpen(t, hop[k + 1]));
+          v.append(b);
+        });
+        v.append(T("shViaPost"));
+        lk.append(v);
+      }
       if(c.pts) lk.append(mk("span", "pt", "+" + c.pts));
       box.append(lk);
     }
     const bd = mk("div", "shBead" + (i === sh.chain.length - 1 ? " cur" : ""));
-    bd.append(mk("span", "no", String(i + 1)), mk("span", "tt", c.shown));
+    const nx = sh.chain[i + 1];
+    const tt = mk("button", "tt shWord", c.shown);
+    tt.addEventListener("click", () => shOpen(c.title, nx ? ((nx.via && nx.via[0]) || nx.title) : null));
+    bd.append(mk("span", "no", String(i + 1)), tt);
     box.append(bd);
   });
   // 判定中
@@ -4372,7 +4413,13 @@ function renderShiri(){
   }else if(sh.over){
     const o = sh.over;
     jb.append(mk("div", "shDobon", T("shDobon")));
-    jb.append(mk("div", "shWhy", o.d === 1 ? T("shWhy1", last.shown, o.shown) : T("shWhy4", last.shown, o.shown)));
+    const why = mk("div", "shWhy", o.d === 1 ? T("shWhy1", last.shown, o.shown) : T("shWhy4", last.shown, o.shown));
+    if(o.d === 1){
+      const ck = mk("button", "shWord chk", T("shCheck"));
+      ck.addEventListener("click", () => shOpen(last.title, o.title));
+      why.append(" ", ck);
+    }
+    jb.append(why);
     jb.append(mk("div", "shFinal", T("shFinal", sh.chain.length - 1, sh.score)));
     const r = mk("div", "mpRow");
     const u = mk("button", "", T("shUndo")), n = mk("button", "prime", T("shAgain"));
@@ -4457,6 +4504,61 @@ async function shSubmit(){
     if(sh.judging){ sh.judging = null; renderShiri(); $("shMsg").textContent = T("err") + e.message; }
   }
 }
+/* 経由を確かめる：記事を開いて、次の記事へのリンクを光らせる */
+let rHits = [], rCur = -1;
+async function shOpen(title, next){
+  hidePop();
+  $("reader").classList.add("show");
+  $("readerNote").textContent = T("loading");
+  $("readerHits").hidden = true;
+  const ext = $("readerExt");
+  ext.href = `https://${wikiHost()}/wiki/${encodeURIComponent(title.replace(/ /g, "_"))}`; ext.hidden = false;
+  rHits = []; rCur = -1;
+  try{
+    await ensureNs();
+    const key = curLang() + ":" + zhVariant() + ":" + title;
+    let parsed = state.parsedCache.get(key);
+    const aliasJob = next ? api({action:"query", titles:next, prop:"redirects", rdlimit:"max", redirects:"1"}).catch(() => null) : null;
+    if(!parsed){ parsed = await loadArticle(title); state.parsedCache.set(key, parsed); }
+    const rdoc = await fillFrame($("readerFrame"), parsed, e => {
+      const a = e.target.closest("a[href]");
+      if(!a) return;
+      e.preventDefault();
+      const href = a.getAttribute("href");
+      if(href.startsWith("#")) scrollToAnchor(e.target.ownerDocument, href);
+    }, ".mw-body a{cursor:default} a.golf-target{background:#ffeb3b !important;outline:2px solid #f5a623;border-radius:2px;color:#202122 !important} a.golf-target.cur{background:#ff9800 !important;outline-color:#e65100}");
+    prepCollapsibles(rdoc);
+    if(!next){ $("readerNote").textContent = T("shReadOnly", title); return; }
+    const names = new Set([norm(next).toLowerCase()]);
+    const ad = await aliasJob;
+    for(const p of (ad && ad.query && ad.query.pages) || []){
+      names.add(norm(p.title).toLowerCase());
+      for(const r of p.redirects || []) names.add(norm(r.title).toLowerCase());
+    }
+    for(const r of (ad && ad.query && ad.query.redirects) || []) names.add(norm(r.from).toLowerCase());
+    rdoc.querySelectorAll("a[href]").forEach(a => {
+      const t = linkTitle(a.getAttribute("href") || "");
+      if(t && names.has(norm(t).toLowerCase())){ a.classList.add("golf-target"); rHits.push(a); }
+    });
+    $("readerNote").textContent = rHits.length ? T("shReadNote", title, next) : T("shReadNone", title, next);
+    if(rHits.length){ $("readerHits").hidden = false; rStep(1); }
+  }catch(e){
+    $("readerNote").textContent = T("loadFail") + e.message;
+  }
+}
+function rStep(dir){
+  if(!rHits.length) return;
+  if(rHits[rCur]) rHits[rCur].classList.remove("cur");
+  rCur = (rCur + dir + rHits.length) % rHits.length;
+  const a = rHits[rCur];
+  let box = a.closest(".golf-collapsed");
+  while(box){ if(box._golfSet) box._golfSet(false); box = box.parentElement && box.parentElement.closest(".golf-collapsed"); }
+  a.classList.add("cur");
+  a.scrollIntoView({block:"center"});
+  $("rhCount").textContent = `${rCur + 1}/${rHits.length}`;
+}
+$("rhPrev").addEventListener("click", () => rStep(-1));
+$("rhNext").addEventListener("click", () => rStep(1));
 $("shGo").addEventListener("click", shSubmit);
 $("shRand").addEventListener("click", async () => {
   $("shRand").disabled = true;
