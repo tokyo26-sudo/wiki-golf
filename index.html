@@ -192,6 +192,10 @@
   .shsRow .lbl{min-width:6.5em;font-weight:700;font-size:.9rem}
   .shsW{flex:1;min-width:8em;font-size:1.05rem}
   .shsW.empty{color:var(--sub);font-weight:400}
+  .shsW.set{cursor:pointer;text-decoration:underline dotted;text-underline-offset:3px}
+  .shsW.set:hover{color:var(--green)}
+  .shsBothRow{justify-content:flex-end}
+  #shsBothR{padding:6px 12px}
   .shsBtns{display:flex;gap:4px}
   .shsBtns button{padding:4px 10px}
   .seg{display:inline-flex;border:1px solid var(--line);border-radius:10px;overflow:hidden}
@@ -517,7 +521,7 @@
   <div class="stat"><div class="num" id="clockNum">0:00</div><div class="lbl" id="clockLbl"></div></div>
   <div class="stat" id="pageStat" hidden><div class="num" id="pageNum">0</div><div class="lbl" data-t="pageLeft"></div></div>
   <div id="route"></div>
-  <span id="ver">v2.1</span>
+  <span id="ver">v2.2</span>
   <div id="barBtns">
     <button id="teeoff" disabled data-t="teeoff"></button>
     <button id="backBtn" hidden data-t="back"></button>
@@ -575,7 +579,7 @@
 
 <div id="settings" class="overlay">
   <div class="panel">
-    <h2><span data-t="settings"></span> <small style="font-size:.65rem;font-weight:400;color:var(--sub)">v2.1</small></h2>
+    <h2><span data-t="settings"></span> <small style="font-size:.65rem;font-weight:400;color:var(--sub)">v2.2</small></h2>
     <p class="lockNote" id="lockNote" hidden></p>
     <button id="quitHole" class="quit" hidden></button>
     <button id="toHome" data-t="toHome"></button>
@@ -603,7 +607,7 @@
 
 <div id="home">
   <div class="homeInner">
-    <div class="homeHead"><h1>⛳ <span data-t="appName"></span></h1><p data-t="homeAbout"></p><small>v2.1</small></div>
+    <div class="homeHead"><h1>⛳ <span data-t="appName"></span></h1><p data-t="homeAbout"></p><small>v2.2</small></div>
 
     <section id="homeMain">
       <div class="homeBtns">
@@ -640,6 +644,7 @@
         <div id="shSetup">
           <div class="shsRow"><span class="lbl" data-t="shsStartL"></span><b id="shsStart" class="shsW"></b><span class="shsBtns"><button id="shsStartR" title="random">🎲</button><button id="shsStartP">✏️</button></span></div>
           <div class="shsRow"><span class="lbl" data-t="shsGoalL"></span><b id="shsGoal" class="shsW"></b><span class="shsBtns"><button id="shsGoalR" title="random">🎲</button><button id="shsGoalP">✏️</button><button id="shsGoalX">✖</button></span></div>
+          <div class="shsRow shsBothRow"><button id="shsBothR" data-t="shBothR"></button></div>
           <div class="shsRow"><span class="lbl" data-t="shsNL"></span><span id="shsN" class="seg"><button data-n="1">1</button><button data-n="2">2</button><button data-n="3">3</button><button data-n="4">4</button></span></div>
           <div id="shsNames"></div>
           <div class="shsRow"><span class="lbl" data-t="shsModeL"></span><span id="shsMode" class="seg"><button data-m="free" data-t="shModeFree"></button><button data-m="r3" data-t="shModeR3"></button></span></div>
@@ -1803,6 +1808,13 @@ for(const [k, a] of [
   ["zh-hant", "🔗 連結接龍（標題畫面）：說出從上一個條目 2～3 桿能到的條目。2 桿 +1、3 桿 +3，1 桿或 4 桿以上出局。"],
   ["zh-hans", "🔗 链接接龙（标题画面）：说出从上一个条目 2～3 杆能到的条目。2 杆 +1、3 杆 +3，1 杆或 4 杆以上出局。"]
 ]) STR[k].help[STR[k].help.length - 1][1].push(a);
+Object.assign(STR['ja'], {shBothR:'🎲 スタートとゴールを両方おまかせ', shPeek:'押すと記事を読めるよ'});
+Object.assign(STR['en'], {shBothR:'🎲 Random start and goal', shPeek:'Click to read the article'});
+Object.assign(STR['fr'], {shBothR:'🎲 Départ et arrivée au hasard', shPeek:"Cliquer pour lire l'article"});
+Object.assign(STR['es'], {shBothR:'🎲 Salida y meta al azar', shPeek:'Pulsa para leer el artículo'});
+Object.assign(STR['ko'], {shBothR:'🎲 출발과 골 둘 다 맡기기', shPeek:'누르면 문서를 볼 수 있어요'});
+Object.assign(STR['zh-hant'], {shBothR:'🎲 起點和終點都隨機', shPeek:'點一下可以閱讀條目'});
+Object.assign(STR['zh-hans'], {shBothR:'🎲 起点和终点都随机', shPeek:'点一下可以阅读条目'});
 /* ── v2.0 リンクしりとり（まわしプレイ） ── */
 Object.assign(STR.ja, {
   shPNames:["先攻","後攻","3番手","4番手"], shNotSet:"（未設定）", shNoGoal:"なし",
@@ -4609,6 +4621,8 @@ function renderShSetup(){
     const el = $(role === "start" ? "shsStart" : "shsGoal");
     el.textContent = w ? w.shown : (role === "goal" ? T("shNoGoal") : T("shNotSet"));
     el.classList.toggle("empty", !w);
+    el.classList.toggle("set", !!w);
+    el.title = w ? T("shPeek") : "";
   }
   $("shsGoalX").hidden = !s.goal;
   document.querySelectorAll("#shsN button").forEach(b => b.classList.toggle("on", +b.dataset.n === s.n));
@@ -4759,7 +4773,7 @@ function renderShPlay(){
     $("shTurn").style.color = multi ? SH_COLORS[sh.turn] : "";
     $("shTurn").hidden = !multi;
     $("shInput").placeholder = T("shPh", last.shown);
-  }
+  }else $("shTurn").hidden = true;
   const cp = shCur();
   $("shPass").hidden = !playing || !multi || !cp || cp.pass < 1;
   $("shPass").disabled = judging;
@@ -4876,6 +4890,26 @@ function shPick(role){
     try{ const w = await shResolve(title); sh.setup[role] = w; shSave(); renderShiri(); }catch(e){ toast(T("err") + e.message); }
   }, other ? other.title : "");
 }
+async function shRandomBoth(){
+  const btns = ["shsBothR", "shsStartR", "shsGoalR"].map(id => $(id));
+  btns.forEach(b => b.disabled = true);
+  try{
+    await ensureNs();
+    for(let k = 0; k < 4; k++){
+      const [a, b] = await Promise.all([pickTitle("start"), pickTitle("goal")]);
+      if(!a || !b) continue;
+      const [ws, wg] = await Promise.all([shResolve(a.title), shResolve(b.title)]);
+      if(norm(ws.title) === norm(wg.title)) continue;
+      sh.setup.start = ws; sh.setup.goal = wg; break;
+    }
+    shSave(); renderShiri();
+  }catch(e){ toast(T("err") + e.message); }
+  btns.forEach(b => b.disabled = false);
+}
+$("shsBothR").addEventListener("click", shRandomBoth);
+for(const role of ["start", "goal"]) $(role === "start" ? "shsStart" : "shsGoal").addEventListener("click", () => {
+  const w = sh.setup[role]; if(w) shOpen(w.title, null);
+});
 $("shsStartR").addEventListener("click", () => shRandom("start"));
 $("shsGoalR").addEventListener("click", () => shRandom("goal"));
 $("shsStartP").addEventListener("click", () => shPick("start"));
