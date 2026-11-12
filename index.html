@@ -331,6 +331,10 @@
   .shFlowInfo .giri{color:#d4890a}
   #shGoalBar.bomb{background:var(--flag2);border-color:var(--flag);color:var(--ink)}
   #shGoalBar.bomb small{color:var(--sub)}
+  #shGoalBar.foot{background:#fff3e0;border-color:#f08c00;color:var(--ink)}
+  :root[data-theme="dark"] #shGoalBar.foot{background:#3a2a10}
+  @media (prefers-color-scheme: dark){ :root:not([data-theme="light"]) #shGoalBar.foot{background:#3a2a10} }
+  .shBead.trapHit{box-shadow:0 0 0 3px var(--flag);animation:shShake .5s 2}
   #shGoalBar .bw{white-space:nowrap;margin-right:8px}
   #shGoalBar .bw.new{background:#ffe066;border-radius:6px;padding:0 4px;color:#5c3b00}
   #shGoalBar .blv{font-size:.85em;color:var(--flag);margin-left:4px;white-space:nowrap}
@@ -643,7 +647,7 @@
   <div class="stat"><div class="num" id="clockNum">0:00</div><div class="lbl" id="clockLbl"></div></div>
   <div class="stat" id="pageStat" hidden><div class="num" id="pageNum">0</div><div class="lbl" data-t="pageLeft"></div></div>
   <div id="route"></div>
-  <span id="ver">v4.2</span>
+  <span id="ver">v4.3</span>
   <div id="barBtns">
     <button id="teeoff" disabled data-t="teeoff"></button>
     <button id="backBtn" hidden data-t="back"></button>
@@ -701,7 +705,7 @@
 
 <div id="settings" class="overlay">
   <div class="panel">
-    <h2><span data-t="settings"></span> <small style="font-size:.65rem;font-weight:400;color:var(--sub)">v4.2</small></h2>
+    <h2><span data-t="settings"></span> <small style="font-size:.65rem;font-weight:400;color:var(--sub)">v4.3</small></h2>
     <p class="lockNote" id="lockNote" hidden></p>
     <button id="quitHole" class="quit" hidden></button>
     <button id="toHome" data-t="toHome"></button>
@@ -729,7 +733,7 @@
 
 <div id="home">
   <div class="homeInner">
-    <div class="homeHead"><h1>⛳ <span data-t="appName"></span></h1><p data-t="homeAbout"></p><small>v4.2</small></div>
+    <div class="homeHead"><h1>⛳ <span data-t="appName"></span></h1><p data-t="homeAbout"></p><small>v4.3</small></div>
 
     <section id="homeMain">
       <div class="homeBtns">
@@ -784,9 +788,9 @@
             </div>
           </div>
           <div class="shsRow"><span class="lbl" data-t="shsStartL"></span><b id="shsStart" class="shsW"></b><span class="shsBtns"><button id="shsStartR" title="random">🎲</button><button id="shsStartP">✏️</button></span></div>
-          <div class="shsRow"><span class="lbl" data-t="shsKindL"></span><span id="shsKind" class="seg"><button data-k="goal" data-t="shKindGoal"></button><button data-k="bomb" data-t="shKindBomb"></button></span></div>
+          <div class="shsRow"><span class="lbl" data-t="shsKindL"></span><span id="shsKind" class="seg"><button data-k="goal" data-t="shKindGoal"></button><button data-k="bomb" data-t="shKindBomb"></button><button data-k="foot" data-t="shKindFoot"></button></span></div>
           <p class="shsNote" id="shsKindNote"></p>
-          <div class="shsRow"><span class="lbl" id="shsGoalLbl"></span><b id="shsGoal" class="shsW"></b><span class="shsBtns"><button id="shsGoalR" title="random">🎲</button><button id="shsGoalP">✏️</button><button id="shsGoalX">✖</button></span></div>
+          <div class="shsRow" id="shsGoalRow"><span class="lbl" id="shsGoalLbl"></span><b id="shsGoal" class="shsW"></b><span class="shsBtns"><button id="shsGoalR" title="random">🎲</button><button id="shsGoalP">✏️</button><button id="shsGoalX">✖</button></span></div>
           <div class="shsRow shsBothRow"><button id="shsBothR" data-t="shBothR"></button></div>
           <div class="shsRow shsLocalOnly"><span class="lbl" data-t="shsNL"></span><span id="shsN" class="seg"><button data-n="1">1</button><button data-n="2">2</button><button data-n="3">3</button><button data-n="4">4</button></span></div>
           <div id="shsNames" class="shsLocalOnly"></div>
@@ -2204,6 +2208,14 @@ Object.assign(STR["es"], {shInN:n=>`~${n} enlaces entrantes`, shKindNoteBomb:"Un
 Object.assign(STR["ko"], {shInN:n=>`역링크 약 ${n}`, shKindNoteBomb:"폭탄 중 하나에 링크한 문서(와 폭탄 자체)를 말하면 쾅. 폭탄은 한 바퀴마다 지금 단어 근처에 하나씩 늘어나요(🧨→🎆→💣→👹, 그 뒤로는 계속 괴물). 사라지지 않아요!", shBombAdd:(ic,nm)=>`${ic} ${nm} 추가!`, shBoomBy:(a,b)=>`“${a}” 문서에 “${b}” 링크가 있었어요`, shBombsN:n=>`💣 폭탄 ${n}개: `});
 Object.assign(STR["zh-hant"], {shInN:n=>`反向連結約 ${n}`, shKindNoteBomb:"說出連到任一炸彈的條目（或炸彈本身）就爆炸。炸彈每一輪在目前詞語附近增加一個（🧨→🎆→💣→👹，之後一直是怪物），不會消失！", shBombAdd:(ic,nm)=>`${ic} 新增${nm}！`, shBoomBy:(a,b)=>`「${a}」有連到「${b}」`, shBombsN:n=>`💣 炸彈 ${n} 個：`});
 Object.assign(STR["zh-hans"], {shInN:n=>`反向链接约 ${n}`, shKindNoteBomb:"说出链接到任一炸弹的条目（或炸弹本身）就爆炸。炸弹每一轮在当前词语附近增加一个（🧨→🎆→💣→👹，之后一直是怪物），不会消失！", shBombAdd:(ic,nm)=>`${ic} 新增${nm}！`, shBoomBy:(a,b)=>`「${a}」有链接到「${b}」`, shBombsN:n=>`💣 炸弹 ${n} 个：`});
+/* v4.3 足あと */
+Object.assign(STR["ja"], {shKindFoot:"👣 足あと", shKindNoteFoot:"今まで出た言葉（スタートも入る。ひとつ前の言葉は除く）にリンクしてる記事を言ったらアウト！言葉が増えるほど地雷が増えていくよ", shFootIs:"👣 足あと：", shFootNote:"ここまでの言葉（ひとつ前は除く）にリンクしてる記事を言ったらアウト！", shFAsk:"👣 前に出た言葉にリンクしてる？", shFootHit:"👣 足あとを踏んだ！", shRuleFoot:"👣 前に出た言葉にリンクしてる記事＝アウト"});
+Object.assign(STR["en"], {shKindFoot:"👣 Footprints", shKindNoteFoot:"Name an article that links to any earlier word (including the start, except the one just before) and you're out! The more words, the more mines.", shFootIs:"👣 Footprints: ", shFootNote:" (linking to any earlier word except the last one = out!)", shFAsk:"👣 Links to an earlier word?", shFootHit:"👣 Stepped on a footprint!", shRuleFoot:"👣 linking to an earlier word = out"});
+Object.assign(STR["fr"], {shKindFoot:"👣 Empreintes", shKindNoteFoot:"Un article qui renvoie vers un mot déjà dit (départ compris, sauf le précédent) : perdu !", shFootIs:"👣 Empreintes : ", shFootNote:" (lien vers un mot déjà dit, sauf le précédent = perdu !)", shFAsk:"👣 Lien vers un mot déjà dit ?", shFootHit:"👣 Sur une empreinte !", shRuleFoot:"👣 lien vers un mot déjà dit = perdu"});
+Object.assign(STR["es"], {shKindFoot:"👣 Huellas", shKindNoteFoot:"Un artículo que enlaza a una palabra ya dicha (incluida la salida, salvo la anterior): ¡fuera!", shFootIs:"👣 Huellas: ", shFootNote:" (enlazar a una palabra ya dicha, salvo la anterior = fuera)", shFAsk:"👣 ¿Enlaza a una palabra ya dicha?", shFootHit:"👣 ¡Pisaste una huella!", shRuleFoot:"👣 enlazar a una palabra ya dicha = fuera"});
+Object.assign(STR["ko"], {shKindFoot:"👣 발자국", shKindNoteFoot:"지금까지 나온 단어(출발 포함, 바로 앞 단어 제외)에 링크한 문서를 말하면 아웃!", shFootIs:"👣 발자국: ", shFootNote:"(바로 앞을 뺀 지금까지의 단어에 링크하면 아웃!)", shFAsk:"👣 앞에 나온 단어에 링크했나?", shFootHit:"👣 발자국을 밟았다!", shRuleFoot:"👣 앞에 나온 단어에 링크 = 아웃"});
+Object.assign(STR["zh-hant"], {shKindFoot:"👣 足跡", shKindNoteFoot:"說出連到之前出現過的詞（含起點，不含上一個）的條目就出局！", shFootIs:"👣 足跡：", shFootNote:"（連到之前的詞〔不含上一個〕就出局！）", shFAsk:"👣 有連到之前的詞？", shFootHit:"👣 踩到足跡了！", shRuleFoot:"👣 連到之前的詞＝出局"});
+Object.assign(STR["zh-hans"], {shKindFoot:"👣 足迹", shKindNoteFoot:"说出链接到之前出现过的词（含起点，不含上一个）的条目就出局！", shFootIs:"👣 足迹：", shFootNote:"（链接到之前的词〔不含上一个〕就出局！）", shFAsk:"👣 有链接到之前的词？", shFootHit:"👣 踩到足迹了！", shRuleFoot:"👣 链接到之前的词＝出局"});
 function T(key, ...args){
   const v = (STR[uiKey()] || STR.en)[key] ?? STR.en[key] ?? STR.ja[key] ?? key;
   return typeof v === "function" ? v(...args) : v;
@@ -4751,6 +4763,9 @@ function shLoad(){
 function shSave(){ if(shNet){ if(shIsHost()) shNetSync(); return; } try{ localStorage.setItem(SH_KEY, JSON.stringify({...sh, judging:null})); }catch(_){} }
 const shMulti = () => sh.players.length > 1;
 const shIsBomb = () => sh.setup.gtype === "bomb" && sh.phase !== "setup";
+const shIsFoot = () => sh.setup.gtype === "foot" && sh.phase !== "setup";
+// v4.3 地雷のリスト：💣なら爆弾、👣なら今まで出た言葉（スタート含む・ひとつ前は除く）
+const shTrapList = () => shIsFoot() ? sh.chain.slice(0, -1).map(c => ({title:c.title, shown:c.shown, foot:true})) : shBombList();
 const shBombList = () => sh.bombs && sh.bombs.length ? sh.bombs : (sh.bomb ? [sh.bomb] : []);
 const shCur = () => sh.players[sh.turn];
 function shName(i){ const p = sh.players[i]; return p ? `${SH_DOTS[i]} ${p.name}` : ""; }
@@ -4849,7 +4864,7 @@ function shRecSave(){
   const id = sh.recId || (Date.now().toString(36) + Math.random().toString(36).slice(2, 6));
   sh.recId = id;
   const rec = {id, at:Date.now(), lang:sh.lang,
-    setup:{n:sh.setup.n, mode:sh.setup.mode, start:sh.setup.start, goal:sh.setup.gtype === "bomb" ? null : sh.setup.goal, gtype:sh.setup.gtype || "goal"},
+    setup:{n:sh.setup.n, mode:sh.setup.mode, start:sh.setup.start, goal:sh.setup.gtype === "bomb" || sh.setup.gtype === "foot" ? null : sh.setup.goal, gtype:sh.setup.gtype || "goal"},
     players:sh.players.map(p => ({name:p.name, score:p.score, alive:p.alive})),
     end:sh.end, chain:sh.chain, log:sh.log};
   const i = recs.findIndex(r => r.id === id);
@@ -4862,7 +4877,7 @@ function shDobon(p, info){
   sh.last = {...info, by:sh.turn, out:!p.alive};
   const lg = {by:sh.turn, round:sh.round, kind:info.kind, title:info.title, shown:info.shown, d:info.d,
                prev:info.prev ? info.prev.title : null, out:!p.alive};
-  if(info.kind === "bomb"){ lg.via = info.via || []; lg.bd = info.bd; lg.bvia = info.bvia || []; lg.bomb = info.bomb; lg.bombT = info.bombT; lg.bombLv = info.bombLv; }
+  if(info.kind === "bomb"){ lg.via = info.via || []; lg.bd = info.bd; lg.bvia = info.bvia || []; lg.bomb = info.bomb; lg.bombT = info.bombT; lg.bombLv = info.bombLv; lg.foot = info.foot; }
   sh.log.push(lg);
 }
 function shCommitSafe(j, d, via, goalOk, giri, x, n){
@@ -4883,14 +4898,14 @@ function shBoom(j, d, via, r){
   const p = sh.players[j.by];
   sh.judging = null;
   shDobon(p, {kind:"bomb", title:j.title, shown:j.shown, d, via, bd:r.d === undefined ? null : r.d,
-              bvia:r.path ? r.path.slice(1, -1) : [], bomb:r.bomb ? r.bomb.shown : "", bombT:r.bomb ? r.bomb.title : "", bombLv:r.bomb ? r.bomb.lv : null, prev:sh.chain[sh.chain.length - 1]});
+              bvia:r.path ? r.path.slice(1, -1) : [], bomb:r.bomb ? r.bomb.shown : "", bombT:r.bomb ? r.bomb.title : "", bombLv:r.bomb && !r.bomb.foot ? r.bomb.lv : null, foot:!!(r.bomb && r.bomb.foot) || shIsFoot(), prev:sh.chain[sh.chain.length - 1]});
   if(!shMulti() && !p.alive) shFinish("allOut");
   else shAdvance();
 }
 /* 💣 爆弾チェック（ホスト／その1台だけが動かす） */
 async function shRunBomb(){
   // v3.8 爆弾ゾーンは1打：言った言葉の記事に爆弾へのリンクがあるか、を1回たずねるだけ
-  const j = sh.judging, bs = shBombList(); if(!j || !j.first || !bs.length) return;
+  const j = sh.judging, bs = shTrapList(); if(!j || !j.first || !bs.length) return;
   const lang = sh.lang, t0 = Date.now();
   try{
     shApply({t:"bstep", k:1, st:"run"});
@@ -5059,7 +5074,7 @@ function shApply(ev){
       const g = sh.setup.goal, s_gtype = () => sh.setup.gtype;
       sh.last = null;
       sh.judging = {title:ev.title, shown:ev.shown, by:sh.turn, steps:{}, left:sh.turnEnds ? sh.turnEnds - Date.now() : 0,
-                    isGoal:!!g && s_gtype() !== "bomb" && norm(ev.title) === norm(g.title)};
+                    isGoal:!!g && s_gtype() !== "bomb" && s_gtype() !== "foot" && norm(ev.title) === norm(g.title)};
       sh.bombNews = false;
       sh.turnEnds = 0; break;
     }
@@ -5070,8 +5085,8 @@ function shApply(ev){
       const goalOk = j.isGoal && (r.d === 1 || r.d === 2);    // ゴールの言葉は1打でもOK（v3.5：1〜2打）
       if(goalOk || r.d === 2 || ev.force === "safe"){
         const d = r.d || 0, via = r.path ? r.path.slice(1, -1) : [];
-        if(shIsBomb()){                                   // 💣 つぎは爆弾チェック
-          const same = shBombList().find(b => norm(b.title) === norm(j.title));
+        if((shIsBomb() || shIsFoot()) && shTrapList().length){      // 💣/👣 つぎは地雷チェック
+          const same = shTrapList().find(b => norm(b.title) === norm(j.title));
           if(same){ shBoom(j, d, via, {d:0, bomb:same}); break; }
           j.first = {d, via, x:!r.d, n:r.n || 0}; j.bsteps = {}; j.unsure = false;
           if(!shNet || shIsHost()) setTimeout(shRunBomb, 0);
@@ -5157,7 +5172,8 @@ function renderShiri(){
   $("home").classList.toggle("shWide", !setupMode);
   const tb = shThumbBase(); if(tb && !(shThumbWant && shThumbWant.kind === "cand" && shItems.length)) shThumbShow(tb.title, tb.kind);
   { const r = T("shRule"), i = r.indexOf("🚩");
-    $("shRule").textContent = sh.setup.gtype === "bomb" ? (i > 0 ? r.slice(0, i) : r + "　") + T("shRuleBomb") : r; }
+    const tail = sh.setup.gtype === "bomb" ? T("shRuleBomb") : sh.setup.gtype === "foot" ? T("shRuleFoot") : "";
+    $("shRule").textContent = tail ? (i > 0 ? r.slice(0, i) : r + "　") + tail : r; }
   if(setupMode){ shBombPopRender(); return renderShSetup(); }
   renderShPlay();
 }
@@ -5173,12 +5189,13 @@ function renderShSetup(){
     el.classList.toggle("set", !!w);
     el.title = w ? T("shPeek") : "";
   }
-  const bk = s.gtype === "bomb";
+  const bk = s.gtype === "bomb", fk = s.gtype === "foot";
+  $("shsGoalRow").hidden = fk;
   $("shsGoalX").hidden = !s.goal || bk;
   $("shsGoalR").hidden = bk; $("shsGoalP").hidden = bk;
   $("shsGoalLbl").textContent = bk ? T("shsBombL") : T("shsGoalL");
   document.querySelectorAll("#shsKind button").forEach(b => b.classList.toggle("on", b.dataset.k === (s.gtype || "goal")));
-  $("shsKindNote").textContent = bk ? T("shKindNoteBomb") : T("shKindNoteGoal");
+  $("shsKindNote").textContent = fk ? T("shKindNoteFoot") : bk ? T("shKindNoteBomb") : T("shKindNoteGoal");
   document.querySelectorAll("#shsN button").forEach(b => b.classList.toggle("on", +b.dataset.n === s.n));
   document.querySelectorAll("#shsMode button").forEach(b => b.classList.toggle("on", b.dataset.m === s.mode));
   $("shsModeNote").textContent = s.mode === "r3" ? T("shModeR3Note") : T("shModeFreeNote");
@@ -5199,8 +5216,9 @@ function renderShPlay(){
   const multi = shMulti(), playing = sh.phase === "play", judging = !!sh.judging;
   const last = sh.chain[sh.chain.length - 1];
   // ゴール・周回
-  const bombOn = shIsBomb(), g = bombOn ? null : sh.setup.goal, gb = $("shGoalBar");
-  gb.hidden = !g && !bombOn; gb.classList.toggle("bomb", bombOn); gb.innerHTML = "";
+  const bombOn = shIsBomb(), footOn = shIsFoot(), g = bombOn || footOn ? null : sh.setup.goal, gb = $("shGoalBar");
+  gb.hidden = !g && !bombOn && !footOn; gb.classList.toggle("bomb", bombOn); gb.classList.toggle("foot", footOn); gb.innerHTML = "";
+  if(footOn){ gb.append(mk("span", "", T("shFootIs") + "×" + Math.max(0, sh.chain.length - 1) + "　"), mk("small", "", T("shFootNote"))); }
   if(bombOn){
     const bs = shBombList(), b = sh.bomb;
     if(bs.length){
@@ -5259,7 +5277,7 @@ function renderShPlay(){
       box.append(lk);
     }
     const nx = sh.chain[i + 1];
-    const bd = mk("div", "shBead" + (i === sh.chain.length - 1 ? " cur" : "") + (g && c.goal ? " goal" : ""));
+    const bd = mk("div", "shBead" + (i === sh.chain.length - 1 ? " cur" : "") + (g && c.goal ? " goal" : "") + (sh.last && sh.last.kind === "bomb" && sh.last.foot && sh.last.bombT && norm(sh.last.bombT) === norm(c.title) ? " trapHit" : ""));
     if(c.by >= 0 && multi) bd.style.setProperty("--pc", SH_COLORS[c.by]);
     const tt = shWordBtn(c.shown, c.title, nx ? ((nx.via && nx.via[0]) || nx.title) : null);
     tt.classList.add("tt");
@@ -5291,7 +5309,7 @@ function renderShPlay(){
       for(const k of [1, 2, 3]){
         const st = j.bsteps[k]; if(!st) continue;
         const row = mk("div", "shStep " + st + (k === 1 ? " bh" : "") + (st === "hit" ? (k < 3 ? " bz" : " b3") : ""));
-        row.append(mk("span", "", T("shBAsk" + k)));
+        row.append(mk("span", "", shIsFoot() ? T("shFAsk") : T("shBAsk" + k)));
         row.append(mk("span", "rs", st === "run" ? T("shDrum") : st === "hit" ? (k < 3 ? T("shBHit") : T("shBHit3")) : (k < 3 ? T("shBMiss") : T("shBMiss3"))));
         jb.append(row);
       }
@@ -5324,7 +5342,7 @@ function renderShPlay(){
     }else if(L.kind === "left"){
       jb.append(mk("div", "shPassBig", who + T("shLogLeft")));
     }else{
-      jb.append(mk("div", "shDobon", (multi ? who : "") + (L.kind === "timeout" ? T("shTimeUp") : L.kind === "bomb" ? T("shBoom") : T("shDobon"))));
+      jb.append(mk("div", "shDobon", (multi ? who : "") + (L.kind === "timeout" ? T("shTimeUp") : L.kind === "bomb" ? (L.foot ? T("shFootHit") : T("shBoom")) : T("shDobon"))));
       if(L.kind === "bomb"){
         const bic = L.bombLv != null ? SH_BOMB_IC[Math.min(3, L.bombLv)] + " " : "";
         const why = mk("div", "shWhy", L.bd === 0 ? T("shBoomSame", L.shown) : L.bd && L.bomb ? T("shBoomBy", L.shown, bic + L.bomb) : L.bd ? T("shBoomWhy", L.shown, L.bd) : "");
@@ -5385,7 +5403,7 @@ function renderShPlay(){
   // 履歴
   $("shLogSum").textContent = T("shHist", sh.log.length);
   $("shLogBox").hidden = !sh.log.length;
-  shRenderLog($("shLogList"), sh.log, sh.players.map(p => p.name), multi, sh.setup.start, sh.setup.gtype === "bomb" ? null : sh.setup.goal, sh.setup.gtype);
+  shRenderLog($("shLogList"), sh.log, sh.players.map(p => p.name), multi, sh.setup.start, sh.setup.gtype === "bomb" || sh.setup.gtype === "foot" ? null : sh.setup.goal, sh.setup.gtype);
   // 入力
   const myTurn = shMyTurn();
   const lock = judging || !playing || !myTurn || !!sh.bombMoving;
@@ -5517,7 +5535,7 @@ function shRenderLog(box, log, names, multi, start, goal, gtype){
       whoTag(el, e);
       if(e.kind === "timeout"){ el.append(mk("b", "lab", T("shTimeUpS"))); }
       else if(e.kind === "bomb"){
-        el.append(mk("b", "lab", T("shFlowBoomD", e.bd || 0)), mk("span", "", e.shown + (e.bomb && e.bd ? "　→ " + (e.bombLv != null ? SH_BOMB_IC[Math.min(3, e.bombLv)] + " " : "") + e.bomb : "")));
+        el.append(mk("b", "lab", e.foot ? T("shFootHit") : T("shFlowBoomD", e.bd || 0)), mk("span", "", e.shown + (e.bomb && e.bd ? "　→ " + (e.bombLv != null ? SH_BOMB_IC[Math.min(3, e.bombLv)] + " " : "") + e.bomb : "")));
         if(e.bd === 1 && e.bombT){ const ck = mk("button", "shWord chk", T("shCheck")); ck.addEventListener("click", () => shOpen(e.title, e.bombT)); el.append(" ", ck); }
         if(e.bvia && e.bvia.length){
           const v = mk("span", "via"); v.append(T("shViaPre"));
@@ -5732,7 +5750,7 @@ function shHistList(){
   recs.forEach(r => {
     const b = mk("button", "shRec");
     b.append(mk("small", "", `${shFmtDate(r.at)} ・ ${r.setup.n}${T("shPpl")} ・ ${r.setup.mode === "r3" ? T("shModeR3") : T("shModeFree")}`));
-    b.append(mk("b", "", `${r.setup.start ? r.setup.start.shown : ""}${r.setup.gtype === "bomb" ? "　💣" + (r.setup.goal ? " " + r.setup.goal.shown : "") : r.setup.goal ? " → 🚩 " + r.setup.goal.shown : ""}`));
+    b.append(mk("b", "", `${r.setup.start ? r.setup.start.shown : ""}${r.setup.gtype === "foot" ? "　👣" : r.setup.gtype === "bomb" ? "　💣" + (r.setup.goal ? " " + r.setup.goal.shown : "") : r.setup.goal ? " → 🚩 " + r.setup.goal.shown : ""}`));
     const sc = r.players.map((p, i) => `${r.setup.n > 1 ? SH_DOTS[i] + " " : ""}${p.name} ${T("shPts", p.score)}`).join("　");
     b.append(mk("span", "sc", `${T("shLinks", Math.max(0, (r.chain || []).length - 1))} ・ ${sc}`));
     b.addEventListener("click", () => shHistDetail(r.id));
@@ -5746,7 +5764,7 @@ function shHistDetail(id){
   $("shHistDelAll").hidden = true;
   const back = mk("button", "", T("shBackList")); back.addEventListener("click", shHistList);
   box.append(back);
-  box.append(mk("h3", "", `${r.setup.start ? r.setup.start.shown : ""}${r.setup.gtype === "bomb" ? "　💣" + (r.setup.goal ? " " + r.setup.goal.shown : "") : r.setup.goal ? " → 🚩 " + r.setup.goal.shown : ""}`));
+  box.append(mk("h3", "", `${r.setup.start ? r.setup.start.shown : ""}${r.setup.gtype === "foot" ? "　👣" : r.setup.gtype === "bomb" ? "　💣" + (r.setup.goal ? " " + r.setup.goal.shown : "") : r.setup.goal ? " → 🚩 " + r.setup.goal.shown : ""}`));
   box.append(mk("p", "shsNote", `${shFmtDate(r.at)} ・ ${r.setup.n}${T("shPpl")} ・ ${r.setup.mode === "r3" ? T("shModeR3") : T("shModeFree")}`));
   const multi = r.setup.n > 1;
   const order = r.players.map((p, i) => ({p, i})).sort((a, b) => b.p.score - a.p.score);
