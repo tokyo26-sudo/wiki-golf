@@ -372,7 +372,7 @@
   .shStep .rs{font-weight:800}
   .shStep.run .rs{animation:shDrum .5s steps(2) infinite}
   .shStep.hit .rs{color:var(--green)}
-  .shStep.miss .rs{color:var(--sub)}
+  .shStep.miss .rs, .shStep.unk .rs{color:var(--sub)}
   .shStep.hit.k1 .rs{color:var(--flag)}
   @keyframes shDrum{50%{opacity:.25}}
   .shDobon{font-size:1.6rem;font-weight:900;color:var(--flag);animation:shShake .4s}
@@ -630,7 +630,7 @@
   <div class="stat"><div class="num" id="clockNum">0:00</div><div class="lbl" id="clockLbl"></div></div>
   <div class="stat" id="pageStat" hidden><div class="num" id="pageNum">0</div><div class="lbl" data-t="pageLeft"></div></div>
   <div id="route"></div>
-  <span id="ver">v3.6</span>
+  <span id="ver">v3.9</span>
   <div id="barBtns">
     <button id="teeoff" disabled data-t="teeoff"></button>
     <button id="backBtn" hidden data-t="back"></button>
@@ -688,7 +688,7 @@
 
 <div id="settings" class="overlay">
   <div class="panel">
-    <h2><span data-t="settings"></span> <small style="font-size:.65rem;font-weight:400;color:var(--sub)">v3.6</small></h2>
+    <h2><span data-t="settings"></span> <small style="font-size:.65rem;font-weight:400;color:var(--sub)">v3.9</small></h2>
     <p class="lockNote" id="lockNote" hidden></p>
     <button id="quitHole" class="quit" hidden></button>
     <button id="toHome" data-t="toHome"></button>
@@ -716,7 +716,7 @@
 
 <div id="home">
   <div class="homeInner">
-    <div class="homeHead"><h1>⛳ <span data-t="appName"></span></h1><p data-t="homeAbout"></p><small>v3.6</small></div>
+    <div class="homeHead"><h1>⛳ <span data-t="appName"></span></h1><p data-t="homeAbout"></p><small>v3.9</small></div>
 
     <section id="homeMain">
       <div class="homeBtns">
@@ -2166,6 +2166,22 @@ Object.assign(STR["es"], {shLv:["débil","media","fuerte"], shInN:n=>n>2000?"200
 Object.assign(STR["ko"], {shLv:["약","중","강"], shInN:n=>n>2000?"역링크 2000 이상":`역링크 약 ${n}`, shKindNoteBomb:"폭탄에서 2타 이내인 단어를 말하면 쾅(아웃). 폭탄은 한 바퀴마다(혼자면 3개 이을 때마다) 이동하고 점점 강해져요(💣약→💣💣중→💣💣💣강). 역링크가 많을수록 위험!"});
 Object.assign(STR["zh-hant"], {shLv:["弱","中","強"], shInN:n=>n>2000?"反向連結 2000 以上":`反向連結約 ${n}`, shKindNoteBomb:"說出離炸彈 2 桿以內的詞就爆炸（出局）。炸彈每一輪（一個人時每接 3 個）移動，而且越來越強（💣弱→💣💣中→💣💣💣強）。反向連結越多越危險！"});
 Object.assign(STR["zh-hans"], {shLv:["弱","中","强"], shInN:n=>n>2000?"反向链接 2000 以上":`反向链接约 ${n}`, shKindNoteBomb:"说出离炸弹 2 杆以内的词就爆炸（出局）。炸弹每一轮（一个人时每接 3 个）移动，而且越来越强（💣弱→💣💣中→💣💣💣强）。反向链接越多越危险！"});
+/* v3.8 爆弾ゾーン1打 */
+Object.assign(STR["ja"], {shRuleBomb:"💣 爆弾にリンクしてる記事＝ドカン", shKindNoteBomb:"爆弾にリンクしてる記事（と爆弾そのもの）を言ったらドカン（ドボン）。爆弾は一巡ごと（1人なら3つつなぐごと）に移動して、そのたびに強くなる（💣弱→💣💣中→💣💣💣強）。被リンクが多い爆弾ほど、うっかり言っちゃう言葉が多いから注意！", shBombNote:"（この記事にリンクしてる記事を言ったらドカン！）", shBAsk1:"💣 爆弾にリンクしてる？", shBHit:"💥 リンクあり！", shBMiss:"✓ リンクなし", shUnk:"？ 見つからない（調べきれず）", shFlowBoomD:d=>d?`💥 ドカン（爆弾にリンクしてた）`:`💥 ドカン（爆弾そのもの）`, shBoomWhy:(a,d)=>`「${a}」の記事に爆弾へのリンクがあった`});
+Object.assign(STR["en"], {shRuleBomb:"💣 linking to the bomb = boom", shKindNoteBomb:"Name an article that links to the bomb (or the bomb itself) and it explodes (bust). The bomb moves every round (solo: every 3 links) and gets stronger each time (💣 → 💣💣 → 💣💣💣). More inlinks = more words to stumble on!", shBombNote:" (any article linking to it explodes!)", shBAsk1:"💣 Links to the bomb?", shBHit:"💥 It does!", shBMiss:"✓ No link", shUnk:"? Not found (search cut short)", shFlowBoomD:d=>d?`💥 Boom (linked to the bomb)`:`💥 Boom (the bomb itself)`, shBoomWhy:(a,d)=>`“${a}” links to the bomb`});
+Object.assign(STR["fr"], {shRuleBomb:"💣 lien vers la bombe = boum", shKindNoteBomb:"Un article qui pointe vers la bombe (ou la bombe elle-même) : boum (perdu). La bombe bouge à chaque tour (seul : tous les 3 liens) et devient plus forte (💣 → 💣💣 → 💣💣💣).", shBombNote:" (tout article qui y renvoie explose !)", shBAsk1:"💣 Lien vers la bombe ?", shBHit:"💥 Oui !", shBMiss:"✓ Pas de lien", shUnk:"? Introuvable (recherche incomplète)", shFlowBoomD:d=>d?`💥 Boum (lien vers la bombe)`:`💥 Boum (la bombe)`, shBoomWhy:(a,d)=>`« ${a} » renvoie vers la bombe`});
+Object.assign(STR["es"], {shRuleBomb:"💣 enlazar a la bomba = bum", shKindNoteBomb:"Un artículo que enlaza a la bomba (o la bomba misma): ¡bum! (fuera). La bomba se mueve cada vuelta (solo: cada 3 enlaces) y se hace más fuerte (💣 → 💣💣 → 💣💣💣).", shBombNote:" (¡cualquier artículo que la enlace explota!)", shBAsk1:"💣 ¿Enlaza a la bomba?", shBHit:"💥 ¡Sí!", shBMiss:"✓ Sin enlace", shUnk:"? No encontrado (búsqueda incompleta)", shFlowBoomD:d=>d?`💥 Bum (enlazaba a la bomba)`:`💥 Bum (la bomba)`, shBoomWhy:(a,d)=>`«${a}» enlaza a la bomba`});
+Object.assign(STR["ko"], {shRuleBomb:"💣 폭탄에 링크한 문서 = 쾅", shKindNoteBomb:"폭탄에 링크한 문서(와 폭탄 자체)를 말하면 쾅(아웃). 폭탄은 한 바퀴마다(혼자면 3개 이을 때마다) 이동하고 점점 강해져요(💣약→💣💣중→💣💣💣강).", shBombNote:"(이 문서에 링크한 문서를 말하면 쾅!)", shBAsk1:"💣 폭탄에 링크했나?", shBHit:"💥 링크 있음!", shBMiss:"✓ 링크 없음", shUnk:"? 못 찾음(다 조사 못 함)", shFlowBoomD:d=>d?`💥 쾅(폭탄에 링크)`:`💥 쾅(폭탄 그 자체)`, shBoomWhy:(a,d)=>`“${a}” 문서에 폭탄 링크가 있었어요`});
+Object.assign(STR["zh-hant"], {shRuleBomb:"💣 連到炸彈的條目＝爆炸", shKindNoteBomb:"說出連到炸彈的條目（或炸彈本身）就爆炸（出局）。炸彈每一輪（一個人時每接 3 個）移動，而且越來越強（💣弱→💣💣中→💣💣💣強）。", shBombNote:"（說出連到這裡的條目就爆炸！）", shBAsk1:"💣 有連到炸彈？", shBHit:"💥 有連結！", shBMiss:"✓ 沒有連結", shUnk:"？ 沒找到（未能查完）", shFlowBoomD:d=>d?`💥 爆炸（連到炸彈）`:`💥 爆炸（就是炸彈）`, shBoomWhy:(a,d)=>`「${a}」有連到炸彈`});
+Object.assign(STR["zh-hans"], {shRuleBomb:"💣 链接到炸弹的条目＝爆炸", shKindNoteBomb:"说出链接到炸弹的条目（或炸弹本身）就爆炸（出局）。炸弹每一轮（一个人时每接 3 个）移动，而且越来越强（💣弱→💣💣中→💣💣💣强）。", shBombNote:"（说出链接到这里的条目就爆炸！）", shBAsk1:"💣 有链接到炸弹？", shBHit:"💥 有链接！", shBMiss:"✓ 没有链接", shUnk:"？ 没找到（未能查完）", shFlowBoomD:d=>d?`💥 爆炸（链接到炸弹）`:`💥 爆炸（就是炸弹）`, shBoomWhy:(a,d)=>`「${a}」有链接到炸弹`});
+/* v3.9 爆竹→花火→爆弾→バケモン */
+Object.assign(STR["ja"], {shLv:["爆竹","花火","爆弾","バケモン"], shInN:n=>n>5000?"被リンク5000以上":`被リンク約${n}`, shBombHidden:"？？？（スタートで発表）", shKindNoteBomb:"爆弾にリンクしてる記事（と爆弾そのもの）を言ったらドカン（ドボン）。爆弾はスタートで発表、一巡ごと（1人なら3つつなぐごと）に今の言葉の近くへ移動して、🧨爆竹→🎆花火→💣爆弾→👹バケモンと強くなる。被リンクが多いほど、うっかり言っちゃう言葉が多いよ！", shBombNote:"（これにリンクしてる記事を言ったらドカン！）", shBombFirst:"爆弾を仕掛け中……", shBombDrop:(ic,nm)=>`${ic} ${nm}が落ちてきた！`, shBombUp:(ic,nm)=>`${ic} ${nm}に進化した！`, shBombMv:(ic,nm)=>`${ic} ${nm}が移動した！`, shBombIs2:(ic,nm)=>`${ic} ${nm}：`});
+Object.assign(STR["en"], {shLv:["Firecracker","Fireworks","Bomb","Monster"], shInN:n=>n>5000?"5000+ inlinks":`~${n} inlinks`, shBombHidden:"??? (revealed at the start)", shKindNoteBomb:"Name an article that links to the bomb (or the bomb itself) and it explodes (bust). The bomb is revealed at the start, then moves near the current word every round (solo: every 3 links), growing 🧨 Firecracker → 🎆 Fireworks → 💣 Bomb → 👹 Monster. More inlinks = more words to stumble on!", shBombNote:" (anything linking to it explodes!)", shBombFirst:"Planting the bomb…", shBombDrop:(ic,nm)=>`${ic} A ${nm.toLowerCase()} dropped!`, shBombUp:(ic,nm)=>`${ic} It grew into a ${nm.toLowerCase()}!`, shBombMv:(ic,nm)=>`${ic} The ${nm.toLowerCase()} moved!`, shBombIs2:(ic,nm)=>`${ic} ${nm}: `});
+Object.assign(STR["fr"], {shLv:["Pétard","Feu d’artifice","Bombe","Monstre"], shInN:n=>n>5000?"5000+ liens entrants":`~${n} liens entrants`, shBombHidden:"??? (révélée au départ)", shKindNoteBomb:"Un article qui pointe vers la bombe (ou la bombe elle-même) : boum (perdu). Révélée au départ, elle se rapproche du mot actuel à chaque tour et grandit : 🧨 → 🎆 → 💣 → 👹.", shBombNote:" (tout ce qui y renvoie explose !)", shBombFirst:"Pose de la bombe…", shBombDrop:(ic,nm)=>`${ic} ${nm} tombé !`, shBombUp:(ic,nm)=>`${ic} Évolution : ${nm} !`, shBombMv:(ic,nm)=>`${ic} ${nm} a bougé !`, shBombIs2:(ic,nm)=>`${ic} ${nm} : `});
+Object.assign(STR["es"], {shLv:["Petardo","Fuegos artificiales","Bomba","Monstruo"], shInN:n=>n>5000?"5000+ enlaces entrantes":`~${n} enlaces entrantes`, shBombHidden:"??? (se revela al empezar)", shKindNoteBomb:"Un artículo que enlaza a la bomba (o la bomba misma): ¡bum! (fuera). Se revela al empezar, se acerca a la palabra actual cada vuelta y crece: 🧨 → 🎆 → 💣 → 👹.", shBombNote:" (¡lo que la enlace explota!)", shBombFirst:"Colocando la bomba…", shBombDrop:(ic,nm)=>`${ic} ¡Cayó: ${nm}!`, shBombUp:(ic,nm)=>`${ic} ¡Evolucionó a ${nm}!`, shBombMv:(ic,nm)=>`${ic} ¡${nm} se movió!`, shBombIs2:(ic,nm)=>`${ic} ${nm}: `});
+Object.assign(STR["ko"], {shLv:["폭죽","불꽃놀이","폭탄","괴물"], shInN:n=>n>5000?"역링크 5000 이상":`역링크 약 ${n}`, shBombHidden:"???(시작할 때 공개)", shKindNoteBomb:"폭탄에 링크한 문서(와 폭탄 자체)를 말하면 쾅(아웃). 시작할 때 공개되고, 한 바퀴마다 지금 단어 근처로 옮기며 🧨폭죽→🎆불꽃놀이→💣폭탄→👹괴물로 강해져요.", shBombNote:"(여기에 링크한 문서를 말하면 쾅!)", shBombFirst:"폭탄 설치 중…", shBombDrop:(ic,nm)=>`${ic} ${nm}이(가) 떨어졌다!`, shBombUp:(ic,nm)=>`${ic} ${nm}(으)로 진화했다!`, shBombMv:(ic,nm)=>`${ic} ${nm}이(가) 이동했다!`, shBombIs2:(ic,nm)=>`${ic} ${nm}: `});
+Object.assign(STR["zh-hant"], {shLv:["爆竹","煙火","炸彈","怪物"], shInN:n=>n>5000?"反向連結 5000 以上":`反向連結約 ${n}`, shBombHidden:"？？？（開始時公布）", shKindNoteBomb:"說出連到炸彈的條目（或炸彈本身）就爆炸（出局）。開始時公布，每一輪移到目前詞語附近，並從 🧨爆竹→🎆煙火→💣炸彈→👹怪物 越來越強。", shBombNote:"（說出連到這裡的條目就爆炸！）", shBombFirst:"安裝炸彈中……", shBombDrop:(ic,nm)=>`${ic} ${nm}掉下來了！`, shBombUp:(ic,nm)=>`${ic} 進化成${nm}了！`, shBombMv:(ic,nm)=>`${ic} ${nm}移動了！`, shBombIs2:(ic,nm)=>`${ic} ${nm}：`});
+Object.assign(STR["zh-hans"], {shLv:["爆竹","烟花","炸弹","怪物"], shInN:n=>n>5000?"反向链接 5000 以上":`反向链接约 ${n}`, shBombHidden:"？？？（开始时公布）", shKindNoteBomb:"说出链接到炸弹的条目（或炸弹本身）就爆炸（出局）。开始时公布，每一轮移到当前词语附近，并从 🧨爆竹→🎆烟花→💣炸弹→👹怪物 越来越强。", shBombNote:"（说出链接到这里的条目就爆炸！）", shBombFirst:"安装炸弹中……", shBombDrop:(ic,nm)=>`${ic} ${nm}掉下来了！`, shBombUp:(ic,nm)=>`${ic} 进化成${nm}了！`, shBombMv:(ic,nm)=>`${ic} ${nm}移动了！`, shBombIs2:(ic,nm)=>`${ic} ${nm}：`});
 function T(key, ...args){
   const v = (STR[uiKey()] || STR.en)[key] ?? STR.en[key] ?? STR.ja[key] ?? key;
   return typeof v === "function" ? v(...args) : v;
@@ -4502,7 +4518,7 @@ async function spApi(run, q){
 }
 async function spLinksOut(run, title){
   const out = new Set(); let cont = {};
-  for(let i = 0; i < 4; i++){
+  for(let i = 0; i < 10; i++){
     const d = await spApi(run, {action:"query", generator:"links", titles:title, gplnamespace:"0", gpllimit:"max", redirects:"1", ...cont});
     for(const p of (d.query && d.query.pages) || []) if(p.missing === undefined && p.ns === 0) out.add(p.title);
     if(!d.continue) return {set:[...out], full:true};
@@ -4512,7 +4528,7 @@ async function spLinksOut(run, title){
 }
 async function spLinksIn(run, title){
   const set = new Set(); let cont = {};
-  for(let i = 0; i < 4; i++){
+  for(let i = 0; i < 10; i++){
     const d = await spApi(run, {action:"query", list:"backlinks", bltitle:title, blnamespace:"0", bllimit:"max", blredirect:"1", ...cont});
     for(const b of (d.query && d.query.backlinks) || []){
       if(!b.redirect) set.add(b.title);
@@ -4712,7 +4728,7 @@ function shLoad(){
 }
 function shSave(){ if(shNet){ if(shIsHost()) shNetSync(); return; } try{ localStorage.setItem(SH_KEY, JSON.stringify({...sh, judging:null})); }catch(_){} }
 const shMulti = () => sh.players.length > 1;
-const shIsBomb = () => sh.setup.gtype === "bomb" && !!sh.bomb;
+const shIsBomb = () => sh.setup.gtype === "bomb" && sh.phase !== "setup";
 const shCur = () => sh.players[sh.turn];
 function shName(i){ const p = sh.players[i]; return p ? `${SH_DOTS[i]} ${p.name}` : ""; }
 function shDefName(i){ return T("shPNames")[i]; }
@@ -4724,17 +4740,44 @@ async function shJudge(S, G, onStep, maxD = 3){
   let t0 = Date.now();
   onStep({k:1, st:"run"});
   const fo = await spLinksOut(run, S);
+  // v3.7 リンクが多すぎて取りきれないときは「SからGへのリンクがあるか」を直接たずねる
+  const linksTo = async (from, tos) => {
+    const hit = [];
+    for(let i = 0; i < tos.length; i += 50){
+      if(run.n >= SP_BUDGET) return null;
+      const d = await spApi(run, {action:"query", prop:"links", titles:from.join("|"), pltitles:tos.slice(i, i + 50).join("|"), plnamespace:"0", pllimit:"max"});
+      for(const p of (d.query && d.query.pages) || []) for(const l of p.links || []) hit.push({from:p.title, to:l.title});
+    }
+    return hit;
+  };
+  let d1 = fo.set.includes(G);
+  if(!d1 && !fo.full){ const h = await linksTo([S], [G]); d1 = !!(h && h.length); }
   await wait(t0, 1500);
-  if(fo.set.includes(G)){ onStep({k:1, st:"hit"}); return {d:1, path:[S, G]}; }
+  if(d1){ onStep({k:1, st:"hit"}); return {d:1, path:[S, G]}; }
   onStep({k:1, st:"miss"});
   t0 = Date.now(); onStep({k:2, st:"run"});
   const bi = await spLinksIn(run, G);
   const F = fo.set.filter(t => t !== G && t !== S), Bs = new Set(bi.set);
-  const mids = F.filter(t => Bs.has(t)), mid = mids[0];
+  let mids = F.filter(t => Bs.has(t));
+  let full2 = fo.full && bi.full;
+  if(!mids.length && !full2){
+    // どちらか取りきれた側を使って、ぜんぶ正確に確かめる（少ないほうを選ぶ）
+    let h = null;
+    const B = bi.set.filter(t => t !== S && t !== G);
+    if(bi.full && (!fo.full || B.length <= F.length)){ h = await linksTo([S], B); if(h) mids = h.map(x => x.to); }
+    else if(fo.full){
+      h = [];
+      for(let i = 0; i < F.length && h; i += 50){ const r = await linksTo(F.slice(i, i + 50), [G]); h = r ? h.concat(r) : null; }
+      if(h) mids = h.map(x => x.from);
+    }
+    if(h) full2 = true;
+  }
+  mids = [...new Set(mids)].filter(t => t !== S && t !== G);
+  const mid = mids[0];
   await wait(t0, 1700);
   if(mid){ onStep({k:2, st:"hit"}); return {d:2, path:[S, mid, G], n:mids.length}; }
-  onStep({k:2, st:"miss"});
-  if(maxD === 2) return {d:0, complete:fo.full && bi.full};      // v3.5 ちょうど2打ルール：3打は調べない
+  onStep({k:2, st:full2 || maxD !== 2 ? "miss" : "unk"});
+  if(maxD === 2) return {d:0, complete:full2};      // v3.5 ちょうど2打ルール：3打は調べない
   t0 = Date.now(); onStep({k:3, st:"run"});
   const B = bi.set.filter(t => t !== S && t !== G);
   let res = null, complete = fo.full && bi.full;
@@ -4783,7 +4826,7 @@ function shRecSave(){
   const id = sh.recId || (Date.now().toString(36) + Math.random().toString(36).slice(2, 6));
   sh.recId = id;
   const rec = {id, at:Date.now(), lang:sh.lang,
-    setup:{n:sh.setup.n, mode:sh.setup.mode, start:sh.setup.start, goal:sh.setup.goal, gtype:sh.setup.gtype || "goal"},
+    setup:{n:sh.setup.n, mode:sh.setup.mode, start:sh.setup.start, goal:sh.setup.gtype === "bomb" ? null : sh.setup.goal, gtype:sh.setup.gtype || "goal"},
     players:sh.players.map(p => ({name:p.name, score:p.score, alive:p.alive})),
     end:sh.end, chain:sh.chain, log:sh.log};
   const i = recs.findIndex(r => r.id === id);
@@ -4796,7 +4839,7 @@ function shDobon(p, info){
   sh.last = {...info, by:sh.turn, out:!p.alive};
   const lg = {by:sh.turn, round:sh.round, kind:info.kind, title:info.title, shown:info.shown, d:info.d,
                prev:info.prev ? info.prev.title : null, out:!p.alive};
-  if(info.kind === "bomb"){ lg.via = info.via || []; lg.bd = info.bd; lg.bvia = info.bvia || []; lg.bomb = info.bomb; }
+  if(info.kind === "bomb"){ lg.via = info.via || []; lg.bd = info.bd; lg.bvia = info.bvia || []; lg.bomb = info.bomb; lg.bombT = info.bombT; }
   sh.log.push(lg);
 }
 function shCommitSafe(j, d, via, goalOk, giri, x, n){
@@ -4817,18 +4860,24 @@ function shBoom(j, d, via, r){
   const p = sh.players[j.by];
   sh.judging = null;
   shDobon(p, {kind:"bomb", title:j.title, shown:j.shown, d, via, bd:r.d === undefined ? null : r.d,
-              bvia:r.path ? r.path.slice(1, -1) : [], bomb:sh.bomb ? sh.bomb.shown : "", prev:sh.chain[sh.chain.length - 1]});
+              bvia:r.path ? r.path.slice(1, -1) : [], bomb:sh.bomb ? sh.bomb.shown : "", bombT:sh.bomb ? sh.bomb.title : "", prev:sh.chain[sh.chain.length - 1]});
   if(!shMulti() && !p.alive) shFinish("allOut");
   else shAdvance();
 }
 /* 💣 爆弾チェック（ホスト／その1台だけが動かす） */
 async function shRunBomb(){
+  // v3.8 爆弾ゾーンは1打：言った言葉の記事に爆弾へのリンクがあるか、を1回たずねるだけ
   const j = sh.judging; if(!j || !j.first || !sh.bomb) return;
-  const lang = sh.lang, b = sh.bomb;
+  const lang = sh.lang, b = sh.bomb, t0 = Date.now();
   try{
-    const res = await shJudge(j.title, b.title, s => { if(sh.judging === j) shApply({t:"bstep", ...s}); }, 2);
+    shApply({t:"bstep", k:1, st:"run"});
+    const run = {cancelled:false, n:0, lang:curLang()};
+    const d = await spApi(run, {action:"query", prop:"links", titles:j.title, pltitles:b.title, plnamespace:"0", pllimit:"max", redirects:"1"});
+    const hit = ((d.query && d.query.pages) || []).some(p => p.links && p.links.length);
+    await new Promise(r => setTimeout(r, Math.max(0, 1600 - (Date.now() - t0))));
     if(sh.lang !== lang || sh.judging !== j) return;
-    shApply({t:"bresult", res});
+    shApply({t:"bstep", k:1, st:hit ? "hit" : "miss"});
+    shApply({t:"bresult", res:hit ? {d:1, path:[j.title, b.title]} : {d:0, complete:true}});
   }catch(e){ if(sh.judging === j) shApply({t:"bunsure"}); }
 }
 async function shNear2(S, G){
@@ -4839,13 +4888,14 @@ async function shNear2(S, G){
   return fo.set.some(t => bi.has(t));
 }
 /* v3.6 爆弾の強さ：被リンク数で 弱→中→強。2000をこえる超ハブは出さない */
-const SH_BOMB_LV = [[50, 200], [200, 1000], [1000, 2000]];
-const shLvFromN = n => n == null ? 0 : n < 200 ? 0 : n < 1000 ? 1 : 2;
-function shRoundN(n){ return n > 2000 ? n : n >= 100 ? Math.round(n / 10) * 10 : n; }
+const SH_BOMB_LV = [[200, 1000], [1000, 2000], [2000, 5000], [5000, Infinity]];   // v3.9 🧨爆竹・🎆花火・💣爆弾・👹バケモン
+const SH_BOMB_IC = ["🧨", "🎆", "💣", "👹"];
+const shLvFromN = n => n == null ? 0 : n < 1000 ? 0 : n < 2000 ? 1 : n < 5000 ? 2 : 3;
+function shRoundN(n){ return n > 5000 ? n : n >= 100 ? Math.round(n / 10) * 10 : n; }
 function shBombTag(b){
   if(!b) return "";
-  const lv = b.lv != null ? b.lv : shLvFromN(b.inN);
-  return `${"💣".repeat(lv + 1)} ${T("shLv")[lv]}` + (b.inN != null ? `・${T("shInN", shRoundN(b.inN))}` : "");
+  const lv = Math.min(3, b.lv != null ? b.lv : shLvFromN(b.inN));
+  return `${SH_BOMB_IC[lv]} ${T("shLv")[lv]}` + (b.inN != null ? `・${T("shInN", shRoundN(b.inN))}` : "");
 }
 async function shInCount(title, cap = 2000){
   let n = 0, cont = {};
@@ -4858,9 +4908,30 @@ async function shInCount(title, cap = 2000){
   }
   return {n:Math.max(n, cap + 1), more:true};
 }
-async function shPickBomb(lv, avoid){
+async function shPickBomb(lv, avoid, near){
   const [lo, hi] = SH_BOMB_LV[lv];
   let best = null, bestGap = Infinity;
+  const tryList = async (cands, max) => {
+    for(let i = cands.length - 1; i > 0; i--){ const j = Math.floor(Math.random() * (i + 1)); [cands[i], cands[j]] = [cands[j], cands[i]]; }
+    let tried = 0;
+    for(const t of cands){
+      if(tried >= max) break;
+      if(avoid && avoid(t)) continue;
+      tried++;
+      const c = await shInCount(t, Math.min(hi, 5000));
+      if(c.n >= lo && c.n <= hi) return {title:t, inN:c.n, lv};
+      const gap = c.n < lo ? lo - c.n : c.n - hi;
+      if(gap < bestGap){ best = {title:t, inN:c.n, lv:shLvFromN(c.n)}; bestGap = gap; }
+    }
+    return null;
+  };
+  if(near){
+    // v3.9 まず「今の言葉の記事に書いてあるリンク先」から、その段階に合う記事をさがす（近所のハブが爆弾になる）
+    const L = await api({action:"query", generator:"links", titles:near, gplnamespace:"0", gpllimit:"max", redirects:"1", prop:"pageprops", ppprop:"disambiguation"});
+    const cands = ((L.query && L.query.pages) || []).filter(p => p.missing === undefined && p.ns === 0 && !(p.pageprops && "disambiguation" in p.pageprops)).map(p => p.title);
+    const hit = await tryList(cands, 12);
+    if(hit) return hit;
+  }
   for(let k = 0; k < 8; k++){
     const d = await api({action:"query", generator:"random", grnnamespace:"0", grnlimit:"10", grnfilterredir:"nonredirects", prop:"info"});
     const pages = (d.query && d.query.pages) || [];
@@ -4873,14 +4944,8 @@ async function shPickBomb(lv, avoid){
       const L = await api({action:"query", generator:"links", titles:pages[0].title, gplnamespace:"0", gpllimit:"max", redirects:"1", prop:"pageprops", ppprop:"disambiguation"});
       cands = ((L.query && L.query.pages) || []).filter(p => p.missing === undefined && p.ns === 0 && !(p.pageprops && "disambiguation" in p.pageprops)).map(p => p.title);
     }
-    for(let i = cands.length - 1; i > 0; i--){ const j = Math.floor(Math.random() * (i + 1)); [cands[i], cands[j]] = [cands[j], cands[i]]; }
-    for(const t of cands.slice(0, 5)){
-      if(avoid && avoid(t)) continue;
-      const c = await shInCount(t, hi);
-      if(c.n >= lo && c.n <= hi) return {title:t, inN:c.n, lv};
-      const gap = c.n < lo ? lo - c.n : c.n - hi;
-      if(!c.more && gap < bestGap){ best = {title:t, inN:c.n, lv:shLvFromN(c.n)}; bestGap = gap; }
-    }
+    const hit = await tryList(cands, 5);
+    if(hit) return hit;
   }
   return best;
 }
@@ -4892,18 +4957,21 @@ async function shMoveBomb(){
     await ensureNs();
     const last = sh.chain[sh.chain.length - 1];
     let pick = null;
-    const lv = Math.min(2, sh.log.filter(e => e.kind === "bombmove").length + 1);   // 1回目の移動＝中、2回目から強
+    const lv = Math.min(3, sh.log.filter(e => e.kind === "bombmove").length);   // v3.9 最初＝🧨、移動ごとに🎆💣👹
     const used = t => sh.chain.some(c => norm(c.title) === norm(t)) || (sh.bomb && norm(t) === norm(sh.bomb.title));
     for(let k = 0; k < 4 && !pick; k++){
-      const c = await shPickBomb(lv, used); if(!c) continue;
+      const c = await shPickBomb(lv, t => used(t) || norm(t) === norm(last.title), k === 0 ? last.title : null); if(!c) continue;
       const w = await shResolve(c.title);
       if(nsOf(w.title) !== 0 || used(w.title)) continue;
-      if(await shNear2(last.title, w.title)) continue;             // 今の言葉の近くには落とさない
       pick = {...w, inN:c.inN, lv:c.lv};
     }
     if(sh.lang !== lang || sh.phase !== "play") return;
+    if(!pick && !sh.bomb){ shBombRun = false; setTimeout(() => { if(sh.bombMoving && !sh.bomb) shBombKick(); }, 1500); return; }
     shApply(pick ? {t:"bomb", w:pick} : {t:"bmovefail"});
-  }catch(e){ if(sh.bombMoving) shApply({t:"bmovefail"}); }
+  }catch(e){
+    if(sh.bombMoving && !sh.bomb){ shBombRun = false; setTimeout(() => { if(sh.bombMoving && !sh.bomb) shBombKick(); }, 2000); return; }
+    if(sh.bombMoving) shApply({t:"bmovefail"});
+  }
   finally{ shBombRun = false; }
 }
 function shBombKick(){
@@ -4923,7 +4991,8 @@ function shApply(ev){
         : Array.from({length:s.n}, (_, i) => ({name:(s.names[i] || "").trim() || shDefName(i),
                      alive:true, life:s.mode === "r3" ? 1 : 0, pass:s.n > 1 ? 1 : 0, score:0}));
       sh.chain = [{title:s.start.title, shown:s.start.shown, by:-1}];
-      sh.bomb = s.gtype === "bomb" && s.goal ? {title:s.goal.title, shown:s.goal.shown, inN:s.goal.inN, lv:shLvFromN(s.goal.inN)} : null;
+      sh.bomb = null;
+      if(s.gtype === "bomb"){ sh.bombMoving = true; sh.turnEnds = 0; }      // v3.9 爆弾は伏せておいて、スタートで発表
       sh.turnEnds = s.mode === "r3" ? Date.now() + SH_TURN_SEC * 1000 : 0;
       break;
     }
@@ -4990,7 +5059,9 @@ function shApply(ev){
       break;
     case "bomb": {
       if(!ev.w) break;
-      sh.bomb = {title:ev.w.title, shown:ev.w.shown, inN:ev.w.inN, lv:ev.w.lv}; sh.bombMoving = false; sh.bombNews = true;
+      const plv = sh.bomb ? sh.bomb.lv : -1;
+      sh.bomb = {title:ev.w.title, shown:ev.w.shown, inN:ev.w.inN, lv:ev.w.lv}; sh.bombMoving = false;
+      sh.bombNews = plv < 0 ? "drop" : ev.w.lv > plv ? "up" : "move";
       sh.log.push({by:-1, round:sh.round, kind:"bombmove", title:ev.w.title, shown:ev.w.shown, inN:ev.w.inN, lv:ev.w.lv});
       sh.turnEnds = sh.setup.mode === "r3" ? Date.now() + SH_TURN_SEC * 1000 : 0;
       break;
@@ -5035,13 +5106,15 @@ function renderShSetup(){
   for(const role of ["start", "goal"]){
     const w = s[role];
     const el = $(role === "start" ? "shsStart" : "shsGoal");
-    el.textContent = w ? w.shown + (role === "goal" && s.gtype === "bomb" && w.inN != null ? `（${shBombTag(w)}）` : "") : (role === "goal" ? T("shNoGoal") : T("shNotSet"));
+    el.textContent = role === "goal" && s.gtype === "bomb" ? T("shBombHidden") : w ? w.shown : (role === "goal" ? T("shNoGoal") : T("shNotSet"));
+    if(role === "goal") el.classList.toggle("empty", s.gtype === "bomb" || !w);
     el.classList.toggle("empty", !w);
     el.classList.toggle("set", !!w);
     el.title = w ? T("shPeek") : "";
   }
-  $("shsGoalX").hidden = !s.goal;
   const bk = s.gtype === "bomb";
+  $("shsGoalX").hidden = !s.goal || bk;
+  $("shsGoalR").hidden = bk; $("shsGoalP").hidden = bk;
   $("shsGoalLbl").textContent = bk ? T("shsBombL") : T("shsGoalL");
   document.querySelectorAll("#shsKind button").forEach(b => b.classList.toggle("on", b.dataset.k === (s.gtype || "goal")));
   $("shsKindNote").textContent = bk ? T("shKindNoteBomb") : T("shKindNoteGoal");
@@ -5068,9 +5141,13 @@ function renderShPlay(){
   const bombOn = shIsBomb(), g = bombOn ? null : sh.setup.goal, gb = $("shGoalBar");
   gb.hidden = !g && !bombOn; gb.classList.toggle("bomb", bombOn); gb.innerHTML = "";
   if(bombOn){
-    gb.append(mk("span", "", T("shBombIs")), shWordBtn(sh.bomb.shown, sh.bomb.title, null), mk("span", "blv", " " + shBombTag(sh.bomb)), mk("small", "", T("shBombNote")));
-    if(sh.bombMoving) gb.append(mk("span", "bmov", T("shBombMoving")));
-    else if(sh.bombNews && playing) gb.append(mk("span", "bnews", T("shBombMoved")));
+    const b = sh.bomb;
+    if(b){
+      const lv = Math.min(3, b.lv != null ? b.lv : shLvFromN(b.inN)), ic = SH_BOMB_IC[lv], nm = T("shLv")[lv];
+      gb.append(mk("span", "", T("shBombIs2", ic, nm)), shWordBtn(b.shown, b.title, null), mk("span", "blv", b.inN != null ? "（" + T("shInN", shRoundN(b.inN)) + "）" : ""), mk("small", "", T("shBombNote")));
+      if(!sh.bombMoving && sh.bombNews && playing) gb.append(mk("span", "bnews", T(sh.bombNews === "drop" ? "shBombDrop" : sh.bombNews === "up" ? "shBombUp" : "shBombMv", ic, nm)));
+    }
+    if(sh.bombMoving) gb.append(mk("span", "bmov", b ? T("shBombMoving") : T("shBombFirst")));
   }else if(g){ gb.append(mk("span", "", T("shGoalIs")), shWordBtn(g.shown, g.title, null), mk("small", "", T("shGoalNote", SH_GOAL_PTS))); }
   $("shRound").textContent = sh.setup.mode === "r3" ? T("shRoundOf", Math.min(sh.round, 3), 3) : "";
   // 点数ボード
@@ -5124,12 +5201,12 @@ function renderShPlay(){
   jb.hidden = !judging && !sh.last && sh.phase !== "end";
   if(judging){
     const j = sh.judging;
-    jb.append(mk("div", "shQ", `${multi ? SH_DOTS[j.by] + " " : ""}${last.shown} → ${j.isGoal ? "🚩 " : ""}${j.shown}${bombOn ? "　（💣 " + sh.bomb.shown + "）" : ""}`));
+    jb.append(mk("div", "shQ", `${multi ? SH_DOTS[j.by] + " " : ""}${last.shown} → ${j.isGoal ? "🚩 " : ""}${j.shown}${bombOn && sh.bomb ? "　（" + SH_BOMB_IC[Math.min(3, sh.bomb.lv || 0)] + " " + sh.bomb.shown + "）" : ""}`));
     for(const k of [1, 2, 3]){
       const st = j.steps[k]; if(!st) continue;
       const row = mk("div", "shStep " + st + (k === 1 && !j.isGoal ? " k1" : ""));
       row.append(mk("span", "", T("shAsk" + k)));
-      row.append(mk("span", "rs", st === "run" ? T("shDrum") : st === "hit" ? (j.isGoal ? T("shHitGoal") : k === 1 ? T("shHit1") : T("shHitN")) : T("shMiss" + k)));
+      row.append(mk("span", "rs", st === "run" ? T("shDrum") : st === "hit" ? (j.isGoal ? T("shHitGoal") : k === 1 ? T("shHit1") : T("shHitN")) : st === "unk" ? T("shUnk") : T("shMiss" + k)));
       jb.append(row);
     }
     if(j.unsure){
@@ -5180,6 +5257,7 @@ function renderShPlay(){
       jb.append(mk("div", "shDobon", (multi ? who : "") + (L.kind === "timeout" ? T("shTimeUp") : L.kind === "bomb" ? T("shBoom") : T("shDobon"))));
       if(L.kind === "bomb"){
         const why = mk("div", "shWhy", L.bd === 0 ? T("shBoomSame", L.shown) : L.bd ? T("shBoomWhy", L.shown, L.bd) : "");
+        if(L.bd === 1 && sh.bomb){ const bt = sh.bomb.title, ck = mk("button", "shWord chk", T("shCheck")); ck.addEventListener("click", () => shOpen(L.title, bt)); why.append(" ", ck); }
         if(L.bvia && L.bvia.length){
           const v = mk("span", "via"), hop = [...L.bvia, sh.bomb ? sh.bomb.title : ""];
           v.append(T("shViaPre")); L.bvia.forEach((t, i) => { if(i) v.append(" → "); v.append(shWordBtn(t, t, hop[i + 1])); }); v.append(T("shViaPost"));
@@ -5236,7 +5314,7 @@ function renderShPlay(){
   // 履歴
   $("shLogSum").textContent = T("shHist", sh.log.length);
   $("shLogBox").hidden = !sh.log.length;
-  shRenderLog($("shLogList"), sh.log, sh.players.map(p => p.name), multi, sh.setup.start, sh.setup.goal, sh.setup.gtype);
+  shRenderLog($("shLogList"), sh.log, sh.players.map(p => p.name), multi, sh.setup.start, sh.setup.gtype === "bomb" ? null : sh.setup.goal, sh.setup.gtype);
   // 入力
   const myTurn = shMyTurn();
   const lock = judging || !playing || !myTurn || !!sh.bombMoving;
@@ -5319,7 +5397,7 @@ function shRenderLog(box, log, names, multi, start, goal, gtype){
   const mark = (text, fill) => { const g = mk("span", "shFg"); g.append(btn(text, "bm", fill)); line.append(g); };
   const openBtn = (title, next) => { const o = mk("button", "shWord open", T("shFlowOpen")); o.addEventListener("click", () => shOpen(title, next || null)); return o; };
   const bombFill = w => el => { el.append(mk("b", "lab bmlab", T("shFlowBomb")), mk("span", "", w.shown + "　" + shBombTag(w)), openBtn(w.title)); };
-  const bombIcon = w => "💣".repeat((w.lv != null ? w.lv : shLvFromN(w.inN)) + 1);
+  const bombIcon = w => SH_BOMB_IC[Math.min(3, w.lv != null ? w.lv : shLvFromN(w.inN))];
   const viaWords = (via, title) => {
     const hop = [...via, title];
     via.forEach((t, i) => put(t, "via", el => { el.append(mk("b", "lab", T("shFlowVia")), mk("span", "", t), openBtn(t, hop[i + 1])); }));
@@ -5337,6 +5415,7 @@ function shRenderLog(box, log, names, multi, start, goal, gtype){
       if(e.kind === "timeout"){ el.append(mk("b", "lab", T("shTimeUpS"))); }
       else if(e.kind === "bomb"){
         el.append(mk("b", "lab", T("shFlowBoomD", e.bd || 0)), mk("span", "", e.shown));
+        if(e.bd === 1 && e.bombT){ const ck = mk("button", "shWord chk", T("shCheck")); ck.addEventListener("click", () => shOpen(e.title, e.bombT)); el.append(" ", ck); }
         if(e.bvia && e.bvia.length){
           const v = mk("span", "via"); v.append(T("shViaPre"));
           e.bvia.forEach((t, i) => { if(i) v.append(" → "); v.append(shWordBtn(t, t, e.bvia[i + 1] || null)); });
@@ -5506,7 +5585,8 @@ async function shRandomBoth(){
   try{
     await ensureNs();
     for(let k = 0; k < 4; k++){
-      const bombPick = sh.setup.gtype === "bomb";
+      if(sh.setup.gtype === "bomb"){ const a = await pickTitle("start"); if(a){ sh.setup.start = await shResolve(a.title); break; } continue; }
+      const bombPick = false;
       const [a, b] = await Promise.all([pickTitle("start"), bombPick ? shPickBomb(0) : pickTitle("goal")]);
       if(!a || !b) continue;
       const [ws, wg] = await Promise.all([shResolve(a.title), shResolve(b.title)]);
@@ -5520,6 +5600,7 @@ async function shRandomBoth(){
 }
 $("shsBothR").addEventListener("click", shRandomBoth);
 for(const role of ["start", "goal"]) $(role === "start" ? "shsStart" : "shsGoal").addEventListener("click", () => {
+  if(role === "goal" && sh.setup.gtype === "bomb") return;   // 爆弾は伏せておく
   const w = sh.setup[role]; if(w) shOpen(w.title, null);
 });
 $("shsStartR").addEventListener("click", () => shRandom("start"));
@@ -5548,7 +5629,7 @@ function shHistList(){
   recs.forEach(r => {
     const b = mk("button", "shRec");
     b.append(mk("small", "", `${shFmtDate(r.at)} ・ ${r.setup.n}${T("shPpl")} ・ ${r.setup.mode === "r3" ? T("shModeR3") : T("shModeFree")}`));
-    b.append(mk("b", "", `${r.setup.start ? r.setup.start.shown : ""}${r.setup.goal ? (r.setup.gtype === "bomb" ? "　💣 " : " → 🚩 ") + r.setup.goal.shown : ""}`));
+    b.append(mk("b", "", `${r.setup.start ? r.setup.start.shown : ""}${r.setup.gtype === "bomb" ? "　💣" + (r.setup.goal ? " " + r.setup.goal.shown : "") : r.setup.goal ? " → 🚩 " + r.setup.goal.shown : ""}`));
     const sc = r.players.map((p, i) => `${r.setup.n > 1 ? SH_DOTS[i] + " " : ""}${p.name} ${T("shPts", p.score)}`).join("　");
     b.append(mk("span", "sc", `${T("shLinks", Math.max(0, (r.chain || []).length - 1))} ・ ${sc}`));
     b.addEventListener("click", () => shHistDetail(r.id));
@@ -5562,7 +5643,7 @@ function shHistDetail(id){
   $("shHistDelAll").hidden = true;
   const back = mk("button", "", T("shBackList")); back.addEventListener("click", shHistList);
   box.append(back);
-  box.append(mk("h3", "", `${r.setup.start ? r.setup.start.shown : ""}${r.setup.goal ? (r.setup.gtype === "bomb" ? "　💣 " : " → 🚩 ") + r.setup.goal.shown : ""}`));
+  box.append(mk("h3", "", `${r.setup.start ? r.setup.start.shown : ""}${r.setup.gtype === "bomb" ? "　💣" + (r.setup.goal ? " " + r.setup.goal.shown : "") : r.setup.goal ? " → 🚩 " + r.setup.goal.shown : ""}`));
   box.append(mk("p", "shsNote", `${shFmtDate(r.at)} ・ ${r.setup.n}${T("shPpl")} ・ ${r.setup.mode === "r3" ? T("shModeR3") : T("shModeFree")}`));
   const multi = r.setup.n > 1;
   const order = r.players.map((p, i) => ({p, i})).sort((a, b) => b.p.score - a.p.score);
