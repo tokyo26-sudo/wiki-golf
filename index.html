@@ -188,6 +188,19 @@
   #homeShiri h2{margin:4px 0 6px}
   #shRule{font-size:.82rem;font-weight:700;margin:0 0 10px;background:var(--green2);color:var(--green);border-radius:10px;padding:6px 10px}
   #shInputRow[hidden]{display:none !important}
+  #shThumbCol{display:none}
+  @media (min-width:1100px){
+    #home.shWide .homeInner{width:min(1060px,100%)}
+    #home.shWide #shPlay{display:grid;grid-template-columns:minmax(0,1fr) 300px;gap:20px;align-items:start}
+    #home.shWide #shThumbCol{display:block;position:sticky;top:12px}
+  }
+  #shThumbHead{font-size:.82rem;font-weight:800;margin:4px 0 6px;overflow:hidden;text-overflow:ellipsis;white-space:nowrap}
+  .shThumbWrap{position:relative;width:300px;height:460px;overflow:hidden;border:1px solid var(--line);border-radius:10px;background:#fff;box-shadow:0 4px 14px rgba(0,0,0,.08)}
+  #shThumb{position:absolute;left:0;top:0;width:1100px;height:1680px;border:0;transform:scale(.2727);transform-origin:0 0;pointer-events:none;background:#fff}
+  #shThumbCover{position:absolute;inset:0;cursor:zoom-in}
+  #shThumbCover:hover{background:rgba(51,102,204,.06)}
+  .shThumbWrap.loading::after{content:"…";position:absolute;inset:0;display:grid;place-items:center;font-size:2rem;color:#a2a9b1;background:#fff}
+  .shThumbNote{display:block;color:var(--sub);font-size:.72rem;margin-top:4px}
   .shsRow{display:flex;flex-wrap:wrap;align-items:center;gap:6px 10px;padding:8px 0;border-bottom:1px dotted var(--line)}
   .shsRow .lbl{min-width:6.5em;font-weight:700;font-size:.9rem}
   .shsW{flex:1;min-width:8em;font-size:1.05rem}
@@ -544,7 +557,7 @@
   <div class="stat"><div class="num" id="clockNum">0:00</div><div class="lbl" id="clockLbl"></div></div>
   <div class="stat" id="pageStat" hidden><div class="num" id="pageNum">0</div><div class="lbl" data-t="pageLeft"></div></div>
   <div id="route"></div>
-  <span id="ver">v2.4</span>
+  <span id="ver">v2.5</span>
   <div id="barBtns">
     <button id="teeoff" disabled data-t="teeoff"></button>
     <button id="backBtn" hidden data-t="back"></button>
@@ -602,7 +615,7 @@
 
 <div id="settings" class="overlay">
   <div class="panel">
-    <h2><span data-t="settings"></span> <small style="font-size:.65rem;font-weight:400;color:var(--sub)">v2.4</small></h2>
+    <h2><span data-t="settings"></span> <small style="font-size:.65rem;font-weight:400;color:var(--sub)">v2.5</small></h2>
     <p class="lockNote" id="lockNote" hidden></p>
     <button id="quitHole" class="quit" hidden></button>
     <button id="toHome" data-t="toHome"></button>
@@ -630,7 +643,7 @@
 
 <div id="home">
   <div class="homeInner">
-    <div class="homeHead"><h1>⛳ <span data-t="appName"></span></h1><p data-t="homeAbout"></p><small>v2.4</small></div>
+    <div class="homeHead"><h1>⛳ <span data-t="appName"></span></h1><p data-t="homeAbout"></p><small>v2.5</small></div>
 
     <section id="homeMain">
       <div class="homeBtns">
@@ -677,6 +690,7 @@
           <button id="shsPast" class="moreBtn" data-t="shPast"></button>
         </div>
         <div id="shPlay" hidden>
+          <div id="shMainCol">
           <div id="shGoalBar" hidden></div>
           <div class="shTop"><span id="shRound"></span><span id="shTimer" hidden></span></div>
           <div id="shBoard"></div>
@@ -690,6 +704,12 @@
           </div>
           <div id="shMsg"></div>
           <div class="mpRow shCtrl"><button id="shPass" data-t="shPass"></button><button id="shQuit" data-t="shQuit"></button></div>
+          </div>
+          <aside id="shThumbCol">
+            <div id="shThumbHead"></div>
+            <div class="shThumbWrap"><iframe id="shThumb" tabindex="-1" title="preview" aria-hidden="true"></iframe><div id="shThumbCover"></div></div>
+            <small class="shThumbNote" data-t="shThumbNote"></small>
+          </aside>
         </div>
       </div>
     </section>
@@ -1854,6 +1874,13 @@ Object.assign(STR['es'], {mapNA:'🗺 Mapa (no disponible aquí)'});
 Object.assign(STR['ko'], {mapNA:'🗺 지도(여기서는 표시할 수 없어요)'});
 Object.assign(STR['zh-hant'], {mapNA:'🗺 地圖（此處無法顯示）'});
 Object.assign(STR['zh-hans'], {mapNA:'🗺 地图（此处无法显示）'});
+Object.assign(STR['ja'], {shThumbCand:'👀 候補：', shThumbNote:'いまの言葉の記事（押すと読める）'});
+Object.assign(STR['en'], {shThumbCand:'👀 Candidate: ', shThumbNote:'Current article (click to read)'});
+Object.assign(STR['fr'], {shThumbCand:'👀 Candidat : ', shThumbNote:'Article actuel (cliquer pour lire)'});
+Object.assign(STR['es'], {shThumbCand:'👀 Candidato: ', shThumbNote:'Artículo actual (pulsa para leer)'});
+Object.assign(STR['ko'], {shThumbCand:'👀 후보: ', shThumbNote:'지금 단어의 문서(누르면 읽기)'});
+Object.assign(STR['zh-hant'], {shThumbCand:'👀 候選：', shThumbNote:'目前條目（點一下閱讀）'});
+Object.assign(STR['zh-hans'], {shThumbCand:'👀 候选：', shThumbNote:'当前条目（点一下阅读）'});
 /* ── v2.0 リンクしりとり（まわしプレイ） ── */
 Object.assign(STR['ja'], {shGoalLink:d=>`🚩 ${d}打でゴール！`, shHitGoal:"🚩 ゴールに届いた！", shLong:"🎯 ロングショット", shGoalWord:"🚩 ゴール", shPtsLine:(a,n)=>`${a} +${n}`, shHist:n=>`📜 履歴（${n}）`, shPast:"📚 過去の記録", shPastNone:"まだ記録はないよ。ゲームが終わると自動で保存されるよ（このブラウザの中だけ）", shDelOne:"🗑 この記録を消す", shDelOneQ:"この記録を消す？", shDelAll:"🗑 全部消す", shDelAllQ:"しりとりの記録を全部消す？", shBackList:"← 一覧にもどる", shPpl:"人", shTimeUpS:"⏱ 時間切れ（ドボン）", shUndone:"↩ ドボンを取り消し", shDobonD:d=>d===1?`💥 ドボン（1打・近すぎ）`:`💥 ドボン（4打以上）`, shOutMark:"💀 脱落"});
 Object.assign(STR['en'], {shGoalLink:d=>`🚩 Goal in ${d}!`, shHitGoal:"🚩 Reached the goal!", shLong:"🎯 Long shot", shGoalWord:"🚩 Goal", shPtsLine:(a,n)=>`${a} +${n}`, shHist:n=>`📜 History (${n})`, shPast:"📚 Past games", shPastNone:"No games yet. Finished games are saved automatically (in this browser only).", shDelOne:"🗑 Delete this game", shDelOneQ:"Delete this game?", shDelAll:"🗑 Delete all", shDelAllQ:"Delete all saved link-chain games?", shBackList:"← Back to list", shPpl:" players", shTimeUpS:"⏱ Time up (bust)", shUndone:"↩ Bust undone", shDobonD:d=>d===1?`💥 Bust (1 click, too close)`:`💥 Bust (4+)`, shOutMark:"💀 out"});
@@ -3590,6 +3617,7 @@ function showHome(view = "main"){
   state.screen = "home";
   state.homeView = view;
   $("home").hidden = false;
+  $("home").classList.remove("shWide");
   $("homeMain").hidden = view !== "main";
   $("homeMp").hidden = view !== "mp";
   $("homeLobby").hidden = view !== "lobby";
@@ -4705,6 +4733,8 @@ function renderShiri(){
   const setupMode = sh.phase === "setup";
   $("shSetup").hidden = !setupMode;
   $("shPlay").hidden = setupMode;
+  $("home").classList.toggle("shWide", !setupMode);
+  const tb = shThumbBase(); if(tb && !(shThumbWant && shThumbWant.kind === "cand" && shItems.length)) shThumbShow(tb.title, tb.kind);
   $("shRule").textContent = T("shRule");
   if(setupMode) return renderShSetup();
   renderShPlay();
@@ -4886,6 +4916,41 @@ function renderShPlay(){
   $("shQuit").disabled = judging;
   shTick();
 }
+/* 右側のサムネイル（広い画面だけ）。文字は読めない大きさ、押すと記事の窓で読める */
+const shWideMQ = matchMedia("(min-width:1100px)");
+let shThumbCur = null, shThumbTok = 0, shThumbTimer = null, shThumbWant = null;
+function shThumbShow(title, kind){
+  shThumbWant = {title, kind};
+  clearTimeout(shThumbTimer);
+  shThumbTimer = setTimeout(shThumbLoad, kind === "cand" ? 350 : 0);
+}
+async function shThumbLoad(){
+  const w = shThumbWant;
+  if(!w || !w.title || !shWideMQ.matches || !$("home").classList.contains("shWide")) return;
+  $("shThumbHead").textContent = (w.kind === "cand" ? T("shThumbCand") : w.kind === "judge" ? "🔍 " : "📄 ") + w.title;
+  if(shThumbCur === w.title) return;
+  const tok = ++shThumbTok, wrap = $("shThumb").parentElement;
+  wrap.classList.add("loading");
+  try{
+    const key = curLang() + ":" + zhVariant() + ":" + w.title;
+    let parsed = state.parsedCache.get(key);
+    if(!parsed){ parsed = await loadArticle(w.title); state.parsedCache.set(key, parsed); }
+    if(tok !== shThumbTok) return;
+    await fillFrame($("shThumb"), parsed, () => {}, "html,body{overflow:hidden !important}");
+    if(tok !== shThumbTok) return;
+    shThumbCur = w.title;
+  }catch(_){ if(tok === shThumbTok) $("shThumbHead").textContent = "📄 " + w.title + " ✕"; }
+  if(tok === shThumbTok) wrap.classList.remove("loading");
+}
+function shThumbBase(){
+  // 判定中はその言葉、ふだんは数珠の最後の言葉
+  if(sh.phase === "setup") return null;
+  if(sh.judging) return {title:sh.judging.title, kind:"judge"};
+  const last = sh.chain[sh.chain.length - 1];
+  return last ? {title:last.title, kind:"cur"} : null;
+}
+$("shThumbCover").addEventListener("click", () => { if(shThumbCur) shOpen(shThumbCur, null); });
+shWideMQ.addEventListener("change", () => { const b = shThumbBase(); if(b) shThumbShow(b.title, b.kind); });
 /* 履歴の一覧（ゲーム中・過去の記録で共通） */
 function shRenderLog(ol, log, names, multi){
   ol.innerHTML = "";
@@ -4943,6 +5008,7 @@ function shSug(){
     if(it.dis) tx.append(mk("small", "dis", "⚠️ " + T("pickDis"))); else if(it.desc) tx.append(mk("small", "", it.desc));
     row.append(tx);
     row.addEventListener("mousedown", e => e.preventDefault());
+    row.addEventListener("mouseenter", () => shThumbShow(it.title, "cand"));
     row.addEventListener("click", () => { $("shInput").value = it.shown; $("shInput").dataset.title = it.title; shItems = []; shSug(); shSubmit(); });
     box.append(row);
   });
@@ -4962,13 +5028,14 @@ $("shInput").addEventListener("keydown", e => {
   if((e.key === "ArrowDown" || e.key === "ArrowUp") && shItems.length){
     e.preventDefault();
     shCurI = (shCurI + (e.key === "ArrowDown" ? 1 : -1) + shItems.length) % shItems.length; shSug();
+    shThumbShow(shItems[shCurI].title, "cand");
   }else if(e.key === "Enter"){
     e.preventDefault();
     if(shCurI >= 0 && shItems[shCurI]){ $("shInput").value = shItems[shCurI].shown; $("shInput").dataset.title = shItems[shCurI].title; }
     shItems = []; shSug(); shSubmit();
   }else if(e.key === "Escape"){ shItems = []; shSug(); }
 });
-$("shInput").addEventListener("blur", () => setTimeout(() => { shItems = []; shSug(); }, 150));
+$("shInput").addEventListener("blur", () => setTimeout(() => { shItems = []; shSug(); const b = shThumbBase(); if(b) shThumbShow(b.title, b.kind); }, 150));
 
 /* 言葉を出す */
 async function shResolve(text){
