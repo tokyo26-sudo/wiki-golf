@@ -117,6 +117,9 @@
   #readerNote{min-width:0;overflow-wrap:anywhere}
   @media (max-width:720px){#reader .rhead{flex-wrap:wrap} #readerNote{flex:1 1 100%} #reader .rtools{margin-left:auto}}
   #readerFrame{flex:1;border:0;width:100%}
+  #reader .panel{position:relative}
+  #readerLoading{position:absolute;left:0;right:0;top:50%;text-align:center;color:#54595d;font-size:.95rem}
+  #readerLoading[hidden]{display:none}
 
   #settings .panel{background:var(--card);border-radius:14px;padding:18px 20px;width:min(540px,100%);max-height:90vh;overflow-y:auto}
   #settings h2{margin:0 0 4px;font-size:1.2rem}
@@ -514,7 +517,7 @@
   <div class="stat"><div class="num" id="clockNum">0:00</div><div class="lbl" id="clockLbl"></div></div>
   <div class="stat" id="pageStat" hidden><div class="num" id="pageNum">0</div><div class="lbl" data-t="pageLeft"></div></div>
   <div id="route"></div>
-  <span id="ver">v2.0</span>
+  <span id="ver">v2.1</span>
   <div id="barBtns">
     <button id="teeoff" disabled data-t="teeoff"></button>
     <button id="backBtn" hidden data-t="back"></button>
@@ -566,12 +569,13 @@
   <div class="panel">
     <div class="rhead"><span id="readerNote"></span><span class="rtools"><span id="readerHits" hidden><button id="rhPrev">▲</button><b id="rhCount"></b><button id="rhNext">▼</button></span><a id="readerExt" target="_blank" rel="noopener" hidden>↗ Wikipedia</a><button id="readerClose" data-t="close"></button></span></div>
     <iframe id="readerFrame" title="full text"></iframe>
+    <div id="readerLoading" data-t="loading" hidden></div>
   </div>
 </div>
 
 <div id="settings" class="overlay">
   <div class="panel">
-    <h2><span data-t="settings"></span> <small style="font-size:.65rem;font-weight:400;color:var(--sub)">v2.0</small></h2>
+    <h2><span data-t="settings"></span> <small style="font-size:.65rem;font-weight:400;color:var(--sub)">v2.1</small></h2>
     <p class="lockNote" id="lockNote" hidden></p>
     <button id="quitHole" class="quit" hidden></button>
     <button id="toHome" data-t="toHome"></button>
@@ -599,7 +603,7 @@
 
 <div id="home">
   <div class="homeInner">
-    <div class="homeHead"><h1>⛳ <span data-t="appName"></span></h1><p data-t="homeAbout"></p><small>v2.0</small></div>
+    <div class="homeHead"><h1>⛳ <span data-t="appName"></span></h1><p data-t="homeAbout"></p><small>v2.1</small></div>
 
     <section id="homeMain">
       <div class="homeBtns">
@@ -2436,6 +2440,16 @@ function fillFrame(frame, parsed, onClick, extraCss){
     frame.srcdoc = buildDoc(parsed, extraCss);
   });
 }
+/* 記事の窓：前の記事が一瞬見えないように、いったん白くしてから出す */
+function readerBlank(){
+  const f = $("readerFrame");
+  f.onload = null;
+  f.style.visibility = "hidden";
+  f.srcdoc = "<!doctype html><body style='background:#fff'></body>";
+  $("readerLoading").textContent = T("loading");
+  $("readerLoading").hidden = false;
+}
+function readerShow(){ $("readerFrame").style.visibility = ""; $("readerLoading").hidden = true; }
 function scrollToAnchor(doc, href){
   let id = href.slice(1);
   try{ id = decodeURIComponent(id); }catch(_){}
@@ -2710,6 +2724,7 @@ async function openReader(role){
   $("reader").classList.add("show");
   $("readerNote").textContent = T("loading");
   $("readerHits").hidden = true; $("readerExt").hidden = true;
+  readerBlank();
   try{
     const key = curLang() + ":" + zhVariant() + ":" + p.title;
     let parsed = state.parsedCache.get(key);
@@ -2726,6 +2741,7 @@ async function openReader(role){
   }catch(e){
     $("readerNote").textContent = T("loadFail") + e.message;
   }
+  readerShow();
 }
 function closeReader(){ $("reader").classList.remove("show"); if(state.goalCheck){ state.goalCheck = false; mpAct(); } }
 $("readerClose").addEventListener("click", closeReader);
@@ -4881,6 +4897,7 @@ async function shOpen(title, next){
   const ext = $("readerExt");
   ext.href = `https://${wikiHost()}/wiki/${encodeURIComponent(title.replace(/ /g, "_"))}`; ext.hidden = false;
   rHits = []; rCur = -1;
+  readerBlank();
   try{
     await ensureNs();
     const key = curLang() + ":" + zhVariant() + ":" + title;
@@ -4895,7 +4912,7 @@ async function shOpen(title, next){
       if(href.startsWith("#")) scrollToAnchor(e.target.ownerDocument, href);
     }, ".mw-body a{cursor:default} a.golf-target{background:#ffeb3b !important;outline:2px solid #f5a623;border-radius:2px;color:#202122 !important} a.golf-target.cur{background:#ff9800 !important;outline-color:#e65100}");
     prepCollapsibles(rdoc);
-    if(!next){ $("readerNote").textContent = T("shReadOnly", title); return; }
+    if(!next){ $("readerNote").textContent = T("shReadOnly", title); readerShow(); return; }
     const names = new Set([norm(next).toLowerCase()]);
     const ad = await aliasJob;
     for(const p of (ad && ad.query && ad.query.pages) || []){
@@ -4908,10 +4925,12 @@ async function shOpen(title, next){
       if(t && names.has(norm(t).toLowerCase())){ a.classList.add("golf-target"); rHits.push(a); }
     });
     $("readerNote").textContent = rHits.length ? T("shReadNote", title, next) : T("shReadNone", title, next);
+    readerShow();
     if(rHits.length){ $("readerHits").hidden = false; rStep(1); }
   }catch(e){
     $("readerNote").textContent = T("loadFail") + e.message;
   }
+  readerShow();
 }
 function rStep(dir){
   if(!rHits.length) return;
