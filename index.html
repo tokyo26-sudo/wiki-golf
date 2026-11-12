@@ -297,6 +297,32 @@
   .shLogList li .via .shWord{color:#36c}
   .shLogList li .pt{font-weight:800;color:var(--green)}
   .shLogList li .out{font-weight:800}
+  /* v3.2 履歴を数珠つなぎで */
+  :root{--shIn:#1c6fd1}
+  @media (prefers-color-scheme: dark){ :root:not([data-theme="light"]){--shIn:#7cb8ff} }
+  :root[data-theme="dark"]{--shIn:#7cb8ff}
+  .shFlow{margin:4px 0 8px;font-size:.95rem}
+  .shFlowLine{display:flex;flex-wrap:wrap;align-items:center;row-gap:4px;line-height:1.6}
+  .shFg{display:inline-flex;align-items:center;white-space:nowrap}
+  .shFa{color:var(--sub);margin:0 4px;font-weight:700}
+  .shFw{border:0;background:transparent;font:inherit;font-weight:700;padding:1px 5px;border-radius:6px;cursor:pointer;color:var(--shIn)}
+  .shFw:hover{background:var(--green2)}
+  .shFw.odai{color:var(--ink);background:var(--green2)}
+  .shFw.dob{color:var(--sub);font-weight:400;text-decoration:line-through;opacity:.75}
+  .shFw.tm{text-decoration:none}
+  .shFw.far{opacity:.55;background:transparent;border:1px dashed var(--line)}
+  .shFw.sel{outline:2px solid var(--green);outline-offset:1px}
+  .shFlowInfo{margin:6px 0 2px;padding:6px 10px;border:1px solid var(--line);border-radius:8px;background:var(--bg);font-size:.82rem;line-height:1.7}
+  .shFlowInfo[hidden]{display:none}
+  .shFlowInfo .who{font-weight:800;color:var(--pc, inherit);margin-right:6px}
+  .shFlowInfo .lab{margin:0 4px 0 0}
+  .shFlowInfo.goal .lab{color:#f08c00}
+  .shFlowInfo.dobon .lab, .shFlowInfo.timeout .lab{color:var(--flag)}
+  .shFlowInfo .via{color:var(--sub)}
+  .shFlowInfo .via .shWord{color:#36c}
+  .shFlowInfo .pt{font-weight:800;color:var(--green)}
+  .shFlowInfo .out{font-weight:800}
+  .shFlowInfo .open{margin-left:8px;color:#36c;font-weight:700}
   #shHistModal{z-index:34}
   #shHistModal .panel{background:var(--card);border-radius:14px;padding:16px 18px;width:min(640px,100%);max-height:88vh;overflow-y:auto}
   .shRec{display:block;width:100%;text-align:left;border:1px solid var(--line);border-radius:10px;padding:8px 12px;margin:6px 0;background:var(--bg);cursor:pointer;color:inherit}
@@ -584,7 +610,7 @@
   <div class="stat"><div class="num" id="clockNum">0:00</div><div class="lbl" id="clockLbl"></div></div>
   <div class="stat" id="pageStat" hidden><div class="num" id="pageNum">0</div><div class="lbl" data-t="pageLeft"></div></div>
   <div id="route"></div>
-  <span id="ver">v3.1</span>
+  <span id="ver">v3.2</span>
   <div id="barBtns">
     <button id="teeoff" disabled data-t="teeoff"></button>
     <button id="backBtn" hidden data-t="back"></button>
@@ -642,7 +668,7 @@
 
 <div id="settings" class="overlay">
   <div class="panel">
-    <h2><span data-t="settings"></span> <small style="font-size:.65rem;font-weight:400;color:var(--sub)">v3.1</small></h2>
+    <h2><span data-t="settings"></span> <small style="font-size:.65rem;font-weight:400;color:var(--sub)">v3.2</small></h2>
     <p class="lockNote" id="lockNote" hidden></p>
     <button id="quitHole" class="quit" hidden></button>
     <button id="toHome" data-t="toHome"></button>
@@ -670,7 +696,7 @@
 
 <div id="home">
   <div class="homeInner">
-    <div class="homeHead"><h1>⛳ <span data-t="appName"></span></h1><p data-t="homeAbout"></p><small>v3.1</small></div>
+    <div class="homeHead"><h1>⛳ <span data-t="appName"></span></h1><p data-t="homeAbout"></p><small>v3.2</small></div>
 
     <section id="homeMain">
       <div class="homeBtns">
@@ -742,7 +768,7 @@
           <div id="shBoard"></div>
           <div id="shChain"></div>
           <div id="shJudge" hidden></div>
-          <details id="shLogBox"><summary id="shLogSum"></summary><ol id="shLogList" class="shLogList"></ol></details>
+          <details id="shLogBox"><summary id="shLogSum"></summary><div id="shLogList" class="shFlow"></div></details>
           <div id="shTurn" hidden></div>
           <div id="shTyping" hidden></div>
           <div id="shInputRow">
@@ -1787,6 +1813,15 @@ for(const [k, a, b] of [
               "🏅 最短奖／📍 近洞奖：开球后会在后台寻找 3 杆以内的最短路线。杆数与最短相同得最短奖，多 1 杆得近洞奖。结果画面可看到最短路线。"]
 ]) STR[k].help[STR[k].help.length - 1][1].push(a, b);
 /* ── v1.8 リンクしりとり ── */
+/* v3.2 履歴の数珠 */
+Object.assign(STR["ja"], {shFlowStart:"🏁 スタート", shFlowGoalFar:"🚩 ゴール（まだ届いてない）", shFlowOpen:"📄 記事を開く"});
+Object.assign(STR["en"], {shFlowStart:"🏁 Start", shFlowGoalFar:"🚩 Goal (not reached yet)", shFlowOpen:"📄 Open article"});
+Object.assign(STR["fr"], {shFlowStart:"🏁 Départ", shFlowGoalFar:"🚩 Arrivée (pas encore atteinte)", shFlowOpen:"📄 Ouvrir l’article"});
+Object.assign(STR["es"], {shFlowStart:"🏁 Salida", shFlowGoalFar:"🚩 Meta (aún no alcanzada)", shFlowOpen:"📄 Abrir artículo"});
+Object.assign(STR["ko"], {shFlowStart:"🏁 출발", shFlowGoalFar:"🚩 골(아직 못 닿음)", shFlowOpen:"📄 문서 열기"});
+Object.assign(STR["zh-hant"], {shFlowStart:"🏁 起點", shFlowGoalFar:"🚩 終點（還沒到）", shFlowOpen:"📄 打開條目"});
+Object.assign(STR["zh-hans"], {shFlowStart:"🏁 起点", shFlowGoalFar:"🚩 终点（还没到）", shFlowOpen:"📄 打开条目"});
+
 Object.assign(STR.ja, {shViaPre:"（", shViaPost:" 経由）", shCheck:"🔍 確かめる", shReadOnly:t=>`「${t}」`,
   shReadNote:(a,b)=>`「${a}」の中の「${b}」へのリンク`, shReadNone:(a,b)=>`「${a}」の中に「${b}」へのリンクが見つからなかった（テンプレートの中などかも）`});
 Object.assign(STR.en, {shViaPre:" (via ", shViaPost:")", shCheck:"🔍 Check", shReadOnly:t=>`“${t}”`,
@@ -4976,7 +5011,7 @@ function renderShPlay(){
   // 履歴
   $("shLogSum").textContent = T("shHist", sh.log.length);
   $("shLogBox").hidden = !sh.log.length;
-  shRenderLog($("shLogList"), sh.log, sh.players.map(p => p.name), multi);
+  shRenderLog($("shLogList"), sh.log, sh.players.map(p => p.name), multi, sh.setup.start, sh.setup.goal);
   // 入力
   const myTurn = shMyTurn();
   const lock = judging || !playing || !myTurn;
@@ -5036,36 +5071,63 @@ function shThumbBase(){
 $("shThumbCover").addEventListener("click", () => { if(shThumbCur) shOpen(shThumbCur, null); });
 shWideMQ.addEventListener("change", () => { const b = shThumbBase(); if(b) shThumbShow(b.title, b.kind); });
 /* 履歴の一覧（ゲーム中・過去の記録で共通） */
-function shRenderLog(ol, log, names, multi){
-  ol.innerHTML = "";
-  log.forEach((e, k) => {
-    const li = mk("li", "lg " + e.kind);
-    if(e.by >= 0 && multi) li.style.setProperty("--pc", SH_COLORS[e.by]);
-    li.append(mk("span", "who", multi ? `${SH_DOTS[e.by]} ${names[e.by]}` : ""));
-    const body = mk("span", "bd");
-    if(e.kind === "pass") body.append(T("shPassed"));
-    else if(e.kind === "timeout") body.append(T("shTimeUpS"));
-    else if(e.kind === "undo") body.append(T("shUndone"));
-    else if(e.kind === "left") body.append(T("shLogLeft"));
-    else{
-      const w = shWordBtn(e.shown, e.title, null);
-      body.append(w, " ");
-      const lab = e.kind === "goal" ? T("shGoalLink", e.d) : e.kind === "dobon" ? T("shDobonD", e.d) :
-                  e.d === 3 ? T("shNice3") : e.d === 2 ? T("shSafe2") : T("shSafeX");
-      body.append(mk("b", "lab", lab));
-      if(e.via && e.via.length){
-        const v = mk("span", "via"), hop = [...e.via, e.title];
-        v.append(T("shViaPre"));
-        e.via.forEach((t, i) => { if(i) v.append(" → "); v.append(shWordBtn(t, t, hop[i + 1])); });
-        v.append(T("shViaPost")); body.append(" ", v);
+function shRenderLog(box, log, names, multi, start, goal){
+  // v3.2：スタート → 言葉 → 言葉 … → ゴール の一本道。言葉を押すとくわしく出る
+  box.innerHTML = "";
+  const line = mk("div", "shFlowLine"), info = mk("div", "shFlowInfo");
+  const btns = [], fills = [];
+  let arrows = 0, first = true, goalHit = false;
+  const put = (text, cls, fill, arrowTxt) => {
+    const g = mk("span", "shFg");
+    if(!first) g.append(mk("span", "shFa", arrowTxt || "→".repeat(Math.max(1, arrows))));
+    const k = btns.length, b = mk("button", "shFw " + cls, text);
+    b.addEventListener("click", () => { box._sel = box._sel === k ? null : k; paint(); });
+    g.append(b); line.append(g);
+    btns.push(b); fills.push(fill);
+    first = false; arrows = 1;
+  };
+  const openBtn = (title, next) => { const o = mk("button", "shWord open", T("shFlowOpen")); o.addEventListener("click", () => shOpen(title, next || null)); return o; };
+  if(start) put(start.shown, "odai", el => { el.append(mk("b", "lab", T("shFlowStart")), mk("span", "", start.shown), openBtn(start.title)); });
+  log.forEach(e => {
+    if(e.kind === "pass"){ arrows++; return; }
+    if(e.kind === "undo" || e.kind === "left") return;
+    const fill = el => {
+      el.classList.add(e.kind);
+      if(e.by >= 0 && multi){ const w = mk("span", "who", `${SH_DOTS[e.by]} ${names[e.by]}`); w.style.setProperty("--pc", SH_COLORS[e.by]); el.append(w); }
+      if(e.kind === "timeout"){ el.append(mk("b", "lab", T("shTimeUpS"))); }
+      else{
+        const lab = e.kind === "goal" ? T("shGoalLink", e.d) : e.kind === "dobon" ? T("shDobonD", e.d) :
+                    e.d === 3 ? T("shNice3") : e.d === 2 ? T("shSafe2") : T("shSafeX");
+        el.append(mk("b", "lab", lab), mk("span", "", e.shown));
+        if(e.pts) el.append(mk("span", "pt", ` +${e.pts}`));
+        if(e.via && e.via.length){
+          const v = mk("span", "via"), hop = [...e.via, e.title];
+          v.append(T("shViaPre"));
+          e.via.forEach((t, i) => { if(i) v.append(" → "); v.append(shWordBtn(t, t, hop[i + 1])); });
+          v.append(T("shViaPost")); el.append(" ", v);
+        }
+        el.append(openBtn(e.title));
+        if(e.kind === "dobon" && e.d === 1 && e.prev){ const ck = mk("button", "shWord chk", T("shCheck")); ck.addEventListener("click", () => shOpen(e.prev, e.title)); el.append(" ", ck); }
       }
-      if(e.kind === "dobon" && e.d === 1 && e.prev){ const ck = mk("button", "shWord chk", T("shCheck")); ck.addEventListener("click", () => shOpen(e.prev, e.title)); body.append(" ", ck); }
-      if(e.pts) body.append(mk("span", "pt", ` +${e.pts}`));
-    }
-    if(e.out) body.append(mk("span", "out", " " + T("shOutMark")));
-    li.append(body);
-    ol.append(li);
+      if(e.out) el.append(mk("span", "out", " " + T("shOutMark")));
+    };
+    if(e.kind === "timeout") put("⏱", "dob tm", fill);
+    else if(e.kind === "dobon") put(e.shown, "dob", fill);
+    else if(e.kind === "goal"){ goalHit = true; put(e.shown + " 🚩", "odai", fill); }
+    else put(e.shown, "inp", fill);
   });
+  if(goal && !goalHit) put("🚩 " + goal.shown, "odai far", el => { el.append(mk("b", "lab", T("shFlowGoalFar")), mk("span", "", goal.shown), openBtn(goal.title)); }, "⇢");
+  else if(arrows > 1){ const g = mk("span", "shFg"); g.append(mk("span", "shFa", "→".repeat(arrows - 1))); line.append(g); }
+  function paint(){
+    const k = box._sel;
+    btns.forEach((b, i) => b.classList.toggle("sel", i === k));
+    info.className = "shFlowInfo"; info.innerHTML = "";
+    info.hidden = !(k != null && fills[k]);
+    if(!info.hidden) fills[k](info);
+  }
+  if(box._sel != null && box._sel >= btns.length) box._sel = null;
+  box.append(line, info);
+  paint();
 }
 /* 1手の持ち時間（3周モード） */
 let shTimerId = null;
@@ -5251,8 +5313,8 @@ function shHistDetail(id){
   });
   box.append(ol);
   box.append(mk("h3", "", T("shHist", (r.log || []).length)));
-  const lg = mk("ol", "shLogList");
-  shRenderLog(lg, r.log || [], r.players.map(p => p.name), multi);
+  const lg = mk("div", "shFlow");
+  shRenderLog(lg, r.log || [], r.players.map(p => p.name), multi, r.setup.start, r.setup.goal);
   box.append(lg);
   const del = mk("button", "", T("shDelOne"));
   del.addEventListener("click", () => { if(confirm(T("shDelOneQ"))){ shRecWrite(shRecLoad().filter(x => x.id !== id)); shHistList(); } });
