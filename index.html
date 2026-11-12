@@ -193,7 +193,11 @@
   #shNetOff .mpRow{margin:6px 0;flex-wrap:wrap;gap:6px}
   #shNetOff input{font-size:16px;padding:6px 8px;border:1px solid var(--line);border-radius:8px;background:var(--card);color:inherit}
   #shNetCode{width:5em}
-  .shNetJoinRow{display:inline-flex;gap:4px}
+  .shNetJoinRow{display:inline-flex;gap:6px;align-items:center}
+  .shNetWay{align-items:center}
+  .shNetWay small{color:var(--sub)}
+  .shNetOr{display:flex;align-items:center;gap:8px;color:var(--sub);font-size:.8rem;margin:2px 0}
+  .shNetOr::before,.shNetOr::after{content:"";flex:1;border-top:1px solid var(--line)}
   #shNetCreate{background:var(--green);color:var(--onGreen);border-color:var(--green);font-weight:800}
   #shNetErr{color:var(--flag);font-size:.85rem;min-height:1em}
   .shNetHead{display:flex;justify-content:space-between;align-items:center}
@@ -580,7 +584,7 @@
   <div class="stat"><div class="num" id="clockNum">0:00</div><div class="lbl" id="clockLbl"></div></div>
   <div class="stat" id="pageStat" hidden><div class="num" id="pageNum">0</div><div class="lbl" data-t="pageLeft"></div></div>
   <div id="route"></div>
-  <span id="ver">v3.0</span>
+  <span id="ver">v3.1</span>
   <div id="barBtns">
     <button id="teeoff" disabled data-t="teeoff"></button>
     <button id="backBtn" hidden data-t="back"></button>
@@ -638,7 +642,7 @@
 
 <div id="settings" class="overlay">
   <div class="panel">
-    <h2><span data-t="settings"></span> <small style="font-size:.65rem;font-weight:400;color:var(--sub)">v3.0</small></h2>
+    <h2><span data-t="settings"></span> <small style="font-size:.65rem;font-weight:400;color:var(--sub)">v3.1</small></h2>
     <p class="lockNote" id="lockNote" hidden></p>
     <button id="quitHole" class="quit" hidden></button>
     <button id="toHome" data-t="toHome"></button>
@@ -666,7 +670,7 @@
 
 <div id="home">
   <div class="homeInner">
-    <div class="homeHead"><h1>⛳ <span data-t="appName"></span></h1><p data-t="homeAbout"></p><small>v3.0</small></div>
+    <div class="homeHead"><h1>⛳ <span data-t="appName"></span></h1><p data-t="homeAbout"></p><small>v3.1</small></div>
 
     <section id="homeMain">
       <div class="homeBtns">
@@ -706,8 +710,10 @@
             <div id="shNetOff">
               <b data-t="shNetTitle"></b>
               <div class="mpRow"><label data-t="mpName"></label><input id="shNetName" maxlength="20"></div>
-              <div class="mpRow"><button id="shNetCreate" data-t="shNetCreate"></button>
-                <span class="shNetJoinRow"><input id="shNetCode" maxlength="4" placeholder="1234" inputmode="numeric" pattern="[0-9]*" autocomplete="off"><button id="shNetJoin" data-t="shNetJoin"></button></span></div>
+              <div class="mpRow shNetWay"><button id="shNetCreate" data-t="shNetCreate"></button><small data-t="shNetCreateNote"></small></div>
+              <div class="shNetOr" data-t="shNetOr"></div>
+              <div class="mpRow shNetWay"><b data-t="shNetJoinL"></b>
+                <span class="shNetJoinRow"><label for="shNetCode" data-t="shNetCodeL"></label><input id="shNetCode" maxlength="4" placeholder="0000" inputmode="numeric" pattern="[0-9]*" autocomplete="off"><button id="shNetJoin" data-t="shNetJoin"></button></span></div>
               <div id="shNetErr"></div>
             </div>
             <div id="shNetOn" hidden>
@@ -1930,6 +1936,13 @@ Object.assign(STR['es'], {shNetTitle:"🌐 Play online (2–4 players, each on t
 Object.assign(STR['ko'], {shNetTitle:"🌐 온라인으로 하기(2~4명·각자의 기기로)", shNetCreate:"🏠 방 만들기", shNetJoin:"참가", shNetCodeBad:"4자리 방 번호를 입력하세요", shNetMembers:(n,m)=>`👥 ${n} / ${m}`, shNetYou:"(나)", shNetNeed2:"Start becomes available with 2+ players", shNetHostHint:"Pick start, goal and mode, then Start. Turn order is drawn at random!", shNetWaitHost:"방장을 기다리는 중…", shNetNewHost:"👑 방장이 되었어요", shNetJoined:n=>`👋 ${n} 입장!`, shNetLeft:n=>`🚪 ${n} 퇴장`, shNetTyping:(w,t)=>`✏️ ${w} 입력 중: “${t}”`, shNetThinking:w=>`🤔 ${w} 생각 중…`, shNetWaitTurn:w=>`${w} 차례`, shNetYourTurn:w=>`👉 내 차례! (${w})`, shNetSent:"📨 방장에게 보냈어요. 판정을 기다려요", shNetLeaveQ:"방을 나갈까요? (게임 중이면 탈락)", shNetOrder:s=>`🎲 순서: ${s}`, shLogLeft:"🚪 방을 나감(탈락)"});
 Object.assign(STR['zh-hant'], {shNetTitle:"🌐 線上對戰（2～4 人・各自的裝置）", shNetCreate:"🏠 建立房間", shNetJoin:"加入", shNetCodeBad:"請輸入 4 位數房號", shNetMembers:(n,m)=>`👥 ${n} / ${m}`, shNetYou:"（你）", shNetNeed2:"Start becomes available with 2+ players", shNetHostHint:"Pick start, goal and mode, then Start. Turn order is drawn at random!", shNetWaitHost:"等待房主…", shNetNewHost:"👑 你成為房主了", shNetJoined:n=>`👋 ${n} 加入！`, shNetLeft:n=>`🚪 ${n} 離開`, shNetTyping:(w,t)=>`✏️ ${w} 正在輸入：「${t}」`, shNetThinking:w=>`🤔 ${w} 思考中…`, shNetWaitTurn:w=>`輪到 ${w}`, shNetYourTurn:w=>`👉 輪到你！（${w}）`, shNetSent:"📨 已送給房主，等待判定", shNetLeaveQ:"離開房間？（遊戲中會被淘汰）", shNetOrder:s=>`🎲 順序：${s}`, shLogLeft:"🚪 離開房間（淘汰）"});
 Object.assign(STR['zh-hans'], {shNetTitle:"🌐 在线对战（2～4 人・各自的设备）", shNetCreate:"🏠 创建房间", shNetJoin:"加入", shNetCodeBad:"请输入 4 位数房号", shNetMembers:(n,m)=>`👥 ${n} / ${m}`, shNetYou:"（你）", shNetNeed2:"Start becomes available with 2+ players", shNetHostHint:"Pick start, goal and mode, then Start. Turn order is drawn at random!", shNetWaitHost:"等待房主…", shNetNewHost:"👑 你成为房主了", shNetJoined:n=>`👋 ${n} 加入！`, shNetLeft:n=>`🚪 ${n} 离开`, shNetTyping:(w,t)=>`✏️ ${w} 正在输入：“${t}”`, shNetThinking:w=>`🤔 ${w} 思考中…`, shNetWaitTurn:w=>`轮到 ${w}`, shNetYourTurn:w=>`👉 轮到你！（${w}）`, shNetSent:"📨 已发给房主，等待判定", shNetLeaveQ:"离开房间？（游戏中会被淘汰）", shNetOrder:s=>`🎲 顺序：${s}`, shLogLeft:"🚪 离开房间（淘汰）"});
+Object.assign(STR['ja'], {shNetCreateNote:'（あなたがホストになる）', shNetOr:'または', shNetJoinL:'🚪 友だちの部屋に入る', shNetCodeL:'部屋番号'});
+Object.assign(STR['en'], {shNetCreateNote:"(you'll be the host)", shNetOr:'or', shNetJoinL:"🚪 Join a friend's room", shNetCodeL:'Room code'});
+Object.assign(STR['fr'], {shNetCreateNote:"(vous serez l'hôte)", shNetOr:'ou', shNetJoinL:"🚪 Rejoindre la salle d'un ami", shNetCodeL:'Code'});
+Object.assign(STR['es'], {shNetCreateNote:'(serás el anfitrión)', shNetOr:'o', shNetJoinL:'🚪 Entrar en la sala de un amigo', shNetCodeL:'Código'});
+Object.assign(STR['ko'], {shNetCreateNote:'(내가 방장이 돼요)', shNetOr:'또는', shNetJoinL:'🚪 친구 방에 들어가기', shNetCodeL:'방 번호'});
+Object.assign(STR['zh-hant'], {shNetCreateNote:'（你會成為房主）', shNetOr:'或', shNetJoinL:'🚪 加入朋友的房間', shNetCodeL:'房號'});
+Object.assign(STR['zh-hans'], {shNetCreateNote:'（你会成为房主）', shNetOr:'或', shNetJoinL:'🚪 加入朋友的房间', shNetCodeL:'房号'});
 /* ── v2.0 リンクしりとり（まわしプレイ） ── */
 Object.assign(STR['ja'], {shGoalLink:d=>`🚩 ${d}打でゴール！`, shHitGoal:"🚩 ゴールに届いた！", shLong:"🎯 ロングショット", shGoalWord:"🚩 ゴール", shPtsLine:(a,n)=>`${a} +${n}`, shHist:n=>`📜 履歴（${n}）`, shPast:"📚 過去の記録", shPastNone:"まだ記録はないよ。ゲームが終わると自動で保存されるよ（このブラウザの中だけ）", shDelOne:"🗑 この記録を消す", shDelOneQ:"この記録を消す？", shDelAll:"🗑 全部消す", shDelAllQ:"しりとりの記録を全部消す？", shBackList:"← 一覧にもどる", shPpl:"人", shTimeUpS:"⏱ 時間切れ（ドボン）", shUndone:"↩ ドボンを取り消し", shDobonD:d=>d===1?`💥 ドボン（1打・近すぎ）`:`💥 ドボン（4打以上）`, shOutMark:"💀 脱落"});
 Object.assign(STR['en'], {shGoalLink:d=>`🚩 Goal in ${d}!`, shHitGoal:"🚩 Reached the goal!", shLong:"🎯 Long shot", shGoalWord:"🚩 Goal", shPtsLine:(a,n)=>`${a} +${n}`, shHist:n=>`📜 History (${n})`, shPast:"📚 Past games", shPastNone:"No games yet. Finished games are saved automatically (in this browser only).", shDelOne:"🗑 Delete this game", shDelOneQ:"Delete this game?", shDelAll:"🗑 Delete all", shDelAllQ:"Delete all saved link-chain games?", shBackList:"← Back to list", shPpl:" players", shTimeUpS:"⏱ Time up (bust)", shUndone:"↩ Bust undone", shDobonD:d=>d===1?`💥 Bust (1 click, too close)`:`💥 Bust (4+)`, shOutMark:"💀 out"});
