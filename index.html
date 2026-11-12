@@ -323,6 +323,21 @@
   .shFlowInfo .pt{font-weight:800;color:var(--green)}
   .shFlowInfo .out{font-weight:800}
   .shFlowInfo .open{margin-left:8px;color:#36c;font-weight:700}
+  /* v3.3 経由の言葉・爆弾 */
+  .shFw.via{color:var(--sub);font-weight:400;font-size:.86em;padding:1px 3px}
+  .shFw.bm{font-size:.82em;font-weight:700;color:var(--flag);border:1px dashed var(--flag);margin:0 4px;padding:0 5px}
+  .shFlowInfo .bmlab{color:var(--flag)}
+  .shFlowInfo.bomb .lab{color:var(--flag)}
+  .shFlowInfo .giri{color:#d4890a}
+  #shGoalBar.bomb{background:var(--flag2);border-color:var(--flag);color:var(--ink)}
+  #shGoalBar.bomb small{color:var(--sub)}
+  #shGoalBar .bnews{display:block;margin-top:3px;color:var(--flag);font-weight:900;animation:shShake .4s}
+  #shGoalBar .bmov{display:block;margin-top:3px;color:var(--flag);animation:shDrum .5s steps(2) infinite}
+  .shStep.bh{border-top:2px solid var(--flag2)}
+  .shStep.hit.bz .rs{color:var(--flag)}
+  .shStep.hit.b3 .rs{color:#d4890a}
+  .shGiri{font-size:1.05rem;font-weight:900;color:#d4890a}
+  .shLink .giri{font-weight:800;color:#d4890a;margin-left:4px}
   #shHistModal{z-index:34}
   #shHistModal .panel{background:var(--card);border-radius:14px;padding:16px 18px;width:min(640px,100%);max-height:88vh;overflow-y:auto}
   .shRec{display:block;width:100%;text-align:left;border:1px solid var(--line);border-radius:10px;padding:8px 12px;margin:6px 0;background:var(--bg);cursor:pointer;color:inherit}
@@ -610,7 +625,7 @@
   <div class="stat"><div class="num" id="clockNum">0:00</div><div class="lbl" id="clockLbl"></div></div>
   <div class="stat" id="pageStat" hidden><div class="num" id="pageNum">0</div><div class="lbl" data-t="pageLeft"></div></div>
   <div id="route"></div>
-  <span id="ver">v3.2</span>
+  <span id="ver">v3.3</span>
   <div id="barBtns">
     <button id="teeoff" disabled data-t="teeoff"></button>
     <button id="backBtn" hidden data-t="back"></button>
@@ -668,7 +683,7 @@
 
 <div id="settings" class="overlay">
   <div class="panel">
-    <h2><span data-t="settings"></span> <small style="font-size:.65rem;font-weight:400;color:var(--sub)">v3.2</small></h2>
+    <h2><span data-t="settings"></span> <small style="font-size:.65rem;font-weight:400;color:var(--sub)">v3.3</small></h2>
     <p class="lockNote" id="lockNote" hidden></p>
     <button id="quitHole" class="quit" hidden></button>
     <button id="toHome" data-t="toHome"></button>
@@ -696,7 +711,7 @@
 
 <div id="home">
   <div class="homeInner">
-    <div class="homeHead"><h1>⛳ <span data-t="appName"></span></h1><p data-t="homeAbout"></p><small>v3.2</small></div>
+    <div class="homeHead"><h1>⛳ <span data-t="appName"></span></h1><p data-t="homeAbout"></p><small>v3.3</small></div>
 
     <section id="homeMain">
       <div class="homeBtns">
@@ -751,7 +766,9 @@
             </div>
           </div>
           <div class="shsRow"><span class="lbl" data-t="shsStartL"></span><b id="shsStart" class="shsW"></b><span class="shsBtns"><button id="shsStartR" title="random">🎲</button><button id="shsStartP">✏️</button></span></div>
-          <div class="shsRow"><span class="lbl" data-t="shsGoalL"></span><b id="shsGoal" class="shsW"></b><span class="shsBtns"><button id="shsGoalR" title="random">🎲</button><button id="shsGoalP">✏️</button><button id="shsGoalX">✖</button></span></div>
+          <div class="shsRow"><span class="lbl" data-t="shsKindL"></span><span id="shsKind" class="seg"><button data-k="goal" data-t="shKindGoal"></button><button data-k="bomb" data-t="shKindBomb"></button></span></div>
+          <p class="shsNote" id="shsKindNote"></p>
+          <div class="shsRow"><span class="lbl" id="shsGoalLbl"></span><b id="shsGoal" class="shsW"></b><span class="shsBtns"><button id="shsGoalR" title="random">🎲</button><button id="shsGoalP">✏️</button><button id="shsGoalX">✖</button></span></div>
           <div class="shsRow shsBothRow"><button id="shsBothR" data-t="shBothR"></button></div>
           <div class="shsRow shsLocalOnly"><span class="lbl" data-t="shsNL"></span><span id="shsN" class="seg"><button data-n="1">1</button><button data-n="2">2</button><button data-n="3">3</button><button data-n="4">4</button></span></div>
           <div id="shsNames" class="shsLocalOnly"></div>
@@ -1813,6 +1830,14 @@ for(const [k, a, b] of [
               "🏅 最短奖／📍 近洞奖：开球后会在后台寻找 3 杆以内的最短路线。杆数与最短相同得最短奖，多 1 杆得近洞奖。结果画面可看到最短路线。"]
 ]) STR[k].help[STR[k].help.length - 1][1].push(a, b);
 /* ── v1.8 リンクしりとり ── */
+/* v3.3 爆弾 */
+Object.assign(STR["ja"], {shRuleBomb:"💣 爆弾から2打以内＝ドカン　😰 ちょうど3打＝ギリギリ +2点", shsKindL:"🎯 しかけ", shKindGoal:"🚩 ゴール", shKindBomb:"💣 爆弾", shsBombL:"💣 爆弾", shKindNoteGoal:"ゴールの言葉を1〜3打で言えたら勝ち！", shKindNoteBomb:"爆弾から2打以内の言葉を言ったらドカン（ドボン）。爆弾までちょうど3打なら😰ギリギリ +2。爆弾は一巡ごと（1人なら3つつなぐごと）に移動するよ", shBombIs:"💣 爆弾：", shBombNote:"（ここから2打以内の言葉はドカン！ちょうど3打なら😰ギリギリ +2）", shBombMoving:"💣 爆弾が移動中……", shBombMoved:"💣 爆弾が移動した！", shBAsk1:"💣 爆弾まで1打？", shBAsk2:"💣 爆弾まで2打？", shBAsk3:"💣 爆弾まで3打？", shBHit:"💥 ドカン！", shBHit3:"😰 ギリギリ！", shBMiss:"✓ セーフ", shBMiss3:"✓ 余裕", shBoom:"💣 ドカン！", shBUnsure:"🤔 爆弾までの道を調べきれなかった。みんなで決めて！", shBoomBtn:"ドカンにする", shGiri:"😰 ギリギリ", shFlowVia:"↪ 経由", shFlowBomb:"💣 爆弾", shBoomWhy:(a,d)=>`「${a}」から爆弾まで${d}打`, shBoomSame:a=>`「${a}」は爆弾そのもの！`, shFlowBoomD:d=>d?`💥 ドカン（爆弾まで${d}打）`:`💥 ドカン（爆弾そのもの）`});
+Object.assign(STR["en"], {shRuleBomb:"💣 within 2 of the bomb = boom　😰 exactly 3 = close call +2", shsKindL:"🎯 Twist", shKindGoal:"🚩 Goal", shKindBomb:"💣 Bomb", shsBombL:"💣 Bomb", shKindNoteGoal:"Name the goal within 1–3 clicks to win!", shKindNoteBomb:"Name a word within 2 clicks of the bomb and it explodes (bust). Exactly 3 clicks away: 😰 Close call +2. The bomb moves every round (solo: every 3 links).", shBombIs:"💣 Bomb: ", shBombNote:" (words within 2 clicks of it explode! exactly 3: 😰 close call +2)", shBombMoving:"💣 The bomb is moving…", shBombMoved:"💣 The bomb moved!", shBAsk1:"💣 1 click to the bomb?", shBAsk2:"💣 2 clicks to the bomb?", shBAsk3:"💣 3 clicks to the bomb?", shBHit:"💥 BOOM!", shBHit3:"😰 Close call!", shBMiss:"✓ Safe", shBMiss3:"✓ Plenty of room", shBoom:"💣 BOOM!", shBUnsure:"🤔 Couldn't fully check the way to the bomb. You decide!", shBoomBtn:"Call it a boom", shGiri:"😰 Close call", shFlowVia:"↪ via", shFlowBomb:"💣 Bomb", shBoomWhy:(a,d)=>`“${a}” is ${d} click${d>1?"s":""} from the bomb`, shBoomSame:a=>`“${a}” IS the bomb!`, shFlowBoomD:d=>d?`💥 Boom (${d} from the bomb)`:`💥 Boom (the bomb itself)`});
+Object.assign(STR["fr"], {shRuleBomb:"💣 à 2 clics ou moins de la bombe = boum　😰 3 pile = +2", shsKindL:"🎯 Variante", shKindGoal:"🚩 Arrivée", shKindBomb:"💣 Bombe", shsBombL:"💣 Bombe", shKindNoteGoal:"Citez l’arrivée en 1–3 clics pour gagner !", shKindNoteBomb:"Un mot à 2 clics ou moins de la bombe : boum (perdu). Exactement 3 clics : 😰 de justesse +2. La bombe bouge à chaque tour (seul : tous les 3 liens).", shBombIs:"💣 Bombe : ", shBombNote:" (à 2 clics ou moins : boum ! à 3 : 😰 +2)", shBombMoving:"💣 La bombe se déplace…", shBombMoved:"💣 La bombe a bougé !", shBAsk1:"💣 À 1 clic de la bombe ?", shBAsk2:"💣 À 2 clics ?", shBAsk3:"💣 À 3 clics ?", shBHit:"💥 BOUM !", shBHit3:"😰 De justesse !", shBMiss:"✓ OK", shBMiss3:"✓ Large", shBoom:"💣 BOUM !", shBUnsure:"🤔 Vérification incomplète. À vous de décider !", shBoomBtn:"Boum", shGiri:"😰 De justesse", shFlowVia:"↪ via", shFlowBomb:"💣 Bombe", shBoomWhy:(a,d)=>`« ${a} » est à ${d} clic(s) de la bombe`, shBoomSame:a=>`« ${a} » est la bombe !`, shFlowBoomD:d=>d?`💥 Boum (à ${d} de la bombe)`:`💥 Boum (la bombe)`});
+Object.assign(STR["es"], {shRuleBomb:"💣 a 2 o menos de la bomba = bum　😰 justo 3 = +2", shsKindL:"🎯 Variante", shKindGoal:"🚩 Meta", shKindBomb:"💣 Bomba", shsBombL:"💣 Bomba", shKindNoteGoal:"¡Nombra la meta a 1–3 clics para ganar!", shKindNoteBomb:"Una palabra a 2 clics o menos de la bomba: ¡bum! (fuera). Exactamente a 3: 😰 por los pelos +2. La bomba se mueve cada vuelta (solo: cada 3 enlaces).", shBombIs:"💣 Bomba: ", shBombNote:" (a 2 clics o menos: ¡bum! a 3: 😰 +2)", shBombMoving:"💣 La bomba se mueve…", shBombMoved:"💣 ¡La bomba se movió!", shBAsk1:"💣 ¿A 1 clic de la bomba?", shBAsk2:"💣 ¿A 2 clics?", shBAsk3:"💣 ¿A 3 clics?", shBHit:"💥 ¡BUM!", shBHit3:"😰 ¡Por los pelos!", shBMiss:"✓ A salvo", shBMiss3:"✓ Holgado", shBoom:"💣 ¡BUM!", shBUnsure:"🤔 No se pudo comprobar del todo. ¡Decidid!", shBoomBtn:"Bum", shGiri:"😰 Por los pelos", shFlowVia:"↪ vía", shFlowBomb:"💣 Bomba", shBoomWhy:(a,d)=>`«${a}» está a ${d} clic(s) de la bomba`, shBoomSame:a=>`¡«${a}» es la bomba!`, shFlowBoomD:d=>d?`💥 Bum (a ${d} de la bomba)`:`💥 Bum (la bomba)`});
+Object.assign(STR["ko"], {shRuleBomb:"💣 폭탄에서 2타 이내 = 쾅　😰 딱 3타 = 아슬아슬 +2", shsKindL:"🎯 장치", shKindGoal:"🚩 골", shKindBomb:"💣 폭탄", shsBombL:"💣 폭탄", shKindNoteGoal:"골 단어를 1~3타로 말하면 승리!", shKindNoteBomb:"폭탄에서 2타 이내인 단어를 말하면 쾅(아웃). 딱 3타면 😰 아슬아슬 +2. 폭탄은 한 바퀴마다(혼자면 3개 이을 때마다) 이동해요.", shBombIs:"💣 폭탄: ", shBombNote:"(여기서 2타 이내는 쾅! 딱 3타면 😰 +2)", shBombMoving:"💣 폭탄 이동 중…", shBombMoved:"💣 폭탄이 이동했다!", shBAsk1:"💣 폭탄까지 1타?", shBAsk2:"💣 폭탄까지 2타?", shBAsk3:"💣 폭탄까지 3타?", shBHit:"💥 쾅!", shBHit3:"😰 아슬아슬!", shBMiss:"✓ 세이프", shBMiss3:"✓ 여유", shBoom:"💣 쾅!", shBUnsure:"🤔 폭탄까지 길을 다 조사하지 못했어요. 정해 주세요!", shBoomBtn:"쾅으로", shGiri:"😰 아슬아슬", shFlowVia:"↪ 경유", shFlowBomb:"💣 폭탄", shBoomWhy:(a,d)=>`“${a}”에서 폭탄까지 ${d}타`, shBoomSame:a=>`“${a}”는 폭탄 그 자체!`, shFlowBoomD:d=>d?`💥 쾅(폭탄까지 ${d}타)`:`💥 쾅(폭탄 그 자체)`});
+Object.assign(STR["zh-hant"], {shRuleBomb:"💣 離炸彈 2 桿以內＝爆炸　😰 剛好 3 桿＝好險 +2", shsKindL:"🎯 機關", shKindGoal:"🚩 終點", shKindBomb:"💣 炸彈", shsBombL:"💣 炸彈", shKindNoteGoal:"在 1～3 桿內說出終點就贏！", shKindNoteBomb:"說出離炸彈 2 桿以內的詞就爆炸（出局）。剛好 3 桿：😰 好險 +2。炸彈每一輪（一個人時每接 3 個）會移動。", shBombIs:"💣 炸彈：", shBombNote:"（2 桿以內會爆炸！剛好 3 桿 😰 +2）", shBombMoving:"💣 炸彈移動中……", shBombMoved:"💣 炸彈移動了！", shBAsk1:"💣 離炸彈 1 桿？", shBAsk2:"💣 離炸彈 2 桿？", shBAsk3:"💣 離炸彈 3 桿？", shBHit:"💥 爆炸！", shBHit3:"😰 好險！", shBMiss:"✓ 安全", shBMiss3:"✓ 還很遠", shBoom:"💣 爆炸！", shBUnsure:"🤔 沒能查完到炸彈的路。大家決定吧！", shBoomBtn:"算爆炸", shGiri:"😰 好險", shFlowVia:"↪ 經由", shFlowBomb:"💣 炸彈", shBoomWhy:(a,d)=>`「${a}」離炸彈 ${d} 桿`, shBoomSame:a=>`「${a}」就是炸彈！`, shFlowBoomD:d=>d?`💥 爆炸（離炸彈 ${d} 桿）`:`💥 爆炸（就是炸彈）`});
+Object.assign(STR["zh-hans"], {shRuleBomb:"💣 离炸弹 2 杆以内＝爆炸　😰 刚好 3 杆＝好险 +2", shsKindL:"🎯 机关", shKindGoal:"🚩 终点", shKindBomb:"💣 炸弹", shsBombL:"💣 炸弹", shKindNoteGoal:"在 1～3 杆内说出终点就赢！", shKindNoteBomb:"说出离炸弹 2 杆以内的词就爆炸（出局）。刚好 3 杆：😰 好险 +2。炸弹每一轮（一个人时每接 3 个）会移动。", shBombIs:"💣 炸弹：", shBombNote:"（2 杆以内会爆炸！刚好 3 杆 😰 +2）", shBombMoving:"💣 炸弹移动中……", shBombMoved:"💣 炸弹移动了！", shBAsk1:"💣 离炸弹 1 杆？", shBAsk2:"💣 离炸弹 2 杆？", shBAsk3:"💣 离炸弹 3 杆？", shBHit:"💥 爆炸！", shBHit3:"😰 好险！", shBMiss:"✓ 安全", shBMiss3:"✓ 还很远", shBoom:"💣 爆炸！", shBUnsure:"🤔 没能查完到炸弹的路。大家决定吧！", shBoomBtn:"算爆炸", shGiri:"😰 好险", shFlowVia:"↪ 经由", shFlowBomb:"💣 炸弹", shBoomWhy:(a,d)=>`「${a}」离炸弹 ${d} 杆`, shBoomSame:a=>`「${a}」就是炸弹！`, shFlowBoomD:d=>d?`💥 爆炸（离炸弹 ${d} 杆）`:`💥 爆炸（就是炸弹）`});
 /* v3.2 履歴の数珠 */
 Object.assign(STR["ja"], {shFlowStart:"🏁 スタート", shFlowGoalFar:"🚩 ゴール（まだ届いてない）", shFlowOpen:"📄 記事を開く"});
 Object.assign(STR["en"], {shFlowStart:"🏁 Start", shFlowGoalFar:"🚩 Goal (not reached yet)", shFlowOpen:"📄 Open article"});
@@ -4649,21 +4674,23 @@ async function mpHostPick(role){
    ③ 画面 renderShiri()：状態 sh から毎回描き直す */
 const SH_KEY = "wikiGolfShiri2";
 const SH_PTS = {2:1, 3:3};
-const SH_GOAL_PTS = 5, SH_LONG_PTS = 3, SH_SURVIVE_PTS = 3, SH_TURN_SEC = 60;
+const SH_GOAL_PTS = 5, SH_LONG_PTS = 3, SH_GIRI_PTS = 2, SH_SURVIVE_PTS = 3, SH_TURN_SEC = 60;
 const SH_REC_KEY = "wikiGolfShiriRec", SH_REC_MAX = 30;
 const SH_COLORS = ["#e03131", "#1c7ed6", "#2f9e44", "#f08c00"], SH_DOTS = ["🔴", "🔵", "🟢", "🟡"];
 let sh = shLoad();
 function shNewSetup(prev){
   return {v:2, lang:curLang(), phase:"setup",
-    setup: prev || {n:1, mode:"free", start:null, goal:null, names:["", "", "", ""]},
-    players:[], turn:0, round:1, chain:[], judging:null, last:null, turnEnds:0, end:null, log:[], recId:null};
+    setup: prev || {n:1, mode:"free", start:null, goal:null, gtype:"goal", names:["", "", "", ""]},
+    players:[], turn:0, round:1, chain:[], judging:null, last:null, turnEnds:0, end:null, log:[], recId:null,
+    bomb:null, bombDue:false, bombMoving:false, bombNews:false};
 }
 function shLoad(){
-  try{ const o = JSON.parse(localStorage.getItem(SH_KEY) || "null"); if(o && o.v === 2){ o.judging = null; o.log = o.log || []; return o; } }catch(_){}
+  try{ const o = JSON.parse(localStorage.getItem(SH_KEY) || "null"); if(o && o.v === 2){ o.judging = null; o.log = o.log || []; if(o.bombMoving){ o.bombMoving = false; o.bombDue = true; } return o; } }catch(_){}
   return shNewSetup();
 }
 function shSave(){ if(shNet){ if(shIsHost()) shNetSync(); return; } try{ localStorage.setItem(SH_KEY, JSON.stringify({...sh, judging:null})); }catch(_){} }
 const shMulti = () => sh.players.length > 1;
+const shIsBomb = () => sh.setup.gtype === "bomb" && !!sh.bomb;
 const shCur = () => sh.players[sh.turn];
 function shName(i){ const p = sh.players[i]; return p ? `${SH_DOTS[i]} ${p.name}` : ""; }
 function shDefName(i){ return T("shPNames")[i]; }
@@ -4711,7 +4738,7 @@ function shAdvance(){
   for(let k = 0; k < sh.players.length; k++){
     const prev = i;
     i = (i + 1) % sh.players.length;
-    if(i <= prev) sh.round++;
+    if(i <= prev){ sh.round++; if(shMulti() && shIsBomb()) sh.bombDue = true; }
     if(sh.players[i].alive) break;
   }
   if(sh.setup.mode === "r3" && sh.round > 3) return shFinish("rounds");
@@ -4733,7 +4760,7 @@ function shRecSave(){
   const id = sh.recId || (Date.now().toString(36) + Math.random().toString(36).slice(2, 6));
   sh.recId = id;
   const rec = {id, at:Date.now(), lang:sh.lang,
-    setup:{n:sh.setup.n, mode:sh.setup.mode, start:sh.setup.start, goal:sh.setup.goal},
+    setup:{n:sh.setup.n, mode:sh.setup.mode, start:sh.setup.start, goal:sh.setup.goal, gtype:sh.setup.gtype || "goal"},
     players:sh.players.map(p => ({name:p.name, score:p.score, alive:p.alive})),
     end:sh.end, chain:sh.chain, log:sh.log};
   const i = recs.findIndex(r => r.id === id);
@@ -4744,8 +4771,74 @@ function shDobon(p, info){
   if(sh.setup.mode === "r3" && p.life > 0) p.life--;
   else p.alive = false;
   sh.last = {...info, by:sh.turn, out:!p.alive};
-  sh.log.push({by:sh.turn, round:sh.round, kind:info.kind, title:info.title, shown:info.shown, d:info.d,
-               prev:info.prev ? info.prev.title : null, out:!p.alive});
+  const lg = {by:sh.turn, round:sh.round, kind:info.kind, title:info.title, shown:info.shown, d:info.d,
+               prev:info.prev ? info.prev.title : null, out:!p.alive};
+  if(info.kind === "bomb"){ lg.via = info.via || []; lg.bd = info.bd; lg.bvia = info.bvia || []; lg.bomb = info.bomb; }
+  sh.log.push(lg);
+}
+function shCommitSafe(j, d, via, goalOk, giri, x){
+  const p = sh.players[j.by];
+  const pts = SH_PTS[d] || 0, gg = giri ? SH_GIRI_PTS : 0;
+  const gb = goalOk ? SH_GOAL_PTS : 0, lb = goalOk && d === 3 ? SH_LONG_PTS : 0;
+  sh.chain.push({title:j.title, shown:j.shown, by:j.by, d, via, pts:pts + gg, goal:goalOk, giri:!!giri});
+  p.score += pts + gb + lb + gg;
+  sh.judging = null;
+  sh.last = {kind:"safe", d, pts, by:j.by, goal:goalOk, gb, lb, gg};
+  sh.log.push({by:j.by, round:sh.round, kind:goalOk ? "goal" : (x ? "safeX" : "safe"), title:j.title, shown:j.shown, d, via,
+               pts:pts + gb + lb + gg, giri:!!giri, prev:sh.chain[sh.chain.length - 2].title});
+  if(goalOk) return shFinish("goal", j.by);
+  if(shIsBomb() && !shMulti() && (sh.chain.length - 1) % 3 === 0) sh.bombDue = true;   // 1人：3つつないだら移動
+  shAdvance();
+}
+function shBoom(j, d, via, r){
+  const p = sh.players[j.by];
+  sh.judging = null;
+  shDobon(p, {kind:"bomb", title:j.title, shown:j.shown, d, via, bd:r.d === undefined ? null : r.d,
+              bvia:r.path ? r.path.slice(1, -1) : [], bomb:sh.bomb ? sh.bomb.shown : "", prev:sh.chain[sh.chain.length - 1]});
+  if(!shMulti() && !p.alive) shFinish("allOut");
+  else shAdvance();
+}
+/* 💣 爆弾チェック（ホスト／その1台だけが動かす） */
+async function shRunBomb(){
+  const j = sh.judging; if(!j || !j.first || !sh.bomb) return;
+  const lang = sh.lang, b = sh.bomb;
+  try{
+    const res = await shJudge(j.title, b.title, s => { if(sh.judging === j) shApply({t:"bstep", ...s}); });
+    if(sh.lang !== lang || sh.judging !== j) return;
+    shApply({t:"bresult", res});
+  }catch(e){ if(sh.judging === j) shApply({t:"bunsure"}); }
+}
+async function shNear2(S, G){
+  const run = {cancelled:false, n:0, lang:curLang()};
+  const fo = await spLinksOut(run, S);
+  if(fo.set.includes(G)) return true;
+  const bi = new Set((await spLinksIn(run, G)).set);
+  return fo.set.some(t => bi.has(t));
+}
+let shBombRun = false;
+async function shMoveBomb(){
+  const lang = sh.lang;
+  if(!sh.bombMoving) shApply({t:"bmove"});
+  try{
+    await ensureNs();
+    const last = sh.chain[sh.chain.length - 1];
+    let pick = null;
+    for(let k = 0; k < 6 && !pick; k++){
+      const p = await pickTitle("goal"); if(!p) continue;
+      const w = await shResolve(p.title);
+      if(nsOf(w.title) !== 0) continue;
+      if(sh.chain.some(c => norm(c.title) === norm(w.title)) || (sh.bomb && norm(w.title) === norm(sh.bomb.title))) continue;
+      if(await shNear2(last.title, w.title)) continue;             // 今の言葉の近くには落とさない
+      pick = w;
+    }
+    if(sh.lang !== lang || sh.phase !== "play") return;
+    shApply(pick ? {t:"bomb", w:pick} : {t:"bmovefail"});
+  }catch(e){ if(sh.bombMoving) shApply({t:"bmovefail"}); }
+  finally{ shBombRun = false; }
+}
+function shBombKick(){
+  if(shBombRun || sh.phase !== "play" || sh.judging || !shIsBomb() || (shNet && !shIsHost())) return;
+  if(sh.bombDue || sh.bombMoving){ sh.bombDue = false; shBombRun = true; setTimeout(shMoveBomb, 0); }
 }
 function shApply(ev){
   switch(ev.t){
@@ -4760,14 +4853,16 @@ function shApply(ev){
         : Array.from({length:s.n}, (_, i) => ({name:(s.names[i] || "").trim() || shDefName(i),
                      alive:true, life:s.mode === "r3" ? 1 : 0, pass:s.n > 1 ? 1 : 0, score:0}));
       sh.chain = [{title:s.start.title, shown:s.start.shown, by:-1}];
+      sh.bomb = s.gtype === "bomb" && s.goal ? {title:s.goal.title, shown:s.goal.shown} : null;
       sh.turnEnds = s.mode === "r3" ? Date.now() + SH_TURN_SEC * 1000 : 0;
       break;
     }
     case "judge": {
-      const g = sh.setup.goal;
+      const g = sh.setup.goal, s_gtype = () => sh.setup.gtype;
       sh.last = null;
       sh.judging = {title:ev.title, shown:ev.shown, by:sh.turn, steps:{}, left:sh.turnEnds ? sh.turnEnds - Date.now() : 0,
-                    isGoal:!!g && norm(ev.title) === norm(g.title)};
+                    isGoal:!!g && s_gtype() !== "bomb" && norm(ev.title) === norm(g.title)};
+      sh.bombNews = false;
       sh.turnEnds = 0; break;
     }
     case "step": if(sh.judging) sh.judging.steps[ev.k] = ev.st; break;
@@ -4776,17 +4871,14 @@ function shApply(ev){
       const r = ev.res, p = sh.players[j.by];
       const goalOk = j.isGoal && (r.d === 1 || r.d === 2 || r.d === 3);    // ゴールの言葉は1打でもOK
       if(goalOk || r.d === 2 || r.d === 3 || ev.force === "safe"){
-        const d = r.d || 0, pts = SH_PTS[d] || 0;
-        const gb = goalOk ? SH_GOAL_PTS : 0, lb = goalOk && d === 3 ? SH_LONG_PTS : 0;
-        const via = r.path ? r.path.slice(1, -1) : [];
-        sh.chain.push({title:j.title, shown:j.shown, by:j.by, d, via, pts, goal:goalOk});
-        p.score += pts + gb + lb;
-        sh.judging = null;
-        sh.last = {kind:"safe", d, pts, by:j.by, goal:goalOk, gb, lb};
-        sh.log.push({by:j.by, round:sh.round, kind:goalOk ? "goal" : (r.d ? "safe" : "safeX"), title:j.title, shown:j.shown, d, via,
-                     pts:pts + gb + lb, prev:sh.chain[sh.chain.length - 2].title});
-        if(goalOk) shFinish("goal", j.by);
-        else shAdvance();
+        const d = r.d || 0, via = r.path ? r.path.slice(1, -1) : [];
+        if(shIsBomb()){                                   // 💣 つぎは爆弾チェック
+          if(norm(j.title) === norm(sh.bomb.title)){ shBoom(j, d, via, {d:0}); break; }
+          j.first = {d, via, x:!r.d}; j.bsteps = {}; j.unsure = false;
+          if(!shNet || shIsHost()) setTimeout(shRunBomb, 0);
+          break;
+        }
+        shCommitSafe(j, d, via, goalOk, false, !r.d);
       }else if(r.d === 0 && !r.complete && !ev.force){
         j.unsure = true;
       }else{
@@ -4811,6 +4903,27 @@ function shApply(ev){
       shAdvance();
       break;
     }
+    case "bstep": if(sh.judging && sh.judging.bsteps) sh.judging.bsteps[ev.k] = ev.st; break;
+    case "bunsure": if(sh.judging && sh.judging.first) sh.judging.bunsure = true; break;
+    case "bresult": {
+      const j = sh.judging; if(!j || !j.first) break;
+      const r = ev.res || {};
+      if(ev.force === "boom" || (!ev.force && (r.d === 1 || r.d === 2))) shBoom(j, j.first.d, j.first.via, r);
+      else shCommitSafe(j, j.first.d, j.first.via, false, !ev.force && r.d === 3, j.first.x);
+      break;
+    }
+    case "bmove": sh.bombMoving = true; sh.turnEnds = 0; break;
+    case "bmovefail":
+      sh.bombMoving = false;
+      sh.turnEnds = sh.setup.mode === "r3" ? Date.now() + SH_TURN_SEC * 1000 : 0;
+      break;
+    case "bomb": {
+      if(!ev.w) break;
+      sh.bomb = {title:ev.w.title, shown:ev.w.shown}; sh.bombMoving = false; sh.bombNews = true;
+      sh.log.push({by:-1, round:sh.round, kind:"bombmove", title:ev.w.title, shown:ev.w.shown});
+      sh.turnEnds = sh.setup.mode === "r3" ? Date.now() + SH_TURN_SEC * 1000 : 0;
+      break;
+    }
     case "finish": if(sh.phase === "play") shFinish("quit"); break;
     case "undo": {                                       // ひとりのときだけ：ドボンを取り消す
       if(shMulti() || !sh.last || sh.last.kind === "safe") break;
@@ -4821,7 +4934,7 @@ function shApply(ev){
       break;
     }
   }
-  if(ev.t !== "step") shSave();
+  if(ev.t !== "step" && ev.t !== "bstep") shSave();
   else if(shIsHost()) shNetSync();
   renderShiri();
   if(["judge", "result", "pass", "timeout"].includes(ev.t)){ const jb = $("shJudge"); if(!jb.hidden) jb.scrollIntoView({behavior:"smooth", block:"nearest"}); }
@@ -4840,7 +4953,8 @@ function renderShiri(){
   $("shPlay").hidden = setupMode;
   $("home").classList.toggle("shWide", !setupMode);
   const tb = shThumbBase(); if(tb && !(shThumbWant && shThumbWant.kind === "cand" && shItems.length)) shThumbShow(tb.title, tb.kind);
-  $("shRule").textContent = T("shRule");
+  { const r = T("shRule"), i = r.indexOf("🚩");
+    $("shRule").textContent = sh.setup.gtype === "bomb" ? (i > 0 ? r.slice(0, i) : r + "　") + T("shRuleBomb") : r; }
   if(setupMode) return renderShSetup();
   renderShPlay();
 }
@@ -4856,6 +4970,10 @@ function renderShSetup(){
     el.title = w ? T("shPeek") : "";
   }
   $("shsGoalX").hidden = !s.goal;
+  const bk = s.gtype === "bomb";
+  $("shsGoalLbl").textContent = bk ? T("shsBombL") : T("shsGoalL");
+  document.querySelectorAll("#shsKind button").forEach(b => b.classList.toggle("on", b.dataset.k === (s.gtype || "goal")));
+  $("shsKindNote").textContent = bk ? T("shKindNoteBomb") : T("shKindNoteGoal");
   document.querySelectorAll("#shsN button").forEach(b => b.classList.toggle("on", +b.dataset.n === s.n));
   document.querySelectorAll("#shsMode button").forEach(b => b.classList.toggle("on", b.dataset.m === s.mode));
   $("shsModeNote").textContent = s.mode === "r3" ? T("shModeR3Note") : T("shModeFreeNote");
@@ -4876,9 +4994,13 @@ function renderShPlay(){
   const multi = shMulti(), playing = sh.phase === "play", judging = !!sh.judging;
   const last = sh.chain[sh.chain.length - 1];
   // ゴール・周回
-  const g = sh.setup.goal;
-  $("shGoalBar").hidden = !g;
-  if(g){ $("shGoalBar").innerHTML = ""; $("shGoalBar").append(mk("span", "", T("shGoalIs")), shWordBtn(g.shown, g.title, null), mk("small", "", T("shGoalNote", SH_GOAL_PTS))); }
+  const bombOn = shIsBomb(), g = bombOn ? null : sh.setup.goal, gb = $("shGoalBar");
+  gb.hidden = !g && !bombOn; gb.classList.toggle("bomb", bombOn); gb.innerHTML = "";
+  if(bombOn){
+    gb.append(mk("span", "", T("shBombIs")), shWordBtn(sh.bomb.shown, sh.bomb.title, null), mk("small", "", T("shBombNote")));
+    if(sh.bombMoving) gb.append(mk("span", "bmov", T("shBombMoving")));
+    else if(sh.bombNews && playing) gb.append(mk("span", "bnews", T("shBombMoved")));
+  }else if(g){ gb.append(mk("span", "", T("shGoalIs")), shWordBtn(g.shown, g.title, null), mk("small", "", T("shGoalNote", SH_GOAL_PTS))); }
   $("shRound").textContent = sh.setup.mode === "r3" ? T("shRoundOf", Math.min(sh.round, 3), 3) : "";
   // 点数ボード
   const sb = $("shBoard"); sb.innerHTML = "";
@@ -4913,11 +5035,12 @@ function renderShPlay(){
         v.append(T("shViaPost"));
         lk.append(v);
       }
+      if(c.giri) lk.append(mk("span", "giri", T("shGiri")));
       if(c.pts) lk.append(mk("span", "pt", "+" + c.pts));
       box.append(lk);
     }
     const nx = sh.chain[i + 1];
-    const bd = mk("div", "shBead" + (i === sh.chain.length - 1 ? " cur" : "") + (g && norm(c.title) === norm(g.title) ? " goal" : ""));
+    const bd = mk("div", "shBead" + (i === sh.chain.length - 1 ? " cur" : "") + (g && c.goal ? " goal" : ""));
     if(c.by >= 0 && multi) bd.style.setProperty("--pc", SH_COLORS[c.by]);
     const tt = shWordBtn(c.shown, c.title, nx ? ((nx.via && nx.via[0]) || nx.title) : null);
     tt.classList.add("tt");
@@ -4929,7 +5052,7 @@ function renderShPlay(){
   jb.hidden = !judging && !sh.last && sh.phase !== "end";
   if(judging){
     const j = sh.judging;
-    jb.append(mk("div", "shQ", `${multi ? SH_DOTS[j.by] + " " : ""}${last.shown} → ${j.isGoal ? "🚩 " : ""}${j.shown}`));
+    jb.append(mk("div", "shQ", `${multi ? SH_DOTS[j.by] + " " : ""}${last.shown} → ${j.isGoal ? "🚩 " : ""}${j.shown}${bombOn ? "　（💣 " + sh.bomb.shown + "）" : ""}`));
     for(const k of [1, 2, 3]){
       const st = j.steps[k]; if(!st) continue;
       const row = mk("div", "shStep " + st + (k === 1 && !j.isGoal ? " k1" : ""));
@@ -4945,6 +5068,25 @@ function renderShPlay(){
       d.addEventListener("click", () => shApply({t:"result", res:{d:0, complete:true}, force:"dobon"}));
       r.append(s, d); jb.append(r);
     }
+    if(j.first){
+      for(const k of [1, 2, 3]){
+        const st = j.bsteps[k]; if(!st) continue;
+        const row = mk("div", "shStep " + st + (k === 1 ? " bh" : "") + (st === "hit" ? (k < 3 ? " bz" : " b3") : ""));
+        row.append(mk("span", "", T("shBAsk" + k)));
+        row.append(mk("span", "rs", st === "run" ? T("shDrum") : st === "hit" ? (k < 3 ? T("shBHit") : T("shBHit3")) : (k < 3 ? T("shBMiss") : T("shBMiss3"))));
+        jb.append(row);
+      }
+      if(j.bunsure){
+        jb.append(mk("div", "shUnsure", T("shBUnsure")));
+        if(!shNet || shIsHost()){
+          const r = mk("div", "mpRow");
+          const s = mk("button", "", T("shSafeBtn")), d = mk("button", "", T("shBoomBtn"));
+          s.addEventListener("click", () => shApply({t:"bresult", res:{d:0}, force:"safe"}));
+          d.addEventListener("click", () => shApply({t:"bresult", res:{}, force:"boom"}));
+          r.append(s, d); jb.append(r);
+        }
+      }
+    }
   }else if(sh.last){
     const L = sh.last, who = multi ? shName(L.by) + " " : "";
     if(L.kind === "safe" && L.goal){
@@ -4956,12 +5098,22 @@ function renderShPlay(){
       parts.forEach(t => jb.append(mk("div", "shPtsRow", t)));
     }else if(L.kind === "safe"){
       jb.append(mk("div", "shSafeBig d" + L.d, who + (L.d === 3 ? T("shNice3") : L.d === 2 ? T("shSafe2") : T("shSafeX")) + (L.pts ? `  +${L.pts}` : "")));
+      if(L.gg) jb.append(mk("div", "shGiri", `${T("shGiri")}  +${L.gg}`));
     }else if(L.kind === "pass"){
       jb.append(mk("div", "shPassBig", who + T("shPassed")));
     }else if(L.kind === "left"){
       jb.append(mk("div", "shPassBig", who + T("shLogLeft")));
     }else{
-      jb.append(mk("div", "shDobon", (multi ? who : "") + (L.kind === "timeout" ? T("shTimeUp") : T("shDobon"))));
+      jb.append(mk("div", "shDobon", (multi ? who : "") + (L.kind === "timeout" ? T("shTimeUp") : L.kind === "bomb" ? T("shBoom") : T("shDobon"))));
+      if(L.kind === "bomb"){
+        const why = mk("div", "shWhy", L.bd === 0 ? T("shBoomSame", L.shown) : L.bd ? T("shBoomWhy", L.shown, L.bd) : "");
+        if(L.bvia && L.bvia.length){
+          const v = mk("span", "via"), hop = [...L.bvia, sh.bomb ? sh.bomb.title : ""];
+          v.append(T("shViaPre")); L.bvia.forEach((t, i) => { if(i) v.append(" → "); v.append(shWordBtn(t, t, hop[i + 1])); }); v.append(T("shViaPost"));
+          why.append(" ", v);
+        }
+        jb.append(why);
+      }
       if(L.kind === "dobon"){
         const why = mk("div", "shWhy", L.d === 1 ? T("shWhy1", L.prev.shown, L.shown) : T("shWhy4", L.prev.shown, L.shown));
         if(L.d === 1){ const ck = mk("button", "shWord chk", T("shCheck")); ck.addEventListener("click", () => shOpen(L.prev.title, L.title)); why.append(" ", ck); }
@@ -5011,10 +5163,10 @@ function renderShPlay(){
   // 履歴
   $("shLogSum").textContent = T("shHist", sh.log.length);
   $("shLogBox").hidden = !sh.log.length;
-  shRenderLog($("shLogList"), sh.log, sh.players.map(p => p.name), multi, sh.setup.start, sh.setup.goal);
+  shRenderLog($("shLogList"), sh.log, sh.players.map(p => p.name), multi, sh.setup.start, sh.setup.goal, sh.setup.gtype);
   // 入力
   const myTurn = shMyTurn();
-  const lock = judging || !playing || !myTurn;
+  const lock = judging || !playing || !myTurn || !!sh.bombMoving;
   $("shInputRow").hidden = !playing;
   $("shInput").disabled = lock; $("shGo").disabled = lock;
   if(playing){
@@ -5030,10 +5182,11 @@ function renderShPlay(){
   $("shNetLeave2").hidden = !shNet;
   const cp = shCur();
   $("shPass").hidden = !playing || !multi || !cp || cp.pass < 1 || !myTurn;
-  $("shPass").disabled = judging;
+  $("shPass").disabled = judging || !!sh.bombMoving;
   $("shQuit").hidden = !playing || (shNet && !shIsHost());
   $("shQuit").disabled = judging;
   shTick();
+  shBombKick();
 }
 /* 右側のサムネイル（広い画面だけ）。文字は読めない大きさ、押すと記事の窓で読める */
 const shWideMQ = matchMedia("(min-width:1100px)");
@@ -5071,41 +5224,58 @@ function shThumbBase(){
 $("shThumbCover").addEventListener("click", () => { if(shThumbCur) shOpen(shThumbCur, null); });
 shWideMQ.addEventListener("change", () => { const b = shThumbBase(); if(b) shThumbShow(b.title, b.kind); });
 /* 履歴の一覧（ゲーム中・過去の記録で共通） */
-function shRenderLog(box, log, names, multi, start, goal){
-  // v3.2：スタート → 言葉 → 言葉 … → ゴール の一本道。言葉を押すとくわしく出る
+function shRenderLog(box, log, names, multi, start, goal, gtype){
+  // v3.2/3.3：スタート → 経由 → 言葉 → … → ゴール の一本道。言葉を押すとくわしく出る
   box.innerHTML = "";
+  const bombMode = gtype === "bomb";
   const line = mk("div", "shFlowLine"), info = mk("div", "shFlowInfo");
   const btns = [], fills = [];
   let arrows = 0, first = true, goalHit = false;
+  const btn = (text, cls, fill) => {
+    const k = btns.length, b = mk("button", "shFw " + cls, text);
+    b.addEventListener("click", () => { box._sel = box._sel === k ? null : k; paint(); });
+    btns.push(b); fills.push(fill);
+    return b;
+  };
   const put = (text, cls, fill, arrowTxt) => {
     const g = mk("span", "shFg");
     if(!first) g.append(mk("span", "shFa", arrowTxt || "→".repeat(Math.max(1, arrows))));
-    const k = btns.length, b = mk("button", "shFw " + cls, text);
-    b.addEventListener("click", () => { box._sel = box._sel === k ? null : k; paint(); });
-    g.append(b); line.append(g);
-    btns.push(b); fills.push(fill);
+    g.append(btn(text, cls, fill)); line.append(g);
     first = false; arrows = 1;
   };
+  const mark = (text, fill) => { const g = mk("span", "shFg"); g.append(btn(text, "bm", fill)); line.append(g); };
   const openBtn = (title, next) => { const o = mk("button", "shWord open", T("shFlowOpen")); o.addEventListener("click", () => shOpen(title, next || null)); return o; };
+  const bombFill = w => el => { el.append(mk("b", "lab bmlab", T("shFlowBomb")), mk("span", "", w.shown), openBtn(w.title)); };
+  const viaWords = (via, title) => {
+    const hop = [...via, title];
+    via.forEach((t, i) => put(t, "via", el => { el.append(mk("b", "lab", T("shFlowVia")), mk("span", "", t), openBtn(t, hop[i + 1])); }));
+  };
+  const whoTag = (el, e) => { if(e.by >= 0 && multi){ const w = mk("span", "who", `${SH_DOTS[e.by]} ${names[e.by]}`); w.style.setProperty("--pc", SH_COLORS[e.by]); el.append(w); } };
   if(start) put(start.shown, "odai", el => { el.append(mk("b", "lab", T("shFlowStart")), mk("span", "", start.shown), openBtn(start.title)); });
+  if(bombMode && goal) mark("💣 " + goal.shown, bombFill(goal));
   log.forEach(e => {
     if(e.kind === "pass"){ arrows++; return; }
     if(e.kind === "undo" || e.kind === "left") return;
+    if(e.kind === "bombmove"){ mark("💣 " + e.shown, bombFill(e)); return; }
     const fill = el => {
       el.classList.add(e.kind);
-      if(e.by >= 0 && multi){ const w = mk("span", "who", `${SH_DOTS[e.by]} ${names[e.by]}`); w.style.setProperty("--pc", SH_COLORS[e.by]); el.append(w); }
+      whoTag(el, e);
       if(e.kind === "timeout"){ el.append(mk("b", "lab", T("shTimeUpS"))); }
-      else{
-        const lab = e.kind === "goal" ? T("shGoalLink", e.d) : e.kind === "dobon" ? T("shDobonD", e.d) :
-                    e.d === 3 ? T("shNice3") : e.d === 2 ? T("shSafe2") : T("shSafeX");
-        el.append(mk("b", "lab", lab), mk("span", "", e.shown));
-        if(e.pts) el.append(mk("span", "pt", ` +${e.pts}`));
-        if(e.via && e.via.length){
-          const v = mk("span", "via"), hop = [...e.via, e.title];
-          v.append(T("shViaPre"));
-          e.via.forEach((t, i) => { if(i) v.append(" → "); v.append(shWordBtn(t, t, hop[i + 1])); });
+      else if(e.kind === "bomb"){
+        el.append(mk("b", "lab", T("shFlowBoomD", e.bd || 0)), mk("span", "", e.shown));
+        if(e.bvia && e.bvia.length){
+          const v = mk("span", "via"); v.append(T("shViaPre"));
+          e.bvia.forEach((t, i) => { if(i) v.append(" → "); v.append(shWordBtn(t, t, e.bvia[i + 1] || null)); });
           v.append(T("shViaPost")); el.append(" ", v);
         }
+        el.append(openBtn(e.title));
+      }else{
+        const lab = e.kind === "goal" ? T("shGoalLink", e.d) : e.kind === "dobon" ? T("shDobonD", e.d) :
+                    e.d === 3 ? T("shNice3") : e.d === 2 ? T("shSafe2") : T("shSafeX");
+        el.append(mk("b", "lab", lab));
+        if(e.giri) el.append(mk("b", "lab giri", T("shGiri")));
+        el.append(mk("span", "", e.shown));
+        if(e.pts) el.append(mk("span", "pt", ` +${e.pts}`));
         el.append(openBtn(e.title));
         if(e.kind === "dobon" && e.d === 1 && e.prev){ const ck = mk("button", "shWord chk", T("shCheck")); ck.addEventListener("click", () => shOpen(e.prev, e.title)); el.append(" ", ck); }
       }
@@ -5113,10 +5283,14 @@ function shRenderLog(box, log, names, multi, start, goal){
     };
     if(e.kind === "timeout") put("⏱", "dob tm", fill);
     else if(e.kind === "dobon") put(e.shown, "dob", fill);
-    else if(e.kind === "goal"){ goalHit = true; put(e.shown + " 🚩", "odai", fill); }
-    else put(e.shown, "inp", fill);
+    else if(e.kind === "bomb"){ viaWords(e.via || [], e.title); put(e.shown + " 💥", "dob", fill); }
+    else{
+      viaWords(e.via || [], e.title);
+      if(e.kind === "goal"){ goalHit = true; put(e.shown + " 🚩", "odai", fill); }
+      else put(e.shown, "inp", fill);
+    }
   });
-  if(goal && !goalHit) put("🚩 " + goal.shown, "odai far", el => { el.append(mk("b", "lab", T("shFlowGoalFar")), mk("span", "", goal.shown), openBtn(goal.title)); }, "⇢");
+  if(goal && !goalHit && !bombMode) put("🚩 " + goal.shown, "odai far", el => { el.append(mk("b", "lab", T("shFlowGoalFar")), mk("span", "", goal.shown), openBtn(goal.title)); }, "⇢");
   else if(arrows > 1){ const g = mk("span", "shFg"); g.append(mk("span", "shFa", "→".repeat(arrows - 1))); line.append(g); }
   function paint(){
     const k = box._sel;
@@ -5133,7 +5307,7 @@ function shRenderLog(box, log, names, multi, start, goal){
 let shTimerId = null;
 function shTick(){
   const el = $("shTimer");
-  const on = sh.phase === "play" && sh.turnEnds && !sh.judging && state.homeView === "shiri" && state.screen === "home";
+  const on = sh.phase === "play" && sh.turnEnds && !sh.judging && !sh.bombMoving && state.homeView === "shiri" && state.screen === "home";
   el.hidden = !on;
   if(!on){ clearInterval(shTimerId); shTimerId = null; return; }
   const left = Math.max(0, Math.ceil((sh.turnEnds - Date.now()) / 1000));
@@ -5192,7 +5366,7 @@ async function shResolve(text){
 }
 async function shSubmit(){
   const inp = $("shInput"), raw = (inp.dataset.title || inp.value).trim();
-  if(!raw || sh.judging || sh.phase !== "play" || !shMyTurn()) return;
+  if(!raw || sh.judging || sh.bombMoving || sh.phase !== "play" || !shMyTurn()) return;
   $("shMsg").textContent = "";
   let w;
   try{ await ensureNs(); w = await shResolve(raw); }
@@ -5272,6 +5446,7 @@ $("shsGoalP").addEventListener("click", () => shPick("goal"));
 $("shsGoalX").addEventListener("click", () => { sh.setup.goal = null; shSave(); renderShiri(); });
 document.querySelectorAll("#shsN button").forEach(b => b.addEventListener("click", () => { sh.setup.n = +b.dataset.n; shSave(); renderShiri(); }));
 document.querySelectorAll("#shsMode button").forEach(b => b.addEventListener("click", () => { sh.setup.mode = b.dataset.m; shSave(); renderShiri(); }));
+document.querySelectorAll("#shsKind button").forEach(b => b.addEventListener("click", () => { sh.setup.gtype = b.dataset.k; shSave(); renderShiri(); }));
 $("shsBegin").addEventListener("click", () => { if(!sh.setup.start) return; if(shNet) shNetBegin(); else shApply({t:"begin"}); });
 /* 過去の記録 */
 function shFmtDate(t){ try{ return new Date(t).toLocaleString(uiKey(), {year:"numeric", month:"numeric", day:"numeric", hour:"2-digit", minute:"2-digit"}); }catch(_){ return ""; } }
@@ -5284,7 +5459,7 @@ function shHistList(){
   recs.forEach(r => {
     const b = mk("button", "shRec");
     b.append(mk("small", "", `${shFmtDate(r.at)} ・ ${r.setup.n}${T("shPpl")} ・ ${r.setup.mode === "r3" ? T("shModeR3") : T("shModeFree")}`));
-    b.append(mk("b", "", `${r.setup.start ? r.setup.start.shown : ""}${r.setup.goal ? " → 🚩 " + r.setup.goal.shown : ""}`));
+    b.append(mk("b", "", `${r.setup.start ? r.setup.start.shown : ""}${r.setup.goal ? (r.setup.gtype === "bomb" ? "　💣 " : " → 🚩 ") + r.setup.goal.shown : ""}`));
     const sc = r.players.map((p, i) => `${r.setup.n > 1 ? SH_DOTS[i] + " " : ""}${p.name} ${T("shPts", p.score)}`).join("　");
     b.append(mk("span", "sc", `${T("shLinks", Math.max(0, (r.chain || []).length - 1))} ・ ${sc}`));
     b.addEventListener("click", () => shHistDetail(r.id));
@@ -5298,7 +5473,7 @@ function shHistDetail(id){
   $("shHistDelAll").hidden = true;
   const back = mk("button", "", T("shBackList")); back.addEventListener("click", shHistList);
   box.append(back);
-  box.append(mk("h3", "", `${r.setup.start ? r.setup.start.shown : ""}${r.setup.goal ? " → 🚩 " + r.setup.goal.shown : ""}`));
+  box.append(mk("h3", "", `${r.setup.start ? r.setup.start.shown : ""}${r.setup.goal ? (r.setup.gtype === "bomb" ? "　💣 " : " → 🚩 ") + r.setup.goal.shown : ""}`));
   box.append(mk("p", "shsNote", `${shFmtDate(r.at)} ・ ${r.setup.n}${T("shPpl")} ・ ${r.setup.mode === "r3" ? T("shModeR3") : T("shModeFree")}`));
   const multi = r.setup.n > 1;
   const order = r.players.map((p, i) => ({p, i})).sort((a, b) => b.p.score - a.p.score);
@@ -5314,7 +5489,7 @@ function shHistDetail(id){
   box.append(ol);
   box.append(mk("h3", "", T("shHist", (r.log || []).length)));
   const lg = mk("div", "shFlow");
-  shRenderLog(lg, r.log || [], r.players.map(p => p.name), multi, r.setup.start, r.setup.goal);
+  shRenderLog(lg, r.log || [], r.players.map(p => p.name), multi, r.setup.start, r.setup.goal, r.setup.gtype);
   box.append(lg);
   const del = mk("button", "", T("shDelOne"));
   del.addEventListener("click", () => { if(confirm(T("shDelOneQ"))){ shRecWrite(shRecLoad().filter(x => x.id !== id)); shHistList(); } });
@@ -5557,7 +5732,7 @@ function shNetOnMsg(p){
       break;
     }
     case "say": {
-      if(!shIsHost() || sh.phase !== "play" || sh.judging) return;
+      if(!shIsHost() || sh.phase !== "play" || sh.judging || sh.bombMoving) return;
       const cur = shCur(); if(!cur || cur.id !== p.from) return;
       if(sh.chain.some(c => norm(c.title) === norm(p.title))) return;
       shRunJudge({title:p.title, shown:p.shown});
@@ -5634,6 +5809,7 @@ function renderShNet(){
   const host = !n || shIsHost();
   ["shsStartR", "shsStartP", "shsGoalR", "shsGoalP", "shsGoalX", "shsBothR"].forEach(id => $(id).disabled = !host);
   document.querySelectorAll("#shsMode button").forEach(b => b.disabled = !host);
+  document.querySelectorAll("#shsKind button").forEach(b => b.disabled = !host);
   $("shsPast").hidden = !!n;
   if(!n){ if(!$("shNetName").value) $("shNetName").value = myName || ""; return; }
   $("shNetRoom").textContent = n.room;
