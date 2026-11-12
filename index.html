@@ -189,6 +189,29 @@
   #shRule{font-size:.82rem;font-weight:700;margin:0 0 10px;background:var(--green2);color:var(--green);border-radius:10px;padding:6px 10px}
   #shInputRow[hidden]{display:none !important}
   #shThumbCol{display:none}
+  #shNetBox{border:2px dashed var(--line);border-radius:12px;padding:8px 12px;margin:4px 0 10px}
+  #shNetOff .mpRow{margin:6px 0;flex-wrap:wrap;gap:6px}
+  #shNetOff input{font-size:16px;padding:6px 8px;border:1px solid var(--line);border-radius:8px;background:var(--card);color:inherit}
+  #shNetCode{width:5em}
+  .shNetJoinRow{display:inline-flex;gap:4px}
+  #shNetCreate{background:var(--green);color:var(--onGreen);border-color:var(--green);font-weight:800}
+  #shNetErr{color:var(--flag);font-size:.85rem;min-height:1em}
+  .shNetHead{display:flex;justify-content:space-between;align-items:center}
+  #shNetRoom{font-size:1.6rem;letter-spacing:.15em;font-weight:900}
+  .shNetShare{display:flex;gap:10px;align-items:center;flex-wrap:wrap;margin:6px 0}
+  #shNetQr{background:#fff;border-radius:8px;padding:6px}
+  #shNetQr canvas{display:block;width:110px;height:auto;image-rendering:pixelated}
+  #shNetUrl{font-size:.75rem;color:var(--sub);word-break:break-all;margin-bottom:4px}
+  #shNetCount{font-weight:800;font-size:.9rem}
+  #shNetList{list-style:none;padding:0;margin:4px 0;display:flex;flex-wrap:wrap;gap:6px}
+  #shNetList li{border:1px solid var(--line);border-radius:999px;padding:4px 10px;background:var(--bg);display:flex;gap:4px;align-items:center}
+  #shNetList .rename{border:0;background:transparent;padding:0 2px}
+  #shTyping{font-weight:700;color:var(--pc);margin:2px 0 6px;font-size:.95rem}
+  #shTyping[hidden]{display:none}
+  #shStamps{margin-top:8px}
+  #shStampLayer{position:fixed;left:50%;top:70px;transform:translateX(-50%);z-index:25;display:flex;flex-direction:column;gap:6px;align-items:center;pointer-events:none}
+  .shStampPop{background:var(--card);border:2px solid var(--green);border-radius:999px;padding:6px 14px;font-size:1.3rem;box-shadow:0 6px 18px rgba(0,0,0,.15);animation:stampIn .25s}
+  .shWaitHost{color:var(--sub);font-weight:700}
   @media (min-width:1100px){
     #home.shWide .homeInner{width:min(1060px,100%)}
     #home.shWide #shPlay{display:grid;grid-template-columns:minmax(0,1fr) 300px;gap:20px;align-items:start}
@@ -557,7 +580,7 @@
   <div class="stat"><div class="num" id="clockNum">0:00</div><div class="lbl" id="clockLbl"></div></div>
   <div class="stat" id="pageStat" hidden><div class="num" id="pageNum">0</div><div class="lbl" data-t="pageLeft"></div></div>
   <div id="route"></div>
-  <span id="ver">v2.5</span>
+  <span id="ver">v3.0</span>
   <div id="barBtns">
     <button id="teeoff" disabled data-t="teeoff"></button>
     <button id="backBtn" hidden data-t="back"></button>
@@ -615,7 +638,7 @@
 
 <div id="settings" class="overlay">
   <div class="panel">
-    <h2><span data-t="settings"></span> <small style="font-size:.65rem;font-weight:400;color:var(--sub)">v2.5</small></h2>
+    <h2><span data-t="settings"></span> <small style="font-size:.65rem;font-weight:400;color:var(--sub)">v3.0</small></h2>
     <p class="lockNote" id="lockNote" hidden></p>
     <button id="quitHole" class="quit" hidden></button>
     <button id="toHome" data-t="toHome"></button>
@@ -643,7 +666,7 @@
 
 <div id="home">
   <div class="homeInner">
-    <div class="homeHead"><h1>⛳ <span data-t="appName"></span></h1><p data-t="homeAbout"></p><small>v2.5</small></div>
+    <div class="homeHead"><h1>⛳ <span data-t="appName"></span></h1><p data-t="homeAbout"></p><small>v3.0</small></div>
 
     <section id="homeMain">
       <div class="homeBtns">
@@ -677,12 +700,29 @@
         <h2 data-t="shTitle"></h2>
         <p class="about" data-t="shAbout"></p>
         <p id="shRule"></p>
+        <div id="shStampLayer"></div>
         <div id="shSetup">
+          <div id="shNetBox">
+            <div id="shNetOff">
+              <b data-t="shNetTitle"></b>
+              <div class="mpRow"><label data-t="mpName"></label><input id="shNetName" maxlength="20"></div>
+              <div class="mpRow"><button id="shNetCreate" data-t="shNetCreate"></button>
+                <span class="shNetJoinRow"><input id="shNetCode" maxlength="4" placeholder="1234" inputmode="numeric" pattern="[0-9]*" autocomplete="off"><button id="shNetJoin" data-t="shNetJoin"></button></span></div>
+              <div id="shNetErr"></div>
+            </div>
+            <div id="shNetOn" hidden>
+              <div class="shNetHead"><span><small data-t="mpRoom"></small> <b id="shNetRoom"></b></span><button id="shNetLeave" data-t="mpLeave"></button></div>
+              <div class="shNetShare"><div id="shNetQr"></div><div><div id="shNetUrl"></div><button id="shNetCopy" data-t="copy"></button></div></div>
+              <div id="shNetCount"></div>
+              <ul id="shNetList"></ul>
+              <p id="shNetHint" class="shsNote"></p>
+            </div>
+          </div>
           <div class="shsRow"><span class="lbl" data-t="shsStartL"></span><b id="shsStart" class="shsW"></b><span class="shsBtns"><button id="shsStartR" title="random">🎲</button><button id="shsStartP">✏️</button></span></div>
           <div class="shsRow"><span class="lbl" data-t="shsGoalL"></span><b id="shsGoal" class="shsW"></b><span class="shsBtns"><button id="shsGoalR" title="random">🎲</button><button id="shsGoalP">✏️</button><button id="shsGoalX">✖</button></span></div>
           <div class="shsRow shsBothRow"><button id="shsBothR" data-t="shBothR"></button></div>
-          <div class="shsRow"><span class="lbl" data-t="shsNL"></span><span id="shsN" class="seg"><button data-n="1">1</button><button data-n="2">2</button><button data-n="3">3</button><button data-n="4">4</button></span></div>
-          <div id="shsNames"></div>
+          <div class="shsRow shsLocalOnly"><span class="lbl" data-t="shsNL"></span><span id="shsN" class="seg"><button data-n="1">1</button><button data-n="2">2</button><button data-n="3">3</button><button data-n="4">4</button></span></div>
+          <div id="shsNames" class="shsLocalOnly"></div>
           <div class="shsRow"><span class="lbl" data-t="shsModeL"></span><span id="shsMode" class="seg"><button data-m="free" data-t="shModeFree"></button><button data-m="r3" data-t="shModeR3"></button></span></div>
           <p class="shsNote" id="shsModeNote"></p>
           <p class="shsNote" id="shsPassNote" data-t="shsPassNote"></p>
@@ -698,12 +738,14 @@
           <div id="shJudge" hidden></div>
           <details id="shLogBox"><summary id="shLogSum"></summary><ol id="shLogList" class="shLogList"></ol></details>
           <div id="shTurn" hidden></div>
+          <div id="shTyping" hidden></div>
           <div id="shInputRow">
             <div class="shField"><input id="shInput" type="search" autocomplete="off" autocapitalize="off" spellcheck="false" enterkeyhint="go"><div id="shSug" hidden></div></div>
             <button id="shGo" class="prime" data-t="shGo"></button>
           </div>
           <div id="shMsg"></div>
-          <div class="mpRow shCtrl"><button id="shPass" data-t="shPass"></button><button id="shQuit" data-t="shQuit"></button></div>
+          <div class="mpRow shCtrl"><button id="shPass" data-t="shPass"></button><button id="shQuit" data-t="shQuit"></button><button id="shNetLeave2" data-t="mpLeave" hidden></button></div>
+          <div id="shStamps" class="stampRow" hidden></div>
           </div>
           <aside id="shThumbCol">
             <div id="shThumbHead"></div>
@@ -1881,6 +1923,13 @@ Object.assign(STR['es'], {shThumbCand:'👀 Candidato: ', shThumbNote:'Artículo
 Object.assign(STR['ko'], {shThumbCand:'👀 후보: ', shThumbNote:'지금 단어의 문서(누르면 읽기)'});
 Object.assign(STR['zh-hant'], {shThumbCand:'👀 候選：', shThumbNote:'目前條目（點一下閱讀）'});
 Object.assign(STR['zh-hans'], {shThumbCand:'👀 候选：', shThumbNote:'当前条目（点一下阅读）'});
+Object.assign(STR['ja'], {shNetTitle:"🌐 ネットで遊ぶ（2〜4人・それぞれのスマホやPCで）", shNetCreate:"🏠 部屋をつくる", shNetJoin:"参加する", shNetCodeBad:"4ケタの部屋番号を入れてね", shNetMembers:(n,m)=>`👥 ${n} / ${m}人`, shNetYou:"（あなた）", shNetNeed2:"2人以上そろったら「はじめる」を押せるよ", shNetHostHint:"スタート・ゴール・モードを決めて「はじめる」。順番はくじ引き！", shNetWaitHost:"ホストを待っています…", shNetNewHost:"👑 あなたがホストになりました", shNetJoined:n=>`👋 ${n} が来た！`, shNetLeft:n=>`🚪 ${n} が抜けた`, shNetTyping:(w,t)=>`✏️ ${w} が入力中：「${t}」`, shNetThinking:w=>`🤔 ${w} が考え中…`, shNetWaitTurn:w=>`${w} の番です`, shNetYourTurn:w=>`👉 あなたの番！（${w}）`, shNetSent:"📨 ホストに送ったよ。判定を待ってね", shNetLeaveQ:"部屋を出る？（ゲーム中なら脱落になるよ）", shNetOrder:s=>`🎲 順番：${s}`, shLogLeft:"🚪 部屋を出た（脱落）"});
+Object.assign(STR['en'], {shNetTitle:"🌐 Play online (2–4 players, each on their own device)", shNetCreate:"🏠 Create a room", shNetJoin:"Join", shNetCodeBad:"Enter the 4-digit room code", shNetMembers:(n,m)=>`👥 ${n} / ${m}`, shNetYou:" (you)", shNetNeed2:"Start becomes available with 2+ players", shNetHostHint:"Pick start, goal and mode, then Start. Turn order is drawn at random!", shNetWaitHost:"Waiting for the host…", shNetNewHost:"👑 You're the host now", shNetJoined:n=>`👋 ${n} joined!`, shNetLeft:n=>`🚪 ${n} left`, shNetTyping:(w,t)=>`✏️ ${w} is typing: “${t}”`, shNetThinking:w=>`🤔 ${w} is thinking…`, shNetWaitTurn:w=>`${w}'s turn`, shNetYourTurn:w=>`👉 Your turn! (${w})`, shNetSent:"📨 Sent to the host — waiting for the judgment", shNetLeaveQ:"Leave the room? (You'll be out if a game is running)", shNetOrder:s=>`🎲 Order: ${s}`, shLogLeft:"🚪 left the room (out)"});
+Object.assign(STR['fr'], {shNetTitle:"🌐 Play online (2–4 players, each on their own device)", shNetCreate:"🏠 Create a room", shNetJoin:"Join", shNetCodeBad:"Enter the 4-digit room code", shNetMembers:(n,m)=>`👥 ${n} / ${m}`, shNetYou:" (you)", shNetNeed2:"Start becomes available with 2+ players", shNetHostHint:"Pick start, goal and mode, then Start. Turn order is drawn at random!", shNetWaitHost:"Waiting for the host…", shNetNewHost:"👑 You're the host now", shNetJoined:n=>`👋 ${n} joined!`, shNetLeft:n=>`🚪 ${n} left`, shNetTyping:(w,t)=>`✏️ ${w} is typing: “${t}”`, shNetThinking:w=>`🤔 ${w} is thinking…`, shNetWaitTurn:w=>`${w}'s turn`, shNetYourTurn:w=>`👉 Your turn! (${w})`, shNetSent:"📨 Sent to the host — waiting for the judgment", shNetLeaveQ:"Leave the room? (You'll be out if a game is running)", shNetOrder:s=>`🎲 Order: ${s}`, shLogLeft:"🚪 left the room (out)"});
+Object.assign(STR['es'], {shNetTitle:"🌐 Play online (2–4 players, each on their own device)", shNetCreate:"🏠 Create a room", shNetJoin:"Join", shNetCodeBad:"Enter the 4-digit room code", shNetMembers:(n,m)=>`👥 ${n} / ${m}`, shNetYou:" (you)", shNetNeed2:"Start becomes available with 2+ players", shNetHostHint:"Pick start, goal and mode, then Start. Turn order is drawn at random!", shNetWaitHost:"Waiting for the host…", shNetNewHost:"👑 You're the host now", shNetJoined:n=>`👋 ${n} joined!`, shNetLeft:n=>`🚪 ${n} left`, shNetTyping:(w,t)=>`✏️ ${w} is typing: “${t}”`, shNetThinking:w=>`🤔 ${w} is thinking…`, shNetWaitTurn:w=>`${w}'s turn`, shNetYourTurn:w=>`👉 Your turn! (${w})`, shNetSent:"📨 Sent to the host — waiting for the judgment", shNetLeaveQ:"Leave the room? (You'll be out if a game is running)", shNetOrder:s=>`🎲 Order: ${s}`, shLogLeft:"🚪 left the room (out)"});
+Object.assign(STR['ko'], {shNetTitle:"🌐 온라인으로 하기(2~4명·각자의 기기로)", shNetCreate:"🏠 방 만들기", shNetJoin:"참가", shNetCodeBad:"4자리 방 번호를 입력하세요", shNetMembers:(n,m)=>`👥 ${n} / ${m}`, shNetYou:"(나)", shNetNeed2:"Start becomes available with 2+ players", shNetHostHint:"Pick start, goal and mode, then Start. Turn order is drawn at random!", shNetWaitHost:"방장을 기다리는 중…", shNetNewHost:"👑 방장이 되었어요", shNetJoined:n=>`👋 ${n} 입장!`, shNetLeft:n=>`🚪 ${n} 퇴장`, shNetTyping:(w,t)=>`✏️ ${w} 입력 중: “${t}”`, shNetThinking:w=>`🤔 ${w} 생각 중…`, shNetWaitTurn:w=>`${w} 차례`, shNetYourTurn:w=>`👉 내 차례! (${w})`, shNetSent:"📨 방장에게 보냈어요. 판정을 기다려요", shNetLeaveQ:"방을 나갈까요? (게임 중이면 탈락)", shNetOrder:s=>`🎲 순서: ${s}`, shLogLeft:"🚪 방을 나감(탈락)"});
+Object.assign(STR['zh-hant'], {shNetTitle:"🌐 線上對戰（2～4 人・各自的裝置）", shNetCreate:"🏠 建立房間", shNetJoin:"加入", shNetCodeBad:"請輸入 4 位數房號", shNetMembers:(n,m)=>`👥 ${n} / ${m}`, shNetYou:"（你）", shNetNeed2:"Start becomes available with 2+ players", shNetHostHint:"Pick start, goal and mode, then Start. Turn order is drawn at random!", shNetWaitHost:"等待房主…", shNetNewHost:"👑 你成為房主了", shNetJoined:n=>`👋 ${n} 加入！`, shNetLeft:n=>`🚪 ${n} 離開`, shNetTyping:(w,t)=>`✏️ ${w} 正在輸入：「${t}」`, shNetThinking:w=>`🤔 ${w} 思考中…`, shNetWaitTurn:w=>`輪到 ${w}`, shNetYourTurn:w=>`👉 輪到你！（${w}）`, shNetSent:"📨 已送給房主，等待判定", shNetLeaveQ:"離開房間？（遊戲中會被淘汰）", shNetOrder:s=>`🎲 順序：${s}`, shLogLeft:"🚪 離開房間（淘汰）"});
+Object.assign(STR['zh-hans'], {shNetTitle:"🌐 在线对战（2～4 人・各自的设备）", shNetCreate:"🏠 创建房间", shNetJoin:"加入", shNetCodeBad:"请输入 4 位数房号", shNetMembers:(n,m)=>`👥 ${n} / ${m}`, shNetYou:"（你）", shNetNeed2:"Start becomes available with 2+ players", shNetHostHint:"Pick start, goal and mode, then Start. Turn order is drawn at random!", shNetWaitHost:"等待房主…", shNetNewHost:"👑 你成为房主了", shNetJoined:n=>`👋 ${n} 加入！`, shNetLeft:n=>`🚪 ${n} 离开`, shNetTyping:(w,t)=>`✏️ ${w} 正在输入：“${t}”`, shNetThinking:w=>`🤔 ${w} 思考中…`, shNetWaitTurn:w=>`轮到 ${w}`, shNetYourTurn:w=>`👉 轮到你！（${w}）`, shNetSent:"📨 已发给房主，等待判定", shNetLeaveQ:"离开房间？（游戏中会被淘汰）", shNetOrder:s=>`🎲 顺序：${s}`, shLogLeft:"🚪 离开房间（淘汰）"});
 /* ── v2.0 リンクしりとり（まわしプレイ） ── */
 Object.assign(STR['ja'], {shGoalLink:d=>`🚩 ${d}打でゴール！`, shHitGoal:"🚩 ゴールに届いた！", shLong:"🎯 ロングショット", shGoalWord:"🚩 ゴール", shPtsLine:(a,n)=>`${a} +${n}`, shHist:n=>`📜 履歴（${n}）`, shPast:"📚 過去の記録", shPastNone:"まだ記録はないよ。ゲームが終わると自動で保存されるよ（このブラウザの中だけ）", shDelOne:"🗑 この記録を消す", shDelOneQ:"この記録を消す？", shDelAll:"🗑 全部消す", shDelAllQ:"しりとりの記録を全部消す？", shBackList:"← 一覧にもどる", shPpl:"人", shTimeUpS:"⏱ 時間切れ（ドボン）", shUndone:"↩ ドボンを取り消し", shDobonD:d=>d===1?`💥 ドボン（1打・近すぎ）`:`💥 ドボン（4打以上）`, shOutMark:"💀 脱落"});
 Object.assign(STR['en'], {shGoalLink:d=>`🚩 Goal in ${d}!`, shHitGoal:"🚩 Reached the goal!", shLong:"🎯 Long shot", shGoalWord:"🚩 Goal", shPtsLine:(a,n)=>`${a} +${n}`, shHist:n=>`📜 History (${n})`, shPast:"📚 Past games", shPastNone:"No games yet. Finished games are saved automatically (in this browser only).", shDelOne:"🗑 Delete this game", shDelOneQ:"Delete this game?", shDelAll:"🗑 Delete all", shDelAllQ:"Delete all saved link-chain games?", shBackList:"← Back to list", shPpl:" players", shTimeUpS:"⏱ Time up (bust)", shUndone:"↩ Bust undone", shDobonD:d=>d===1?`💥 Bust (1 click, too close)`:`💥 Bust (4+)`, shOutMark:"💀 out"});
@@ -2004,7 +2053,11 @@ const state = {
 
 /* いま効いているルール（挑戦状のときはリンクのルールが上書き） */
 function eff(){ return state.challenge ? {...settings, ...state.challenge.rules} : settings; }
-function curLang(){ return (state.playing && state.rules ? state.rules.lang : eff().lang); }
+var shNet = null;   // リンクしりとりのネット対戦（つないでいる間は、ホストの言語に合わせる）
+function curLang(){
+  if(shNet && state.homeView === "shiri" && sh && sh.lang) return sh.lang;
+  return (state.playing && state.rules ? state.rules.lang : eff().lang);
+}
 function zhVariant(){
   if(settings.zhVariant === "zh-tw" || settings.zhVariant === "zh-cn") return settings.zhVariant;
   for(const l of (navigator.languages || [navigator.language || ""])){
@@ -4561,7 +4614,7 @@ function shLoad(){
   try{ const o = JSON.parse(localStorage.getItem(SH_KEY) || "null"); if(o && o.v === 2){ o.judging = null; o.log = o.log || []; return o; } }catch(_){}
   return shNewSetup();
 }
-function shSave(){ try{ localStorage.setItem(SH_KEY, JSON.stringify({...sh, judging:null})); }catch(_){} }
+function shSave(){ if(shNet){ if(shIsHost()) shNetSync(); return; } try{ localStorage.setItem(SH_KEY, JSON.stringify({...sh, judging:null})); }catch(_){} }
 const shMulti = () => sh.players.length > 1;
 const shCur = () => sh.players[sh.turn];
 function shName(i){ const p = sh.players[i]; return p ? `${SH_DOTS[i]} ${p.name}` : ""; }
@@ -4653,7 +4706,10 @@ function shApply(ev){
       const s = sh.setup;
       sh = shNewSetup(s);
       sh.phase = "play";
-      sh.players = Array.from({length:s.n}, (_, i) => ({name:(s.names[i] || "").trim() || shDefName(i),
+      if(ev.players){ s.n = ev.players.length; sh.lang = curLang(); }
+      sh.players = ev.players
+        ? ev.players.map(p => ({id:p.id, name:p.name, alive:true, life:s.mode === "r3" ? 1 : 0, pass:1, score:0}))
+        : Array.from({length:s.n}, (_, i) => ({name:(s.names[i] || "").trim() || shDefName(i),
                      alive:true, life:s.mode === "r3" ? 1 : 0, pass:s.n > 1 ? 1 : 0, score:0}));
       sh.chain = [{title:s.start.title, shown:s.start.shown, by:-1}];
       sh.turnEnds = s.mode === "r3" ? Date.now() + SH_TURN_SEC * 1000 : 0;
@@ -4718,6 +4774,7 @@ function shApply(ev){
     }
   }
   if(ev.t !== "step") shSave();
+  else if(shIsHost()) shNetSync();
   renderShiri();
   if(["judge", "result", "pass", "timeout"].includes(ev.t)){ const jb = $("shJudge"); if(!jb.hidden) jb.scrollIntoView({behavior:"smooth", block:"nearest"}); }
 }
@@ -4741,6 +4798,7 @@ function renderShiri(){
 }
 function renderShSetup(){
   const s = sh.setup;
+  renderShNet();
   for(const role of ["start", "goal"]){
     const w = s[role];
     const el = $(role === "start" ? "shsStart" : "shsGoal");
@@ -4763,8 +4821,8 @@ function renderShSetup(){
     inp.addEventListener("input", () => { s.names[i] = inp.value; shSave(); });
     row.append(inp); nb.append(row);
   }
-  $("shsPassNote").hidden = s.n < 2;
-  $("shsBegin").disabled = !s.start;
+  $("shsPassNote").hidden = s.n < 2 && !shNet;
+  if(!shNet){ $("shsBegin").hidden = false; $("shsBegin").disabled = !s.start; }
 }
 function renderShPlay(){
   const multi = shMulti(), playing = sh.phase === "play", judging = !!sh.judging;
@@ -4852,6 +4910,8 @@ function renderShPlay(){
       jb.append(mk("div", "shSafeBig d" + L.d, who + (L.d === 3 ? T("shNice3") : L.d === 2 ? T("shSafe2") : T("shSafeX")) + (L.pts ? `  +${L.pts}` : "")));
     }else if(L.kind === "pass"){
       jb.append(mk("div", "shPassBig", who + T("shPassed")));
+    }else if(L.kind === "left"){
+      jb.append(mk("div", "shPassBig", who + T("shLogLeft")));
     }else{
       jb.append(mk("div", "shDobon", (multi ? who : "") + (L.kind === "timeout" ? T("shTimeUp") : T("shDobon"))));
       if(L.kind === "dobon"){
@@ -4890,16 +4950,23 @@ function renderShPlay(){
     if(!multi && sh.last && sh.last.kind !== "safe" && E.why === "allOut"){
       const u = mk("button", "", T("shUndo")); u.addEventListener("click", () => shApply({t:"undo"})); r.append(u);
     }
-    const again = mk("button", "prime", T("shAgain")); again.addEventListener("click", () => shApply({t:"begin"}));
-    const set = mk("button", "", T("shToSetup")); set.addEventListener("click", () => shApply({t:"setup"}));
-    r.append(again, set); jb.append(r);
+    if(shNet && !shIsHost()) r.append(mk("span", "shWaitHost", T("shNetWaitHost")));
+    else{
+      const again = mk("button", "prime", T("shAgain"));
+      again.addEventListener("click", () => { if(shNet){ shNet.locked = false; shNetBegin(); } else shApply({t:"begin"}); });
+      const set = mk("button", "", T("shToSetup"));
+      set.addEventListener("click", () => { if(shNet){ shNet.locked = false; shNet.participants = []; } shApply({t:"setup"}); });
+      r.append(again, set);
+    }
+    jb.append(r);
   }
   // 履歴
   $("shLogSum").textContent = T("shHist", sh.log.length);
   $("shLogBox").hidden = !sh.log.length;
   shRenderLog($("shLogList"), sh.log, sh.players.map(p => p.name), multi);
   // 入力
-  const lock = judging || !playing;
+  const myTurn = shMyTurn();
+  const lock = judging || !playing || !myTurn;
   $("shInputRow").hidden = !playing;
   $("shInput").disabled = lock; $("shGo").disabled = lock;
   if(playing){
@@ -4907,12 +4974,16 @@ function renderShPlay(){
     $("shTurn").textContent = turnTxt;
     $("shTurn").style.color = multi ? SH_COLORS[sh.turn] : "";
     $("shTurn").hidden = !multi;
-    $("shInput").placeholder = T("shPh", last.shown);
+    $("shInput").placeholder = myTurn ? T("shPh", last.shown) : T("shNetWaitTurn", shName(sh.turn));
+    if(shNet && myTurn) $("shTurn").textContent = T("shNetYourTurn", shName(sh.turn));
   }else $("shTurn").hidden = true;
+  shShowTyping();
+  shRenderStamps();
+  $("shNetLeave2").hidden = !shNet;
   const cp = shCur();
-  $("shPass").hidden = !playing || !multi || !cp || cp.pass < 1;
+  $("shPass").hidden = !playing || !multi || !cp || cp.pass < 1 || !myTurn;
   $("shPass").disabled = judging;
-  $("shQuit").hidden = !playing;
+  $("shQuit").hidden = !playing || (shNet && !shIsHost());
   $("shQuit").disabled = judging;
   shTick();
 }
@@ -4962,6 +5033,7 @@ function shRenderLog(ol, log, names, multi){
     if(e.kind === "pass") body.append(T("shPassed"));
     else if(e.kind === "timeout") body.append(T("shTimeUpS"));
     else if(e.kind === "undo") body.append(T("shUndone"));
+    else if(e.kind === "left") body.append(T("shLogLeft"));
     else{
       const w = shWordBtn(e.shown, e.title, null);
       body.append(w, " ");
@@ -4992,7 +5064,7 @@ function shTick(){
   const left = Math.max(0, Math.ceil((sh.turnEnds - Date.now()) / 1000));
   el.textContent = `⏱ ${left}`;
   el.classList.toggle("warn", left <= 10);
-  if(left <= 0){ clearInterval(shTimerId); shTimerId = null; shApply({t:"timeout"}); return; }
+  if(left <= 0){ clearInterval(shTimerId); shTimerId = null; if(!shNet || shIsHost()) shApply({t:"timeout"}); return; }
   if(!shTimerId) shTimerId = setInterval(shTick, 250);
 }
 
@@ -5014,6 +5086,7 @@ function shSug(){
   });
 }
 $("shInput").addEventListener("input", () => {
+  shTypSend();
   delete $("shInput").dataset.title;
   $("shMsg").textContent = "";
   clearTimeout(shTimer);
@@ -5044,15 +5117,19 @@ async function shResolve(text){
 }
 async function shSubmit(){
   const inp = $("shInput"), raw = (inp.dataset.title || inp.value).trim();
-  if(!raw || sh.judging || sh.phase !== "play") return;
+  if(!raw || sh.judging || sh.phase !== "play" || !shMyTurn()) return;
   $("shMsg").textContent = "";
   let w;
   try{ await ensureNs(); w = await shResolve(raw); }
   catch(e){ $("shMsg").textContent = T("notFound", raw); return; }
   if(nsOf(w.title) !== 0){ $("shMsg").textContent = T("shOnlyArticle"); return; }
   if(sh.chain.some(c => norm(c.title) === norm(w.title))){ $("shMsg").textContent = T("shUsed", w.shown); return; }
-  if(sh.phase !== "play" || sh.judging) return;
+  if(sh.phase !== "play" || sh.judging || !shMyTurn()) return;
   inp.value = ""; delete inp.dataset.title;
+  if(shNet && !shIsHost()){ shNetSend({t:"say", ...w}); shTypLast = null; $("shMsg").textContent = T("shNetSent"); return; }
+  shRunJudge(w);
+}
+async function shRunJudge(w){
   const last = sh.chain[sh.chain.length - 1];
   const lang = sh.lang;
   shApply({t:"judge", ...w});
@@ -5120,7 +5197,7 @@ $("shsGoalP").addEventListener("click", () => shPick("goal"));
 $("shsGoalX").addEventListener("click", () => { sh.setup.goal = null; shSave(); renderShiri(); });
 document.querySelectorAll("#shsN button").forEach(b => b.addEventListener("click", () => { sh.setup.n = +b.dataset.n; shSave(); renderShiri(); }));
 document.querySelectorAll("#shsMode button").forEach(b => b.addEventListener("click", () => { sh.setup.mode = b.dataset.m; shSave(); renderShiri(); }));
-$("shsBegin").addEventListener("click", () => { if(sh.setup.start) shApply({t:"begin"}); });
+$("shsBegin").addEventListener("click", () => { if(!sh.setup.start) return; if(shNet) shNetBegin(); else shApply({t:"begin"}); });
 /* 過去の記録 */
 function shFmtDate(t){ try{ return new Date(t).toLocaleString(uiKey(), {year:"numeric", month:"numeric", day:"numeric", hour:"2-digit", minute:"2-digit"}); }catch(_){ return ""; } }
 function shHistList(){
@@ -5173,7 +5250,7 @@ $("shsPast").addEventListener("click", () => { shHistList(); $("shHistModal").cl
 $("shHistClose").addEventListener("click", () => $("shHistModal").classList.remove("show"));
 $("shHistModal").addEventListener("click", e => { if(e.target.id === "shHistModal") $("shHistModal").classList.remove("show"); });
 $("shHistDelAll").addEventListener("click", () => { if(confirm(T("shDelAllQ"))){ shRecWrite([]); shHistList(); } });
-$("shPass").addEventListener("click", () => shApply({t:"pass"}));
+$("shPass").addEventListener("click", () => { if(shNet && !shIsHost()) shNetSend({t:"pass"}); else shApply({t:"pass"}); });
 $("shQuit").addEventListener("click", () => { if(confirm(T("shQuitQ"))) shApply({t:"finish"}); });
 
 /* 経由を確かめる：記事を開いて、次の記事へのリンクを光らせる */
@@ -5234,11 +5311,319 @@ function rStep(dir){
 }
 $("rhPrev").addEventListener("click", () => rStep(-1));
 $("rhNext").addEventListener("click", () => rStep(1));
+/* ════════ v3.0 リンクしりとり：ネット対戦（Supabase Realtime） ════════
+   ・ホストが「正しい状態 sh」を持ち、変わるたびに全員へ丸ごと配る（sync）
+   ・参加者は「言葉を出す」「パス」などの希望をホストへ送るだけ（say / pass）
+   ・判定（うぃきぺでぃあへの問い合わせ）はホストのブラウザだけがやる
+   ・入力中の文字（typ）とスタンプ（stamp）は全員へ直接流す */
+const SH_NET_MAX = 4;
+const shIsHost = () => !!shNet && shNet.hostId === shNet.me.id;
+function shMyTurn(){ if(!shNet) return true; const p = shCur(); return !!p && p.id === shNet.me.id; }
+function shNetMembers(){
+  const n = shNet; if(!n) return [];
+  if(n.locked) return n.participants.map(id => n.people.get(id)).filter(Boolean);
+  return n.arrival.filter(id => n.active.has(id)).slice(0, SH_NET_MAX).map(id => n.people.get(id)).filter(Boolean);
+}
+async function shNetSend(payload){
+  const n = shNet; if(!n || !n.ch || !n.subscribed) return;
+  const body = {...payload, from:n.me.id};
+  for(let i = 0; i < 2; i++){
+    let r; try{ r = await n.ch.send({type:"broadcast", event:"s", payload:body}); }catch(e){ r = "err"; }
+    if(r === "ok" || shNet !== n || payload.t === "typ") return;
+    await new Promise(res => setTimeout(res, 600));
+  }
+}
+function shNetSnapshot(){
+  const s = JSON.parse(JSON.stringify({...sh, judging:sh.judging}));
+  s.turnLeft = sh.turnEnds ? Math.max(0, sh.turnEnds - Date.now()) : 0;
+  delete s.turnEnds;
+  return s;
+}
+function shNetSync(){
+  const n = shNet; if(!n || !shIsHost()) return;
+  n.seq++;
+  shNetSend({t:"sync", seq:n.seq, sh:shNetSnapshot(), locked:n.locked, participants:n.participants});
+}
+async function shNetConnect(room, creating){
+  if(shNet) return;
+  const name = ($("shNetName").value.trim() || myName || (T("mpGuest") + Math.floor(Math.random() * 90 + 10))).slice(0, 20);
+  saveName(name); $("shNetName").value = name;
+  $("shNetErr").textContent = T("mpConnecting");
+  try{
+    await loadSupabase();
+    if(!sbClient) sbClient = window.supabase.createClient(SB_URL, SB_KEY,
+      {auth:{persistSession:false, autoRefreshToken:false}, realtime:{params:{eventsPerSecond:20}}});
+  }catch(e){ $("shNetErr").textContent = T("mpFail") + e.message; return; }
+  const me = {id:rid(), name, joinedAt:Date.now()};
+  const ch = sbClient.channel("wikishiri:" + room, {config:{broadcast:{self:false, ack:true}, presence:{key:me.id}}});
+  shNet = {ch, room, me, hostId:null, amHost:!!creating, creating:!!creating, people:new Map([[me.id, {id:me.id, name}]]),
+           active:new Set([me.id]), arrival:[me.id], locked:false, participants:[], subscribed:false, seq:0, lastSeq:-1,
+           gotSync:!!creating, hostSeen:false, backup:JSON.parse(JSON.stringify(sh)), typing:null, savedRec:null, lastStamp:0};
+  ch.on("broadcast", {event:"s"}, ({payload}) => shNetOnMsg(payload))
+    .on("presence", {event:"sync"}, () => shNetOnSync())
+    .subscribe(async status => {
+      const n = shNet;
+      if(!n || n.ch !== ch) return;
+      if(status === "SUBSCRIBED"){
+        if(n.subscribed) return;
+        n.subscribed = true;
+        await ch.track({id:me.id, name:me.name, joinedAt:me.joinedAt, host:n.amHost, creator:n.creating});
+        $("shNetErr").textContent = "";
+        try{ history.replaceState(null, "", baseUrl() + "?shroom=" + room); }catch(_){}
+        if(creating){
+          const s = sh.setup;
+          sh = shNewSetup({...s, names:["", "", "", ""]});
+          sh.lang = curLang();
+          shNetSync();
+        }else{
+          shNetSend({t:"hello"});
+          setTimeout(() => { if(shNet && shNet.ch === ch && !shNet.gotSync){ shNetLeave(true); $("shNetErr").textContent = T("mpNoHost"); } }, 8000);
+        }
+        renderShiri();
+      }else if(!n.subscribed && (status === "CHANNEL_ERROR" || status === "TIMED_OUT")){
+        $("shNetErr").textContent = T("mpFail") + status;
+        shNet = null;
+        try{ sbClient.removeChannel(ch); }catch(_){}
+      }
+    });
+  renderShiri();
+}
+async function shNetLeave(silent){
+  const n = shNet; if(!n) return;
+  if(!silent && sh.phase === "play" && !confirm(T("shNetLeaveQ"))) return;
+  shNet = null;
+  try{ await n.ch.untrack(); }catch(_){}
+  try{ sbClient.removeChannel(n.ch); }catch(_){}
+  try{ history.replaceState(null, "", baseUrl()); }catch(_){}
+  sh = n.backup && n.backup.v === 2 ? n.backup : shNewSetup();
+  sh.judging = null;
+  $("shTyping").hidden = true;
+  renderShiri();
+}
+function shNetOnSync(){
+  const n = shNet; if(!n) return;
+  const active = Object.values(n.ch.presenceState()).map(a => a && a[a.length - 1]).filter(x => x && x.id);
+  const before = new Set(n.active);
+  n.active = new Set(active.map(x => x.id));
+  const newcomers = [];
+  for(const x of active.sort((a, b) => a.joinedAt - b.joinedAt || (a.id < b.id ? -1 : 1))){
+    n.people.set(x.id, {id:x.id, name:x.name});
+    if(!n.arrival.includes(x.id)) n.arrival.push(x.id);
+    if(!before.has(x.id) && x.id !== n.me.id) newcomers.push(x);
+  }
+  const gone = [...before].filter(id => !n.active.has(id));
+  // ホストの決め方は、ゴルフの対戦と同じ（札を持っている人。いなくなったら id の小さい人へ）
+  const holders = active.filter(x => x.host).sort((a, b) =>
+    (!!b.creator - !!a.creator) || ((b.id === n.hostId) - (a.id === n.hostId)) || (a.id < b.id ? -1 : 1));
+  if(holders.length) n.hostSeen = true;
+  let hostId = holders.length ? holders[0].id : null;
+  if(!hostId && n.hostSeen && active.length){
+    const mem = active.filter(x => !n.locked || n.participants.includes(x.id));
+    hostId = (mem.length ? mem : active).map(x => x.id).sort()[0];
+    if(hostId === n.me.id && !n.amHost){ n.amHost = true; n.ch.track({id:n.me.id, name:n.me.name, joinedAt:n.me.joinedAt, host:true, creator:false}); }
+  }
+  if(holders.length > 1 && n.amHost && hostId !== n.me.id){ n.amHost = false; n.ch.track({id:n.me.id, name:n.me.name, joinedAt:n.me.joinedAt, host:false, creator:n.creating}); }
+  const wasHost = n.hostId === n.me.id;
+  n.hostId = hostId;
+  if(shIsHost()){
+    if(!wasHost && n.gotSync){
+      toast(T("shNetNewHost"));
+      if(sh.judging){                                     // 判定の途中でホストが抜けた：その手はやり直し
+        const left = sh.judging.left; sh.judging = null;
+        if(left > 0) sh.turnEnds = Date.now() + left;
+      }
+    }
+    for(const x of newcomers){
+      if(n.locked && !n.participants.includes(x.id)) shNetSend({t:"kick", id:x.id, reason:"locked"});
+      else if(!n.locked && n.arrival.filter(id => n.active.has(id)).indexOf(x.id) >= SH_NET_MAX) shNetSend({t:"kick", id:x.id, reason:"full"});
+      else toast(T("shNetJoined", x.name));
+    }
+    // ゲーム中に抜けた人は脱落あつかい
+    if(sh.phase === "play"){
+      let changed = false;
+      sh.players.forEach((p, i) => {
+        if(p.id && p.alive && !n.active.has(p.id)){
+          p.alive = false; p.gone = true; changed = true;
+          sh.log.push({by:i, round:sh.round, kind:"left", out:true});
+          toast(T("shNetLeft", p.name));
+          if(i === sh.turn && !sh.judging){ sh.last = {kind:"left", by:i}; shAdvance(); }
+        }
+      });
+      const alive = shAliveIdx();
+      if(changed && alive.length <= 1 && sh.phase === "play") shFinish(alive.length ? "lastOne" : "allOut");
+    }
+    shNetSync();
+  }else{
+    for(const x of newcomers) toast(T("shNetJoined", x.name));
+  }
+  for(const id of gone){ const p = n.people.get(id); if(p && (!n.locked || n.participants.includes(id))) toast(T("shNetLeft", p.name)); }
+  renderShiri();
+}
+function shNetOnMsg(p){
+  const n = shNet; if(!n || !p || p.from === n.me.id) return;
+  const fromHost = p.from === n.hostId;
+  switch(p.t){
+    case "hello": if(shIsHost()) shNetSync(); break;
+    case "sync": {
+      if(!fromHost && n.hostId) return;
+      if(p.from !== n.lastFrom){ n.lastFrom = p.from; n.lastSeq = -1; }
+      if(p.seq <= n.lastSeq) return;
+      n.lastSeq = p.seq; n.gotSync = true;
+      n.locked = !!p.locked; n.participants = p.participants || [];
+      const s = p.sh;
+      s.turnEnds = s.turnLeft ? Date.now() + s.turnLeft : 0; delete s.turnLeft;
+      const wasJudging = !!sh.judging;
+      if(s.turn !== sh.turn || s.judging || s.phase !== "play") n.typing = null;
+      sh = s;
+      if(sh.phase !== "play" || !shMyTurn()) $("shInput").value = "";
+      if(sh.phase === "end" && sh.recId && n.savedRec !== sh.recId){ n.savedRec = sh.recId; shRecSave(); }
+      renderShiri();
+      if((sh.judging && !wasJudging) || (!sh.judging && wasJudging)){ const jb = $("shJudge"); if(!jb.hidden) jb.scrollIntoView({behavior:"smooth", block:"nearest"}); }
+      break;
+    }
+    case "say": {
+      if(!shIsHost() || sh.phase !== "play" || sh.judging) return;
+      const cur = shCur(); if(!cur || cur.id !== p.from) return;
+      if(sh.chain.some(c => norm(c.title) === norm(p.title))) return;
+      shRunJudge({title:p.title, shown:p.shown});
+      break;
+    }
+    case "pass": {
+      if(!shIsHost()) return;
+      const cur = shCur(); if(cur && cur.id === p.from) shApply({t:"pass"});
+      break;
+    }
+    case "typ": {
+      n.typing = {id:p.from, text:p.text || "", at:Date.now()};
+      shShowTyping();
+      break;
+    }
+    case "stamp": shStampShow(p.from, p.i); break;
+    case "kick":
+      if(p.id === n.me.id){ shNetLeave(true); $("shNetErr").textContent = p.reason === "full" ? T("mpFull") : T("mpLocked"); }
+      break;
+  }
+}
+/* 入力中の文字を見せる */
+let shTypTimer = null, shTypLast = null;
+function shTypSend(){
+  if(!shNet || sh.phase !== "play" || !shMyTurn()) return;
+  clearTimeout(shTypTimer);
+  shTypTimer = setTimeout(() => {
+    const t = $("shInput").value;
+    if(t === shTypLast) return;
+    shTypLast = t;
+    shNetSend({t:"typ", text:t.slice(0, 60)});
+  }, 120);
+}
+function shShowTyping(){
+  const el = $("shTyping"), n = shNet;
+  if(!n || sh.phase !== "play" || sh.judging || !n.typing){ el.hidden = true; return; }
+  const cur = shCur();
+  if(!cur || cur.id !== n.typing.id || cur.id === n.me.id){ el.hidden = true; return; }
+  const i = sh.turn;
+  el.hidden = false;
+  el.style.setProperty("--pc", SH_COLORS[i]);
+  el.textContent = n.typing.text ? T("shNetTyping", `${SH_DOTS[i]} ${cur.name}`, n.typing.text) : T("shNetThinking", `${SH_DOTS[i]} ${cur.name}`);
+}
+/* スタンプ */
+function shStampShow(from, i){
+  const n = shNet; if(!n) return;
+  const who = (n.people.get(from) || {}).name || "";
+  const b = mk("div", "shStampPop", `${STAMPS[i] || "❓"} ${who}`);
+  $("shStampLayer").append(b);
+  setTimeout(() => b.remove(), 2600);
+}
+function shRenderStamps(){
+  const box = $("shStamps"); box.innerHTML = "";
+  box.hidden = !shNet;
+  if(!shNet) return;
+  STAMPS.forEach((s, i) => {
+    const b = mk("button", "", s);
+    b.title = (T("stamps") || [])[i] || "";
+    b.addEventListener("click", () => {
+      if(Date.now() - shNet.lastStamp < 800) return;
+      shNet.lastStamp = Date.now();
+      shStampShow(shNet.me.id, i); shNetSend({t:"stamp", i});
+    });
+    box.append(b);
+  });
+}
+/* 部屋の表示（準備画面の上） */
+let shQrRoom = null;
+function renderShNet(){
+  const n = shNet;
+  $("shNetOff").hidden = !!n;
+  $("shNetOn").hidden = !n;
+  document.querySelectorAll(".shsLocalOnly").forEach(el => el.hidden = !!n);
+  const host = !n || shIsHost();
+  ["shsStartR", "shsStartP", "shsGoalR", "shsGoalP", "shsGoalX", "shsBothR"].forEach(id => $(id).disabled = !host);
+  document.querySelectorAll("#shsMode button").forEach(b => b.disabled = !host);
+  $("shsPast").hidden = !!n;
+  if(!n){ if(!$("shNetName").value) $("shNetName").value = myName || ""; return; }
+  $("shNetRoom").textContent = n.room;
+  const url = baseUrl() + "?shroom=" + n.room;
+  $("shNetUrl").textContent = url;
+  if(shQrRoom !== n.room){
+    shQrRoom = n.room;
+    const box = $("shNetQr"); box.innerHTML = "";
+    try{
+      const qr = makeQr(url), k = qr.getModuleCount(), size = (k + 4) * 5;
+      const cv = document.createElement("canvas"); cv.width = cv.height = size;
+      drawQr(cv.getContext("2d"), qr, 0, 0, size); box.appendChild(cv);
+    }catch(_){}
+  }
+  const mem = shNetMembers();
+  const ul = $("shNetList"); ul.innerHTML = "";
+  mem.forEach(p => {
+    const li = mk("li", "");
+    li.append(mk("span", "", (p.id === n.hostId ? "👑 " : "") + p.name + (p.id === n.me.id ? T("shNetYou") : "")));
+    if(p.id === n.me.id && sh.phase === "setup"){
+      const r = mk("button", "rename", "✏️"); r.title = T("mpRename");
+      r.addEventListener("click", () => {
+        const v = prompt(T("mpRenamePrompt"), n.me.name);
+        if(!v || !v.trim()) return;
+        n.me.name = v.trim().slice(0, 20); saveName(n.me.name);
+        n.ch.track({id:n.me.id, name:n.me.name, joinedAt:n.me.joinedAt, host:n.amHost, creator:n.creating});
+      });
+      li.append(r);
+    }
+    ul.append(li);
+  });
+  $("shNetCount").textContent = T("shNetMembers", mem.length, SH_NET_MAX);
+  $("shNetHint").textContent = host ? (mem.length < 2 ? T("shNetNeed2") : T("shNetHostHint")) : T("shNetWaitHost");
+  $("shsBegin").hidden = !host;
+  if(host) $("shsBegin").disabled = !sh.setup.start || mem.length < 2;
+}
+/* ホストがはじめる：参加者の順番はくじ引き */
+function shNetBegin(){
+  const n = shNet; if(!shIsHost()) return;
+  const mem = shNetMembers();
+  if(mem.length < 2 || !sh.setup.start) return;
+  const order = mem.map(p => ({p, r:Math.random()})).sort((a, b) => a.r - b.r).map(x => x.p);
+  n.locked = true; n.participants = order.map(p => p.id);
+  shApply({t:"begin", players:order.map(p => ({id:p.id, name:p.name}))});
+  toast(T("shNetOrder", order.map((p, i) => `${SH_DOTS[i]}${p.name}`).join(" → ")));
+}
+
+$("shNetCreate").addEventListener("click", () => shNetConnect(newRoomCode(), true));
+$("shNetJoin").addEventListener("click", () => {
+  const c = $("shNetCode").value.replace(/\D/g, "");
+  if(c.length !== 4){ $("shNetErr").textContent = T("shNetCodeBad"); return; }
+  shNetConnect(c, false);
+});
+$("shNetCode").addEventListener("keydown", e => { if(e.key === "Enter" && !e.isComposing) $("shNetJoin").click(); });
+$("shNetLeave").addEventListener("click", () => shNetLeave(false));
+$("shNetLeave2").addEventListener("click", () => shNetLeave(false));
+$("shNetCopy").addEventListener("click", async () => {
+  const url = $("shNetUrl").textContent;
+  try{ await navigator.clipboard.writeText(url); toast(T("copied")); }catch(_){ prompt(T("copyPrompt"), url); }
+});
 $("shGo").addEventListener("click", shSubmit);
 $("hShiri").addEventListener("click", () => showHome("shiri"));
-$("shBack").addEventListener("click", () => showHome("main"));
+$("shBack").addEventListener("click", async () => { if(shNet){ if(sh.phase === "play" && !confirm(T("shNetLeaveQ"))) return; await shNetLeave(true); } showHome("main"); });
 function shEnter(){
-  if(sh.lang !== curLang()){ const s = sh.setup; s.start = null; s.goal = null; sh = shNewSetup(s); }
+  if(!shNet && sh.lang !== curLang()){ const s = sh.setup; s.start = null; s.goal = null; sh = shNewSetup(s); }
   renderShiri();
 }
 
@@ -5251,7 +5636,15 @@ function toast(msg){
 applyTheme();
 state.challenge = parseChallenge();
 const roomQ = (new URLSearchParams(location.search).get("room") || "").toUpperCase().replace(/[^A-Z0-9]/g, "").slice(0, 4);
+const shRoomQ = (new URLSearchParams(location.search).get("shroom") || "").replace(/\D/g, "").slice(0, 4);
 if(state.challenge){ hideHome(); loadChallenge(); }
+else if(shRoomQ.length === 4){
+  applyUI();
+  showHome("shiri");
+  $("shNetCode").value = shRoomQ;
+  if(myName){ $("shNetName").value = myName; shNetConnect(shRoomQ, false); }
+  else $("shNetName").focus();
+}
 else if(roomQ.length === 4){
   // 部屋のQR・リンクで来た人：名前を覚えていればそのまま参加
   state.invite = roomQ;
