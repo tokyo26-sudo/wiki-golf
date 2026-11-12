@@ -334,6 +334,8 @@
   #shGoalBar.foot{background:#fff3e0;border-color:#f08c00;color:var(--ink)}
   :root[data-theme="dark"] #shGoalBar.foot{background:#3a2a10}
   @media (prefers-color-scheme: dark){ :root:not([data-theme="light"]) #shGoalBar.foot{background:#3a2a10} }
+  .shBead .mine{margin:0 2px 0 4px;font-size:.9em}
+  .shFw.mine{text-decoration:underline wavy rgba(224,49,49,.5);text-underline-offset:3px}
   .shBead.trapHit{box-shadow:0 0 0 3px var(--flag);animation:shShake .5s 2}
   #shGoalBar .bw{white-space:nowrap;margin-right:8px}
   #shGoalBar .bw.new{background:#ffe066;border-radius:6px;padding:0 4px;color:#5c3b00}
@@ -647,7 +649,7 @@
   <div class="stat"><div class="num" id="clockNum">0:00</div><div class="lbl" id="clockLbl"></div></div>
   <div class="stat" id="pageStat" hidden><div class="num" id="pageNum">0</div><div class="lbl" data-t="pageLeft"></div></div>
   <div id="route"></div>
-  <span id="ver">v4.3</span>
+  <span id="ver">v4.5</span>
   <div id="barBtns">
     <button id="teeoff" disabled data-t="teeoff"></button>
     <button id="backBtn" hidden data-t="back"></button>
@@ -705,7 +707,7 @@
 
 <div id="settings" class="overlay">
   <div class="panel">
-    <h2><span data-t="settings"></span> <small style="font-size:.65rem;font-weight:400;color:var(--sub)">v4.3</small></h2>
+    <h2><span data-t="settings"></span> <small style="font-size:.65rem;font-weight:400;color:var(--sub)">v4.5</small></h2>
     <p class="lockNote" id="lockNote" hidden></p>
     <button id="quitHole" class="quit" hidden></button>
     <button id="toHome" data-t="toHome"></button>
@@ -733,7 +735,7 @@
 
 <div id="home">
   <div class="homeInner">
-    <div class="homeHead"><h1>⛳ <span data-t="appName"></span></h1><p data-t="homeAbout"></p><small>v4.3</small></div>
+    <div class="homeHead"><h1>⛳ <span data-t="appName"></span></h1><p data-t="homeAbout"></p><small>v4.5</small></div>
 
     <section id="homeMain">
       <div class="homeBtns">
@@ -764,7 +766,7 @@
     <section id="homeShiri" hidden>
       <div class="homeCard">
         <button id="shBack" data-t="hBack"></button>
-        <h2 data-t="shTitle"></h2>
+        <h2 id="shTitleH" data-t="shTitle"></h2>
         <p class="about" data-t="shAbout"></p>
         <p id="shRule"></p>
         <div id="shStampLayer"></div>
@@ -2216,6 +2218,14 @@ Object.assign(STR["es"], {shKindFoot:"👣 Huellas", shKindNoteFoot:"Un artícul
 Object.assign(STR["ko"], {shKindFoot:"👣 발자국", shKindNoteFoot:"지금까지 나온 단어(출발 포함, 바로 앞 단어 제외)에 링크한 문서를 말하면 아웃!", shFootIs:"👣 발자국: ", shFootNote:"(바로 앞을 뺀 지금까지의 단어에 링크하면 아웃!)", shFAsk:"👣 앞에 나온 단어에 링크했나?", shFootHit:"👣 발자국을 밟았다!", shRuleFoot:"👣 앞에 나온 단어에 링크 = 아웃"});
 Object.assign(STR["zh-hant"], {shKindFoot:"👣 足跡", shKindNoteFoot:"說出連到之前出現過的詞（含起點，不含上一個）的條目就出局！", shFootIs:"👣 足跡：", shFootNote:"（連到之前的詞〔不含上一個〕就出局！）", shFAsk:"👣 有連到之前的詞？", shFootHit:"👣 踩到足跡了！", shRuleFoot:"👣 連到之前的詞＝出局"});
 Object.assign(STR["zh-hans"], {shKindFoot:"👣 足迹", shKindNoteFoot:"说出链接到之前出现过的词（含起点，不含上一个）的条目就出局！", shFootIs:"👣 足迹：", shFootNote:"（链接到之前的词〔不含上一个〕就出局！）", shFAsk:"👣 有链接到之前的词？", shFootHit:"👣 踩到足迹了！", shRuleFoot:"👣 链接到之前的词＝出局"});
+/* v4.5 足あと→地雷 */
+Object.assign(STR["ja"], {shKindFoot:"💣 地雷", shKindNoteFoot:"今まで出た言葉（スタートも入る。ひとつ前の言葉は除く）が地雷になる。地雷にリンクしてる記事を言ったらアウト！言葉が増えるほど地雷も増えていくよ", shFootIs:"💣 地雷：", shFootNote:"ここまでの言葉（ひとつ前は除く）にリンクしてる記事を言ったらアウト！", shFAsk:"💣 地雷（前に出た言葉）にリンクしてる？", shFootHit:"💥 地雷を踏んだ！", shRuleFoot:"💣 地雷（前に出た言葉）にリンクしてる記事＝アウト", shTitleFoot:"💣 リンク地雷しりとり"});
+Object.assign(STR["en"], {shKindFoot:"💣 Mines", shKindNoteFoot:"Every earlier word (including the start, except the one just before) becomes a mine. Name an article that links to a mine and you're out!", shFootIs:"💣 Mines: ", shFootNote:" (linking to an earlier word except the last one = out!)", shFAsk:"💣 Links to a mine (an earlier word)?", shFootHit:"💥 Stepped on a mine!", shRuleFoot:"💣 linking to a mine (an earlier word) = out", shTitleFoot:"💣 Link Minefield"});
+Object.assign(STR["fr"], {shKindFoot:"💣 Mines", shFootIs:"💣 Mines : ", shFAsk:"💣 Lien vers une mine (mot déjà dit) ?", shFootHit:"💥 Sur une mine !", shRuleFoot:"💣 lien vers une mine (mot déjà dit) = perdu", shTitleFoot:"💣 Champ de mines de liens"});
+Object.assign(STR["es"], {shKindFoot:"💣 Minas", shFootIs:"💣 Minas: ", shFAsk:"💣 ¿Enlaza a una mina (palabra ya dicha)?", shFootHit:"💥 ¡Pisaste una mina!", shRuleFoot:"💣 enlazar a una mina (palabra ya dicha) = fuera", shTitleFoot:"💣 Campo de minas de enlaces"});
+Object.assign(STR["ko"], {shKindFoot:"💣 지뢰", shFootIs:"💣 지뢰: ", shFAsk:"💣 지뢰(앞에 나온 단어)에 링크했나?", shFootHit:"💥 지뢰를 밟았다!", shRuleFoot:"💣 지뢰(앞에 나온 단어)에 링크 = 아웃", shTitleFoot:"💣 링크 지뢰 끝말잇기"});
+Object.assign(STR["zh-hant"], {shKindFoot:"💣 地雷", shFootIs:"💣 地雷：", shFAsk:"💣 有連到地雷（之前的詞）？", shFootHit:"💥 踩到地雷了！", shRuleFoot:"💣 連到地雷（之前的詞）＝出局", shTitleFoot:"💣 連結地雷接龍"});
+Object.assign(STR["zh-hans"], {shKindFoot:"💣 地雷", shFootIs:"💣 地雷：", shFAsk:"💣 有链接到地雷（之前的词）？", shFootHit:"💥 踩到地雷了！", shRuleFoot:"💣 链接到地雷（之前的词）＝出局", shTitleFoot:"💣 链接地雷接龙"});
 function T(key, ...args){
   const v = (STR[uiKey()] || STR.en)[key] ?? STR.en[key] ?? STR.ja[key] ?? key;
   return typeof v === "function" ? v(...args) : v;
@@ -5171,6 +5181,7 @@ function renderShiri(){
   $("shPlay").hidden = setupMode;
   $("home").classList.toggle("shWide", !setupMode);
   const tb = shThumbBase(); if(tb && !(shThumbWant && shThumbWant.kind === "cand" && shItems.length)) shThumbShow(tb.title, tb.kind);
+  $("shTitleH").textContent = sh.setup.gtype === "foot" ? T("shTitleFoot") : T("shTitle");
   { const r = T("shRule"), i = r.indexOf("🚩");
     const tail = sh.setup.gtype === "bomb" ? T("shRuleBomb") : sh.setup.gtype === "foot" ? T("shRuleFoot") : "";
     $("shRule").textContent = tail ? (i > 0 ? r.slice(0, i) : r + "　") + tail : r; }
@@ -5281,7 +5292,9 @@ function renderShPlay(){
     if(c.by >= 0 && multi) bd.style.setProperty("--pc", SH_COLORS[c.by]);
     const tt = shWordBtn(c.shown, c.title, nx ? ((nx.via && nx.via[0]) || nx.title) : null);
     tt.classList.add("tt");
-    bd.append(mk("span", "no", String(i + 1)), tt);
+    bd.append(mk("span", "no", String(i + 1)));
+    if(shIsFoot() && i < sh.chain.length - 1) bd.append(mk("span", "mine", "💣"));   // v4.4 いま地雷になってる言葉
+    bd.append(tt);
     box.append(bd);
   });
   // 判定パネル
@@ -5523,8 +5536,10 @@ function shRenderLog(box, log, names, multi, start, goal, gtype){
   const lands = log.filter(e => e.kind === "safe" || e.kind === "safeX" || e.kind === "goal");
   const hopOf = e => e ? ((e.via && e.via[0]) || e.title) : null;
   const nextOf = e => hopOf(lands[lands.indexOf(e) + 1]);
+  const footMode = gtype === "foot", lastLand = lands[lands.length - 1];
+  const mineMark = (isStart, e) => footMode && (isStart ? lands.length > 0 : e !== lastLand) ? "💣 " : "";
   const whoTag = (el, e) => { if(e.by >= 0 && multi){ const w = mk("span", "who", `${SH_DOTS[e.by]} ${names[e.by]}`); w.style.setProperty("--pc", SH_COLORS[e.by]); el.append(w); } };
-  if(start) put(start.shown, "odai", el => { el.append(mk("b", "lab", T("shFlowStart")), mk("span", "", start.shown), openBtn(start.title, hopOf(lands[0]))); });
+  if(start) put(mineMark(true) + start.shown, "odai", el => { el.append(mk("b", "lab", T("shFlowStart")), mk("span", "", start.shown), openBtn(start.title, hopOf(lands[0]))); });
   if(bombMode && goal) mark(bombIcon(goal) + " " + goal.shown, bombFill(goal));
   log.forEach(e => {
     if(e.kind === "pass"){ arrows++; return; }
@@ -5562,7 +5577,7 @@ function shRenderLog(box, log, names, multi, start, goal, gtype){
     else{
       viaWords(e.via || [], e.title);
       if(e.kind === "goal"){ goalHit = true; put(e.shown + " 🚩", "odai", fill); }
-      else put(e.shown, "inp", fill);
+      else put(mineMark(false, e) + e.shown, "inp" + (mineMark(false, e) ? " mine" : ""), fill);
     }
   });
   if(goal && !goalHit && !bombMode) put("🚩 " + goal.shown, "odai far", el => { el.append(mk("b", "lab", T("shFlowGoalFar")), mk("span", "", goal.shown), openBtn(goal.title)); }, "⇢");
@@ -5750,7 +5765,7 @@ function shHistList(){
   recs.forEach(r => {
     const b = mk("button", "shRec");
     b.append(mk("small", "", `${shFmtDate(r.at)} ・ ${r.setup.n}${T("shPpl")} ・ ${r.setup.mode === "r3" ? T("shModeR3") : T("shModeFree")}`));
-    b.append(mk("b", "", `${r.setup.start ? r.setup.start.shown : ""}${r.setup.gtype === "foot" ? "　👣" : r.setup.gtype === "bomb" ? "　💣" + (r.setup.goal ? " " + r.setup.goal.shown : "") : r.setup.goal ? " → 🚩 " + r.setup.goal.shown : ""}`));
+    b.append(mk("b", "", `${r.setup.start ? r.setup.start.shown : ""}${r.setup.gtype === "foot" ? "　💣" + T("shKindFoot").replace(/^💣\s*/, "") : r.setup.gtype === "bomb" ? "　💣" + (r.setup.goal ? " " + r.setup.goal.shown : "") : r.setup.goal ? " → 🚩 " + r.setup.goal.shown : ""}`));
     const sc = r.players.map((p, i) => `${r.setup.n > 1 ? SH_DOTS[i] + " " : ""}${p.name} ${T("shPts", p.score)}`).join("　");
     b.append(mk("span", "sc", `${T("shLinks", Math.max(0, (r.chain || []).length - 1))} ・ ${sc}`));
     b.addEventListener("click", () => shHistDetail(r.id));
@@ -5764,7 +5779,7 @@ function shHistDetail(id){
   $("shHistDelAll").hidden = true;
   const back = mk("button", "", T("shBackList")); back.addEventListener("click", shHistList);
   box.append(back);
-  box.append(mk("h3", "", `${r.setup.start ? r.setup.start.shown : ""}${r.setup.gtype === "foot" ? "　👣" : r.setup.gtype === "bomb" ? "　💣" + (r.setup.goal ? " " + r.setup.goal.shown : "") : r.setup.goal ? " → 🚩 " + r.setup.goal.shown : ""}`));
+  box.append(mk("h3", "", `${r.setup.start ? r.setup.start.shown : ""}${r.setup.gtype === "foot" ? "　💣" + T("shKindFoot").replace(/^💣\s*/, "") : r.setup.gtype === "bomb" ? "　💣" + (r.setup.goal ? " " + r.setup.goal.shown : "") : r.setup.goal ? " → 🚩 " + r.setup.goal.shown : ""}`));
   box.append(mk("p", "shsNote", `${shFmtDate(r.at)} ・ ${r.setup.n}${T("shPpl")} ・ ${r.setup.mode === "r3" ? T("shModeR3") : T("shModeFree")}`));
   const multi = r.setup.n > 1;
   const order = r.players.map((p, i) => ({p, i})).sort((a, b) => b.p.score - a.p.score);
