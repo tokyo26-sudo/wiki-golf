@@ -205,6 +205,63 @@
   #homeSettings{margin-top:6px}
   .homeFoot{display:flex;justify-content:center;gap:18px;margin:14px 0 4px;flex-wrap:wrap}
   @media (max-width:560px){ .gameCards2{grid-template-columns:1fr} }
+  /* v5.3 📺 観客画面 */
+  .shTopRow{display:flex;justify-content:space-between;align-items:center}
+  .tvTxt{border:1px solid var(--line);background:var(--card);border-radius:10px;padding:4px 10px;font-size:.85rem}
+  body.tvMode{overflow:hidden;background:#0b1410}
+  body.tvMode > *:not(#tv):not(#shBombPop){display:none !important}
+  #tv{position:fixed;inset:0;display:flex;align-items:center;justify-content:center;overflow:hidden}
+  #tvStage{width:1280px;height:720px;flex:none;transform-origin:center center;background:var(--bg);color:var(--ink);padding:22px 30px;box-sizing:border-box;display:flex;flex-direction:column;gap:10px;overflow:hidden;font-size:18px}
+  #tvStage .tvHead{display:flex;align-items:flex-start;justify-content:space-between;gap:16px}
+  #tvStage h1{margin:0;font-size:2.1rem;white-space:nowrap}
+  #tvStage .tvSub{color:var(--sub);font-size:1rem}
+  #tvStage #shBoard{margin:0;flex-wrap:nowrap}
+  #tvStage #shBoard .shPl{font-size:1.25rem;min-width:150px}
+  #tvStage #shBoard .shPl .st{font-size:1.3rem;letter-spacing:.05em}
+  #tvStage .shFw{cursor:default}
+  #tvStage .tvFlow{flex:1;min-height:0;overflow:hidden;display:flex;flex-direction:column;justify-content:flex-end;background:var(--card);border:1px solid var(--line);border-radius:14px;padding:10px 16px}
+  #tvStage .tvFlow .shFlow{font-size:1.45rem;margin:0}
+  #tvStage .tvFlow .shFlowInfo{display:none}
+  #tvStage .tvBottom{display:flex;gap:14px;align-items:stretch}
+  #tvStage .tvBottom > #shJudge{flex:1;margin:0;max-height:250px;overflow:hidden;font-size:1.05rem}
+  #tvStage .tvTurn{flex:1;background:var(--card);border:1px solid var(--line);border-radius:14px;padding:12px 18px;display:flex;flex-direction:column;justify-content:center;gap:8px}
+  #tvStage .tvTurn .who{font-size:1.9rem;font-weight:900}
+  #tvStage .tvTurn .ph{font-size:1.15rem;color:var(--sub)}
+  #tvStage .tvTime{display:flex;align-items:center;gap:12px}
+  #tvStage .tvTime b{font-size:2.6rem;font-weight:900;min-width:3em;font-variant-numeric:tabular-nums;color:var(--green)}
+  #tvStage .tvTime .tbar{flex:1;height:20px;border-radius:999px;background:var(--line);overflow:hidden}
+  #tvStage .tvTime i{display:block;height:100%;background:var(--green);border-radius:999px}
+  #tvStage .tvTime.mid b{color:#e8a200} #tvStage .tvTime.mid i{background:#f2b705}
+  #tvStage .tvTime.warn b{color:var(--flag);animation:shBeat .5s ease-in-out infinite} #tvStage .tvTime.warn i{background:var(--flag)}
+  #tvStage .tvCenter{flex:1;display:flex;flex-direction:column;align-items:center;justify-content:center;text-align:center;gap:14px}
+  #tvStage .tvCenter .big{font-size:3.2rem;font-weight:900}
+  #tvStage .tvCenter .tip{color:var(--sub);font-size:.95rem;max-width:900px}
+  /* ゴルフ */
+  #tvStage .tvOdai{display:grid;grid-template-columns:1fr auto 1fr;gap:14px;align-items:stretch}
+  #tvStage .tvCard{display:flex;gap:12px;background:var(--card);border:1px solid var(--line);border-radius:14px;padding:10px 14px;min-width:0}
+  #tvStage .tvCard img{width:96px;height:96px;object-fit:cover;border-radius:10px;flex:none}
+  #tvStage .tvCard .k{font-size:.9rem;color:var(--sub);font-weight:800}
+  #tvStage .tvCard .t{font-size:1.7rem;font-weight:900;line-height:1.2;overflow:hidden;display:-webkit-box;-webkit-line-clamp:2;-webkit-box-orient:vertical}
+  #tvStage .tvCard .x{font-size:.82rem;color:var(--sub);overflow:hidden;display:-webkit-box;-webkit-line-clamp:2;-webkit-box-orient:vertical}
+  #tvStage .tvArrow{align-self:center;font-size:2.4rem;color:var(--sub)}
+  #tvStage .tvStats{display:flex;gap:14px}
+  #tvStage .tvStat{background:var(--card);border:1px solid var(--line);border-radius:14px;padding:8px 18px;text-align:center}
+  #tvStage .tvStat b{display:block;font-size:2.8rem;font-weight:900;font-variant-numeric:tabular-nums;line-height:1.1}
+  #tvStage .tvStat.now{flex:1;text-align:left}
+  #tvStage .tvStat.now b{font-size:2.3rem;color:#36c;overflow:hidden;white-space:nowrap;text-overflow:ellipsis}
+  #tvStage .tvStat .l{font-size:.85rem;color:var(--sub);font-weight:800}
+  #tvStage .tvStat.warn b{color:var(--flag)}
+  #tvStage .tvRoute{flex:1;min-height:0;overflow:hidden;display:flex;flex-wrap:wrap;align-content:flex-end;gap:4px 8px;font-size:1.25rem;background:var(--card);border:1px solid var(--line);border-radius:14px;padding:10px 16px}
+  #tvStage .tvRoute .sep{color:var(--sub)} #tvStage .tvRoute .back{color:var(--sub);text-decoration:line-through}
+  #tvStage .tvRoute .last{font-weight:900;color:#36c}
+  #tvStage .tvPlayers{display:flex;gap:10px;flex-wrap:wrap}
+  #tvStage .tvPl{background:var(--card);border:1px solid var(--line);border-radius:12px;padding:6px 14px;font-size:1.1rem;font-weight:800}
+  #tvStage .tvPl.done{border-color:var(--green);background:var(--green2)}
+  #tvStage .tvRes{background:var(--card);border:3px solid var(--green);border-radius:16px;padding:14px 20px}
+  #tvStage .tvRes .h{font-size:2.6rem;font-weight:900;color:var(--green)}
+  #tvStage .tvRes.ng .h{color:var(--flag)} #tvStage .tvRes.ng{border-color:var(--flag)}
+  #tvStage .tvRes .best{white-space:pre-line;font-size:1.05rem;margin-top:6px}
+  #mpList li.away{opacity:.6}
   #innTip{position:fixed;z-index:60;pointer-events:none;background:rgba(20,20,20,.88);color:#fff;font-size:.8rem;font-weight:700;padding:3px 8px;border-radius:8px;white-space:nowrap}
   #innTip[hidden]{display:none}
   .shiriBtn{display:block;width:100%;margin:-4px 0 12px;padding:12px;font-size:1rem;font-weight:700;border-radius:12px;border:2px dashed var(--green);background:var(--card);color:var(--green)}
@@ -684,7 +741,7 @@
   <div class="stat"><div class="num" id="clockNum">0:00</div><div class="lbl" id="clockLbl"></div></div>
   <div class="stat" id="pageStat" hidden><div class="num" id="pageNum">0</div><div class="lbl" data-t="pageLeft"></div></div>
   <div id="route"></div>
-  <span id="ver">v5.2</span>
+  <span id="ver">v5.5</span>
   <div id="barBtns">
     <button id="teeoff" disabled data-t="teeoff"></button>
     <button id="backBtn" hidden data-t="back"></button>
@@ -693,6 +750,7 @@
     <button id="savedBtn">📁</button>
     <button id="shareOdai" disabled data-t="share"></button>
     <button id="stampBtn" hidden>😀</button>
+    <button id="tvBtnGolf" class="tvOpen">📺</button>
     <button id="gearBtn">⚙️</button>
     <button id="findToggle" hidden>🔍</button>
     <button id="menuBtn">⋯</button>
@@ -742,7 +800,7 @@
 
 <div id="settings" class="overlay">
   <div class="panel">
-    <h2><span data-t="settings"></span> <small style="font-size:.65rem;font-weight:400;color:var(--sub)">v5.2</small></h2>
+    <h2><span data-t="settings"></span> <small style="font-size:.65rem;font-weight:400;color:var(--sub)">v5.5</small></h2>
     <p class="lockNote" id="lockNote" hidden></p>
     <button id="quitHole" class="quit" hidden></button>
     <button id="toHome" data-t="toHome"></button>
@@ -770,7 +828,7 @@
 
 <div id="home">
   <div class="homeInner">
-    <div class="homeHead"><h1>🎮 <span data-t="gamesName"></span></h1><p data-t="gamesAbout"></p><small>v5.2</small></div>
+    <div class="homeHead"><h1>🎮 <span data-t="gamesName"></span></h1><p data-t="gamesAbout"></p><small>v5.5</small></div>
 
     <section id="homeMain">
       <div class="homeCard homeLang" id="homeLang"></div>
@@ -800,6 +858,7 @@
       <div class="homeFoot">
         <button id="helpBtnHome" class="helpLink" data-t="helpBtn"></button>
         <button id="hShiriRec" class="helpLink" data-t="gcShiriRec"></button>
+        <button id="tvBtnHome" class="helpLink tvOpen" data-t="tvBtn"></button>
       </div>
       <button id="homeMoreBtn" class="moreBtn"></button>
       <div class="homeCard" id="homeMore" hidden></div>
@@ -820,7 +879,7 @@
 
     <section id="homeShiri" hidden>
       <div class="homeCard">
-        <button id="shBack" data-t="hBack"></button>
+        <div class="shTopRow"><button id="shBack" data-t="hBack"></button><button id="tvBtnShiri" class="tvOpen tvTxt" data-t="tvBtn"></button></div>
         <h2 id="shTitleH" data-t="shTitle"></h2>
         <p class="about" data-t="shAbout"></p>
         <p id="shRule"></p>
@@ -2299,6 +2358,22 @@ Object.assign(STR["es"], {shLifeNote0:"Sin ♥: un fallo y fuera.", shPassLife:"
 Object.assign(STR["ko"], {shLifeNote0:"♥ 없음: 한 번에 아웃. 한 번이라도 실수하면 탈락", shPassLife:"⏭️ 패스(♥−1)"});
 Object.assign(STR["zh-hant"], {shLifeNote0:"無 ♥：一次出局。失誤一次就淘汰", shPassLife:"⏭️ 跳過（♥−1）"});
 Object.assign(STR["zh-hans"], {shLifeNote0:"无 ♥：一次出局。失误一次就淘汰", shPassLife:"⏭️ 跳过（♥−1）"});
+/* v5.3 観客画面 */
+Object.assign(STR["ja"], {tvBtn:"📺 観客画面", tvWait:"メインの画面を待っています…（同じブラウザで「📺 観客画面」を押した画面とつながります）", tvSetup:"準備中…", tvNow:"いまの記事", tvPick:"お題を選んでいます…", tvHomeSub:"このあと始まるゲームがここに映ります", tvTip:"この窓をモニタに移して全画面に（Chromecastは「タブをキャスト」、Zoomは「ウィンドウを共有」）"});
+Object.assign(STR["en"], {tvBtn:"📺 Audience view", tvWait:"Waiting for the main screen… (it connects to the window where you pressed “📺 Audience view” in this browser)", tvSetup:"Getting ready…", tvNow:"Now on", tvPick:"Picking the course…", tvHomeSub:"The game will appear here", tvTip:"Move this window to the big screen and go full screen (Chromecast: “Cast tab”, Zoom: share this window)"});
+Object.assign(STR["fr"], {tvBtn:"📺 Écran public"});
+Object.assign(STR["es"], {tvBtn:"📺 Pantalla del público"});
+Object.assign(STR["ko"], {tvBtn:"📺 관객 화면"});
+Object.assign(STR["zh-hant"], {tvBtn:"📺 觀眾畫面"});
+Object.assign(STR["zh-hans"], {tvBtn:"📺 观众画面"});
+/* v5.4 離席・つなぎ直し */
+Object.assign(STR["ja"], {netBack:"🔌 つなぎ直しました", mpAwayS:"💤 離席中", netAway:n=>`💤 ${n} が離席中…（2分は待つよ）`, netBack2:n=>`👋 ${n} が戻ってきた`});
+Object.assign(STR["en"], {netBack:"🔌 Reconnected", mpAwayS:"💤 Away", netAway:n=>`💤 ${n} is away… (waiting 2 min)`, netBack2:n=>`👋 ${n} is back`});
+Object.assign(STR["fr"], {netBack:"🔌 Reconnecté", mpAwayS:"💤 Absent", netAway:n=>`💤 ${n} est absent… (2 min d’attente)`, netBack2:n=>`👋 ${n} est de retour`});
+Object.assign(STR["es"], {netBack:"🔌 Reconectado", mpAwayS:"💤 Ausente", netAway:n=>`💤 ${n} se ausentó… (esperamos 2 min)`, netBack2:n=>`👋 ${n} volvió`});
+Object.assign(STR["ko"], {netBack:"🔌 다시 연결했어요", mpAwayS:"💤 자리 비움", netAway:n=>`💤 ${n} 자리 비움…(2분 기다려요)`, netBack2:n=>`👋 ${n} 돌아왔어요`});
+Object.assign(STR["zh-hant"], {netBack:"🔌 已重新連線", mpAwayS:"💤 離開中", netAway:n=>`💤 ${n} 暫時離開…（等 2 分鐘）`, netBack2:n=>`👋 ${n} 回來了`});
+Object.assign(STR["zh-hans"], {netBack:"🔌 已重新连接", mpAwayS:"💤 离开中", netAway:n=>`💤 ${n} 暂时离开…（等 2 分钟）`, netBack2:n=>`👋 ${n} 回来了`});
 function T(key, ...args){
   const v = (STR[uiKey()] || STR.en)[key] ?? STR.en[key] ?? STR.ja[key] ?? key;
   return typeof v === "function" ? v(...args) : v;
@@ -4046,8 +4121,11 @@ async function mpSend(payload, tries = 2){
 }
 function mpTrack(){
   const m = state.mp;
-  if(m && m.ch) m.ch.track({id:m.me.id, name:m.me.name, joinedAt:m.me.joinedAt, host:m.amHost, creator:!!m.creating});
+  if(m && m.ch) return m.ch.track({id:m.me.id, name:m.me.name, joinedAt:m.me.joinedAt, host:m.amHost, creator:!!m.creating});
 }
+/* v5.4 離席（すまほでブラウザから離れる等）は2分待つ。そのあいだに戻れば続きから */
+const NET_AWAY_MS = 120000;
+const mpAway = id => { const m = state.mp, p = m && m.players.get(id); return !!(p && p.awaySince && !p.left); };
 /* 名前が同じ人がいたら、あとから来た人に (2) を付ける */
 function dname(id){
   const m = state.mp, p = m && m.players.get(id);
@@ -4057,9 +4135,9 @@ function dname(id){
   return k > 0 ? `${p.name} (${k + 1})` : p.name;
 }
 
-async function mpConnect(room, creating){
+async function mpConnect(room, creating, resume){
   if(state.mp) return;
-  const name = ($("mpName").value.trim() || myName || (T("mpGuest") + Math.floor(Math.random() * 90 + 10))).slice(0, 20);
+  const name = resume ? resume.name : ($("mpName").value.trim() || myName || (T("mpGuest") + Math.floor(Math.random() * 90 + 10))).slice(0, 20);
   saveName(name); $("mpName").value = name;
   $("mpErr").textContent = T("mpConnecting");
   try{
@@ -4067,48 +4145,122 @@ async function mpConnect(room, creating){
     if(!sbClient) sbClient = window.supabase.createClient(SB_URL, SB_KEY,
       {auth:{persistSession:false, autoRefreshToken:false}, realtime:{params:{eventsPerSecond:20}}});
   }catch(e){ $("mpErr").textContent = T("mpFail") + e.message; return; }
-  const me = {id:rid(), name, joinedAt:Date.now()};
+  const me = resume ? {id:resume.id, name, joinedAt:resume.joinedAt} : {id:rid(), name, joinedAt:Date.now()};   // v5.5 リロードしたら同じ背番号で
   const ch = sbClient.channel("wikigolf:" + room, {config:{broadcast:{self:false, ack:true}, presence:{key:me.id}}});
-  state.mp = {ch, room, me, hostId:null, amHost:!!creating, players:new Map(), order:[], arrival:[me.id],
+  if(resume){ creating = !!resume.creating; }
+  state.mp = {ch, room, me, hostId:null, amHost:resume ? !!resume.host : !!creating, creating:!!creating, resume:resume || null, players:new Map(), order:[], arrival:[me.id],
               round:0, phase:"lobby", locked:false, participants:[], rules:creating ? hostRules() : null,
               subscribed:false, gotRoom:!!creating, drawing:false, lastStamp:0};
   state.mp.players.set(me.id, {id:me.id, name, joinedAt:me.joinedAt, ...freshStats()});
   mpLog("◎", `join ${room} as ${name}${creating ? " (host)" : ""}`);
+  mpWire(ch);
+}
+function mpWire(ch){
   ch.on("broadcast", {event:"g"}, ({payload}) => mpOnMsg(payload))
     .on("presence", {event:"sync"}, () => mpOnSync())
-    .subscribe(async status => {
-      const m = state.mp;
-      mpLog("◎", "channel " + status);
-      if(!m || m.ch !== ch) return;
-      if(status === "SUBSCRIBED"){
-        if(m.subscribed) return;
-        m.subscribed = true;
-        await ch.track({id:me.id, name:me.name, joinedAt:me.joinedAt, host:m.amHost, creator:!!creating});
-        $("mpErr").textContent = "";
-        try{ history.replaceState(null, "", baseUrl() + "?room=" + room); }catch(_){}
-        showHome("lobby");
-        mpControls();
-        if(creating) mpHostDraw();
-        else{
-          mpSend({t:"hello"});
-          setTimeout(()=>{
-            if(state.mp && state.mp.ch === ch && !state.mp.gotRoom){ mpLeave(true); $("mpErr").textContent = T("mpNoHost"); }
-          }, 8000);
-        }
-      }else if(!m.subscribed && (status === "CHANNEL_ERROR" || status === "TIMED_OUT")){
-        $("mpErr").textContent = T("mpFail") + status;
-        state.mp = null;
-        try{ sbClient.removeChannel(ch); }catch(_){}
+    .subscribe(status => mpStatus(ch, status));
+}
+async function mpStatus(ch, status){
+  const m = state.mp;
+  mpLog("◎", "channel " + status);
+  if(!m || m.ch !== ch) return;
+  if(status === "SUBSCRIBED"){
+    m.okAt = Date.now();
+    if(m.subscribed){ mpRejoined(); return; }           // v5.4 つなぎ直したとき：名乗り直して、様子を送り直す
+    m.subscribed = true;
+    await mpTrack();
+    $("mpErr").textContent = "";
+    try{ history.replaceState(null, "", baseUrl() + "?room=" + m.room); }catch(_){}
+    if(m.resume){ mpResume(m); return; }
+    showHome("lobby");
+    mpControls();
+    if(m.creating) mpHostDraw();
+    else{
+      mpSend({t:"hello"});
+      setTimeout(()=>{
+        if(state.mp === m && !m.gotRoom){ mpLeave(true); $("mpErr").textContent = T("mpNoHost"); }
+      }, 8000);
+    }
+  }else if(!m.subscribed && (status === "CHANNEL_ERROR" || status === "TIMED_OUT")){
+    $("mpErr").textContent = T("mpFail") + status;
+    state.mp = null;
+    try{ sbClient.removeChannel(ch); }catch(_){}
+  }else if(m.subscribed && (status === "CHANNEL_ERROR" || status === "TIMED_OUT" || status === "CLOSED")){
+    setTimeout(() => mpRevive(true), 1500);
+  }
+}
+/* v5.5 リロードのあと：保存しておいた様子から続きを始める */
+async function mpResume(m){
+  const r = m.resume; m.resume = null; m.resuming = true;
+  try{ await mpResume2(m, r); }finally{ m.resuming = false; }
+}
+async function mpResume2(m, r){
+  showHome("lobby"); mpControls();
+  toast(T("netBack"));
+  if(m.amHost){
+    m.gotRoom = true; m.hostSeen = true;
+    Object.assign(m, {round:r.round || 0, phase:r.phase || "lobby", locked:!!r.locked, participants:r.participants || [], rules:r.rules || m.rules});
+    if(r.phase === "playing" && r.odai){
+      await mpLoadOdai(r.odai); if(state.mp !== m) return;
+      if(r.play){
+        hideHome(); mpBeginRound(r.round, r.participants || []);
+        await startGame(); await golfRestore(r.play);
+      }else{
+        m.phase = "playing"; m.myFin = r.myFin || null;
+        for(const id of m.participants){ const q = m.players.get(id); if(q) q.inRound = true; }
+        const me = m.players.get(m.me.id); if(me && r.myFin) Object.assign(me, {done:true, inRound:true}, r.myFin);
       }
-    });
+      mpSendRoom();
+    }else{
+      m.phase = "lobby";
+      if(r.odai){ await mpLoadOdai(r.odai); mpSendRoom(); } else mpHostDraw();
+    }
+  }else{
+    m.resumePlay = r.play && r.phase === "playing" ? {...r.play, round:r.round} : null;
+    if(r.myFin && r.phase === "playing"){ Object.assign(m, {round:r.round, phase:"playing", myFin:r.myFin, locked:true, participants:r.participants || []}); }
+    mpSend({t:"hello"});
+    setTimeout(()=>{ if(state.mp === m && !m.gotRoom){ mpLeave(true); $("mpErr").textContent = T("mpNoHost"); } }, 10000);
+  }
+}
+async function golfRestore(pl){
+  if(!pl || !state.playing) return;
+  if(pl.t0) state.t0 = pl.t0;
+  if(!pl.route || pl.route.length < 2) return;
+  const last = pl.route[pl.route.length - 1];
+  state.route = pl.route.slice(0, -1); state.stack = (pl.stack || []).slice(0, -1);
+  state.strokes = pl.strokes || 0; state.backs = pl.backs || 0;
+  $("strokeNum").textContent = state.strokes;
+  await go(last.title, {count:false});
+  mpSendStatus(true);
+}
+function mpRejoined(){
+  const m = state.mp; if(!m) return;
+  mpTrack();
+  if(isHost()) mpSendRoom(); else mpSend({t:"hello"});
+  if(state.playing) mpSendStatus(true);
+  else if(m.phase === "playing" && m.myFin) mpSend({t:"fin", round:m.round, ...m.myFin}, 1);
+}
+async function mpRevive(force){
+  const m = state.mp; if(!m || !sbClient || !m.subscribed || m.reviving) return;
+  const old = m.ch;
+  if(!force && old && old.state === "joined"){ mpRejoined(); return; }
+  m.reviving = true; m.ch = null;
+  mpLog("◎", "revive");
+  try{ await sbClient.removeChannel(old); }catch(_){}
+  if(state.mp !== m){ return; }
+  const ch = sbClient.channel("wikigolf:" + m.room, {config:{broadcast:{self:false, ack:true}, presence:{key:m.me.id}}});
+  m.ch = ch; m.reviving = false;
+  mpWire(ch);
+  toast(T("netBack"));
 }
 
 async function mpLeave(silent){
   const m = state.mp;
   if(!m) return;
   if(!silent && state.playing && state.strokes > 0 && !confirm(T("confirmExit"))) return;
-  state.mp = null;
+  state.mp = null; netSessClear();
   mpLog("◎", "leave");
+  try{ if(m.ch && m.subscribed) await m.ch.send({type:"broadcast", event:"g", payload:{t:"bye", from:m.me.id}}); }catch(_){}   // v5.4 自分で抜けたときは「離席」じゃなくすぐ抜けたことにする
   try{ await m.ch.untrack(); }catch(_){}
   try{ sbClient.removeChannel(m.ch); }catch(_){}
   if(state.playing){ stopTimer(); setPlaying(false); }
@@ -4123,28 +4275,34 @@ async function mpLeave(silent){
 function mpOnSync(){
   const m = state.mp;
   if(!m) return;
-  const active = Object.values(m.ch.presenceState()).map(a => a && a[a.length - 1]).filter(x => x && x.id);
+  const active = Object.values(m.ch.presenceState()).map(a => a && a[a.length - 1]).filter(x => x && x.id && !(m.byes && m.byes.has(x.id)));
   const prev = new Set(m.order);
   const newcomers = [];
   for(const x of active){
     let p = m.players.get(x.id);
     if(!p){ p = {id:x.id, name:x.name, joinedAt:x.joinedAt, ...freshStats()}; m.players.set(x.id, p); }
-    p.name = x.name; p.left = false;
+    if(p.awaySince && !p.left){ p.awaySince = null; if(mpIsMember(x.id)) toast(T("netBack2", p.name)); mpLog("◎", "back " + p.name); }
+    p.name = x.name; p.left = false; p.joinedAt = x.joinedAt || p.joinedAt;
     if(!m.arrival.includes(x.id)) m.arrival.push(x.id);
     if(!prev.has(x.id) && x.id !== m.me.id) newcomers.push(x);
   }
+  // 来た順はみんな同じになるように「入った時刻」で並べる（前は自分がいつも先頭になっていた）
+  const jt = id => { const q = m.players.get(id); return q ? q.joinedAt || 0 : 0; };
+  m.arrival.sort((a, b) => jt(a) - jt(b) || (a < b ? -1 : 1));
   for(const id of m.order){
-    if(!active.some(x => x.id === id)){
+    if(id !== m.me.id && !active.some(x => x.id === id)){
       const p = m.players.get(id);
-      if(p && !p.left){ p.left = true; if(mpIsMember(id)) toast(T("mpLeft", p.name)); mpLog("◎", "left " + p.name); }
+      if(p && !p.left && !p.awaySince){ p.awaySince = Date.now(); if(mpIsMember(id)) toast(T("netAway", p.name)); mpLog("◎", "away " + p.name); }
     }
   }
+  const awayIds = [...m.players.values()].filter(p => p.awaySince && !p.left && p.id !== m.me.id).map(p => p.id);
   // ホストは「ホスト札」を持っている人（端末の時計は使わない）。いなくなったら id のいちばん小さい人へ
   // 札を持っている人が複数いたら：部屋を作った人 → いま認めているホスト → id の小さい人
   const holders = active.filter(x => x.host).sort((a, b) =>
     (!!b.creator - !!a.creator) || ((b.id === m.hostId) - (a.id === m.hostId)) || (a.id < b.id ? -1 : 1));
   if(holders.length) m.hostSeen = true;
   let hostId = holders.length ? holders[0].id : null;
+  if(!hostId && m.hostId && awayIds.includes(m.hostId)) hostId = m.hostId;   // v5.4 ホストが離席中のあいだは待つ
   // ホストが「いたのに、いなくなった」ときだけ札を渡す（入った直後で、まだホストが見えていないだけのときは渡さない）
   if(!hostId && m.hostSeen && active.length){
     const members = active.filter(x => mpIsMember(x.id));
@@ -4154,7 +4312,7 @@ function mpOnSync(){
   if(holders.length > 1 && m.amHost && hostId !== m.me.id){ m.amHost = false; mpTrack(); mpLog("◎", "host flag returned"); }
   const wasHost = m.hostId === m.me.id;
   m.hostId = hostId;
-  m.order = active.map(x => x.id).sort((a, b) => (b === hostId) - (a === hostId) || m.arrival.indexOf(a) - m.arrival.indexOf(b));
+  m.order = [...new Set([...active.map(x => x.id), ...awayIds])].sort((a, b) => (b === hostId) - (a === hostId) || m.arrival.indexOf(a) - m.arrival.indexOf(b));
   if(isHost()){
     for(const x of newcomers){
       mpLog("◎", "arrive " + x.name);
@@ -4252,7 +4410,11 @@ function mpOnMsg(p){
     case "hello":
       if(!isHost()) return;
       if(m.locked && !m.participants.includes(p.from)) mpSend({t:"kick", id:p.from, reason:"locked"});
-      else mpSendRoom();
+      else{
+        mpSendRoom();
+        // v5.4 ゲーム中に戻ってきた参加者が「スタート」を取りこぼしていたら、もう一度送る
+        if(m.phase === "playing" && m.participants.includes(p.from)) mpSend({t:"start", round:m.round, odai:curOdai(), players:m.participants});
+      }
       break;
     case "room":
       if(!fromHost) return;
@@ -4260,6 +4422,7 @@ function mpOnMsg(p){
       m.rules = p.rules; m.locked = p.locked; m.participants = p.participants || []; m.round = p.round || 0;
       if(m.locked && !m.participants.includes(m.me.id)){ mpLeave(true); $("mpErr").textContent = T("mpLocked"); return; }
       if(!state.playing && state.screen === "home" && p.phase === "lobby" && p.odai) mpLoadOdai(p.odai);
+      if(p.phase === "lobby" && m.phase === "playing" && p.round === m.round && state.screen === "game"){ mpGoLobby(); break; }   // 「待合室へ」を取りこぼしていた
       renderHome();
       break;
     case "odai":
@@ -4279,6 +4442,10 @@ function mpOnMsg(p){
       break;
     case "stamp":
       showStamp(p.from, p.i);
+      break;
+    case "bye":
+      (m.byes || (m.byes = new Set())).add(p.from);
+      if(pl && !pl.left){ pl.left = true; pl.awaySince = null; if(mpIsMember(p.from)) toast(T("mpLeft", pl.name)); mpOnSync(); }
       break;
     case "sp":
       if(!fromHost) return;
@@ -4310,8 +4477,8 @@ function mpBeginRound(round, players){
 }
 async function mpHostStart(){
   const m = state.mp;
-  if(!isHost() || m.drawing || mpMembers().length < 2 || !state.start || !state.goal) return;
-  const players = mpMembers();
+  const players = mpMembers().filter(id => !mpAway(id));
+  if(!isHost() || m.drawing || players.length < 2 || !state.start || !state.goal) return;
   const round = m.round + 1;
   mpSend({t:"start", round, odai:curOdai(), players}, 3);
   hideHome();
@@ -4321,13 +4488,15 @@ async function mpHostStart(){
 async function mpGuestStart(p){
   const m = state.mp;
   if(state.playing) return;
+  if(p.round <= m.round && m.phase === "playing") return;     // もう始めた／終わった回は無視
   if(!(p.players || []).includes(m.me.id)){ m.locked = true; m.participants = p.players || []; mpLeave(true); $("mpErr").textContent = T("mpLocked"); return; }
   ["win", "reader", "settings", "qrModal", "savedModal"].forEach(id => $(id).classList.remove("show"));
   await mpLoadOdai(p.odai);
   if(state.mp !== m) return;
   hideHome();
   mpBeginRound(p.round, p.players);
-  startGame();
+  await startGame();
+  if(m.resumePlay && m.resumePlay.round === p.round){ const rp = m.resumePlay; m.resumePlay = null; await golfRestore(rp); }   // v5.5 リロード前の続きから
 }
 function mpGoLobby(){
   const m = state.mp;
@@ -4370,13 +4539,60 @@ function mpSendStatus(force){
   lastSt = key;
   mpSend({t:"st", round:m.round, ...st}, 1);
 }
+/* v5.4 離席の時間切れ・つながりの見張り */
+setInterval(()=>{
+  const m = state.mp;
+  if(m){
+    let ch = false;
+    for(const p of m.players.values()) if(p.awaySince && !p.left && Date.now() - p.awaySince > NET_AWAY_MS){ p.awaySince = null; p.left = true; ch = true; if(mpIsMember(p.id)) toast(T("mpLeft", p.name)); }
+    if(ch && m.ch) mpOnSync();
+    if(m.ch && m.subscribed && !m.reviving && m.ch.state && !["joined", "joining"].includes(m.ch.state)) mpRevive(true);
+  }
+  const n = typeof shNet !== "undefined" ? shNet : null;
+  if(n){
+    let ch = false;
+    for(const [id, t] of n.away || []) if(Date.now() - t > NET_AWAY_MS){ n.away.delete(id); ch = true; }
+    if(ch && n.ch) shNetOnSync();
+    if(n.ch && n.subscribed && !n.reviving && n.ch.state && !["joined", "joining"].includes(n.ch.state)) shNetRevive(true);
+  }
+}, 4000);
+/* v5.5 リロード対策：部屋・背番号・名前・途中の様子を、このタブに保存しておく */
+const NET_SESS = "wgNetSess";
+function netSessGet(){ try{ return JSON.parse(sessionStorage.getItem(NET_SESS) || "null"); }catch(_){ return null; } }
+function netSessClear(){ try{ sessionStorage.removeItem(NET_SESS); }catch(_){} }
+function netSessSave(){
+  try{
+    const m = state.mp, n = shNet;
+    if(m && m.subscribed && !m.resume){
+      sessionStorage.setItem(NET_SESS, JSON.stringify({kind:"golf", room:m.room, id:m.me.id, name:m.me.name, joinedAt:m.me.joinedAt,
+        host:m.amHost, creating:!!m.creating, round:m.round, phase:m.phase, locked:m.locked, participants:m.participants, rules:m.rules,
+        odai:curOdai(), myFin:m.myFin || null,
+        play:state.playing ? {strokes:state.strokes, backs:state.backs || 0, route:state.route, stack:state.stack, t0:state.t0} : null}));
+    }else if(n && n.subscribed && !n.resume){
+      sessionStorage.setItem(NET_SESS, JSON.stringify({kind:"shiri", room:n.room, id:n.me.id, name:n.me.name, joinedAt:n.me.joinedAt,
+        host:n.amHost, creating:!!n.creating, locked:n.locked, participants:n.participants, sh:shIsHost() ? sh : null}));
+    }
+  }catch(_){}
+}
+if(!new URLSearchParams(location.search).has("tv")){ setInterval(netSessSave, 1000); addEventListener("pagehide", netSessSave); }
+let netHiddenAt = 0;
+function netWake(){
+  const long = netHiddenAt && Date.now() - netHiddenAt > 20000;
+  netHiddenAt = 0;
+  if(state.mp){ const m = state.mp; mpRevive(long); setTimeout(() => { if(state.mp === m && (!m.ch || (m.ch.state && m.ch.state !== "joined"))) mpRevive(true); }, 5000); }
+  if(shNet){ const n = shNet; shNetRevive(long); setTimeout(() => { if(shNet === n && (!n.ch || (n.ch.state && n.ch.state !== "joined"))) shNetRevive(true); }, 5000); }
+}
+document.addEventListener("visibilitychange", () => { if(document.visibilityState === "hidden") netHiddenAt = Date.now(); else netWake(); });
+addEventListener("pageshow", e => { if(e.persisted) netWake(); });
+addEventListener("online", () => netWake());
 /* 定期便：様子・ゴールの合図を送り直す（取りこぼし対策） */
 setInterval(()=>{
   const m = state.mp;
   if(!m) return;
   if(state.playing) mpSendStatus(true);
   else if(m.phase === "playing" && m.myFin && !mpAllDone()) mpSend({t:"fin", round:m.round, ...m.myFin}, 1);
-  else if(isHost() && state.screen === "home") mpSendRoom();
+  else if(isHost() && state.screen === "home" && !m.resuming) mpSendRoom();
+  if(isHost() && !m.resuming && m.phase === "playing" && !state.playing && state.screen === "home" && mpAllDone()){ mpSend({t:"lobby"}, 3); mpGoLobby(); }
 }, 3000);
 
 function actText(p){
@@ -4410,6 +4626,7 @@ function renderStrip(){
     let txt;
     if(p.done) txt = p.success ? `🏁 ${T("sk", p.strokes)}` : `🏳 ${T("mpDnf")}`;
     else if(p.left) txt = "📴 " + T("mpOffline");
+    else if(p.awaySince) txt = `⛳${p.strokes} ` + T("mpAwayS");
     else txt = `⛳${p.strokes}` + (p.backs ? ` ↩${p.backs}` : "") + " " + actText(p) + (reach ? "  🔥" + T("mpReach") : "");
     chip.append(mk("span", "st", txt));
     box.append(chip);
@@ -4627,7 +4844,7 @@ function renderLobby(){
   for(let i = 0; i < MP_MAX; i++){
     const id = members[i];
     if(!id){ list.append(mk("li", "empty", T("lbEmpty"))); continue; }
-    const li = mk("li", "", dname(id));
+    const li = mk("li", mpAway(id) ? "away" : "", dname(id) + (mpAway(id) ? "　" + T("mpAwayS") : ""));
     if(id === m.hostId) li.append(mk("span", "tagHost", "👑 " + T("mpHost")));
     if(id === m.me.id){
       li.append(mk("span", "tagMe", T("you")));
@@ -4656,8 +4873,9 @@ function renderLobby(){
   renderStampRow($("lbStamps"));
   const ready = !!(state.start && state.goal && !m.drawing);
   $("lbStart").hidden = !isHost();
-  $("lbStart").disabled = members.length < 2 || !ready;
-  $("mpHint").textContent = isHost() ? (members.length < 2 ? T("lbNeed2") : T("mpHintHost")) : T("mpHintGuest");
+  const here = members.filter(id => !mpAway(id)).length;
+  $("lbStart").disabled = here < 2 || !ready;
+  $("mpHint").textContent = isHost() ? (here < 2 ? T("lbNeed2") : T("mpHintHost")) : T("mpHintGuest");
 }
 $("lbStart").addEventListener("click", ()=> mpHostStart());
 $("mpLeaveBtn").addEventListener("click", ()=> mpLeave());
@@ -5407,7 +5625,7 @@ function renderShPlay(){
       c.append(mk("span", "nm", `${SH_DOTS[i]} ${p.name}`), mk("b", "sc", T("shPts", p.score)));
       const st = mk("span", "st");
       if(!p.alive) st.textContent = T("shOut");
-      else st.textContent = sh.setup.lives ? shHearts(p) : "";
+      else st.textContent = (p.away ? T("mpAwayS") + " " : "") + (sh.setup.lives ? shHearts(p) : "");
       c.append(st);
       sb.append(c);
     });
@@ -6070,9 +6288,9 @@ function shNetSync(){
   n.seq++;
   shNetSend({t:"sync", seq:n.seq, sh:shNetSnapshot(), locked:n.locked, participants:n.participants});
 }
-async function shNetConnect(room, creating){
+async function shNetConnect(room, creating, resume){
   if(shNet) return;
-  const name = ($("shNetName").value.trim() || myName || (T("mpGuest") + Math.floor(Math.random() * 90 + 10))).slice(0, 20);
+  const name = resume ? resume.name : ($("shNetName").value.trim() || myName || (T("mpGuest") + Math.floor(Math.random() * 90 + 10))).slice(0, 20);
   saveName(name); $("shNetName").value = name;
   $("shNetErr").textContent = T("mpConnecting");
   try{
@@ -6080,44 +6298,77 @@ async function shNetConnect(room, creating){
     if(!sbClient) sbClient = window.supabase.createClient(SB_URL, SB_KEY,
       {auth:{persistSession:false, autoRefreshToken:false}, realtime:{params:{eventsPerSecond:20}}});
   }catch(e){ $("shNetErr").textContent = T("mpFail") + e.message; return; }
-  const me = {id:rid(), name, joinedAt:Date.now()};
+  const me = resume ? {id:resume.id, name, joinedAt:resume.joinedAt} : {id:rid(), name, joinedAt:Date.now()};   // v5.5 リロードしたら同じ背番号で
   const ch = sbClient.channel("wikishiri:" + room, {config:{broadcast:{self:false, ack:true}, presence:{key:me.id}}});
-  shNet = {ch, room, me, hostId:null, amHost:!!creating, creating:!!creating, people:new Map([[me.id, {id:me.id, name}]]),
+  if(resume) creating = !!resume.creating;
+  shNet = {ch, room, me, hostId:null, amHost:resume ? !!resume.host : !!creating, creating:!!creating, resume:resume || null, people:new Map([[me.id, {id:me.id, name}]]),
            active:new Set([me.id]), arrival:[me.id], locked:false, participants:[], subscribed:false, seq:0, lastSeq:-1,
-           gotSync:!!creating, hostSeen:false, backup:JSON.parse(JSON.stringify(sh)), typing:null, savedRec:null, lastStamp:0};
+           gotSync:!!creating, hostSeen:false, away:new Map(), backup:JSON.parse(JSON.stringify(sh)), typing:null, savedRec:null, lastStamp:0};
+  shNetWire(ch);
+  renderShiri();
+}
+function shNetTrack(){ const n = shNet; if(n && n.ch) return n.ch.track({id:n.me.id, name:n.me.name, joinedAt:n.me.joinedAt, host:n.amHost, creator:n.creating}); }
+function shNetWire(ch){
   ch.on("broadcast", {event:"s"}, ({payload}) => shNetOnMsg(payload))
     .on("presence", {event:"sync"}, () => shNetOnSync())
-    .subscribe(async status => {
-      const n = shNet;
-      if(!n || n.ch !== ch) return;
-      if(status === "SUBSCRIBED"){
-        if(n.subscribed) return;
-        n.subscribed = true;
-        await ch.track({id:me.id, name:me.name, joinedAt:me.joinedAt, host:n.amHost, creator:n.creating});
-        $("shNetErr").textContent = "";
-        try{ history.replaceState(null, "", baseUrl() + "?shroom=" + room); }catch(_){}
-        if(creating){
-          const s = sh.setup;
-          sh = shNewSetup({...s, names:["", "", "", ""]});
-          sh.lang = curLang();
-          shNetSync();
-        }else{
-          shNetSend({t:"hello"});
-          setTimeout(() => { if(shNet && shNet.ch === ch && !shNet.gotSync){ shNetLeave(true); $("shNetErr").textContent = T("mpNoHost"); } }, 8000);
-        }
-        renderShiri();
-      }else if(!n.subscribed && (status === "CHANNEL_ERROR" || status === "TIMED_OUT")){
-        $("shNetErr").textContent = T("mpFail") + status;
-        shNet = null;
-        try{ sbClient.removeChannel(ch); }catch(_){}
-      }
-    });
-  renderShiri();
+    .subscribe(status => shNetStatus(ch, status));
+}
+async function shNetStatus(ch, status){
+  const n = shNet;
+  if(!n || n.ch !== ch) return;
+  if(status === "SUBSCRIBED"){
+    if(n.subscribed){ shNetRejoined(); return; }        // v5.4 つなぎ直したとき
+    n.subscribed = true;
+    await shNetTrack();
+    $("shNetErr").textContent = "";
+    try{ history.replaceState(null, "", baseUrl() + "?shroom=" + n.room); }catch(_){}
+    const rs = n.resume; n.resume = null;
+    if(rs) toast(T("netBack"));
+    if(rs && n.amHost && rs.sh && rs.sh.v === 2){            // v5.5 ホストがリロード：保存しておいたゲームの続きから
+      sh = rs.sh; n.locked = !!rs.locked; n.participants = rs.participants || []; n.gotSync = true; n.hostSeen = true;
+      if(sh.judging){ const left = sh.judging.left; sh.judging = null; sh.turnEnds = left > 0 ? Date.now() + left : (sh.setup.turnSec ? Date.now() + sh.setup.turnSec * 1000 : 0); }
+      if(sh.bombMoving){ sh.bombMoving = false; sh.bombDue = true; }
+      shNetSync();
+    }else if(n.creating && !(rs && !n.amHost)){
+      const s = sh.setup;
+      sh = shNewSetup({...s, names:["", "", "", ""]});
+      sh.lang = curLang();
+      shNetSync();
+    }else{
+      shNetSend({t:"hello"});
+      setTimeout(() => { if(shNet === n && !n.gotSync){ shNetLeave(true); $("shNetErr").textContent = T("mpNoHost"); } }, 8000);
+    }
+    renderShiri();
+  }else if(!n.subscribed && (status === "CHANNEL_ERROR" || status === "TIMED_OUT")){
+    $("shNetErr").textContent = T("mpFail") + status;
+    shNet = null;
+    try{ sbClient.removeChannel(ch); }catch(_){}
+  }else if(n.subscribed && (status === "CHANNEL_ERROR" || status === "TIMED_OUT" || status === "CLOSED")){
+    setTimeout(() => shNetRevive(true), 1500);
+  }
+}
+function shNetRejoined(){
+  const n = shNet; if(!n) return;
+  shNetTrack();
+  if(shIsHost()) shNetSync(); else shNetSend({t:"hello"});
+}
+async function shNetRevive(force){
+  const n = shNet; if(!n || !sbClient || !n.subscribed || n.reviving) return;
+  const old = n.ch;
+  if(!force && old && old.state === "joined"){ shNetRejoined(); return; }
+  n.reviving = true; n.ch = null;
+  try{ await sbClient.removeChannel(old); }catch(_){}
+  if(shNet !== n) return;
+  const ch = sbClient.channel("wikishiri:" + n.room, {config:{broadcast:{self:false, ack:true}, presence:{key:n.me.id}}});
+  n.ch = ch; n.reviving = false;
+  shNetWire(ch);
+  toast(T("netBack"));
 }
 async function shNetLeave(silent){
   const n = shNet; if(!n) return;
   if(!silent && sh.phase === "play" && !confirm(T("shNetLeaveQ"))) return;
-  shNet = null;
+  shNet = null; netSessClear();
+  try{ if(n.ch && n.subscribed) await n.ch.send({type:"broadcast", event:"s", payload:{t:"bye", from:n.me.id}}); }catch(_){}
   try{ await n.ch.untrack(); }catch(_){}
   try{ sbClient.removeChannel(n.ch); }catch(_){}
   try{ history.replaceState(null, "", baseUrl()); }catch(_){}
@@ -6138,17 +6389,25 @@ function shNetOnSync(){
     if(!before.has(x.id) && x.id !== n.me.id) newcomers.push(x);
   }
   const gone = [...before].filter(id => !n.active.has(id));
+  // v5.4 消えた人はすぐ脱落にしないで、2分は「💤 離席中」で待つ
+  if(!n.away) n.away = new Map();
+  const backIds = new Set();
+  for(const id of gone) if(id !== n.me.id && !n.away.has(id) && !(n.byes && n.byes.has(id))){ n.away.set(id, Date.now()); const q = n.people.get(id); if(q && (!n.locked || n.participants.includes(id))) toast(T("netAway", q.name)); }
+  if(n.byes) for(const id of gone) if(n.byes.has(id)){ const q = n.people.get(id); if(q && (!n.locked || n.participants.includes(id))) toast(T("shNetLeft", q.name)); }
+  for(const id of n.active){ if(n.byes) n.byes.delete(id); }
+  for(const id of n.active) if(n.away.has(id)){ n.away.delete(id); backIds.add(id); const q = n.people.get(id); if(q) toast(T("netBack2", q.name)); }
   // ホストの決め方は、ゴルフの対戦と同じ（札を持っている人。いなくなったら id の小さい人へ）
   const holders = active.filter(x => x.host).sort((a, b) =>
     (!!b.creator - !!a.creator) || ((b.id === n.hostId) - (a.id === n.hostId)) || (a.id < b.id ? -1 : 1));
   if(holders.length) n.hostSeen = true;
   let hostId = holders.length ? holders[0].id : null;
+  if(!hostId && n.hostId && n.away.has(n.hostId)) hostId = n.hostId;     // ホストが離席中のあいだは待つ
   if(!hostId && n.hostSeen && active.length){
     const mem = active.filter(x => !n.locked || n.participants.includes(x.id));
     hostId = (mem.length ? mem : active).map(x => x.id).sort()[0];
-    if(hostId === n.me.id && !n.amHost){ n.amHost = true; n.ch.track({id:n.me.id, name:n.me.name, joinedAt:n.me.joinedAt, host:true, creator:false}); }
+    if(hostId === n.me.id && !n.amHost){ n.amHost = true; shNetTrack(); }
   }
-  if(holders.length > 1 && n.amHost && hostId !== n.me.id){ n.amHost = false; n.ch.track({id:n.me.id, name:n.me.name, joinedAt:n.me.joinedAt, host:false, creator:n.creating}); }
+  if(holders.length > 1 && n.amHost && hostId !== n.me.id){ n.amHost = false; shNetTrack(); }
   const wasHost = n.hostId === n.me.id;
   n.hostId = hostId;
   if(shIsHost()){
@@ -6162,13 +6421,15 @@ function shNetOnSync(){
     for(const x of newcomers){
       if(n.locked && !n.participants.includes(x.id)) shNetSend({t:"kick", id:x.id, reason:"locked"});
       else if(!n.locked && n.arrival.filter(id => n.active.has(id)).indexOf(x.id) >= SH_NET_MAX) shNetSend({t:"kick", id:x.id, reason:"full"});
-      else toast(T("shNetJoined", x.name));
+      else if(!backIds.has(x.id)) toast(T("shNetJoined", x.name));
     }
     // ゲーム中に抜けた人は脱落あつかい
     if(sh.phase === "play"){
       let changed = false;
       sh.players.forEach((p, i) => {
-        if(p.id && p.alive && !n.active.has(p.id)){
+        const aw = !!(p.id && n.away.has(p.id));
+        if(!!p.away !== aw){ p.away = aw; changed = true; }
+        if(p.id && p.alive && !n.active.has(p.id) && !aw){
           p.alive = false; p.gone = true; changed = true;
           sh.log.push({by:i, round:sh.round, kind:"left", out:true});
           toast(T("shNetLeft", p.name));
@@ -6180,9 +6441,8 @@ function shNetOnSync(){
     }
     shNetSync();
   }else{
-    for(const x of newcomers) toast(T("shNetJoined", x.name));
+    for(const x of newcomers) if(!backIds.has(x.id)) toast(T("shNetJoined", x.name));
   }
-  for(const id of gone){ const p = n.people.get(id); if(p && (!n.locked || n.participants.includes(id))) toast(T("shNetLeft", p.name)); }
   renderShiri();
 }
 function shNetOnMsg(p){
@@ -6190,6 +6450,7 @@ function shNetOnMsg(p){
   const fromHost = p.from === n.hostId;
   switch(p.t){
     case "hello": if(shIsHost()) shNetSync(); break;
+    case "bye": (n.byes || (n.byes = new Set())).add(p.from); n.away && n.away.delete(p.from); break;
     case "sync": {
       if(!fromHost && n.hostId) return;
       if(p.from !== n.lastFrom){ n.lastFrom = p.from; n.lastSeq = -1; }
@@ -6375,7 +6636,155 @@ function toast(msg){
   clearTimeout(toastTimer); toastTimer = setTimeout(()=>t.classList.remove("show"), 2200);
 }
 
+/* ════════ v5.3 📺 観客画面（別ウィンドウ ?tv=1 に BroadcastChannel で今の様子を送る） ════════ */
+const TV_MODE = new URLSearchParams(location.search).has("tv");
+let tvCh = null; try{ tvCh = new BroadcastChannel("wikiGamesTV"); }catch(_){}
+let tvLive = false, tvLast = "", tvGot = 0;
+function tvCardOf(p){ return p ? {t:shown(p), img:p.thumbnail ? p.thumbnail.source : "", x:(p.extract || "").replace(/\s+/g, " ").slice(0, 140)} : null; }
+function tvSnap(){
+  if(state.screen === "home" && state.homeView === "shiri") return {kind:"shiri", sh};
+  if(state.screen === "game"){
+    const m = state.mp, R = state.result;
+    return {kind:"golf", start:tvCardOf(state.start), goal:tvCardOf(state.goal), playing:state.playing, strokes:state.strokes,
+      route:state.route.map(x => ({t:x.shown || x.title, back:!!x.back, forced:!!x.forced})),
+      clock:$("clockNum").textContent, clockLbl:$("clockLbl").textContent, warn:$("clockNum").classList.contains("warn"),
+      result:R ? {ok:R.success, head:$("winHead").textContent, strokes:R.strokes, time:fmtTime(R.elapsed), best:$("winBest").hidden ? "" : $("winBest").innerText} : null,
+      players:m ? [...m.players.values()].filter(x => !x.left && x.inRound !== false).map(x => ({name:x.name, strokes:x.strokes, done:x.done, success:x.success})) : null};
+  }
+  return {kind:"home"};
+}
+function tvPush(){
+  if(TV_MODE || !tvLive || !tvCh) return;
+  let j; try{ j = JSON.stringify(tvSnap()); }catch(_){ return; }
+  if(j !== tvLast){ tvLast = j; tvCh.postMessage(j); }
+}
+function tvOpen(){
+  tvLive = true; tvLast = "";
+  const w = window.open(location.pathname + "?tv=1", "wikiTV", "popup=yes,width=1280,height=760");
+  if(!w) toast(T("tvTip"));
+  setTimeout(tvPush, 300);
+}
+document.querySelectorAll(".tvOpen").forEach(b => b.addEventListener("click", tvOpen));
+if(tvCh && !TV_MODE){
+  tvCh.addEventListener("message", e => { if(e.data === "hello"){ tvLive = true; tvLast = ""; tvPush(); } });
+  setInterval(tvPush, 300);
+}
+/* ── 観客画面のほう ── */
+function tvFit(){
+  const st = $("tvStage"); if(!st) return;
+  const k = Math.min(innerWidth / 1280, innerHeight / 720);
+  st.style.transform = `scale(${k})`;
+}
+let tvTimerEl = null, tvTurnEnds = 0, tvTurnSec = 60;
+function tvTick(){
+  if(tvTimerEl && tvTurnEnds){
+    const ms = Math.max(0, tvTurnEnds - Date.now()), left = Math.ceil(ms / 1000), r = Math.min(1, ms / (tvTurnSec * 1000));
+    tvTimerEl.querySelector("b").textContent = `⏱ ${left}`;
+    tvTimerEl.querySelector("i").style.width = (r * 100).toFixed(1) + "%";
+    tvTimerEl.classList.toggle("warn", left <= 10);
+    tvTimerEl.classList.toggle("mid", left > 10 && r <= .5);
+  }
+  requestAnimationFrame(tvTick);
+}
+function tvBoot(){
+  document.documentElement.dataset.theme = "dark";      // イベント用に濃い色で
+  document.body.classList.add("tvMode");
+  const tv = mk("div", ""); tv.id = "tv";
+  const st = mk("div", ""); st.id = "tvStage"; tv.append(st);
+  document.body.append(tv);
+  // 観客画面では何も動かさない（保存・判定・問い合わせをしない）
+  shApply = () => {}; shSave = () => {}; shBombKick = () => {}; shTick = () => {}; shThumbShow = () => {};
+  state.screen = "home"; state.homeView = "shiri";
+  applyUI();
+  addEventListener("resize", tvFit); tvFit();
+  tvShow({kind:"wait"});
+  if(tvCh){
+    tvCh.addEventListener("message", e => { if(e.data === "hello") return; try{ tvGot = Date.now(); tvShow(JSON.parse(e.data)); }catch(err){ console.error(err); } });
+    tvCh.postMessage("hello");
+    setInterval(() => { if(Date.now() - tvGot > 6000) tvCh.postMessage("hello"); }, 3000);
+  }
+  requestAnimationFrame(tvTick);
+}
+function tvShow(S){
+  const st = $("tvStage"); st.innerHTML = ""; tvTimerEl = null; tvTurnEnds = 0;
+  if(S.kind === "shiri") return tvShiri(S.sh);
+  if(S.kind === "golf") return tvGolf(S);
+  $("shBombPop").hidden = true;
+  const c = mk("div", "tvCenter");
+  c.append(mk("div", "big", "🎮 " + T("gamesName")), mk("div", "tvSub", S.kind === "wait" ? T("tvWait") : T("tvHomeSub")), mk("div", "tip", T("tvTip")));
+  st.append(c);
+}
+function tvShiri(snap){
+  sh = snap;
+  const st = $("tvStage"), multi = sh.players.length > 1;
+  renderShiri();                                        // 隠れた画面にふつうに描いて、必要なところを借りてくる
+  const head = mk("div", "tvHead");
+  head.append(mk("h1", "", $("shTitleH").textContent));
+  if(sh.phase !== "setup") head.append($("shBoard").cloneNode(true));
+  st.append(head);
+  if(sh.phase === "setup"){
+    const c = mk("div", "tvCenter");
+    c.append(mk("div", "big", T("tvSetup")));
+    if(sh.setup.start) c.append(mk("div", "tvSub", `${T("shFlowStart")}：${sh.setup.start.shown}`));
+    st.append(c); return;
+  }
+  if(!$("shGoalBar").hidden) st.append($("shGoalBar").cloneNode(true));
+  const flow = mk("div", "tvFlow"), fbox = mk("div", "shFlow");
+  shRenderLog(fbox, sh.log, sh.players.map(p => p.name), multi, sh.setup.start,
+              sh.setup.gtype === "bomb" || sh.setup.gtype === "foot" ? null : sh.setup.goal, sh.setup.gtype, sh.chain);
+  flow.append(fbox); st.append(flow);
+  const bottom = mk("div", "tvBottom");
+  if(!$("shJudge").hidden) bottom.append($("shJudge").cloneNode(true));
+  if(sh.phase === "play" && !sh.judging){
+    const cur = sh.players[sh.turn], last = sh.chain[sh.chain.length - 1];
+    const tb = mk("div", "tvTurn");
+    if(cur){ const w = mk("div", "who", multi ? T("shTurnOf", `${SH_DOTS[sh.turn]} ${cur.name}`) : ""); w.style.color = multi ? SH_COLORS[sh.turn] : ""; if(multi) tb.append(w); }
+    if(last) tb.append(mk("div", "ph", T("shPh", last.shown)));
+    if(sh.turnEnds && !sh.bombMoving){
+      const tm = mk("div", "tvTime"); tm.append(mk("b", ""), mk("div", "tbar")); tm.lastChild.append(mk("i", ""));
+      tb.append(tm); tvTimerEl = tm; tvTurnEnds = sh.turnEnds; tvTurnSec = sh.setup.turnSec || 60;
+    }
+    bottom.append(tb);
+  }
+  if(bottom.children.length) st.append(bottom);
+}
+function tvGolf(S){
+  const st = $("tvStage");
+  $("shBombPop").hidden = true;
+  st.append(mk("h1", "", "⛳ " + T("appName")));
+  if(!S.start || !S.goal){ const c = mk("div", "tvCenter"); c.append(mk("div", "big", T("tvPick"))); st.append(c); return; }
+  const od = mk("div", "tvOdai");
+  const card = (k, c) => { const d = mk("div", "tvCard"); if(c.img){ const im = mk("img", ""); im.src = c.img; im.referrerPolicy = "no-referrer"; d.append(im); } const b = mk("div", ""); b.append(mk("div", "k", k), mk("div", "t", c.t), mk("div", "x", c.x)); d.append(b); return d; };
+  od.append(card(T("start"), S.start), mk("div", "tvArrow", "→"), card(T("goal"), S.goal));
+  st.append(od);
+  const stats = mk("div", "tvStats");
+  const lastR = S.route[S.route.length - 1];
+  const now = mk("div", "tvStat now"); now.append(mk("span", "l", T("tvNow")), mk("b", "", lastR ? lastR.t : S.start.t)); stats.append(now);
+  const sk = mk("div", "tvStat"); sk.append(mk("span", "l", T("strokes")), mk("b", "", String(S.strokes))); stats.append(sk);
+  const ck = mk("div", "tvStat" + (S.warn ? " warn" : "")); ck.append(mk("span", "l", S.clockLbl), mk("b", "", S.clock)); stats.append(ck);
+  st.append(stats);
+  if(S.players && S.players.length > 1){
+    const pl = mk("div", "tvPlayers");
+    S.players.forEach(p => pl.append(mk("div", "tvPl" + (p.done ? " done" : ""), `${p.name}　${T("sk", p.strokes)}${p.done ? (p.success ? " ⛳" : " ✖") : ""}`)));
+    st.append(pl);
+  }
+  const rt = mk("div", "tvRoute");
+  if(!S.route.length) rt.append(mk("span", "last", S.start.t));
+  S.route.forEach((x, i) => {
+    if(i) rt.append(mk("span", "sep", x.back ? "↩" : "→"));
+    rt.append(mk("span", (x.back ? "back " : "") + (i === S.route.length - 1 ? "last" : ""), (x.forced ? "🎲" : "") + x.t));
+  });
+  st.append(rt);
+  if(S.result && !S.playing){
+    const r = mk("div", "tvRes" + (S.result.ok ? "" : " ng"));
+    r.append(mk("div", "h", `${S.result.head}　${S.result.ok ? T("sk", S.result.strokes) : ""}`), mk("div", "tvSub", T("timeLbl") + S.result.time));
+    if(S.result.best) r.append(mk("div", "best", S.result.best));
+    st.append(r);
+  }
+}
+
 /* ════════ はじまり ════════ */
+if(TV_MODE) tvBoot(); else {
 applyTheme();
 setTimeout(() => { if(!state.challenge) golfPrefetch(); }, 1500);   // v5.2 タイトル画面にいる間に最初のお題も用意しておく
 state.challenge = parseChallenge();
@@ -6386,7 +6795,9 @@ else if(shRoomQ.length === 4){
   applyUI();
   showHome("shiri");
   $("shNetCode").value = shRoomQ;
-  if(myName){ $("shNetName").value = myName; shNetConnect(shRoomQ, false); }
+  const ss = netSessGet();
+  if(ss && ss.kind === "shiri" && ss.room === shRoomQ){ $("shNetName").value = ss.name; shNetConnect(shRoomQ, ss.creating, ss); }   // v5.5 リロード
+  else if(myName){ $("shNetName").value = myName; shNetConnect(shRoomQ, false); }
   else $("shNetName").focus();
 }
 else if(roomQ.length === 4){
@@ -6394,10 +6805,13 @@ else if(roomQ.length === 4){
   state.invite = roomQ;
   applyUI();
   showHome("mp");
-  if(myName) mpConnect(roomQ, false);
+  const ss = netSessGet();
+  if(ss && ss.kind === "golf" && ss.room === roomQ){ $("mpName").value = ss.name; mpConnect(roomQ, ss.creating, ss); }   // v5.5 リロード
+  else if(myName) mpConnect(roomQ, false);
 }else{
   applyUI();
   showHome("main");
+}
 }
 </script>
 </body>
