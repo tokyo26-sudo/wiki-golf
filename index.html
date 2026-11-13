@@ -684,7 +684,7 @@
   <div class="stat"><div class="num" id="clockNum">0:00</div><div class="lbl" id="clockLbl"></div></div>
   <div class="stat" id="pageStat" hidden><div class="num" id="pageNum">0</div><div class="lbl" data-t="pageLeft"></div></div>
   <div id="route"></div>
-  <span id="ver">v5.1</span>
+  <span id="ver">v5.2</span>
   <div id="barBtns">
     <button id="teeoff" disabled data-t="teeoff"></button>
     <button id="backBtn" hidden data-t="back"></button>
@@ -742,7 +742,7 @@
 
 <div id="settings" class="overlay">
   <div class="panel">
-    <h2><span data-t="settings"></span> <small style="font-size:.65rem;font-weight:400;color:var(--sub)">v5.1</small></h2>
+    <h2><span data-t="settings"></span> <small style="font-size:.65rem;font-weight:400;color:var(--sub)">v5.2</small></h2>
     <p class="lockNote" id="lockNote" hidden></p>
     <button id="quitHole" class="quit" hidden></button>
     <button id="toHome" data-t="toHome"></button>
@@ -770,7 +770,7 @@
 
 <div id="home">
   <div class="homeInner">
-    <div class="homeHead"><h1>🎮 <span data-t="gamesName"></span></h1><p data-t="gamesAbout"></p><small>v5.1</small></div>
+    <div class="homeHead"><h1>🎮 <span data-t="gamesName"></span></h1><p data-t="gamesAbout"></p><small>v5.2</small></div>
 
     <section id="homeMain">
       <div class="homeCard homeLang" id="homeLang"></div>
@@ -2410,6 +2410,37 @@ function shown(p){
   return p.title;
 }
 
+/* v5.2 お題の先読み：遊んでいる間に次のスタート・ゴール（説明文つき）を2つずつ裏で用意しておく */
+const golfPre = {start:[], goal:[]};
+let golfPreRun = false;
+const golfPreKey = () => `${curLang()}|${settings.difficulty}`;
+async function golfMake(role, avoid){
+  const pick = await pickTitle(role, avoid);
+  if(!pick) return null;
+  const p = await getSummary(pick.title);
+  if(role === "goal"){
+    if(pick.inlinks === undefined){ const c = await inlinkCount(p.title); pick.inlinks = c.n; pick.more = c.more; }
+    p.inlinks = pick.inlinks; p.inlinksMore = pick.more;
+  }
+  p.lang = curLang(); p._key = golfPreKey();
+  return p;
+}
+async function golfPrefetch(){
+  if(golfPreRun) return;
+  golfPreRun = true;
+  try{
+    await ensureNs();
+    for(let guard = 0; guard < 8; guard++){
+      const key = golfPreKey();
+      for(const r of ["start", "goal"]) golfPre[r] = golfPre[r].filter(x => x._key === key);
+      const role = golfPre.goal.length < 2 ? "goal" : golfPre.start.length < 2 ? "start" : null;
+      if(!role) break;
+      const p = await golfMake(role);
+      if(p && p._key === golfPreKey()) golfPre[role].push(p);
+    }
+  }catch(_){}
+  finally{ golfPreRun = false; }
+}
 async function draw(role, fixedTitle){
   const card = $(role);
   card.classList.add("loading");
@@ -2418,14 +2449,22 @@ async function draw(role, fixedTitle){
   try{
     await ensureNs();
     const other = role === "start" ? state.goal : state.start;
-    const pick = fixedTitle ? {title:fixedTitle} : await pickTitle(role, other && other.title);
-    if(!pick) throw new Error(T("noFound"));
-    const p = await getSummary(pick.title);
-    if(role === "goal"){
-      if(pick.inlinks === undefined){ const c = await inlinkCount(p.title); pick.inlinks = c.n; pick.more = c.more; }
-      p.inlinks = pick.inlinks; p.inlinksMore = pick.more;
+    let p = null;
+    if(!fixedTitle){                                   // 先読みしてあればそれを使う（一瞬で出る）
+      const key = golfPreKey();
+      const i = golfPre[role].findIndex(x => x._key === key && !(other && norm(x.title) === norm(other.title)));
+      if(i >= 0) p = golfPre[role].splice(i, 1)[0];
     }
-    p.lang = curLang();
+    if(!p){
+      const pick = fixedTitle ? {title:fixedTitle} : await pickTitle(role, other && other.title);
+      if(!pick) throw new Error(T("noFound"));
+      p = await getSummary(pick.title);
+      if(role === "goal"){
+        if(pick.inlinks === undefined){ const c = await inlinkCount(p.title); pick.inlinks = c.n; pick.more = c.more; }
+        p.inlinks = pick.inlinks; p.inlinksMore = pick.more;
+      }
+      p.lang = curLang();
+    }
     state[role] = p;
     fillCard(role);
   }catch(e){
@@ -2439,6 +2478,7 @@ async function draw(role, fixedTitle){
     $("teeoff").disabled = !(state.start && state.goal) || state.playing;
     $("shareOdai").disabled = !(state.start && state.goal);
     updateSaveBtn();
+    setTimeout(golfPrefetch, 400);                     // 使ったぶんを裏で補充
   }
 }
 
@@ -6337,6 +6377,7 @@ function toast(msg){
 
 /* ════════ はじまり ════════ */
 applyTheme();
+setTimeout(() => { if(!state.challenge) golfPrefetch(); }, 1500);   // v5.2 タイトル画面にいる間に最初のお題も用意しておく
 state.challenge = parseChallenge();
 const roomQ = (new URLSearchParams(location.search).get("room") || "").toUpperCase().replace(/[^A-Z0-9]/g, "").slice(0, 4);
 const shRoomQ = (new URLSearchParams(location.search).get("shroom") || "").replace(/\D/g, "").slice(0, 4);
