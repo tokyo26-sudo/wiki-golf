@@ -261,6 +261,28 @@
   #tvStage .tvRes .h{font-size:2.6rem;font-weight:900;color:var(--green)}
   #tvStage .tvRes.ng .h{color:var(--flag)} #tvStage .tvRes.ng{border-color:var(--flag)}
   #tvStage .tvRes .best{white-space:pre-line;font-size:1.05rem;margin-top:6px}
+  /* v5.6 観客画面に記事も出す */
+  #tvStage .tvGTop{display:flex;flex-direction:column;gap:8px;flex:none}
+  #tvStage .tvBand{display:flex;gap:10px;align-items:stretch}
+  #tvStage .tvMini{display:flex;gap:10px;align-items:center;background:var(--card);border:1px solid var(--line);border-radius:12px;padding:6px 12px;min-width:0;flex:1}
+  #tvStage .tvMini img{width:52px;height:52px;object-fit:cover;border-radius:8px;flex:none}
+  #tvStage .tvMini .k{font-size:.75rem;color:var(--sub);font-weight:800}
+  #tvStage .tvMini .t{font-size:1.35rem;font-weight:900;line-height:1.15;overflow:hidden;white-space:nowrap;text-overflow:ellipsis}
+  #tvStage .tvMini > div{min-width:0}
+  #tvStage .tvBand .tvArrow{font-size:1.8rem}
+  #tvStage .tvBand .tvStat{padding:4px 14px;display:flex;flex-direction:column;justify-content:center}
+  #tvStage .tvBand .tvStat b{font-size:2rem}
+  #tvStage .tvRow2{display:flex;gap:10px;align-items:center;min-width:0}
+  #tvStage .tvRow2 .tvRoute{flex:1;min-width:0;flex-wrap:nowrap;justify-content:flex-end;white-space:nowrap;font-size:1.05rem;padding:6px 12px;border-radius:10px}
+  #tvStage .tvRow2 .tvPl{font-size:.95rem;padding:4px 10px}
+  #tvStage .tvPl.on{border-color:#36c;box-shadow:0 0 0 3px #36c inset}
+  #tvStage .tvArtWrap{flex:1;min-height:0;position:relative;border-radius:14px;overflow:hidden;border:2px solid var(--line);background:#fff}
+  #tvStage .tvArtFrame{width:100%;height:100%;border:0;display:block;background:#fff}
+  #tvStage .tvArtWho{position:absolute;top:8px;right:12px;background:#36c;color:#fff;font-weight:900;font-size:1.2rem;padding:4px 14px;border-radius:999px;box-shadow:0 2px 8px #0005}
+  #tvStage .tvArtLoad{position:absolute;left:12px;bottom:10px;background:#000a;color:#fff;font-size:1rem;padding:4px 12px;border-radius:999px}
+  #tvStage .tvArtWrap .tvRes{position:absolute;left:50%;top:50%;transform:translate(-50%,-50%);min-width:520px;max-width:90%;box-shadow:0 8px 40px #0008;text-align:center}
+  #mpStrip.tvSel .chip{cursor:pointer}
+  #mpStrip .chip.tvOn{outline:3px solid #36c;outline-offset:1px}
   #mpList li.away{opacity:.6}
   #innTip{position:fixed;z-index:60;pointer-events:none;background:rgba(20,20,20,.88);color:#fff;font-size:.8rem;font-weight:700;padding:3px 8px;border-radius:8px;white-space:nowrap}
   #innTip[hidden]{display:none}
@@ -741,7 +763,7 @@
   <div class="stat"><div class="num" id="clockNum">0:00</div><div class="lbl" id="clockLbl"></div></div>
   <div class="stat" id="pageStat" hidden><div class="num" id="pageNum">0</div><div class="lbl" data-t="pageLeft"></div></div>
   <div id="route"></div>
-  <span id="ver">v5.5</span>
+  <span id="ver">v5.6</span>
   <div id="barBtns">
     <button id="teeoff" disabled data-t="teeoff"></button>
     <button id="backBtn" hidden data-t="back"></button>
@@ -800,7 +822,7 @@
 
 <div id="settings" class="overlay">
   <div class="panel">
-    <h2><span data-t="settings"></span> <small style="font-size:.65rem;font-weight:400;color:var(--sub)">v5.5</small></h2>
+    <h2><span data-t="settings"></span> <small style="font-size:.65rem;font-weight:400;color:var(--sub)">v5.6</small></h2>
     <p class="lockNote" id="lockNote" hidden></p>
     <button id="quitHole" class="quit" hidden></button>
     <button id="toHome" data-t="toHome"></button>
@@ -828,7 +850,7 @@
 
 <div id="home">
   <div class="homeInner">
-    <div class="homeHead"><h1>🎮 <span data-t="gamesName"></span></h1><p data-t="gamesAbout"></p><small>v5.5</small></div>
+    <div class="homeHead"><h1>🎮 <span data-t="gamesName"></span></h1><p data-t="gamesAbout"></p><small>v5.6</small></div>
 
     <section id="homeMain">
       <div class="homeCard homeLang" id="homeLang"></div>
@@ -2360,6 +2382,8 @@ Object.assign(STR["zh-hant"], {shLifeNote0:"無 ♥：一次出局。失誤一�
 Object.assign(STR["zh-hans"], {shLifeNote0:"无 ♥：一次出局。失误一次就淘汰", shPassLife:"⏭️ 跳过（♥−1）"});
 /* v5.3 観客画面 */
 Object.assign(STR["ja"], {tvBtn:"📺 観客画面", tvWait:"メインの画面を待っています…（同じブラウザで「📺 観客画面」を押した画面とつながります）", tvSetup:"準備中…", tvNow:"いまの記事", tvPick:"お題を選んでいます…", tvHomeSub:"このあと始まるゲームがここに映ります", tvTip:"この窓をモニタに移して全画面に（Chromecastは「タブをキャスト」、Zoomは「ウィンドウを共有」）"});
+Object.assign(STR["ja"], {tvScreenOf:n=>`📺 ${n} の画面`, tvFocusTip:"参加者の名前を押すと、その人の画面を観客画面に出せます（もう一度押すと自分にもどる）"});
+Object.assign(STR["en"], {tvScreenOf:n=>`📺 ${n}'s screen`, tvFocusTip:"Tap a player's name to show their screen on the audience view (tap again to switch back)"});
 Object.assign(STR["en"], {tvBtn:"📺 Audience view", tvWait:"Waiting for the main screen… (it connects to the window where you pressed “📺 Audience view” in this browser)", tvSetup:"Getting ready…", tvNow:"Now on", tvPick:"Picking the course…", tvHomeSub:"The game will appear here", tvTip:"Move this window to the big screen and go full screen (Chromecast: “Cast tab”, Zoom: share this window)"});
 Object.assign(STR["fr"], {tvBtn:"📺 Écran public"});
 Object.assign(STR["es"], {tvBtn:"📺 Pantalla del público"});
@@ -2978,6 +3002,30 @@ function markLinks(doc, quiet){
   });
   if(!quiet){ mpAct(); if($("sInput").value.trim()) doSearch(false); }
 }
+/* v5.6 読んでる場所を「何番目の見出しのどのへん」で表す（画面の幅がちがっても合わせられるように） */
+function artTops(fr){
+  try{
+    const w = fr.contentWindow, d = fr.contentDocument;
+    if(!w || !d || !d.body) return null;
+    const tops = [...d.querySelectorAll("#mw-content-text h2, #mw-content-text h3")].map(h => h.getBoundingClientRect().top + w.scrollY);
+    return {w, d, tops, end:d.documentElement.scrollHeight};
+  }catch(_){ return null; }
+}
+function artSecOf(fr){
+  const A = artTops(fr); if(!A) return null;
+  const y = A.w.scrollY + 8;
+  let i = -1;
+  for(let k = 0; k < A.tops.length; k++){ if(A.tops[k] <= y) i = k; else break; }
+  const a = i < 0 ? 0 : A.tops[i], b = i + 1 < A.tops.length ? A.tops[i + 1] : A.end;
+  return [i, Math.round(Math.min(1, Math.max(0, (y - a) / Math.max(1, b - a))) * 100) / 100];
+}
+function artSecGo(fr, sec){
+  const A = artTops(fr); if(!A || !sec) return;
+  const [i, f] = sec;
+  const a = i < 0 ? 0 : (A.tops[i] ?? 0), b = i + 1 < A.tops.length ? A.tops[i + 1] : A.end;
+  A.w.scrollTo({top:Math.max(0, a + f * (b - a) - 8), behavior:"smooth"});
+}
+function tvNotePick(t){ state.tvPick = {t, n:((state.tvPick && state.tvPick.n) || 0) + 1}; }
 const narrow = matchMedia("(max-width:720px)");
 async function render(parsed){
   const doc = await fillFrame($("frame"), parsed, onFrameClick);
@@ -3017,6 +3065,7 @@ function onFrameClick(e){
   const t = linkTitle(href);
   const why = linkAllowed(a, t, state.rules);
   if(why) return toast(why);
+  tvNotePick(t);
   go(t);
 }
 
@@ -3099,6 +3148,7 @@ function forcedShot(){
   if(!cands.length) return;
   const a = cands[Math.floor(Math.random() * cands.length)];
   toast(T("forcedToast"));
+  tvNotePick(linkTitle(a.getAttribute("href")));
   state.forcedUntil = Date.now() + 4000;
   mpAct();
   go(linkTitle(a.getAttribute("href")), {forced:true});
@@ -4453,13 +4503,15 @@ function mpOnMsg(p){
       if(p.round === m.round && state.best && state.best.pending) spSet(p.res);
       break;
     case "st":
-      if(pl && p.round === m.round && !pl.done){ Object.assign(pl, {strokes:p.strokes, backs:p.backs, act:p.act, pct:p.pct, reach:p.reach, seen:Date.now()}); renderStrip(); }
+      if(pl && p.round === m.round && !pl.done){ Object.assign(pl, {strokes:p.strokes, backs:p.backs, act:p.act, pct:p.pct, reach:p.reach, at:p.at || pl.at, sec:p.sec || null, pick:p.pick || null, seen:Date.now()}); renderStrip(); }
       else if(pl && p.round !== m.round) mpLog("←", `st round ${p.round}≠${m.round} from ${pl.name}`);
       break;
     case "fin":
       if(pl && p.round === m.round){
         const first = !pl.done;
         Object.assign(pl, {done:true, success:p.success, strokes:p.strokes, elapsed:p.elapsed, route:p.route, backs:p.backs, reach:false, seen:Date.now()});
+        const lr = p.route && p.route[p.route.length - 1];
+        if(lr) pl.at = typeof lr === "string" ? lr : (lr.title || lr.t || pl.at);
         if(first){ renderStrip(); renderMpResults(); }
       }
       break;
@@ -4533,7 +4585,9 @@ function myAct(){
 function mpSendStatus(force){
   const m = state.mp;
   if(!m || !state.playing) return;
-  const st = {strokes:state.strokes, backs:state.backs || 0, act:myAct(), pct:state.pct || 0, reach:!!state.reach};
+  const lr = state.route[state.route.length - 1];
+  const st = {strokes:state.strokes, backs:state.backs || 0, act:myAct(), pct:state.pct || 0, reach:!!state.reach,
+              at:lr ? lr.title : null, sec:artSecOf($("frame")), pick:state.tvPick || null};
   const key = JSON.stringify(st);
   if(key === lastSt && !force) return;
   lastSt = key;
@@ -4616,13 +4670,17 @@ function renderStrip(){
   const ids = [...m.players.values()].filter(p => p.inRound && p.id !== m.me.id).map(p => p.id)
     .sort((a, b) => (b === m.hostId) - (a === m.hostId) || m.arrival.indexOf(a) - m.arrival.indexOf(b));
   box.hidden = !ids.length; box.innerHTML = "";
+  const sel = isHost() && tvLive;
+  box.classList.toggle("tvSel", sel);
+  if(sel) box.title = T("tvFocusTip"); else box.removeAttribute("title");
   box.append(mk("div", "stripHead", `⚔️ ${T("mpRoom")} ${m.room}`));
   for(const id of ids){
     const p = m.players.get(id);
     const reach = p.reach && !p.done && !p.left;
     const chip = mk("span", "chip" + (p.left ? " off" : "") + (reach ? " reach" : ""));
     chip.dataset.id = id;
-    chip.append(mk("b", "", dname(id) + (id === m.hostId ? " 👑" : "")));
+    if(sel && m.tvFocus === id) chip.classList.add("tvOn");
+    chip.append(mk("b", "", (sel && m.tvFocus === id ? "📺 " : "") + dname(id) + (id === m.hostId ? " 👑" : "")));
     let txt;
     if(p.done) txt = p.success ? `🏁 ${T("sk", p.strokes)}` : `🏳 ${T("mpDnf")}`;
     else if(p.left) txt = "📴 " + T("mpOffline");
@@ -4633,6 +4691,12 @@ function renderStrip(){
   }
 }
 
+$("mpStrip").addEventListener("click", e => {
+  const c = e.target.closest(".chip[data-id]"), m = state.mp;
+  if(!c || !m || !isHost() || !tvLive) return;
+  m.tvFocus = m.tvFocus === c.dataset.id ? null : c.dataset.id;
+  renderStrip(); tvPush();
+});
 /* ── スタンプ ── */
 const STAMPS = ["😎", "😰", "🤔", "😂", "🙏", "🎉"];
 function sendStamp(i){
@@ -6649,9 +6713,21 @@ function tvSnap(){
       route:state.route.map(x => ({t:x.shown || x.title, back:!!x.back, forced:!!x.forced})),
       clock:$("clockNum").textContent, clockLbl:$("clockLbl").textContent, warn:$("clockNum").classList.contains("warn"),
       result:R ? {ok:R.success, head:$("winHead").textContent, strokes:R.strokes, time:fmtTime(R.elapsed), best:$("winBest").hidden ? "" : $("winBest").innerText} : null,
-      players:m ? [...m.players.values()].filter(x => !x.left && x.inRound !== false).map(x => ({name:x.name, strokes:x.strokes, done:x.done, success:x.success})) : null};
+      players:m ? [...m.players.values()].filter(x => !x.left && x.inRound !== false).map(x => ({name:x.name, strokes:x.strokes, done:x.done, success:x.success, on:!!(m.tvFocus && x.id === m.tvFocus)})) : null,
+      art:tvArtSnap()};
   }
   return {kind:"home"};
+}
+/* v5.6 観客画面に出す記事：1人なら自分、対戦ならホストが選んだ人（選んでなければホスト自身） */
+function tvArtSnap(){
+  const m = state.mp;
+  if(m && m.tvFocus){
+    const p = m.players.get(m.tvFocus);
+    if(p && !p.left && p.inRound && p.at) return {id:p.id, by:dname(p.id), t:p.at, sec:p.sec || null, pick:p.pick || null, strokes:p.strokes};
+  }
+  const lr = state.route[state.route.length - 1];
+  if(!lr) return null;
+  return {id:"me", by:m ? dname(m.me.id) : "", t:lr.title, sec:artSecOf($("frame")), pick:state.tvPick || null, strokes:state.strokes};
 }
 function tvPush(){
   if(TV_MODE || !tvLive || !tvCh) return;
@@ -6660,6 +6736,7 @@ function tvPush(){
 }
 function tvOpen(){
   tvLive = true; tvLast = "";
+  if(state.mp && isHost()){ renderStrip(); if(state.screen === "game") toast(T("tvFocusTip")); }
   const w = window.open(location.pathname + "?tv=1", "wikiTV", "popup=yes,width=1280,height=760");
   if(!w) toast(T("tvTip"));
   setTimeout(tvPush, 300);
@@ -6706,7 +6783,10 @@ function tvBoot(){
   requestAnimationFrame(tvTick);
 }
 function tvShow(S){
-  const st = $("tvStage"); st.innerHTML = ""; tvTimerEl = null; tvTurnEnds = 0;
+  const st = $("tvStage"); tvTimerEl = null; tvTurnEnds = 0;
+  if(S.kind === "golf" && S.art) return tvGolfArt(S);
+  tvA = null;
+  st.innerHTML = "";
   if(S.kind === "shiri") return tvShiri(S.sh);
   if(S.kind === "golf") return tvGolf(S);
   $("shBombPop").hidden = true;
@@ -6781,6 +6861,94 @@ function tvGolf(S){
     if(S.result.best) r.append(mk("div", "best", S.result.best));
     st.append(r);
   }
+}
+
+/* v5.6 観客画面：上に帯、下にいまの記事（記事の窓は作り直さずに使い回す） */
+let tvA = null;
+const TV_ART_CSS = "html{zoom:1.25} ::-webkit-scrollbar{display:none} html{scrollbar-width:none}" +
+  " a.tvFlash{outline:4px solid #ff3b30;outline-offset:2px;background:#ffe14d !important;color:#000 !important;border-radius:3px;animation:tvFl .3s ease-in-out 5 alternate}" +
+  " @keyframes tvFl{from{outline-color:#ff3b30}to{outline-color:#ffb300}}";
+function tvGolfArt(S){
+  const st = $("tvStage");
+  if(!tvA || !st.contains(tvA.wrap)){
+    st.innerHTML = ""; $("shBombPop").hidden = true;
+    const top = mk("div", "tvGTop"), wrap = mk("div", "tvArtWrap"), fr = document.createElement("iframe");
+    fr.className = "tvArtFrame"; fr.tabIndex = -1; fr.title = "article";
+    const who = mk("div", "tvArtWho"), load = mk("div", "tvArtLoad", T("loading")), res = mk("div", "");
+    load.hidden = true;
+    wrap.append(fr, who, load, res); st.append(top, wrap);
+    tvA = {top, wrap, fr, who, load, res, key:"", id:"", doc:null, pickN:null, holdUntil:0, want:null, lastSec:"", loading:false};
+  }
+  const A = tvA, art = S.art;
+  // 上の帯
+  A.top.innerHTML = "";
+  const band = mk("div", "tvBand");
+  const mini = (k, c) => { const d = mk("div", "tvMini"); if(c.img){ const im = mk("img", ""); im.src = c.img; im.referrerPolicy = "no-referrer"; d.append(im); } const b = mk("div", ""); b.append(mk("div", "k", k), mk("div", "t", c.t)); d.append(b); return d; };
+  if(S.start && S.goal) band.append(mini(T("start"), S.start), mk("div", "tvArrow", "→"), mini(T("goal"), S.goal));
+  const sk = mk("div", "tvStat"); sk.append(mk("span", "l", T("strokes")), mk("b", "", String(art.strokes ?? S.strokes))); band.append(sk);
+  const ck = mk("div", "tvStat" + (S.warn ? " warn" : "")); ck.append(mk("span", "l", S.clockLbl), mk("b", "", S.clock)); band.append(ck);
+  A.top.append(band);
+  const row = mk("div", "tvRow2");
+  if(S.players && S.players.length > 1)
+    S.players.forEach(p => row.append(mk("div", "tvPl" + (p.done ? " done" : "") + (p.on ? " on" : ""), `${p.on ? "📺 " : ""}${p.name}　${T("sk", p.strokes)}${p.done ? (p.success ? " ⛳" : " ✖") : ""}`)));
+  if(art.id === "me" && S.route.length){
+    const rt = mk("div", "tvRoute");
+    S.route.forEach((x, i) => {
+      if(i) rt.append(mk("span", "sep", x.back ? "↩" : "→"));
+      rt.append(mk("span", (x.back ? "back " : "") + (i === S.route.length - 1 ? "last" : ""), (x.forced ? "🎲" : "") + x.t));
+    });
+    row.append(rt);
+  }
+  if(row.children.length) A.top.append(row);
+  A.who.hidden = !art.by;
+  A.who.textContent = art.by ? T("tvScreenOf", art.by) : "";
+  // 結果（自分の画面を出しているとき）
+  A.res.innerHTML = ""; A.res.className = "";
+  if(art.id === "me" && S.result && !S.playing){
+    A.res.className = "tvRes" + (S.result.ok ? "" : " ng");
+    A.res.append(mk("div", "h", `${S.result.head}　${S.result.ok ? T("sk", S.result.strokes) : ""}`), mk("div", "tvSub", T("timeLbl") + S.result.time));
+    if(S.result.best) A.res.append(mk("div", "best", S.result.best));
+  }
+  A.want = art;
+  tvArtStep();
+}
+function tvFlashLink(A, t){
+  const doc = A.doc, w = A.fr.contentWindow;
+  if(!doc || !w) return false;
+  const cands = [...doc.querySelectorAll("a[href]")].filter(a => { const h = a.getAttribute("href") || ""; return !h.startsWith("#") && linkTitle(h) === t; });
+  if(!cands.length) return false;
+  const mid = w.innerHeight / 2;
+  const a = cands.reduce((x, y) => Math.abs(y.getBoundingClientRect().top - mid) < Math.abs(x.getBoundingClientRect().top - mid) ? y : x);
+  doc.querySelectorAll("a.tvFlash").forEach(x => x.classList.remove("tvFlash"));
+  a.classList.add("tvFlash");
+  a.scrollIntoView({behavior:"smooth", block:"center"});
+  return true;
+}
+async function tvArtStep(){
+  const A = tvA;
+  if(!A || A.loading || !A.want) return;
+  const w = A.want, key = w.id + "|" + w.t;
+  // 押したリンクを光らせる（同じ人の新しい1打のときだけ）
+  if(w.pick && w.pick.n !== A.pickN && w.id === A.id && A.doc){
+    A.pickN = w.pick.n;
+    if(tvFlashLink(A, w.pick.t)) A.holdUntil = Date.now() + 1500;
+  }
+  if(key !== A.key){
+    const wait = A.holdUntil - Date.now();
+    if(wait > 0){ clearTimeout(A.holdT); A.holdT = setTimeout(tvArtStep, wait + 20); return; }
+    A.loading = true; A.load.hidden = false;
+    try{
+      const p = await loadArticle(w.t);
+      A.doc = await fillFrame(A.fr, p, e => e.preventDefault(), TV_ART_CSS);
+    }catch(e){ console.error(e); }
+    A.key = key; A.id = w.id; A.pickN = A.want && A.want.pick ? A.want.pick.n : null; A.lastSec = "";
+    A.loading = false; A.load.hidden = true;
+    if(tvA === A) setTimeout(tvArtStep, 250);      // 画像で高さが落ち着くのを少し待ってから位置合わせ
+    return;
+  }
+  if(Date.now() < A.holdUntil) return;
+  const s = JSON.stringify(w.sec);
+  if(s !== A.lastSec){ A.lastSec = s; artSecGo(A.fr, w.sec); }
 }
 
 /* ════════ はじまり ════════ */
