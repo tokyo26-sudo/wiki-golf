@@ -176,6 +176,19 @@
   .homeHead h1{margin:0;font-size:2.1rem;letter-spacing:.02em}
   .homeHead p{color:var(--sub);margin:6px 0 0;font-size:.92rem;text-wrap:balance;word-break:auto-phrase}
   .homeCard .about,#mpHint,.snote{text-wrap:pretty;word-break:auto-phrase}
+  /* v5.9 お題選びのスロット */
+  .slotSpin{color:var(--sub) !important;filter:blur(.25px)}
+  .slotN{font-size:.78rem;color:var(--sub);margin-top:2px;font-weight:700}
+  .card.slotting{pointer-events:none;animation:slotGlow 1.1s linear infinite}
+  .card.slotting .extract,.card.slotting img,.card.slotting .meta{opacity:.2}
+  .lbCard:has(.slotSpin),.shsRow:has(.slotSpin),#tvStage .tvCard:has(.slotSpin),#tvStage .tvCenter:has(.slotSpin){animation:slotGlow 1.1s linear infinite}
+  @keyframes slotGlow{0%{box-shadow:0 0 0 2px #f2b705,0 0 14px #f2b70599}50%{box-shadow:0 0 0 2px #ff6b6b,0 0 22px #ff6b6b99}100%{box-shadow:0 0 0 2px #f2b705,0 0 14px #f2b70599}}
+  .slotPop{animation:slotPop .55s cubic-bezier(.3,1.6,.5,1)}
+  @keyframes slotPop{0%{transform:scale(.93)}60%{transform:scale(1.05)}100%{transform:scale(1)}}
+  .shsRow .slotN{margin:0 0 0 6px}
+  .shsRow:has(.slotSpin){border-radius:10px}
+  #tvStage .tvCard .slotN{font-size:1rem}
+  #tvStage .tvSlotBig{font-size:2.6rem;font-weight:900}
   /* v5.7 どこからでもタイトルへ */
   .titleBtn{font-size:1.15rem;line-height:1;padding:7px 10px;border-radius:10px;flex:none}
   #titleBtnHome{position:fixed;top:10px;left:10px;z-index:30;box-shadow:0 2px 8px #0003}
@@ -772,7 +785,7 @@
   <div class="stat"><div class="num" id="clockNum">0:00</div><div class="lbl" id="clockLbl"></div></div>
   <div class="stat" id="pageStat" hidden><div class="num" id="pageNum">0</div><div class="lbl" data-t="pageLeft"></div></div>
   <div id="route"></div>
-  <span id="ver">v5.8</span>
+  <span id="ver">v5.9</span>
   <div id="barBtns">
     <button id="teeoff" disabled data-t="teeoff"></button>
     <button id="backBtn" hidden data-t="back"></button>
@@ -831,7 +844,7 @@
 
 <div id="settings" class="overlay">
   <div class="panel">
-    <h2><span data-t="settings"></span> <small style="font-size:.65rem;font-weight:400;color:var(--sub)">v5.8</small></h2>
+    <h2><span data-t="settings"></span> <small style="font-size:.65rem;font-weight:400;color:var(--sub)">v5.9</small></h2>
     <p class="lockNote" id="lockNote" hidden></p>
     <button id="quitHole" class="quit" hidden></button>
     <button id="toHome" data-t="toHome"></button>
@@ -860,7 +873,7 @@
 <div id="home">
   <button id="titleBtnHome" class="titleBtn">🏠</button>
   <div class="homeInner">
-    <div class="homeHead"><h1>🎮 <span data-t="gamesName"></span></h1><p data-t="gamesAbout"></p><small>v5.8</small></div>
+    <div class="homeHead"><h1>🎮 <span data-t="gamesName"></span></h1><p data-t="gamesAbout"></p><small>v5.9</small></div>
 
     <section id="homeMain">
       <div class="homeCard homeLang" id="homeLang"></div>
@@ -2393,6 +2406,8 @@ Object.assign(STR["zh-hant"], {shLifeNote0:"無 ♥：一次出局。失誤一�
 Object.assign(STR["zh-hans"], {shLifeNote0:"无 ♥：一次出局。失误一次就淘汰", shPassLife:"⏭️ 跳过（♥−1）"});
 /* v5.3 観客画面 */
 Object.assign(STR["ja"], {tvBtn:"📺 観客画面", tvWait:"メインの画面を待っています…（同じブラウザで「📺 観客画面」を押した画面とつながります）", tvSetup:"準備中…", tvNow:"いまの記事", tvPick:"お題を選んでいます…", tvHomeSub:"このあと始まるゲームがここに映ります", tvTip:"この窓をモニタに移して全画面に（Chromecastは「タブをキャスト」、Zoomは「ウィンドウを共有」）"});
+Object.assign(STR["ja"], {slotSeen:n=>`🔍 しらべ中…（${n}本目）`, slotLooking:"🔍 しらべ中…", tvLobby:"まもなくスタート！"});
+Object.assign(STR["en"], {slotSeen:n=>`🔍 Looking… (${n} checked)`, slotLooking:"🔍 Looking…", tvLobby:"Starting soon!"});
 Object.assign(STR["ja"], {titleQQuit:"やめてタイトルにもどる？", titleQRoom:"部屋から出てタイトルにもどる？"});
 Object.assign(STR["en"], {titleQQuit:"Quit and go back to the title?", titleQRoom:"Leave the room and go back to the title?"});
 Object.assign(STR["ja"], {tvScreenOf:n=>`📺 ${n} の画面`, tvFocusTip:"参加者の名前を押すと、その人の画面を観客画面に出せます（もう一度押すと自分にもどる）"});
@@ -2518,7 +2533,66 @@ async function outlinkCount(title){
   return {n:(pg.links || []).length, more:!!d.continue};
 }
 const shuffle = a => { for(let i = a.length - 1; i > 0; i--){ const j = Math.floor(Math.random() * (i + 1)); [a[i], a[j]] = [a[j], a[i]]; } return a; };
-async function pickTitle(role, avoid){
+/* v5.9 スロット：くじで実際に引いた記事の名前をパラパラ回す（SLOT[キー]、キーは start/goal/shstart/shgoal） */
+const SLOT = {};
+let slotRecent = [], slotTimer = null;
+const slotRand = a => a[Math.floor(Math.random() * a.length)];
+const slotSleep = ms => new Promise(r => setTimeout(r, ms));
+function slotBegin(k){ SLOT[k] = {pool:[], n:0, t0:Date.now(), text:"？？？", slow:false}; slotKick(); slotPaint(); return SLOT[k]; }
+function slotFeed(k, ts){
+  const S = SLOT[k]; if(!S || !ts || !ts.length) return;
+  S.pool.push(...ts); if(S.pool.length > 60) S.pool.splice(0, S.pool.length - 60);
+  S.n += ts.length;
+}
+function slotPaint(){
+  document.querySelectorAll("[data-slot]").forEach(el => {
+    const S = SLOT[el.dataset.slot];
+    if(S){ if(el.textContent !== S.text) el.textContent = S.text; el.classList.add("slotSpin"); }
+    else el.classList.remove("slotSpin");
+  });
+  document.querySelectorAll("[data-slot-n]").forEach(el => {
+    const S = SLOT[el.dataset.slotN];
+    const t = S ? (S.n ? T("slotSeen", S.n) : T("slotLooking")) : "";
+    if(el.textContent !== t) el.textContent = t;
+    el.hidden = !t;
+  });
+}
+function slotKick(){
+  if(slotTimer) return;
+  slotTimer = setInterval(() => {
+    let any = false;
+    for(const k in SLOT){
+      const S = SLOT[k]; any = true;
+      if(!S.slow){ const src = S.pool.length ? S.pool : slotRecent; if(src.length) S.text = slotRand(src); }
+    }
+    slotPaint();
+    if(!any){ clearInterval(slotTimer); slotTimer = null; }
+  }, 75);
+}
+function slotPopEl(el){
+  const c = el.closest(".card,.lbCard,.shsRow,.tvCard") || el;
+  c.classList.remove("slotPop"); void c.offsetWidth; c.classList.add("slotPop");
+  setTimeout(() => c.classList.remove("slotPop"), 650);
+}
+async function slotEnd(k, final){
+  const S = SLOT[k]; if(!S) return;
+  const wait = 450 - (Date.now() - S.t0);
+  if(wait > 0) await slotSleep(wait);
+  if(SLOT[k] !== S) return;
+  S.slow = true;
+  const src = S.pool.length ? S.pool : slotRecent;
+  for(const d of [80, 120, 170]){ if(src.length) S.text = slotRand(src); slotPaint(); await slotSleep(d); if(SLOT[k] !== S) return; }
+  delete SLOT[k];
+  document.querySelectorAll(`[data-slot="${k}"]`).forEach(el => { if(final != null) el.textContent = final; slotPopEl(el); });
+  slotPaint();
+}
+function slotCancel(k){ if(SLOT[k]){ delete SLOT[k]; slotPaint(); } }
+function slotSnap(keys){
+  const o = {}; let any = false;
+  for(const k of keys){ const S = SLOT[k]; if(S){ o[k] = {pool:(S.pool.length ? S.pool : slotRecent).slice(-30), n:S.n}; any = true; } }
+  return any ? o : null;
+}
+async function pickTitle(role, avoid, onSeen){
   const lang = curLang();
   const any = settings.difficulty === "any";
   const conf = any ? null : (WIKIS[lang].diff[settings.difficulty] || WIKIS[lang].diff.normal);
@@ -2532,6 +2606,9 @@ async function pickTitle(role, avoid){
     const d = await api(q);
     const pages = shuffle(((d.query && d.query.pages) || []).filter(p => !(p.pageprops && "disambiguation" in p.pageprops) && norm(p.title) !== norm(avoid || "")));
     if(!pages.length) continue;
+    const seen = pages.map(p => p.title);
+    slotRecent.push(...seen); if(slotRecent.length > 80) slotRecent.splice(0, slotRecent.length - 80);
+    if(onSeen) try{ onSeen(seen); }catch(_){}
     if(any) return {title:pages[0].title};
     // ジャンルが長いこと出ないときは、あきらめて別のジャンルを引き直す（8回目から）
     if(useGenre && round === 8 && !best) want = GENRE_IDS[Math.floor(Math.random() * GENRE_IDS.length)];
@@ -2597,7 +2674,14 @@ async function golfPrefetch(){
 }
 async function draw(role, fixedTitle){
   const card = $(role);
-  card.classList.add("loading");
+  const spin = !fixedTitle || !!state.mp;
+  const hostLobby = () => state.mp && isHost() && state.screen === "home";
+  if(spin){
+    card.classList.add("slotting");
+    slotBegin(role);
+    if(hostLobby()) mpSend({t:"slot", role, ts:[]}, 1);
+  }else card.classList.add("loading");
+  const feed = ts => { slotFeed(role, ts); if(hostLobby()) mpSend({t:"slot", role, ts:ts.slice(0, 20)}, 1); };
   $("teeoff").disabled = true;
   hidePop();
   try{
@@ -2610,7 +2694,7 @@ async function draw(role, fixedTitle){
       if(i >= 0) p = golfPre[role].splice(i, 1)[0];
     }
     if(!p){
-      const pick = fixedTitle ? {title:fixedTitle} : await pickTitle(role, other && other.title);
+      const pick = fixedTitle ? {title:fixedTitle} : await pickTitle(role, other && other.title, feed);
       if(!pick) throw new Error(T("noFound"));
       p = await getSummary(pick.title);
       if(role === "goal"){
@@ -2619,16 +2703,19 @@ async function draw(role, fixedTitle){
       }
       p.lang = curLang();
     }
+    if(spin) await slotEnd(role, shown(p));
     state[role] = p;
     fillCard(role);
   }catch(e){
+    slotCancel(role);
     state[role] = null;
     card.querySelector(".title").textContent = T("fail");
     card.querySelector(".extract").textContent = T("err") + e.message;
     card.querySelector(".extract").hidden = false;
     card.querySelector("img").hidden = true;
   }finally{
-    card.classList.remove("loading");
+    slotCancel(role);
+    card.classList.remove("loading", "slotting");
     $("teeoff").disabled = !(state.start && state.goal) || state.playing;
     $("shareOdai").disabled = !(state.start && state.goal);
     updateSaveBtn();
@@ -2636,6 +2723,10 @@ async function draw(role, fixedTitle){
   }
 }
 
+for(const role of ["start", "goal"]){
+  const t = $(role).querySelector(".title"); t.dataset.slot = role;
+  const n = document.createElement("div"); n.className = "slotN"; n.dataset.slotN = role; n.hidden = true; t.after(n);
+}
 function fillCard(role){
   const p = state[role], card = $(role);
   if(!p) return;
@@ -4552,9 +4643,17 @@ function mpOnMsg(p){
       if(p.phase === "lobby" && m.phase === "playing" && p.round === m.round && state.screen === "game"){ mpGoLobby(); break; }   // 「待合室へ」を取りこぼしていた
       renderHome();
       break;
+    case "slot":
+      if(!fromHost || state.playing || isHost()) return;
+      if(!SLOT[p.role]) slotBegin(p.role);
+      slotFeed(p.role, p.ts);
+      clearTimeout(SLOT[p.role].to); SLOT[p.role].to = setTimeout(() => { slotCancel(p.role); renderLobby(); }, 20000);   // 合図が来なくなったら止める
+      break;
     case "odai":
       if(!fromHost || state.playing) return;
-      mpLoadOdai(p.odai);
+      Promise.resolve(mpLoadOdai(p.odai)).finally(() => {
+        if(p.odai) for(const r of ["start", "goal"]) if(SLOT[r]) slotEnd(r).then(() => renderLobby());
+      });
       break;
     case "kick":
       if(p.id === m.me.id){ mpLeave(true); $("mpErr").textContent = p.reason === "full" ? T("mpFull") : T("mpLocked"); }
@@ -4938,15 +5037,17 @@ function renderLobbyOdai(){
   box.innerHTML = "";
   const view = eff().goalView;
   for(const role of ["start", "goal"]){
-    const p = m.drawing ? null : state[role];
+    const p = SLOT[role] ? null : state[role];
     const card = mk("div", "lbCard " + role);
     card.append(mk("span", "tag", T(role)));
     if(role === "goal" && p && p.inlinks !== undefined) card.append(mk("span", "meta", T("inlinks", p.inlinks, p.inlinksMore)));
-    const title = mk("div", "lbTitle", p ? shown(p) : T("mpPreparing"));
+    const title = mk("div", "lbTitle", SLOT[role] ? SLOT[role].text : p ? shown(p) : T("mpPreparing"));
+    title.dataset.slot = role;
     const canRead = p && (role === "start" || view === "full");
     if(canRead){ title.classList.add("link"); title.addEventListener("click", ()=> openReader(role)); }
     card.append(title);
-    if(p && (role === "start" || view !== "title") && p.extract) card.append(mk("p", "lbExt", p.extract.replace(/\s+/g, " ")));
+    const sn = mk("div", "slotN"); sn.dataset.slotN = role; sn.hidden = !SLOT[role]; card.append(sn);
+    if(p && !SLOT[role] && (role === "start" || view !== "title") && p.extract) card.append(mk("p", "lbExt", p.extract.replace(/\s+/g, " ")));
     const btns = mk("div", "lbBtns");
     if(isHost()){
       const rr = mk("button", "", T("reroll"));
@@ -6217,20 +6318,24 @@ async function shRunJudge(w){
 async function shRandom(role){
   const btn = $(role === "start" ? "shsStartR" : "shsGoalR");
   btn.disabled = true;
+  const key = "sh" + role;
+  slotBegin(key);
   try{
     await ensureNs();
     const other = sh.setup[role === "start" ? "goal" : "start"];
     const bombPick = role === "goal" && sh.setup.gtype === "bomb";
     for(let k = 0; k < 4; k++){
-      const p = bombPick ? await shPickBomb(0, t => other && norm(other.title) === norm(t)) : await pickTitle(role);
+      const p = bombPick ? await shPickBomb(0, t => other && norm(other.title) === norm(t)) : await pickTitle(role, null, ts => slotFeed(key, ts));
       if(!p) continue;
       const w = await shResolve(p.title);
       if(other && norm(other.title) === norm(w.title)) continue;
       if(bombPick) w.inN = p.inN;
+      await slotEnd(key, bombPick ? null : w.shown);
       sh.setup[role] = w; break;
     }
+    slotCancel(key);
     shSave(); renderShiri();
-  }catch(e){ toast(T("err") + e.message); }
+  }catch(e){ slotCancel(key); toast(T("err") + e.message); }
   btn.disabled = false;
 }
 function shPick(role){
@@ -6246,23 +6351,31 @@ function shPick(role){
 async function shRandomBoth(){
   const btns = ["shsBothR", "shsStartR", "shsGoalR"].map(id => $(id));
   btns.forEach(b => b.disabled = true);
+  const solo = sh.setup.gtype === "bomb";
+  slotBegin("shstart"); if(!solo) slotBegin("shgoal");
   try{
     await ensureNs();
     for(let k = 0; k < 4; k++){
-      if(sh.setup.gtype === "bomb"){ const a = await pickTitle("start"); if(a){ sh.setup.start = await shResolve(a.title); break; } continue; }
+      if(solo){ const a = await pickTitle("start", null, ts => slotFeed("shstart", ts)); if(a){ const w = await shResolve(a.title); await slotEnd("shstart", w.shown); sh.setup.start = w; break; } continue; }
       const bombPick = false;
-      const [a, b] = await Promise.all([pickTitle("start"), bombPick ? shPickBomb(0) : pickTitle("goal")]);
+      const [a, b] = await Promise.all([pickTitle("start", null, ts => slotFeed("shstart", ts)), bombPick ? shPickBomb(0) : pickTitle("goal", null, ts => slotFeed("shgoal", ts))]);
       if(!a || !b) continue;
       const [ws, wg] = await Promise.all([shResolve(a.title), shResolve(b.title)]);
       if(norm(ws.title) === norm(wg.title)) continue;
       if(bombPick) wg.inN = b.inN;
+      await Promise.all([slotEnd("shstart", ws.shown), slotEnd("shgoal", wg.shown)]);
       sh.setup.start = ws; sh.setup.goal = wg; break;
     }
+    slotCancel("shstart"); slotCancel("shgoal");
     shSave(); renderShiri();
-  }catch(e){ toast(T("err") + e.message); }
+  }catch(e){ slotCancel("shstart"); slotCancel("shgoal"); toast(T("err") + e.message); }
   btns.forEach(b => b.disabled = false);
 }
 $("shsBothR").addEventListener("click", shRandomBoth);
+for(const role of ["start", "goal"]){
+  const el = $(role === "start" ? "shsStart" : "shsGoal"); el.dataset.slot = "sh" + role;
+  const n = mk("small", "slotN"); n.dataset.slotN = "sh" + role; n.hidden = true; el.after(n);
+}
 for(const role of ["start", "goal"]) $(role === "start" ? "shsStart" : "shsGoal").addEventListener("click", () => {
   if(role === "goal" && sh.setup.gtype === "bomb") return;   // 爆弾は伏せておく
   const w = sh.setup[role]; if(w) shOpen(w.title, null);
@@ -6783,7 +6896,12 @@ let tvCh = null; try{ tvCh = new BroadcastChannel("wikiGamesTV"); }catch(_){}
 let tvLive = false, tvLast = "", tvGot = 0;
 function tvCardOf(p){ return p ? {t:shown(p), img:p.thumbnail ? p.thumbnail.source : "", x:(p.extract || "").replace(/\s+/g, " ").slice(0, 140)} : null; }
 function tvSnap(){
-  if(state.screen === "home" && state.homeView === "shiri") return {kind:"shiri", sh};
+  if(state.screen === "home" && state.homeView === "shiri") return {kind:"shiri", sh, slot:slotSnap(["shstart", "shgoal"])};
+  if(state.screen === "home" && state.homeView === "lobby" && state.mp){
+    const m = state.mp;
+    return {kind:"golf", lobby:true, start:SLOT.start ? null : tvCardOf(state.start), goal:SLOT.goal ? null : tvCardOf(state.goal), slot:slotSnap(["start", "goal"]),
+      route:[], players:[...m.players.values()].filter(x => !x.left).map(x => ({name:x.name, strokes:0, done:false}))};
+  }
   if(state.screen === "game"){
     const m = state.mp, R = state.result;
     return {kind:"golf", start:tvCardOf(state.start), goal:tvCardOf(state.goal), playing:state.playing, strokes:state.strokes,
@@ -6791,7 +6909,7 @@ function tvSnap(){
       clock:$("clockNum").textContent, clockLbl:$("clockLbl").textContent, warn:$("clockNum").classList.contains("warn"),
       result:R ? {ok:R.success, head:$("winHead").textContent, strokes:R.strokes, time:fmtTime(R.elapsed), best:$("winBest").hidden ? "" : $("winBest").innerText} : null,
       players:m ? [...m.players.values()].filter(x => !x.left && x.inRound !== false).map(x => ({name:x.name, strokes:x.strokes, done:x.done, success:x.success, on:!!(m.tvFocus && x.id === m.tvFocus)})) : null,
-      art:tvArtSnap()};
+      art:tvArtSnap(), slot:slotSnap(["start", "goal"])};
   }
   return {kind:"home"};
 }
@@ -6859,19 +6977,33 @@ function tvBoot(){
   }
   requestAnimationFrame(tvTick);
 }
+let tvSlotPrev = new Set(), tvSlotEnded = new Set();
+function tvSlotSync(snap){
+  const now = new Set(Object.keys(snap || {}));
+  for(const k of Object.keys(SLOT)) if(!now.has(k)) delete SLOT[k];
+  for(const k of now){
+    if(!SLOT[k]) SLOT[k] = {pool:[], n:0, t0:Date.now(), text:"？？？", slow:false};
+    SLOT[k].pool = snap[k].pool || []; SLOT[k].n = snap[k].n || 0;
+  }
+  tvSlotEnded = new Set([...tvSlotPrev].filter(k => !now.has(k)));
+  tvSlotPrev = now;
+  if(now.size) slotKick();
+}
 function tvShow(S){
   const st = $("tvStage"); tvTimerEl = null; tvTurnEnds = 0;
+  tvSlotSync(S.slot || null);
+  setTimeout(slotPaint, 0);
   if(S.kind === "golf" && S.art) return tvGolfArt(S);
   tvA = null;
   st.innerHTML = "";
-  if(S.kind === "shiri") return tvShiri(S.sh);
+  if(S.kind === "shiri") return tvShiri(S.sh, S.slot);
   if(S.kind === "golf") return tvGolf(S);
   $("shBombPop").hidden = true;
   const c = mk("div", "tvCenter");
   c.append(mk("div", "big", "🎮 " + T("gamesName")), mk("div", "tvSub", S.kind === "wait" ? T("tvWait") : T("tvHomeSub")), mk("div", "tip", T("tvTip")));
   st.append(c);
 }
-function tvShiri(snap){
+function tvShiri(snap, slot){
   sh = snap;
   const st = $("tvStage"), multi = sh.players.length > 1;
   renderShiri();                                        // 隠れた画面にふつうに描いて、必要なところを借りてくる
@@ -6882,7 +7014,16 @@ function tvShiri(snap){
   if(sh.phase === "setup"){
     const c = mk("div", "tvCenter");
     c.append(mk("div", "big", T("tvSetup")));
-    if(sh.setup.start) c.append(mk("div", "tvSub", `${T("shFlowStart")}：${sh.setup.start.shown}`));
+    slot = slot || {};
+    const line = (k, lbl, w) => {
+      const d = mk("div", "tvSub"); d.append(lbl + "：");
+      const b = mk("b", "tvSlotBig", slot[k] ? SLOT[k] ? SLOT[k].text : "" : w ? w.shown : "");
+      if(slot[k]) b.dataset.slot = k; else if(tvSlotEnded.has(k)) slotPopEl(b);
+      d.append(b); c.append(d);
+      if(slot[k]){ const n = mk("div", "slotN"); n.dataset.slotN = k; c.append(n); }
+    };
+    if(sh.setup.start || slot.shstart) line("shstart", T("shFlowStart"), sh.setup.start);
+    if(slot.shgoal || (sh.setup.goal && !["bomb", "foot"].includes(sh.setup.gtype))) line("shgoal", T("goal"), sh.setup.goal);
     st.append(c); return;
   }
   if(!$("shGoalBar").hidden) st.append($("shGoalBar").cloneNode(true));
@@ -6909,11 +7050,30 @@ function tvGolf(S){
   const st = $("tvStage");
   $("shBombPop").hidden = true;
   st.append(mk("h1", "", "⛳ " + T("appName")));
-  if(!S.start || !S.goal){ const c = mk("div", "tvCenter"); c.append(mk("div", "big", T("tvPick"))); st.append(c); return; }
+  const sl = S.slot || {};
+  if(!S.start && !S.goal && !sl.start && !sl.goal || (!S.lobby && (!S.start || !S.goal) && !sl.start && !sl.goal)){ const c = mk("div", "tvCenter"); c.append(mk("div", "big", T("tvPick"))); st.append(c); return; }
   const od = mk("div", "tvOdai");
-  const card = (k, c) => { const d = mk("div", "tvCard"); if(c.img){ const im = mk("img", ""); im.src = c.img; im.referrerPolicy = "no-referrer"; d.append(im); } const b = mk("div", ""); b.append(mk("div", "k", k), mk("div", "t", c.t), mk("div", "x", c.x)); d.append(b); return d; };
-  od.append(card(T("start"), S.start), mk("div", "tvArrow", "→"), card(T("goal"), S.goal));
+  const card0 = (k, c) => { const d = mk("div", "tvCard"); if(c.img){ const im = mk("img", ""); im.src = c.img; im.referrerPolicy = "no-referrer"; d.append(im); } const b = mk("div", ""); b.append(mk("div", "k", k), mk("div", "t", c.t), mk("div", "x", c.x)); d.append(b); return d; };
+  const card = (k, c, role) => {
+    if(sl[role]){
+      const d = mk("div", "tvCard"), b = mk("div", "");
+      const t = mk("div", "t", SLOT[role] ? SLOT[role].text : ""); t.dataset.slot = role;
+      const x = mk("div", "slotN"); x.dataset.slotN = role;
+      b.append(mk("div", "k", k), t, x); d.append(b); return d;
+    }
+    const d = card0(k, c || {t:"？", x:""});
+    if(tvSlotEnded.has(role)) slotPopEl(d);
+    return d;
+  };
+  od.append(card(T("start"), S.start, "start"), mk("div", "tvArrow", "→"), card(T("goal"), S.goal, "goal"));
   st.append(od);
+  if(S.lobby){
+    const pl = mk("div", "tvPlayers");
+    (S.players || []).forEach(p => pl.append(mk("div", "tvPl", p.name)));
+    const c = mk("div", "tvCenter"); c.append(mk("div", "big", T("tvLobby")));
+    st.append(pl, c); return;
+  }
+  if(!S.start || !S.goal) return;
   const stats = mk("div", "tvStats");
   const lastR = S.route[S.route.length - 1];
   const now = mk("div", "tvStat now"); now.append(mk("span", "l", T("tvNow")), mk("b", "", lastR ? lastR.t : S.start.t)); stats.append(now);
