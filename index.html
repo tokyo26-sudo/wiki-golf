@@ -176,6 +176,14 @@
   .homeHead h1{margin:0;font-size:2.1rem;letter-spacing:.02em}
   .homeHead p{color:var(--sub);margin:6px 0 0;font-size:.92rem;text-wrap:balance;word-break:auto-phrase}
   .homeCard .about,#mpHint,.snote{text-wrap:pretty;word-break:auto-phrase}
+  /* v5.7 どこからでもタイトルへ */
+  .titleBtn{font-size:1.15rem;line-height:1;padding:7px 10px;border-radius:10px;flex:none}
+  #titleBtnHome{position:fixed;top:10px;left:10px;z-index:30;box-shadow:0 2px 8px #0003}
+  #win .box{position:relative}
+  #titleBtnWin{position:absolute;top:10px;left:10px}
+  body.atTitle #titleBtnHome{display:none}
+  body:not(.atTitle) .homeHead h1{cursor:pointer}
+  #shTitleH{cursor:pointer}
   .homeHead small{color:var(--sub);font-size:.68rem;opacity:.8}
   .homeCard{background:var(--card);border:1px solid var(--line);border-radius:14px;padding:6px 18px 14px;margin:12px 0}
   .homeBtns{display:grid;grid-template-columns:1.3fr 1fr 1fr;gap:10px;margin:16px 0}
@@ -758,12 +766,13 @@
 </section>
 
 <section id="bar">
+  <button id="titleBtnBar" class="titleBtn">🏠</button>
   <div id="miniOdai" hidden><span id="moTag"></span><button class="mo" id="moStart"></button><span class="moArrow">→</span><button class="mo" id="moGoal"></button></div>
   <div class="stat"><div class="num" id="strokeNum">0</div><div class="lbl" data-t="strokes"></div></div>
   <div class="stat"><div class="num" id="clockNum">0:00</div><div class="lbl" id="clockLbl"></div></div>
   <div class="stat" id="pageStat" hidden><div class="num" id="pageNum">0</div><div class="lbl" data-t="pageLeft"></div></div>
   <div id="route"></div>
-  <span id="ver">v5.6</span>
+  <span id="ver">v5.7</span>
   <div id="barBtns">
     <button id="teeoff" disabled data-t="teeoff"></button>
     <button id="backBtn" hidden data-t="back"></button>
@@ -822,7 +831,7 @@
 
 <div id="settings" class="overlay">
   <div class="panel">
-    <h2><span data-t="settings"></span> <small style="font-size:.65rem;font-weight:400;color:var(--sub)">v5.6</small></h2>
+    <h2><span data-t="settings"></span> <small style="font-size:.65rem;font-weight:400;color:var(--sub)">v5.7</small></h2>
     <p class="lockNote" id="lockNote" hidden></p>
     <button id="quitHole" class="quit" hidden></button>
     <button id="toHome" data-t="toHome"></button>
@@ -849,8 +858,9 @@
 </div>
 
 <div id="home">
+  <button id="titleBtnHome" class="titleBtn">🏠</button>
   <div class="homeInner">
-    <div class="homeHead"><h1>🎮 <span data-t="gamesName"></span></h1><p data-t="gamesAbout"></p><small>v5.6</small></div>
+    <div class="homeHead"><h1>🎮 <span data-t="gamesName"></span></h1><p data-t="gamesAbout"></p><small>v5.7</small></div>
 
     <section id="homeMain">
       <div class="homeCard homeLang" id="homeLang"></div>
@@ -888,7 +898,7 @@
 
     <section id="homeMp" hidden>
       <div class="homeCard">
-        <button id="hBack" data-t="hBack"></button>
+        <button id="hBack" data-t="hBack" hidden></button>
         <h2 data-t="mpTitle"></h2>
         <p class="about" data-t="mpAbout"></p>
         <p id="mpInvite" hidden></p>
@@ -901,7 +911,7 @@
 
     <section id="homeShiri" hidden>
       <div class="homeCard">
-        <div class="shTopRow"><button id="shBack" data-t="hBack"></button><button id="tvBtnShiri" class="tvOpen tvTxt" data-t="tvBtn"></button></div>
+        <div class="shTopRow"><button id="shBack" data-t="hBack" hidden></button><button id="tvBtnShiri" class="tvOpen tvTxt" data-t="tvBtn"></button></div>
         <h2 id="shTitleH" data-t="shTitle"></h2>
         <p class="about" data-t="shAbout"></p>
         <p id="shRule"></p>
@@ -984,7 +994,7 @@
         <div id="lbStamps" class="stampRow"></div>
         <p id="mpHint"></p>
         <button id="lbStart" data-t="lbStart"></button>
-        <div class="mpRow" style="justify-content:center"><button id="mpLeaveBtn" data-t="mpLeave"></button></div>
+        <div class="mpRow" style="justify-content:center" hidden><button id="mpLeaveBtn" data-t="mpLeave"></button></div>
       </div>
     </section>
   </div>
@@ -1029,6 +1039,7 @@
 
 <div id="win" class="overlay">
   <div class="box">
+    <button id="titleBtnWin" class="titleBtn">🏠</button>
     <div class="whead" id="winHead"></div>
     <div class="sg"><span class="tag" style="background:var(--green2);color:var(--green)" data-t="start"></span><span class="big" id="winStart"></span></div>
     <div class="down">↓</div>
@@ -2382,6 +2393,8 @@ Object.assign(STR["zh-hant"], {shLifeNote0:"無 ♥：一次出局。失誤一�
 Object.assign(STR["zh-hans"], {shLifeNote0:"无 ♥：一次出局。失误一次就淘汰", shPassLife:"⏭️ 跳过（♥−1）"});
 /* v5.3 観客画面 */
 Object.assign(STR["ja"], {tvBtn:"📺 観客画面", tvWait:"メインの画面を待っています…（同じブラウザで「📺 観客画面」を押した画面とつながります）", tvSetup:"準備中…", tvNow:"いまの記事", tvPick:"お題を選んでいます…", tvHomeSub:"このあと始まるゲームがここに映ります", tvTip:"この窓をモニタに移して全画面に（Chromecastは「タブをキャスト」、Zoomは「ウィンドウを共有」）"});
+Object.assign(STR["ja"], {titleQQuit:"やめてタイトルにもどる？", titleQRoom:"部屋から出てタイトルにもどる？"});
+Object.assign(STR["en"], {titleQQuit:"Quit and go back to the title?", titleQRoom:"Leave the room and go back to the title?"});
 Object.assign(STR["ja"], {tvScreenOf:n=>`📺 ${n} の画面`, tvFocusTip:"参加者の名前を押すと、その人の画面を観客画面に出せます（もう一度押すと自分にもどる）"});
 Object.assign(STR["en"], {tvScreenOf:n=>`📺 ${n}'s screen`, tvFocusTip:"Tap a player's name to show their screen on the audience view (tap again to switch back)"});
 Object.assign(STR["en"], {tvBtn:"📺 Audience view", tvWait:"Waiting for the main screen… (it connects to the window where you pressed “📺 Audience view” in this browser)", tvSetup:"Getting ready…", tvNow:"Now on", tvPick:"Picking the course…", tvHomeSub:"The game will appear here", tvTip:"Move this window to the big screen and go full screen (Chromecast: “Cast tab”, Zoom: share this window)"});
@@ -2411,6 +2424,7 @@ function applyUI(){
   $("sInput").placeholder = T("searchPh");
   $("myName").placeholder = T("namePh");
   $("gearBtn").title = T("settings");
+  document.querySelectorAll(".titleBtn").forEach(x => x.title = T("toHome"));
   $("savedBtn").title = T("savedList");
   updateSaveBtn();
   if(typeof mpControls === "function"){ mpControls(); renderHome(); }
@@ -4069,11 +4083,13 @@ function showHome(view = "main"){
   $("homeMp").hidden = view !== "mp";
   $("homeLobby").hidden = view !== "lobby";
   $("homeShiri").hidden = view !== "shiri";
+  document.body.classList.toggle("atTitle", view === "main");
   renderHome();
   renderStrip();
 }
 function hideHome(){
   state.screen = "game";
+  document.body.classList.remove("atTitle");
   $("home").hidden = true;
 }
 function renderHome(){
@@ -4113,13 +4129,33 @@ $("lbMoreBtn").addEventListener("click", ()=>{ state.lbMoreOpen = !state.lbMoreO
 $("hBattle").addEventListener("click", ()=>{ state.invite = null; $("mpErr").textContent = ""; showHome("mp"); });
 $("hSaved").addEventListener("click", ()=>{ renderSaved(); $("savedModal").classList.add("show"); });
 $("hBack").addEventListener("click", ()=>{ state.invite = null; try{ history.replaceState(null, "", baseUrl()); }catch(_){} showHome("main"); });
-$("toHome").addEventListener("click", ()=>{
-  $("settings").classList.remove("show");
-  if(state.mp){ mpLeave(); return; }
-  if(state.playing && state.strokes > 0 && !confirm(T("confirmNew"))) return;
-  exitChallenge(); resetGame(); state.start = state.goal = null;
+/* v5.7 どこからでもタイトルへ（🏠・タイトルの文字・設定の「タイトルにもどる」） */
+async function goTitle(){
+  ["win", "reader", "settings", "qrModal", "savedModal", "helpModal"].forEach(id => { const el = $(id); if(el) el.classList.remove("show"); });
+  $("menuPop").hidden = true;
+  if(state.screen === "home" && state.homeView === "main") return;
+  const inShiri = state.screen === "home" && state.homeView === "shiri";
+  if(state.mp){
+    if(!confirm(T("titleQRoom"))) return;
+    await mpLeave(true);
+  }else if(shNet){
+    if(!confirm(T("titleQRoom"))) return;
+    await shNetLeave(true);
+  }else if(inShiri && sh.phase === "play"){
+    if(!confirm(T("titleQQuit"))) return;
+    shApply({t:"setup"});
+  }else if(state.screen === "game" && state.playing){
+    if(!confirm(T("titleQQuit"))) return;
+  }
+  $("shBombPop").hidden = true;
+  state.invite = null;
+  try{ history.replaceState(null, "", baseUrl()); }catch(_){}
+  if(state.screen === "game" || state.start || state.goal){ exitChallenge(); resetGame(); state.start = state.goal = null; }
   showHome("main");
-});
+}
+["toHome", "titleBtnBar", "titleBtnHome", "titleBtnWin", "shTitleH"].forEach(id => $(id).addEventListener("click", goTitle));
+document.querySelector(".homeHead h1").addEventListener("click", () => { if(!(state.screen === "home" && state.homeView === "main")) goTitle(); });
+
 
 /* ════════ リアルタイム対戦（Supabase Realtime：broadcast＋presence。表は使わない） ════════ */
 const SB_URL = "https://acytuhewfhuoxugwmbat.supabase.co";
