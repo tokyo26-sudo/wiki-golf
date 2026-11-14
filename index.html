@@ -772,7 +772,7 @@
   <div class="stat"><div class="num" id="clockNum">0:00</div><div class="lbl" id="clockLbl"></div></div>
   <div class="stat" id="pageStat" hidden><div class="num" id="pageNum">0</div><div class="lbl" data-t="pageLeft"></div></div>
   <div id="route"></div>
-  <span id="ver">v5.7</span>
+  <span id="ver">v5.8</span>
   <div id="barBtns">
     <button id="teeoff" disabled data-t="teeoff"></button>
     <button id="backBtn" hidden data-t="back"></button>
@@ -831,7 +831,7 @@
 
 <div id="settings" class="overlay">
   <div class="panel">
-    <h2><span data-t="settings"></span> <small style="font-size:.65rem;font-weight:400;color:var(--sub)">v5.7</small></h2>
+    <h2><span data-t="settings"></span> <small style="font-size:.65rem;font-weight:400;color:var(--sub)">v5.8</small></h2>
     <p class="lockNote" id="lockNote" hidden></p>
     <button id="quitHole" class="quit" hidden></button>
     <button id="toHome" data-t="toHome"></button>
@@ -860,7 +860,7 @@
 <div id="home">
   <button id="titleBtnHome" class="titleBtn">🏠</button>
   <div class="homeInner">
-    <div class="homeHead"><h1>🎮 <span data-t="gamesName"></span></h1><p data-t="gamesAbout"></p><small>v5.7</small></div>
+    <div class="homeHead"><h1>🎮 <span data-t="gamesName"></span></h1><p data-t="gamesAbout"></p><small>v5.8</small></div>
 
     <section id="homeMain">
       <div class="homeCard homeLang" id="homeLang"></div>
@@ -1077,26 +1077,26 @@ const $ = id => document.getElementById(id);
 const WIKIS = {
   ja:  {host:"ja.wikipedia.org",  name:"日本語",
         siteSub:"出典: フリー百科事典『ウィキペディア（Wikipedia）』", redirect:f=>`（${f}から転送）`,
-        diff:{easy:{minLen:20000,minIn:300}, normal:{minLen:5000,minIn:30}}},
+        diff:{easy:{minOut:50,minIn:300}, normal:{minOut:20,minIn:30}}},
   en:  {host:"en.wikipedia.org",  name:"English",
         siteSub:"From Wikipedia, the free encyclopedia", redirect:f=>`(Redirected from ${f})`,
-        diff:{easy:{minLen:30000,minIn:500}, normal:{minLen:8000,minIn:50}}},
+        diff:{easy:{minOut:50,minIn:500}, normal:{minOut:20,minIn:50}}},
   fr:  {host:"fr.wikipedia.org",  name:"Français",
         siteSub:"Un article de Wikipédia, l'encyclopédie libre.", redirect:f=>`(Redirigé depuis ${f})`,
-        diff:{easy:{minLen:20000,minIn:300}, normal:{minLen:5000,minIn:30}}},
+        diff:{easy:{minOut:50,minIn:300}, normal:{minOut:20,minIn:30}}},
   es:  {host:"es.wikipedia.org",  name:"Español",
         siteSub:"De Wikipedia, la enciclopedia libre", redirect:f=>`(Redirigido desde «${f}»)`,
-        diff:{easy:{minLen:20000,minIn:300}, normal:{minLen:5000,minIn:30}}},
+        diff:{easy:{minOut:50,minIn:300}, normal:{minOut:20,minIn:30}}},
   zh:  {host:"zh.wikipedia.org",  name:"中文",
         siteSub:v => v === "zh-cn" ? "维基百科，自由的百科全书" : "維基百科，自由的百科全書",
         redirect:(f,v) => v === "zh-cn" ? `（重定向自${f}）` : `（重新導向自${f}）`,
-        diff:{easy:{minLen:20000,minIn:300}, normal:{minLen:5000,minIn:30}}},
+        diff:{easy:{minOut:50,minIn:300}, normal:{minOut:20,minIn:30}}},
   ko:  {host:"ko.wikipedia.org",  name:"한국어",
         siteSub:"위키백과, 우리 모두의 백과사전.", redirect:f=>`(${f}에서 넘어옴)`,
-        diff:{easy:{minLen:15000,minIn:200}, normal:{minLen:4000,minIn:20}}},
+        diff:{easy:{minOut:50,minIn:200}, normal:{minOut:20,minIn:20}}},
   ceb: {host:"ceb.wikipedia.org", name:"Sinugboanon",
         siteSub:"Gikan sa Wikipedia, ang gawasnong ensiklopedya", redirect:f=>`(Redirected from ${f})`,
-        diff:{easy:{minLen:3000,minIn:30}, normal:{minLen:1000,minIn:5}}}
+        diff:{easy:{minOut:20,minIn:30}, normal:{minOut:10,minIn:5}}}
 };
 const LANG_ORDER = ["ja","en","fr","es","zh","ko","ceb"];
 
@@ -2484,27 +2484,68 @@ async function inlinkCount(title){
                        bllimit:"500", blfilterredir:"nonredirects"});
   return {n:d.query.backlinks.length, more:!!d.continue};
 }
+/* v5.8 お題くじ：ジャンル偏り補正ランダム
+   ・なんでもあり＝引いた中からまったく平等に1本
+   ・ふつう／かんたん＝先にジャンルをサイコロで決めて（10ジャンル同じ割合）、そのジャンルの記事から選ぶ（日本語版だけ）
+     スタートは出口リンクの数、ゴールは入口リンクの数で合格を決める（文字数・長い順は使わない） */
+const GENRES = [
+  ["sport", /スポーツ|選手|サッカー|野球|競馬|競走馬|オリンピック|相撲|力士|プロレス|ラグビー|バスケットボール|バレーボール|テニス|ゴルフ|陸上競技|競泳|格闘技|柔道|剣道|空手|ボクシング|スキー|スケート|自転車競技|モータースポーツ|F1|競技大会|大会$|クラブ$|球団|チーム$/],
+  ["ent", /声優|アニメ|漫画|ゲーム|テレビ番組|テレビドラマ|ドラマ|映画|楽曲|シングル|アルバム|歌手|タレント|アイドル|俳優|女優|お笑い|芸人|ミュージシャン|バンド|ライトノベル|特撮|ラジオ番組|VTuber|YouTuber|キャラクター|音楽グループ|レコード|作曲家|作詞家|放送局|番組/],
+  ["mono", /道具|工具|日用品|生活用品|容器|食器|調理器具|台所用品|家具|文房具|筆記具|衣類|衣服|服飾|履物|靴|帽子|装身具|アクセサリー|家電|電化製品|玩具|おもちゃ|楽器|刃物|器具|用具|雑貨|寝具|照明器具|化粧品|かばん|鞄/],
+  ["koto", /感情|行動|生理現象|心理|動作|睡眠|遊び|恋愛|コミュニケーション|習慣|性格|感覚|身体動作|態度|欲求|情動/],
+  ["sci", /生物|動物|植物|哺乳類|鳥類|魚類|昆虫|爬虫類|両生類|甲殻類|軟体動物|菌類|細菌|ウイルス|病気|疾患|症候群|医学|医薬品|化学|化合物|元素|物理|天文|恒星|惑星|小惑星|衛星|銀河|星座|数学|定理|鉱物|地質|気象|コンピュータ|ソフトウェア|プログラミング|インターネット|技術|工学|自動車|鉄道車両|航空機|船舶|機関車|電車|電気|電子|ロケット|兵器|科$|属$|種$/],
+  ["hist", /時代|戦い|戦争|合戦|事件|古代|中世|近世|幕末|戦国|武将|大名|藩|城$|城郭|遺跡|古墳|条約|王朝|皇帝|天皇|将軍|武士|貴族|の歴史|革命|内乱|反乱|世紀の/],
+  ["social", /政治|政党|議員|首相|大臣|法律|法令|裁判|判例|企業|会社|銀行|学校|大学|高等学校|中学校|小学校|団体|組織|経済|行政|官庁|省庁|労働|選挙|軍|外交|国際機関|NPO|財団|社会/],
+  ["culture", /料理|食品|食べ物|菓子|飲料|酒|宗教|仏教|神道|キリスト教|イスラム|寺院|寺$|神社|教会|言語|方言|文字|芸術|美術|絵画|彫刻|文学|小説|詩|俳句|建築|建造物|祭|行事|年中行事|伝統|民俗|文化|哲学|思想|神話|伝説|妖怪/],
+  ["geo", /市町村|の町$|の村$|の市$|区$|駅$|鉄道駅|山$|山地|山脈|河川|川$|湖|島$|諸島|半島|海峡|湾$|国道|道路|都道府県|の地理|地形|国家$|港$|空港|橋$|峠|岬|滝|温泉|公園|地域|地区|集落|町村|市$/]
+];
+const GENRE_IDS = [...GENRES.map(g => g[0]), "other"];
+const GENRE_SKIP = /出身の人物|年生$|年没$|存命人物|出典を必要|記事$|スタブ|曖昧さ回避|ウィキデータ|画像|座標/;
+function genreOf(p){
+  const tally = {};
+  for(const c of p.categories || []){
+    const name = c.title.slice(c.title.indexOf(":") + 1);
+    if(GENRE_SKIP.test(name)) continue;
+    for(const [id, re] of GENRES) if(re.test(name)){ tally[id] = (tally[id] || 0) + 1; break; }
+  }
+  let best = "other", n = 0;
+  for(const [id] of GENRES) if((tally[id] || 0) > n){ best = id; n = tally[id]; }
+  return best;
+}
+async function outlinkCount(title){
+  const d = await api({action:"query", prop:"links", titles:title, plnamespace:"0", pllimit:"max"});
+  const pg = (d.query && d.query.pages || [])[0] || {};
+  return {n:(pg.links || []).length, more:!!d.continue};
+}
+const shuffle = a => { for(let i = a.length - 1; i > 0; i--){ const j = Math.floor(Math.random() * (i + 1)); [a[i], a[j]] = [a[j], a[i]]; } return a; };
 async function pickTitle(role, avoid){
   const lang = curLang();
-  const conf = settings.difficulty === "any" ? {minLen:0, minIn:0}
-             : (WIKIS[lang].diff[settings.difficulty] || WIKIS[lang].diff.normal);
-  const {minLen, minIn} = conf;
+  const any = settings.difficulty === "any";
+  const conf = any ? null : (WIKIS[lang].diff[settings.difficulty] || WIKIS[lang].diff.normal);
+  const useGenre = !any && lang === "ja";
+  let want = useGenre ? GENRE_IDS[Math.floor(Math.random() * GENRE_IDS.length)] : null;
   let best = null;
-  for(let round = 0; round < 8; round++){
-    const d = await api({action:"query", generator:"random", grnnamespace:"0", grnlimit:"20",
-      grnfilterredir:"nonredirects", prop:"info|pageprops", ppprop:"disambiguation"});
-    const pages = d.query.pages.filter(p => !(p.pageprops && "disambiguation" in p.pageprops) && norm(p.title) !== norm(avoid));
+  for(let round = 0; round < 12; round++){
+    const q = {action:"query", generator:"random", grnnamespace:"0", grnlimit:"20",
+      grnfilterredir:"nonredirects", prop:"info|pageprops", ppprop:"disambiguation"};
+    if(useGenre) Object.assign(q, {prop:"info|pageprops|categories", clshow:"!hidden", cllimit:"max"});
+    const d = await api(q);
+    const pages = shuffle(((d.query && d.query.pages) || []).filter(p => !(p.pageprops && "disambiguation" in p.pageprops) && norm(p.title) !== norm(avoid || "")));
     if(!pages.length) continue;
-    pages.sort((a,b)=>b.length-a.length);
-    if(role === "start" || !minIn){
-      if(pages[0].length >= minLen) return {title:pages.find(p=>p.length>=minLen && Math.random()<.5)?.title || pages[0].title};
-      if(!best || pages[0].length > (best.length||0)) best = {title:pages[0].title, length:pages[0].length};
-      continue;
-    }
-    for(const p of pages.slice(0,3)){
-      const c = await inlinkCount(p.title);
-      if(c.n >= minIn) return {title:p.title, inlinks:c.n, more:c.more};
-      if(!best || c.n > (best.inlinks||0)) best = {title:p.title, inlinks:c.n, more:c.more};
+    if(any) return {title:pages[0].title};
+    // ジャンルが長いこと出ないときは、あきらめて別のジャンルを引き直す（8回目から）
+    if(useGenre && round === 8 && !best) want = GENRE_IDS[Math.floor(Math.random() * GENRE_IDS.length)];
+    const cands = useGenre && round < 11 ? pages.filter(p => genreOf(p) === want) : pages;
+    for(const p of cands.slice(0, 3)){
+      if(role === "start"){
+        const c = await outlinkCount(p.title);
+        if(c.n >= conf.minOut || c.more) return {title:p.title, genre:want};
+        if(!best || c.n > (best.out || 0)) best = {title:p.title, out:c.n, genre:want};
+      }else{
+        const c = await inlinkCount(p.title);
+        if(c.n >= conf.minIn) return {title:p.title, inlinks:c.n, more:c.more, genre:want};
+        if(!best || c.n > (best.inlinks || 0)) best = {title:p.title, inlinks:c.n, more:c.more, genre:want};
+      }
     }
   }
   return best;
